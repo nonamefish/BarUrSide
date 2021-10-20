@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.databinding.ItemEditRatingObjectBinding
 import com.mingyuwu.barurside.rating.ImageAdapter
-import com.mingyuwu.barurside.rating.TagFrdAdapter
+import com.mingyuwu.barurside.rating.UserImageAdapter
 
 class EditRatingAdapter(val isVenue: Boolean, private val viewModel: EditRatingViewModel) :
     ListAdapter<String, EditRatingAdapter.EditRatingViewHolder>(DiffCallback) {
@@ -37,7 +35,7 @@ class EditRatingAdapter(val isVenue: Boolean, private val viewModel: EditRatingV
 
             // set recyclerView
             val imgAdapter = ImageAdapter(15, 15)
-            val tagFrdAdapter = TagFrdAdapter()
+            val tagFrdAdapter = UserImageAdapter()
             binding.ratingAddImgList.adapter = imgAdapter
             binding.ratingTagFrdsList.adapter = tagFrdAdapter
 

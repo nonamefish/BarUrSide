@@ -34,4 +34,29 @@
         android:name="com.mingyuwu.barurside.activity.ActivityFragment"
         android:label="fragment_activity"
         tools:layout="@layout/fragment_activity" />
+    <fragment
+        android:id="@+id/drinkFragment"
+        android:name="com.mingyuwu.barurside.drink.DrinkFragment"
+        android:label="DrinkFragment" />
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.mingyuwu.barurside.filter.FilterFragment"
+        android:label="FilterFragment" />
+    <fragment
+        android:id="@+id/venueFragment"
+        android:name="com.mingyuwu.barurside.venue.VenueFragment"
+        android:label="VenueFragment" />
+    <fragment
+        android:id="@+id/collectPageFragment"
+        android:name="com.mingyuwu.barurside.collect.CollectPageFragment"
+        android:label="CollectPageFragment" />
+    <fragment
+        android:id="@+id/randomFragment"
+        android:name="com.mingyuwu.barurside.filter.random.RandomFragment"
+        android:label="fragment_random"
+        tools:layout="@layout/fragment_random" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.mingyuwu.barurside.MainActivity"
+        android:label="MainActivity" />
 </navigation>

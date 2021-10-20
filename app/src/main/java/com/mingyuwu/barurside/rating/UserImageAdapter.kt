@@ -7,11 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.collect.TAG
-import com.mingyuwu.barurside.databinding.ItemRatingImageBinding
 import com.mingyuwu.barurside.databinding.ItemUserImageBinding
 
-class TagFrdAdapter () :
-    ListAdapter<String, TagFrdAdapter.TagFrdViewHolder>(DiffCallback) {
+class UserImageAdapter () :
+    ListAdapter<String, UserImageAdapter.TagFrdViewHolder>(DiffCallback) {
 
     class TagFrdViewHolder(private var binding: ItemUserImageBinding) :
         RecyclerView.ViewHolder(binding.root) {

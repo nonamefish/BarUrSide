@@ -5,4 +5,9 @@
     <!--    Collect Tab-->
     <string name="collect_tab_venue">店家</string>
     <string name="collect_tab_drink">酒項</string>
+
+    <!--Venue Info -->
+    <string name="venue_rating_info_view">(%,.1f)&#160;|&#160;%d則評論</string>
+
+
 </resources>

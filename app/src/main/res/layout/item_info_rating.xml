@@ -3,6 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="Rating"
+            type="com.mingyuwu.barurside.data.Rating" />
+        <variable
+            name="User"
+            type="com.mingyuwu.barurside.data.User"/>
+        <variable
+            name="objectName"
+            type="String"/>
+        <variable
+            name="objectImg"
+            type="String"/>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -31,6 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
+                    app:imageUrl="@{User.image}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -43,7 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:text="無尾熊"
+                tools:text="無尾熊"
+                android:text = "@{User.name}"
                 app:layout_constraintStart_toEndOf="@+id/profile_base_img"
                 app:layout_constraintTop_toTopOf="@+id/profile_base_img" />
 
@@ -55,14 +72,15 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toEndOf="@+id/profile_base_img"
                 app:layout_constraintTop_toBottomOf="@+id/rtg_user_name"
-                tools:srcCompat="@tools:sample/avatars" />
+                android:src="@drawable/ic_baseline_menu_24" />
 
             <TextView
                 android:id="@+id/user_post_cnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="569"
+                android:text="@{User.shareCount.toString()}"
+                tools:text="569"
                 app:layout_constraintStart_toEndOf="@+id/img_user_post_cnt"
                 app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt" />
 
@@ -73,14 +91,16 @@
                 android:layout_marginStart="8dp"
                 app:layout_constraintStart_toEndOf="@+id/user_post_cnt"
                 app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt"
-                tools:srcCompat="@tools:sample/avatars" />
+                android:background="@drawable/ic_baseline_image_24"
+                android:backgroundTint="@color/black_3f3a3a"/>
 
             <TextView
                 android:id="@+id/user_postimg_cnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="569"
+                android:text="@{User.shareImageCount.toString()}"
+                tools:text="569"
                 app:layout_constraintStart_toEndOf="@+id/img_user_postimg_cnt"
                 app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt" />
 
@@ -97,7 +117,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_rtg_info"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -105,7 +125,7 @@
             android:background="@drawable/border_map_search"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/constraint_user_info">
+            app:layout_constraintTop_toBottomOf="@+id/constraint_user_info">
 
             <ImageView
                 android:id="@+id/img_info_rtg"
@@ -113,6 +133,7 @@
                 android:layout_height="42dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                app:imageUrl="@{objectImg}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
@@ -122,9 +143,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="文青不要喝IPA"
+                android:text="@{objectName}"
                 app:layout_constraintStart_toEndOf="@+id/img_info_rtg"
-                app:layout_constraintTop_toTopOf="@+id/img_info_rtg" />
+                app:layout_constraintTop_toTopOf="@+id/img_info_rtg"
+                tools:text="文青不要喝IPA" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rating_score_list"
@@ -132,44 +154,53 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/img_info_rtg"
-                app:layout_constraintTop_toBottomOf="@+id/info_rtg_object" />
+                app:layout_constraintTop_toBottomOf="@+id/info_rtg_object"
+                app:stars="@{Rating.rating.floatValue()}" />
 
             <TextView
                 android:id="@+id/rating_comment"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="好險我不是文青，可以在周一喝到不錯的酒精實在不錯，在微冷/無恙/寂靜的空間享受美好，好險我不是文青"
+                android:text="@{Rating.comment}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_info_rtg" />
+                app:layout_constraintTop_toBottomOf="@+id/img_info_rtg"
+                tools:text="好險我不是文青，可以在周一喝到不錯的酒精實在不錯，在微冷/無恙/寂靜的空間享受美好，好險我不是文青" />
 
             <TextView
                 android:id="@+id/txt_rating_tag_frds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:text=":: 標註朋友:: "
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/rating_comment"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rating_comment" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rating_tag_frds"
+                android:id="@+id/rating_tag_frd_list"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
+                app:imageUrls="@{Rating.tagFriends}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/txt_rating_tag_frds"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_rating_tag_frds" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -180,11 +211,21 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginTop="4dp"
-            android:text="2021.10.15"
+            app:rtgData="@{Rating.postDate}"
+            tools:text="2021.10.15"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/constraint_rtg_info"
             app:layout_constraintTop_toBottomOf="@+id/constraint_rtg_info" />
 
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/gray_f0f0f0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rating_post_date" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

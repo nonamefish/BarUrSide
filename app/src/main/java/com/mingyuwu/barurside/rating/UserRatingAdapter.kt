@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.databinding.ItemUserRatingBinding
 
-class RatingAdapter() :
-    ListAdapter<Rating?, RatingAdapter.RatingViewHolder>(DiffCallback) {
+class UserRatingAdapter() :
+    ListAdapter<Rating?, UserRatingAdapter.UserRatingViewHolder>(DiffCallback) {
 
-    class RatingViewHolder(private var binding: ItemUserRatingBinding) :
+    class UserRatingViewHolder(private var binding: ItemUserRatingBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(rating: Rating?) {
@@ -39,15 +39,15 @@ class RatingAdapter() :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RatingViewHolder {
+    ): UserRatingViewHolder {
 
-        return RatingViewHolder(
+        return UserRatingViewHolder(
             ItemUserRatingBinding.inflate(LayoutInflater.from(parent.context))
         )
     }
 
     // Replaces the contents of a view (invoked by the layout manager)
-    override fun onBindViewHolder(holder: RatingViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserRatingViewHolder, position: Int) {
         val rating = getItem(position)
         holder.bind(rating)
     }

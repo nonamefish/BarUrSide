@@ -10,7 +10,7 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.mockdata.RatingData
 import com.mingyuwu.barurside.databinding.FragmentProfileBinding
 import com.mingyuwu.barurside.rating.ImageAdapter
-import com.mingyuwu.barurside.rating.RatingAdapter
+import com.mingyuwu.barurside.rating.UserRatingAdapter
 
 
 class ProfileFragment : Fragment() {
@@ -38,12 +38,12 @@ class ProfileFragment : Fragment() {
         imgAdapter.submitList(listOf("","",""))
 
         // test rating adapter
-        val rtgVnAdapter = RatingAdapter()
+        val rtgVnAdapter = UserRatingAdapter()
         binding.userRtgVenueList.adapter=rtgVnAdapter
         rtgVnAdapter.submitList(rtg.rating)
 
         // test drink adapter
-        val rtgDkAdapter = RatingAdapter()
+        val rtgDkAdapter = UserRatingAdapter()
         binding.userRtgDrinkList.adapter=rtgDkAdapter
         rtgDkAdapter.submitList(rtg.rating)
 

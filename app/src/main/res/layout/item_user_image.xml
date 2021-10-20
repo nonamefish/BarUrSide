@@ -16,8 +16,12 @@
             android:id="@+id/profile_base_img"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="2dp"
             app:cardCornerRadius="250dp"
             app:cardMaxElevation="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -30,6 +34,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:imageUrl="@{img}"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
         </androidx.cardview.widget.CardView>
