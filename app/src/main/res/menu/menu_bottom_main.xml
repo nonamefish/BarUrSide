@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    id name is the same as the navigation fragment, and bottom navigation can map-->
+    <item
+        android:title="Activity"
+        android:id="@+id/activityFragment"
+        android:icon="@drawable/sl_bar_activity" />
+
+    <item
+        android:title="Map"
+        android:id="@+id/mapFragment"
+        android:icon="@drawable/sl_bar_map" />
+
+    <item
+        android:title="Discover"
+        android:id="@+id/discoverFragment"
+        android:icon="@drawable/sl_bar_discover"/>
+    <item
+        android:title="Collect"
+        android:id="@+id/collectFragment"
+        android:icon="@drawable/sl_bar_collect"/>
+    <item
+        android:title="Profile"
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/sl_bar_profile"/>
+</menu>
