@@ -12,6 +12,7 @@ import com.mingyuwu.barurside.rating.RatingScoreAdapter
 import com.mingyuwu.barurside.rating.ScoreStatus
 import kotlin.math.roundToInt
 import com.bumptech.glide.request.RequestOptions
+import com.mingyuwu.barurside.rating.ImageAdapter
 import java.sql.Timestamp
 
 @BindingAdapter("stars")
@@ -32,9 +33,23 @@ fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
     }
 }
 
+@BindingAdapter("imageUrls")
+fun bindRecyclerViewWithImageUrls(recyclerView: RecyclerView, imageUrls: List<String>) {
+    imageUrls?.let {
+        recyclerView.adapter?.apply {
+            when (this) {
+                is ImageAdapter -> {
+                    submitList(imageUrls)
+                }
+            }
+        }
+
+    }
+}
+
+
 @BindingAdapter("clickRtgScore")
 fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean) {
-    val app = BarUrSideApplication()
     flgFull?.let {
         if(flgFull){
             imageView.setBackgroundResource(R.drawable.ic_baseline_star_rate_24)

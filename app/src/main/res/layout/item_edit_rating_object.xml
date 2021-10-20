@@ -16,7 +16,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/rtg_venue"
@@ -39,7 +39,7 @@
             android:layout_marginTop="8dp"
             android:elevation="2dp"
             android:onClick="@{()->viewModel.clickRatingStore(1,rtgOrder)}"
-            app:clickRtgScore="@{viewModel.star[0]>=1}"
+            app:clickRtgScore="@{viewModel.star[rtgOrder]>=1}"
             app:layout_constraintEnd_toStartOf="@+id/image_edit_star_2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
@@ -55,7 +55,7 @@
             android:layout_marginTop="8dp"
             android:elevation="2dp"
             android:onClick="@{()->viewModel.clickRatingStore(2,rtgOrder)}"
-            app:clickRtgScore="@{viewModel.star[0]>=2}"
+            app:clickRtgScore="@{viewModel.star[rtgOrder]>=2}"
             app:layout_constraintEnd_toStartOf="@+id/image_edit_star_3"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/image_edit_star_1"
@@ -69,7 +69,7 @@
             android:layout_marginTop="8dp"
             android:elevation="2dp"
             android:onClick="@{()->viewModel.clickRatingStore(3,rtgOrder)}"
-            app:clickRtgScore="@{viewModel.star[0]>=3}"
+            app:clickRtgScore="@{viewModel.star[rtgOrder]>=3}"
             app:layout_constraintEnd_toStartOf="@+id/image_edit_star_4"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/image_edit_star_2"
@@ -83,7 +83,7 @@
             android:layout_marginTop="8dp"
             android:elevation="2dp"
             android:onClick="@{()->viewModel.clickRatingStore(4,rtgOrder)}"
-            app:clickRtgScore="@{viewModel.star[0]>=4}"
+            app:clickRtgScore="@{viewModel.star[rtgOrder]>=4}"
             app:layout_constraintEnd_toStartOf="@+id/image_edit_star_5"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/image_edit_star_3"
@@ -98,7 +98,7 @@
             android:layout_marginEnd="36dp"
             android:elevation="2dp"
             android:onClick="@{()->viewModel.clickRatingStore(5,rtgOrder)}"
-            app:clickRtgScore="@{viewModel.star[0]>=5}"
+            app:clickRtgScore="@{viewModel.star[rtgOrder]>=5}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/image_edit_star_4"
@@ -144,7 +144,7 @@
             app:layout_constraintTop_toBottomOf="@+id/rtg_score_list">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/appCompatButton"
+                android:id="@+id/btn_add_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -184,6 +184,7 @@
             app:layout_constraintTop_toBottomOf="@+id/constraint_upload_photo">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_tag_frd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -214,10 +215,13 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="18dp"
+            android:layout_marginBottom="8dp"
             android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_add_drink_rtg" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_drink_rtg"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

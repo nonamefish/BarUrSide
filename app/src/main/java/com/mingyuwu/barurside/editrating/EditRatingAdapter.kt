@@ -10,8 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mingyuwu.barurside.collect.TAG
 import com.mingyuwu.barurside.databinding.ItemEditRatingObjectBinding
+import com.mingyuwu.barurside.rating.ImageAdapter
+import com.mingyuwu.barurside.rating.TagFrdAdapter
 
 class EditRatingAdapter(val isVenue: Boolean, private val viewModel: EditRatingViewModel) :
     ListAdapter<String, EditRatingAdapter.EditRatingViewHolder>(DiffCallback) {
@@ -29,11 +30,30 @@ class EditRatingAdapter(val isVenue: Boolean, private val viewModel: EditRatingV
             }
         }
 
-        fun bind(viewModel: EditRatingViewModel, isVenue: Boolean) {
+        fun bind(viewModel: EditRatingViewModel, isVenue: Boolean, position: Int) {
 
             binding.viewModel = viewModel
-            binding.rtgOrder = viewModel.rtgOrder.value!!
-            viewModel.addNewRating()
+            binding.rtgOrder = position
+
+            // set recyclerView
+            val imgAdapter = ImageAdapter(15, 15)
+            val tagFrdAdapter = TagFrdAdapter()
+            binding.ratingAddImgList.adapter = imgAdapter
+            binding.ratingTagFrdsList.adapter = tagFrdAdapter
+
+            binding.btnAddDrinkRtg.setOnClickListener {
+                viewModel.addNewRating()
+            }
+
+            binding.btnAddImage.setOnClickListener {
+
+                viewModel.addUploadImg(0,null)
+
+            }
+
+            binding.btnTagFrd.setOnClickListener {
+                viewModel.addNewRating()
+            }
 
             if (isVenue) {
                 binding.btnAddDrinkRtg.visibility = View.VISIBLE
@@ -67,11 +87,11 @@ class EditRatingAdapter(val isVenue: Boolean, private val viewModel: EditRatingV
     // Replaces the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: EditRatingViewHolder, position: Int) {
         val id = getItem(position)
-        holder.bind(viewModel, isVenue)
+        holder.bind(viewModel, isVenue, position)
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG, "getItemCount : ${super.getItemCount()}")
+        Log.d("EditRatingAdapter", "getItemCount : ${super.getItemCount()}")
         return super.getItemCount()
     }
 
