@@ -49,7 +49,7 @@ class EditRatingFragment : Fragment() {
 
         // set adapter
         val adapter = EditRatingAdapter(true, viewModel)
-        binding.venusRtgScoreList.adapter = adapter
+        binding.venueRtgScoreList.adapter = adapter
 
         viewModel.rtgList.observe(viewLifecycleOwner, Observer {
             Log.d("Ming","Fragment rtgList.value: $it")

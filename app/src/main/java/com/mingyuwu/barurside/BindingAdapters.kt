@@ -34,7 +34,7 @@ fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
 }
 
 @BindingAdapter("imageUrls")
-fun bindRecyclerViewWithImageUrls(recyclerView: RecyclerView, imageUrls: List<String>) {
+fun bindRecyclerViewWithImageUrls(recyclerView: RecyclerView, imageUrls: List<String>?) {
     imageUrls?.let {
         recyclerView.adapter?.apply {
             when (this) {
@@ -52,7 +52,7 @@ fun bindRecyclerViewWithImageUrls(recyclerView: RecyclerView, imageUrls: List<St
 
 
 @BindingAdapter("clickRtgScore")
-fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean) {
+fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean?) {
     flgFull?.let {
         if(flgFull){
             imageView.setBackgroundResource(R.drawable.ic_baseline_star_rate_24)
@@ -88,7 +88,7 @@ fun bindRtgData(textView: TextView, timeStamp: Timestamp?) {
 }
 
 @BindingAdapter("rtgList")
-fun bindRtgData(recyclerView: RecyclerView, rtgList: List<Rating>) {
+fun bindRtgData(recyclerView: RecyclerView, rtgList: List<Rating>?) {
     rtgList?.let {
         recyclerView.adapter?.apply {
             when (this) {

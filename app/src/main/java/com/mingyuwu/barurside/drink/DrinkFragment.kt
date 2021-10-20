@@ -11,7 +11,6 @@ import com.mingyuwu.barurside.data.mockdata.DrinkData
 import com.mingyuwu.barurside.data.mockdata.RatingData
 import com.mingyuwu.barurside.data.mockdata.VenueData
 import com.mingyuwu.barurside.databinding.FragmentDrinkBinding
-import com.mingyuwu.barurside.databinding.FragmentProfileBinding
 import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import com.mingyuwu.barurside.rating.RatingScoreAdapter

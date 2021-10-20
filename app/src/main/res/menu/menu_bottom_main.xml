@@ -13,7 +13,7 @@
 
     <item
         android:title="Discover"
-        android:id="@+id/drinkFragment"
+        android:id="@+id/venueFragment"
         android:icon="@drawable/sl_bar_discover"/>
     <item
         android:title="Collect"
