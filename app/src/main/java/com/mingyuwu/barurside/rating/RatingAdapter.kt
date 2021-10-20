@@ -19,6 +19,8 @@ class RatingAdapter() :
             binding.rating = rating
             binding.img=""
             binding.title="還沒串起來"
+
+            binding.ratingScoreList.adapter = RatingScoreAdapter(15,15)
         }
     }
 

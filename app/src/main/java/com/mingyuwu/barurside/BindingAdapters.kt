@@ -1,7 +1,9 @@
 package com.mingyuwu.barurside
 
+import android.text.format.DateFormat
 import android.util.Log
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +12,7 @@ import com.mingyuwu.barurside.rating.RatingScoreAdapter
 import com.mingyuwu.barurside.rating.ScoreStatus
 import kotlin.math.roundToInt
 import com.bumptech.glide.request.RequestOptions
+import java.sql.Timestamp
 
 @BindingAdapter("stars")
 fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
@@ -19,7 +22,6 @@ fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
             starList += ScoreStatus.FULL
         }
         recyclerView.adapter?.apply {
-            Log.d("Ming","bindRecyclerViewWithStarts: $starList")
             when (this) {
                 is RatingScoreAdapter -> {
                     submitList(starList)
@@ -34,7 +36,7 @@ fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let {
         val imgUri = it.toUri().buildUpon().build()
-        Log.d("Ming","bindImage")
+        Log.d("Ming","imgUrl: $imgUrl")
         Glide.with(imgView.context)
             .load(imgUri)
             .apply(
@@ -46,3 +48,9 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     }
 }
 
+@BindingAdapter("rtgData")
+fun bindRtgData(textView: TextView, timeStamp: Timestamp?) {
+    timeStamp?.let {
+        textView.text = DateFormat.format("yyyy-MM-dd", timeStamp).toString()
+    }
+}
