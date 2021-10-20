@@ -32,6 +32,19 @@ fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
     }
 }
 
+@BindingAdapter("clickRtgScore")
+fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean) {
+    val app = BarUrSideApplication()
+    flgFull?.let {
+        if(flgFull){
+            imageView.setBackgroundResource(R.drawable.ic_baseline_star_rate_24)
+        }else{
+            imageView.setBackgroundResource(R.drawable.ic_baseline_star_border_24)
+        }
+
+    }
+}
+
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let {

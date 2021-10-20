@@ -4,6 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.editrating.EditRatingViewModel" />
+        <variable
+            name="rtgOrder"
+            type="int" />
+    </data>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -12,7 +22,7 @@
             android:id="@+id/rtg_venue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="32dp"
             android:text="不醉不歸酒吧"
             android:textColor="@color/black_3f3a3a"
             android:textSize="24sp"
@@ -28,12 +38,14 @@
             android:layout_marginStart="36dp"
             android:layout_marginTop="8dp"
             android:elevation="2dp"
-            android:src="@drawable/ic_baseline_star_rate_24"
+            android:onClick="@{()->viewModel.clickRatingStore(1,rtgOrder)}"
+            app:clickRtgScore="@{viewModel.star[0]>=1}"
             app:layout_constraintEnd_toStartOf="@+id/image_edit_star_2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rtg_venue" />
+            app:layout_constraintTop_toBottomOf="@+id/rtg_venue"
+            tools:src="@drawable/ic_baseline_star_rate_24"/>
 
 
         <ImageView
@@ -42,11 +54,13 @@
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:elevation="2dp"
-            android:src="@drawable/ic_baseline_star_rate_24"
+            android:onClick="@{()->viewModel.clickRatingStore(2,rtgOrder)}"
+            app:clickRtgScore="@{viewModel.star[0]>=2}"
             app:layout_constraintEnd_toStartOf="@+id/image_edit_star_3"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/image_edit_star_1"
-            app:layout_constraintTop_toBottomOf="@+id/rtg_venue" />
+            app:layout_constraintTop_toBottomOf="@+id/rtg_venue"
+            tools:src="@drawable/ic_baseline_star_rate_24"/>
 
         <ImageView
             android:id="@+id/image_edit_star_3"
@@ -54,11 +68,13 @@
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:elevation="2dp"
-            android:src="@drawable/ic_baseline_star_rate_24"
+            android:onClick="@{()->viewModel.clickRatingStore(3,rtgOrder)}"
+            app:clickRtgScore="@{viewModel.star[0]>=3}"
             app:layout_constraintEnd_toStartOf="@+id/image_edit_star_4"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/image_edit_star_2"
-            app:layout_constraintTop_toBottomOf="@+id/rtg_venue" />
+            app:layout_constraintTop_toBottomOf="@+id/rtg_venue"
+            tools:src="@drawable/ic_baseline_star_rate_24"/>
 
         <ImageView
             android:id="@+id/image_edit_star_4"
@@ -66,11 +82,13 @@
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:elevation="2dp"
-            android:src="@drawable/ic_baseline_star_rate_24"
+            android:onClick="@{()->viewModel.clickRatingStore(4,rtgOrder)}"
+            app:clickRtgScore="@{viewModel.star[0]>=4}"
             app:layout_constraintEnd_toStartOf="@+id/image_edit_star_5"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/image_edit_star_3"
-            app:layout_constraintTop_toBottomOf="@+id/rtg_venue" />
+            app:layout_constraintTop_toBottomOf="@+id/rtg_venue"
+            tools:src="@drawable/ic_baseline_star_rate_24"/>
 
         <ImageView
             android:id="@+id/image_edit_star_5"
@@ -79,11 +97,13 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="36dp"
             android:elevation="2dp"
-            android:src="@drawable/ic_baseline_star_rate_24"
+            android:onClick="@{()->viewModel.clickRatingStore(5,rtgOrder)}"
+            app:clickRtgScore="@{viewModel.star[0]>=5}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/image_edit_star_4"
-            app:layout_constraintTop_toBottomOf="@+id/rtg_venue" />
+            app:layout_constraintTop_toBottomOf="@+id/rtg_venue"
+            tools:src="@drawable/ic_baseline_star_rate_24"/>
 
         <EditText
             android:id="@+id/rtg_score_list"
@@ -113,7 +133,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_upload_photo"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="80dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
@@ -153,7 +173,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_tag_frds"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="80dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
@@ -187,7 +207,17 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="18dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_drink_rtg" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -22,9 +22,9 @@
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/ratingFragment"
-        android:name="com.mingyuwu.barurside.rating.RatingFragment"
+        android:name="com.mingyuwu.barurside.editrating.EditRatingFragment"
         android:label="fragment_rating"
-        tools:layout="@layout/fragment_rating" />
+        tools:layout="@layout/fragment_edit_rating" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.mingyuwu.barurside.profile.ProfileFragment"
