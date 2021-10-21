@@ -47,9 +47,16 @@ class EditRatingFragment : Fragment() {
         binding.lifecycleOwner = this
 
         // set adapter
-        val adapter = EditRatingAdapter(viewModel, requireActivity())
+        val adapter = EditRatingAdapter(viewModel)
         binding.venueRtgScoreList.adapter = adapter
 
+
+        // add drink rating : set button click listener
+        binding.btnAddDrinkRtg.setOnClickListener {
+            viewModel.addNewRating()
+        }
+
+        // viewModel observer
         viewModel.rtgList.observe(viewLifecycleOwner, Observer {
             Log.d("Ming","Fragment rtgList.value: $it")
             adapter.submitList(it)
@@ -87,21 +94,13 @@ class EditRatingFragment : Fragment() {
 
 
     private fun checkAndRequestPermissions(context: Context): Boolean {
-        val wExtStorePermission: Int = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-        val cameraPermission: Int = ContextCompat.checkSelfPermission(
+        val rExtStorePermission: Int = ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.READ_EXTERNAL_STORAGE
         )
         val listPermissionsNeeded: MutableList<String> = ArrayList()
-        if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+        if (rExtStorePermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-        if (wExtStorePermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded
-                .add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
         if (listPermissionsNeeded.isNotEmpty()) {
             ActivityCompat.requestPermissions(
@@ -158,8 +157,6 @@ class EditRatingFragment : Fragment() {
                             val columnIndex: Int = cursor.getColumnIndex(filePathColumn[0])
                             val picturePath: String = cursor.getString(columnIndex)
                             val img = BitmapFactory.decodeFile(picturePath)
-                            Log.d("Ming","picturePath: $picturePath")
-                            Log.d("Ming","img: ${BitmapFactory.decodeFile(picturePath)}")
                             addImageToRecyclerView(img)
                             cursor.close()
                         }

@@ -16,10 +16,7 @@ import com.mingyuwu.barurside.rating.BitmapAdapter
 import com.mingyuwu.barurside.rating.UserImageAdapter
 
 
-class EditRatingAdapter(
-    private val viewModel: EditRatingViewModel,
-    private val activity: Activity
-) :
+class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
     ListAdapter<String, EditRatingAdapter.EditRatingViewHolder>(DiffCallback) {
 
     class EditRatingViewHolder(private var binding: ItemEditRatingObjectBinding) :
@@ -35,17 +32,10 @@ class EditRatingAdapter(
             }
         }
 
-        fun bind(viewModel: EditRatingViewModel, activity: Activity, position: Int) {
+        fun bind(viewModel: EditRatingViewModel, position: Int) {
 
             binding.viewModel = viewModel
             binding.rtgOrder = position
-
-            // set button btnAddDrinkRtg visibility
-            if (position == 0) {
-                binding.btnAddDrinkRtg.visibility = View.VISIBLE
-            } else {
-                binding.btnAddDrinkRtg.visibility = View.GONE
-            }
 
             // set recyclerView adapter
             val imgAdapter = BitmapAdapter(60, 70)
@@ -53,21 +43,9 @@ class EditRatingAdapter(
             binding.ratingAddImgList.adapter = imgAdapter
             binding.ratingTagFrdsList.adapter = tagFrdAdapter
 
-            // add drink rating : set button click listener
-            binding.btnAddDrinkRtg.setOnClickListener {
-                viewModel.addNewRating()
-            }
 
             // upload photo : set button click listener
             binding.btnAddImage.setOnClickListener {
-//                val bitmap = BitmapFactory.decodeResource(
-//                    BarUrSideApplication.appContext!!.resources,
-//                    R.drawable.image_placeholder
-//                )
-//                val pickPhoto =
-//                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//                startActivityForResult(activity, pickPhoto, 1, bundleOf("position" to position))
-//                viewModel.addUploadImg(position, bitmap)
                 viewModel.isClickBtn.value = true
                 viewModel.clickPosition.value = position
             }
@@ -103,7 +81,7 @@ class EditRatingAdapter(
     override fun onBindViewHolder(holder: EditRatingViewHolder, position: Int) {
         val id = getItem(position)
 
-        holder.bind(viewModel, activity, position)
+        holder.bind(viewModel, position)
     }
 
 }

@@ -22,7 +22,7 @@
             android:id="@+id/rtg_venue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="不醉不歸酒吧"
             android:textColor="@color/black_3f3a3a"
             android:textSize="24sp"
@@ -122,14 +122,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_edit_star_1" />
 
-        <Button
-            android:id="@+id/btn_add_drink_rtg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="新增酒類評價"
-            app:layout_constraintStart_toStartOf="@+id/constraint_tag_frds"
-            app:layout_constraintTop_toBottomOf="@+id/constraint_tag_frds" />
+<!--        <Button-->
+<!--            android:id="@+id/btn_add_drink_rtg"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:text="新增酒類評價"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/constraint_tag_frds"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/constraint_tag_frds" />-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_upload_photo"
@@ -221,12 +221,12 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="18dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:background="@android:color/darker_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_add_drink_rtg"
+            app:layout_constraintTop_toBottomOf="@+id/constraint_tag_frds"
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
