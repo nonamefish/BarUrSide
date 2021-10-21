@@ -12,7 +12,7 @@ import com.mingyuwu.barurside.data.mockdata.CollectData
 import com.mingyuwu.barurside.data.mockdata.RatingData
 import com.mingyuwu.barurside.databinding.FragmentCollectPageBinding
 
-class CollectPageFragment(val isVenue: Boolean) : Fragment() {
+class CollectPageFragment() : Fragment() {
 
     private lateinit var binding: FragmentCollectPageBinding
 
@@ -25,6 +25,8 @@ class CollectPageFragment(val isVenue: Boolean) : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_collect_page, container, false
         )
+
+        val isVenue = requireArguments().getBundle("isVenue")
 
         // data
         val collect = CollectData.collect

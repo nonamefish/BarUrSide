@@ -48,7 +48,7 @@ class EditRatingFragment : Fragment() {
         binding.lifecycleOwner = this
 
         // set adapter
-        val adapter = EditRatingAdapter(true, viewModel)
+        val adapter = EditRatingAdapter(viewModel)
         binding.venueRtgScoreList.adapter = adapter
 
         viewModel.rtgList.observe(viewLifecycleOwner, Observer {

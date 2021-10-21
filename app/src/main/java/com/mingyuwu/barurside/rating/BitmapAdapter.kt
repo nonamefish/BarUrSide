@@ -1,5 +1,6 @@
 package com.mingyuwu.barurside.rating
 
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,15 +8,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.collect.TAG
+import com.mingyuwu.barurside.databinding.ItemRatingBitmapBinding
 import com.mingyuwu.barurside.databinding.ItemRatingImageBinding
 
-class ImageAdapter (val width: Int, val height: Int) :
-    ListAdapter<String, ImageAdapter.ImageViewHolder>(DiffCallback) {
+class BitmapAdapter (val width: Int, val height: Int) :
+    ListAdapter<Bitmap, BitmapAdapter.ImageViewHolder>(DiffCallback) {
 
-    class ImageViewHolder(private var binding: ItemRatingImageBinding) :
+    class ImageViewHolder(private var binding: ItemRatingBitmapBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(img: String,width: Int,height: Int) {
+        fun bind(img: Bitmap,width: Int,height: Int) {
             binding.img=img
             binding.width=width
             binding.height=height
@@ -23,12 +25,12 @@ class ImageAdapter (val width: Int, val height: Int) :
     }
 
     // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
-    companion object DiffCallback : DiffUtil.ItemCallback<String>() {
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<Bitmap>() {
+        override fun areItemsTheSame(oldItem: Bitmap, newItem: Bitmap): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areContentsTheSame(oldItem: Bitmap, newItem: Bitmap): Boolean {
             return oldItem == newItem
         }
     }
@@ -40,7 +42,7 @@ class ImageAdapter (val width: Int, val height: Int) :
     ): ImageViewHolder {
 
         return ImageViewHolder(
-            ItemRatingImageBinding.inflate(LayoutInflater.from(parent.context))
+            ItemRatingBitmapBinding.inflate(LayoutInflater.from(parent.context))
         )
     }
 
@@ -54,5 +56,4 @@ class ImageAdapter (val width: Int, val height: Int) :
         Log.d(TAG,"getItemCount : ${super.getItemCount()}")
         return super.getItemCount()
     }
-
 }

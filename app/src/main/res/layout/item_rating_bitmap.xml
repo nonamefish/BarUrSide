@@ -6,7 +6,7 @@
 
         <variable
             name="img"
-            type="String" />
+            type="android.graphics.Bitmap" />
 
         <variable
             name="height"
@@ -27,7 +27,7 @@
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
-            app:imageUrl="@{img}"
+            app:imageBitmap="@{img}"
             app:imgHeight="@{height}"
             app:imgWidth="@{width}"
             app:layout_constraintBottom_toBottomOf="parent"

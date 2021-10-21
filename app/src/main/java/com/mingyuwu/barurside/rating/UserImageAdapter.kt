@@ -9,14 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.collect.TAG
 import com.mingyuwu.barurside.databinding.ItemUserImageBinding
 
-class UserImageAdapter () :
+class UserImageAdapter(private val size: Int) :
     ListAdapter<String, UserImageAdapter.TagFrdViewHolder>(DiffCallback) {
 
     class TagFrdViewHolder(private var binding: ItemUserImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(img: String) {
-            binding.img=img
+        fun bind(img: String, size: Int) {
+            binding.img = img
+            binding.size = size
         }
     }
 
@@ -45,11 +46,11 @@ class UserImageAdapter () :
     // Replaces the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: TagFrdViewHolder, position: Int) {
         val img = getItem(position)
-        holder.bind(img)
+        holder.bind(img, size)
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG,"getItemCount : ${super.getItemCount()}")
+        Log.d(TAG, "getItemCount : ${super.getItemCount()}")
         return super.getItemCount()
     }
 

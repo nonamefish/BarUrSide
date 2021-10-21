@@ -6,6 +6,9 @@
         <variable
             name="img"
             type="String" />
+        <variable
+            name="size"
+            type="int" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,13 +17,14 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/profile_base_img"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="2dp"
             app:cardCornerRadius="250dp"
             app:cardMaxElevation="5dp"
+            app:userImgSize="@{size}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

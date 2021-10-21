@@ -18,7 +18,7 @@ class InfoRatingAdapter() :
 
             fun bind(rating: Rating?) {
                 binding.ratingScoreList.adapter = RatingScoreAdapter(15,15)
-                binding.ratingTagFrdList.adapter = UserImageAdapter()
+                binding.ratingTagFrdList.adapter = UserImageAdapter(60)
                 binding.rating = rating
                 binding.user = UserData.user.user[0]
                 binding.objectName = "大麻婆豆腐"

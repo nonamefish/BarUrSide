@@ -8,20 +8,20 @@ import androidx.lifecycle.ViewModel
 
 class EditRatingViewModel() : ViewModel() {
 
-    private val _star = MutableLiveData<MutableList<Int?>>(listOf(null).toMutableList())
+    private val _star = MutableLiveData<MutableList<Int?>>()
     val star: LiveData<MutableList<Int?>>
         get() = _star
 
-    private val _comment = MutableLiveData<MutableList<String?>>(listOf(null).toMutableList())
+    private val _comment = MutableLiveData<MutableList<String?>>()
     val comment: LiveData<MutableList<String?>>
         get() = _comment
 
-    private val _uploadImg = MutableLiveData<MutableList<Bitmap?>>(listOf(null).toMutableList())
-    val uploadImg: LiveData<MutableList<Bitmap?>>
+    private val _uploadImg = MutableLiveData<MutableList<List<Bitmap?>>>()
+    val uploadImg: LiveData<MutableList<List<Bitmap?>>>
         get() = _uploadImg
 
-    private val _tagFrd = MutableLiveData<MutableList<String?>>(listOf(null).toMutableList())
-    val tagFrd: LiveData<MutableList<String?>>
+    private val _tagFrd = MutableLiveData<MutableList<List<String?>>>()
+    val tagFrd: LiveData<MutableList<List<String?>>>
         get() = _tagFrd
 
 
@@ -38,6 +38,10 @@ class EditRatingViewModel() : ViewModel() {
 
     init {
         _rtgList.value = listOf("1").toMutableList()
+        _tagFrd.value = listOf(listOf(null)).toMutableList()
+        _uploadImg.value = listOf(listOf(null)).toMutableList()
+        _comment.value = listOf(null).toMutableList()
+        _star.value = listOf(null).toMutableList()
     }
 
     fun clickRatingStore(score: Int, rtgOrder: Int) {
@@ -57,17 +61,27 @@ class EditRatingViewModel() : ViewModel() {
         _star.value!! += listOf(null).toMutableList()
         _uploadImg.value!! += listOf(null).toMutableList()
         _comment.value!! += listOf(null).toMutableList()
-        _tagFrd.value!! += listOf(null).toMutableList()
+        _tagFrd.value!! += listOf(listOf(null)).toMutableList()
         _rtgList.value = _rtgList.value
     }
 
 
-    fun addUploadImg(position: Int, img: Bitmap?) {
-        _uploadImg.value!![position] = img
+    fun addUploadImg(position: Int, bitmap: Bitmap?) {
+        if(_uploadImg.value!![position][0]==null){
+            _uploadImg.value!![position] = listOf(bitmap).toMutableList()
+        }else{
+            _uploadImg.value!![position] += listOf(bitmap).toMutableList()
+        }
+        _uploadImg.value = _uploadImg.value
     }
 
     fun addTagFrd(position: Int, frdId: String) {
-        _tagFrd.value!![position] = frdId
+        if(_tagFrd.value!![position][0]==null){
+            _tagFrd.value!![position] = listOf(frdId).toMutableList()
+        }else{
+            _tagFrd.value!![position] += listOf(frdId).toMutableList()
+        }
+        _tagFrd.value = _tagFrd.value
     }
 
     fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {
