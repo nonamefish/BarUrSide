@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.mockdata.CollectData
-import com.mingyuwu.barurside.data.mockdata.RatingData
 import com.mingyuwu.barurside.databinding.FragmentCollectPageBinding
 
 class CollectPageFragment() : Fragment() {
@@ -26,7 +25,7 @@ class CollectPageFragment() : Fragment() {
             inflater, R.layout.fragment_collect_page, container, false
         )
 
-        val isVenue = requireArguments().getBundle("isVenue")
+        val isVenue = this.requireArguments().getBoolean("isVenue")
 
         // data
         val collect = CollectData.collect
@@ -39,8 +38,6 @@ class CollectPageFragment() : Fragment() {
         )
         binding.collectList.adapter = adapter
         adapter.submitList(collect.collect)
-
-        Log.d("Ming","Here")
 
         return binding.root
     }

@@ -24,6 +24,9 @@ class EditRatingViewModel() : ViewModel() {
     val tagFrd: LiveData<MutableList<List<String?>>>
         get() = _tagFrd
 
+    // control upload image
+    val isClickBtn = MutableLiveData<Boolean>()
+    val clickPosition = MutableLiveData<Int>()
 
     // all rating item
     private val _rtgList = MutableLiveData<MutableList<String>>()

@@ -1,7 +1,9 @@
 package com.mingyuwu.barurside.editrating
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.BitmapFactory
-import android.util.Log
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,15 +11,15 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mingyuwu.barurside.BarUrSideApplication
-import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.ItemEditRatingObjectBinding
 import com.mingyuwu.barurside.rating.BitmapAdapter
-import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.UserImageAdapter
 
 
-class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
+class EditRatingAdapter(
+    private val viewModel: EditRatingViewModel,
+    private val activity: Activity
+) :
     ListAdapter<String, EditRatingAdapter.EditRatingViewHolder>(DiffCallback) {
 
     class EditRatingViewHolder(private var binding: ItemEditRatingObjectBinding) :
@@ -33,13 +35,13 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
             }
         }
 
-        fun bind(viewModel: EditRatingViewModel, position: Int) {
+        fun bind(viewModel: EditRatingViewModel, activity: Activity, position: Int) {
 
             binding.viewModel = viewModel
             binding.rtgOrder = position
 
             // set button btnAddDrinkRtg visibility
-            if (position==0) {
+            if (position == 0) {
                 binding.btnAddDrinkRtg.visibility = View.VISIBLE
             } else {
                 binding.btnAddDrinkRtg.visibility = View.GONE
@@ -51,25 +53,29 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
             binding.ratingAddImgList.adapter = imgAdapter
             binding.ratingTagFrdsList.adapter = tagFrdAdapter
 
-            // set button click listener
+            // add drink rating : set button click listener
             binding.btnAddDrinkRtg.setOnClickListener {
                 viewModel.addNewRating()
             }
 
+            // upload photo : set button click listener
             binding.btnAddImage.setOnClickListener {
-                val bitmap = BitmapFactory.decodeResource(
-                    BarUrSideApplication.appContext!!.resources,
-                    R.drawable.image_placeholder
-                )
-                viewModel.addUploadImg(position, bitmap)
+//                val bitmap = BitmapFactory.decodeResource(
+//                    BarUrSideApplication.appContext!!.resources,
+//                    R.drawable.image_placeholder
+//                )
+//                val pickPhoto =
+//                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//                startActivityForResult(activity, pickPhoto, 1, bundleOf("position" to position))
+//                viewModel.addUploadImg(position, bitmap)
+                viewModel.isClickBtn.value = true
+                viewModel.clickPosition.value = position
             }
 
+            // tag friend : set button click listener
             binding.btnTagFrd.setOnClickListener {
                 viewModel.addTagFrd(position, "")
             }
-
-
-
         }
     }
 
@@ -96,12 +102,9 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
     // Replaces the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: EditRatingViewHolder, position: Int) {
         val id = getItem(position)
-        holder.bind(viewModel, position)
-    }
 
-    override fun getItemCount(): Int {
-        Log.d("EditRatingAdapter", "getItemCount : ${super.getItemCount()}")
-        return super.getItemCount()
+        holder.bind(viewModel, activity, position)
     }
 
 }
+
