@@ -2,9 +2,15 @@
     <string name="app_name">BarUrSide</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <!--    Collect Tab-->
     <string name="collect_tab_venue">店家</string>
     <string name="collect_tab_drink">酒項</string>
+
+    <!--    Activity Tab-->
+    <string name="activity_tab_recommend">為你推薦</string>
+    <string name="activity_tab_activity">近期活動</string>
+    <string name="activity_tab_follow">追蹤中</string>
 
     <!--Venue Info -->
     <string name="venue_rating_info_view">(%,.1f)&#160;|&#160;%d則評論</string>

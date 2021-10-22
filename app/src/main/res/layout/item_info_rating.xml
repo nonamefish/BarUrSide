@@ -24,7 +24,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_user_info"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,10 +59,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                tools:text="無尾熊"
-                android:text = "@{User.name}"
+                android:text="@{User.name}"
                 app:layout_constraintStart_toEndOf="@+id/profile_base_img"
-                app:layout_constraintTop_toTopOf="@+id/profile_base_img" />
+                app:layout_constraintTop_toTopOf="@+id/profile_base_img"
+                tools:text="無尾熊" />
 
             <ImageView
                 android:id="@+id/img_user_post_cnt"
@@ -70,9 +70,9 @@
                 android:layout_height="18dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
+                android:src="@drawable/ic_baseline_menu_24"
                 app:layout_constraintStart_toEndOf="@+id/profile_base_img"
-                app:layout_constraintTop_toBottomOf="@+id/rtg_user_name"
-                android:src="@drawable/ic_baseline_menu_24" />
+                app:layout_constraintTop_toBottomOf="@+id/rtg_user_name" />
 
             <TextView
                 android:id="@+id/user_post_cnt"
@@ -80,19 +80,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@{User.shareCount.toString()}"
-                tools:text="569"
                 app:layout_constraintStart_toEndOf="@+id/img_user_post_cnt"
-                app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt" />
+                app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt"
+                tools:text="569" />
 
             <ImageView
                 android:id="@+id/img_user_postimg_cnt"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginStart="8dp"
-                app:layout_constraintStart_toEndOf="@+id/user_post_cnt"
-                app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt"
                 android:background="@drawable/ic_baseline_image_24"
-                android:backgroundTint="@color/black_3f3a3a"/>
+                android:backgroundTint="@color/black_3f3a3a"
+                app:layout_constraintStart_toEndOf="@+id/user_post_cnt"
+                app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt" />
 
             <TextView
                 android:id="@+id/user_postimg_cnt"
@@ -100,9 +100,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@{User.shareImageCount.toString()}"
-                tools:text="569"
                 app:layout_constraintStart_toEndOf="@+id/img_user_postimg_cnt"
-                app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt" />
+                app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt"
+                tools:text="569" />
 
             <TextView
                 android:id="@+id/see_user_profile"
@@ -117,7 +117,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_rtg_info"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"

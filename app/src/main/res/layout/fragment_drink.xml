@@ -163,16 +163,14 @@
                 android:id="@+id/drink_rtg_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                app:rtgList="@{Ratings}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_drink_last_rtg">
+                app:layout_constraintTop_toBottomOf="@+id/txt_drink_last_rtg"
+                app:rtgList="@{Ratings}">
 
             </androidx.recyclerview.widget.RecyclerView>
 

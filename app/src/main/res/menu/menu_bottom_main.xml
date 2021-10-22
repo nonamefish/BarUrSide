@@ -3,7 +3,7 @@
 <!--    id name is the same as the navigation fragment, and bottom navigation can map-->
     <item
         android:title="Activity"
-        android:id="@+id/ratingFragment"
+        android:id="@+id/activityFragment"
         android:icon="@drawable/sl_bar_activity" />
 
     <item

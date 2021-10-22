@@ -6,12 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.data.mockdata.UserData
 import com.mingyuwu.barurside.databinding.ItemInfoRatingBinding
+import com.mingyuwu.barurside.discoverdetail.DiscoverActivityAdapter
 
 class InfoRatingAdapter() :
-    ListAdapter<Rating?, InfoRatingAdapter.InfoRatingViewHolder>(DiffCallback) {
+    ListAdapter<Any, RecyclerView.ViewHolder>(DiscoverActivityAdapter) {
 
         class InfoRatingViewHolder(private var binding: ItemInfoRatingBinding) :
             RecyclerView.ViewHolder(binding.root) {
@@ -27,13 +29,13 @@ class InfoRatingAdapter() :
         }
 
         // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
-        companion object DiffCallback : DiffUtil.ItemCallback<Rating?>() {
-            override fun areItemsTheSame(oldItem: Rating, newItem: Rating): Boolean {
+        companion object DiffCallback : DiffUtil.ItemCallback<Any>() {
+            override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
                 return oldItem === newItem
             }
 
-            override fun areContentsTheSame(oldItem: Rating, newItem: Rating): Boolean {
-                return oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+                return (oldItem as Rating).id == (newItem as Rating).id
             }
         }
 
@@ -49,14 +51,12 @@ class InfoRatingAdapter() :
         }
 
         // Replaces the contents of a view (invoked by the layout manager)
-        override fun onBindViewHolder(holder: InfoRatingViewHolder, position: Int) {
-            val rating = getItem(position)
-            holder.bind(rating)
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            when (holder) {
+                is InfoRatingViewHolder -> {
+                    Log.d("Ming", getItem(position).toString())
+                    holder.bind((getItem(position) as Rating))
+                }
+            }
         }
-
-        override fun getItemCount(): Int {
-            Log.d(com.mingyuwu.barurside.collect.TAG, "getItemCount : ${super.getItemCount()}")
-            return super.getItemCount()
-        }
-
     }
