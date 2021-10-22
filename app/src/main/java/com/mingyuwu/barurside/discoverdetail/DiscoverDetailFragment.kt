@@ -8,9 +8,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.data.Drink
+import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.FragmentDiscoverDetailBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 
@@ -57,6 +61,23 @@ class DiscoverDetailFragment() : Fragment() {
         // assign value to recyclerView
         viewModel.detailData.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
+        }
+        )
+
+        // click info button and navigate to info fragment
+        viewModel.navigateToInfo.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                    is Venue ->{
+                        findNavController().navigate(
+                            MainNavigationDirections.navigateToVenueFragment(it.id)
+                        )
+                    }
+                    is Drink ->{
+                        findNavController().navigate(
+                            MainNavigationDirections.navigateToDrinkFragment(it.id)
+                        )
+                    }
+                }
             }
         )
 

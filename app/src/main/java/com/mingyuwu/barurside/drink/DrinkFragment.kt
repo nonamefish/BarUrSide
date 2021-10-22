@@ -11,6 +11,7 @@ import com.mingyuwu.barurside.data.mockdata.DrinkData
 import com.mingyuwu.barurside.data.mockdata.RatingData
 import com.mingyuwu.barurside.data.mockdata.VenueData
 import com.mingyuwu.barurside.databinding.FragmentDrinkBinding
+import com.mingyuwu.barurside.discoverdetail.DiscoverDetailFragmentArgs
 import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
@@ -27,6 +28,9 @@ class DrinkFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_drink, container, false
         )
+
+        // get id
+        val id = DrinkFragmentArgs.fromBundle(requireArguments()).id
 
         // mockData
         val drink = DrinkData.drink.drink

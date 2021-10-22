@@ -24,7 +24,11 @@
         android:id="@+id/ratingFragment"
         android:name="com.mingyuwu.barurside.editrating.EditRatingFragment"
         android:label="fragment_rating"
-        tools:layout="@layout/fragment_edit_rating" />
+        tools:layout="@layout/fragment_edit_rating" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.mingyuwu.barurside.profile.ProfileFragment"
@@ -37,7 +41,11 @@
     <fragment
         android:id="@+id/drinkFragment"
         android:name="com.mingyuwu.barurside.drink.DrinkFragment"
-        android:label="DrinkFragment" />
+        android:label="DrinkFragment" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
     <dialog
         android:id="@+id/filterFragment"
         android:name="com.mingyuwu.barurside.filter.FilterFragment"
@@ -45,7 +53,11 @@
     <fragment
         android:id="@+id/venueFragment"
         android:name="com.mingyuwu.barurside.venue.VenueFragment"
-        android:label="VenueFragment" />
+        android:label="VenueFragment" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/collectPageFragment"
         android:name="com.mingyuwu.barurside.collect.CollectPageFragment"
@@ -79,4 +91,16 @@
     <action
         android:id="@+id/navigate_to_random_fragment"
         app:destination="@id/randomFragment"></action>
+
+    <action
+        android:id="@+id/navigate_to_venue_fragment"
+        app:destination="@id/venueFragment"></action>
+
+    <action
+        android:id="@+id/navigate_to_drink_fragment"
+        app:destination="@id/drinkFragment"></action>
+
+    <action
+        android:id="@+id/navigate_to_rating_fragment"
+        app:destination="@id/ratingFragment"></action>
 </navigation>

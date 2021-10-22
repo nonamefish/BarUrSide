@@ -30,6 +30,10 @@ class DiscoverDrinkAdapter(val viewModel: DiscoverDetailViewModel) :
             binding.category = drink.category
             binding.info = drink.price.toString()
             binding.info2 = drink.venueId
+
+            binding.btnObjectInfo.setOnClickListener {
+                viewModel.navigateToInfo.value = drink
+            }
         }
     }
 

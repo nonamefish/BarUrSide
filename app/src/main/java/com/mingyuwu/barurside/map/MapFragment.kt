@@ -56,6 +56,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val mapFragment = childFragmentManager.findFragmentById(binding.googleMap.id) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        // set filter button on click listener
+        binding.btnFilter.setOnClickListener {
+            findNavController().navigate(
+                MainNavigationDirections.navigateToFilterFragment()
+            )
+        }
+
         return binding.root
     }
 
@@ -68,11 +75,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val mapView = binding.googleMap
         val locationButton = mapView.findViewById<View>("2".toInt())
         val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
-        binding.btnFilter.setOnClickListener {
-            findNavController().navigate(
-                MainNavigationDirections.navigateToFilterFragment()
-            )
-        }
 
         // set location btn margin
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
