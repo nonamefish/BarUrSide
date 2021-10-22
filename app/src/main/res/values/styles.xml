@@ -10,4 +10,11 @@
         <item name="android:background">@drawable/border_map_search</item>
         <item name="android:textColor">@color/white_f5f5f5</item>
     </style>
+
+    <style name="MapFilterDialog">
+        <item name="android:windowEnterAnimation">@null</item>
+        <item name="android:windowExitAnimation">@null</item>
+        <item name="android:windowBackground">@color/translucent_40</item>
+        <item name="android:animation">@null</item>
+    </style>
 </resources>

@@ -1,21 +1,34 @@
 package com.mingyuwu.barurside.filter
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.fragment.app.DialogFragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.databinding.FragmentFilterBinding
 
 
-class FilterFragment : Fragment() {
+class FilterFragment : BottomSheetDialogFragment() {
+
+    private lateinit var binding: FragmentFilterBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.MapFilterDialog)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        binding = FragmentFilterBinding.inflate(inflater, container, false)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_filter, container, false)
+        return binding.root
     }
 
 }

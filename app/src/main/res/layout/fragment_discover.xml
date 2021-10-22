@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".discover.DiscoverFragment">
@@ -22,9 +22,6 @@
 
         <EditText
             android:id="@+id/editTextTextPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginStart="24dp"
@@ -37,216 +34,288 @@
             android:maxLines="1"
             android:paddingStart="48dp"
             android:singleLine="true"
-            android:text="Name" />
+            android:text="Name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/btn_search"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
-            app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
-            app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginStart="16dp"
             android:backgroundTint="@color/gray_cccccc"
-            android:src="@drawable/icons_24px_discover" />
+            android:src="@drawable/icons_24px_discover"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
+            app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
+            app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName" />
 
-        <ImageView
-            android:id="@+id/img_around_venue"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="24dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cnstrt_recent_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view1"
-            android:src="@drawable/ic_baseline_storefront_24" />
+            android:clickable="true">
 
-        <TextView
-            android:id="@+id/txt_around_venue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="附近酒吧"
-            android:textColor="@color/black_3f3a3a"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/img_around_venue"
-            app:layout_constraintStart_toEndOf="@+id/img_around_venue"
-            app:layout_constraintTop_toTopOf="@+id/img_around_venue" />
+            <ImageView
+                android:id="@+id/img_recent_activity"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_outline_run_circle_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:id="@+id/view2"
+            <TextView
+                android:id="@+id/txt_recent_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="近期活動"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/img_recent_activity"
+                app:layout_constraintStart_toEndOf="@+id/img_recent_activity"
+                app:layout_constraintTop_toTopOf="@+id/img_recent_activity" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_recent_activity" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cnstrt_around_venue"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="@android:color/darker_gray"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_around_venue" />
+            app:layout_constraintTop_toBottomOf="@+id/cnstrt_recent_activity"
+            android:clickable="true">
 
-        <ImageView
-            android:id="@+id/img_recent_activity"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view2"
-            android:src="@drawable/ic_outline_run_circle_24" />
+            <ImageView
+                android:id="@+id/img_around_venue"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_baseline_storefront_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_recent_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="近期活動"
-            android:textColor="@color/black_3f3a3a"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/img_recent_activity"
-            app:layout_constraintStart_toEndOf="@+id/img_recent_activity"
-            app:layout_constraintTop_toTopOf="@+id/img_recent_activity" />
+            <TextView
+                android:id="@+id/txt_around_venue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="附近酒吧"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/img_around_venue"
+                app:layout_constraintStart_toEndOf="@+id/img_around_venue"
+                app:layout_constraintTop_toTopOf="@+id/img_around_venue" />
 
-        <View
-            android:id="@+id/view4"
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_around_venue" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cnstrt_hot_drink"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="@android:color/darker_gray"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_recent_activity" />
+            app:layout_constraintTop_toBottomOf="@+id/cnstrt_around_venue"
+            android:clickable="true">
 
-        <ImageView
-            android:id="@+id/img_hot_drink"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view4"
-            android:src="@drawable/ic_baseline_local_fire_department_24" />
+            <ImageView
+                android:id="@+id/img_hot_drink"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_baseline_local_fire_department_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_hot_drink"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="人氣酒項"
-            android:textColor="@color/black_3f3a3a"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/img_hot_drink"
-            app:layout_constraintStart_toEndOf="@+id/img_hot_drink"
-            app:layout_constraintTop_toTopOf="@+id/img_hot_drink" />
+            <TextView
+                android:id="@+id/txt_hot_drink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="人氣酒項"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/img_hot_drink"
+                app:layout_constraintStart_toEndOf="@+id/img_hot_drink"
+                app:layout_constraintTop_toTopOf="@+id/img_hot_drink" />
 
-        <View
-            android:id="@+id/view5"
+            <View
+                android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_hot_drink" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cnstrt_hot_venue"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="@android:color/darker_gray"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_hot_drink" />
+            app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_drink"
+            android:clickable="true">
 
-        <ImageView
-            android:id="@+id/img_hot_venue"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view5"
-            android:src="@drawable/ic_baseline_local_fire_department_24" />
+            <ImageView
+                android:id="@+id/img_hot_venue"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_baseline_local_fire_department_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_hot_venue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="熱門酒吧"
-            android:textColor="@color/black_3f3a3a"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/img_hot_venue"
-            app:layout_constraintStart_toEndOf="@+id/img_hot_venue"
-            app:layout_constraintTop_toTopOf="@+id/img_hot_venue" />
+            <TextView
+                android:id="@+id/txt_hot_venue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="熱門酒吧"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/img_hot_venue"
+                app:layout_constraintStart_toEndOf="@+id/img_hot_venue"
+                app:layout_constraintTop_toTopOf="@+id/img_hot_venue" />
 
-        <View
-            android:id="@+id/view6"
+            <View
+                android:id="@+id/view6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_hot_venue" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cnstrt_high_rate_drink"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="@android:color/darker_gray"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_hot_venue" />
+            app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_venue"
+            android:clickable="true">
 
-        <ImageView
-            android:id="@+id/img_high_rate_drink"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view6"
-            android:src="@drawable/ic_baseline_thumb_up_off_alt_24" />
+            <ImageView
+                android:id="@+id/img_high_rate_drink"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_high_rate_drink"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="好評酒類"
-            android:textColor="@color/black_3f3a3a"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/img_high_rate_drink"
-            app:layout_constraintStart_toEndOf="@+id/img_high_rate_drink"
-            app:layout_constraintTop_toTopOf="@+id/img_high_rate_drink" />
+            <TextView
+                android:id="@+id/txt_high_rate_drink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="好評酒類"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/img_high_rate_drink"
+                app:layout_constraintStart_toEndOf="@+id/img_high_rate_drink"
+                app:layout_constraintTop_toTopOf="@+id/img_high_rate_drink" />
 
-        <View
-            android:id="@+id/view7"
+            <View
+                android:id="@+id/view7"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_high_rate_drink" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cnstrt_high_rate_venue"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="@android:color/darker_gray"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_high_rate_drink" />
+            app:layout_constraintTop_toBottomOf="@+id/cnstrt_high_rate_drink"
+            android:clickable="true">
 
-        <ImageView
-            android:id="@+id/img_high_rate_venue"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view7"
-            android:src="@drawable/ic_baseline_thumb_up_off_alt_24" />
+            <ImageView
+                android:id="@+id/img_high_rate_venue"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_high_rate_venue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="眾人愛店"
-            android:textColor="@color/black_3f3a3a"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/img_high_rate_venue"
-            app:layout_constraintStart_toEndOf="@+id/img_high_rate_venue"
-            app:layout_constraintTop_toTopOf="@+id/img_high_rate_venue" />
+            <TextView
+                android:id="@+id/txt_high_rate_venue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="眾人愛店"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/img_high_rate_venue"
+                app:layout_constraintStart_toEndOf="@+id/img_high_rate_venue"
+                app:layout_constraintTop_toTopOf="@+id/img_high_rate_venue" />
 
-        <View
-            android:id="@+id/view8"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="@android:color/darker_gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_high_rate_venue" />
+            <View
+                android:id="@+id/view8"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_high_rate_venue" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

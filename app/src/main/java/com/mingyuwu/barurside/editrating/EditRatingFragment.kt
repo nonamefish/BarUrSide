@@ -20,10 +20,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import android.util.Log
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
+import com.mingyuwu.barurside.ext.getVmFactory
 import kotlin.collections.ArrayList
 
 
@@ -32,7 +33,7 @@ private const val REQUEST_ID_MULTIPLE_PERMISSIONS = 101
 class EditRatingFragment : Fragment() {
 
     private lateinit var binding: FragmentEditRatingBinding
-    private lateinit var viewModel: EditRatingViewModel
+    private val viewModel by viewModels<EditRatingViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +43,6 @@ class EditRatingFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_edit_rating, container, false
         )
-        viewModel = ViewModelProvider(this).get(EditRatingViewModel::class.java)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 

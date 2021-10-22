@@ -33,7 +33,8 @@ android {
 
     buildFeatures {
         buildConfig = true
-        dataBinding true
+        dataBinding = true
+        viewBinding = true
     }
 
     compileOptions {

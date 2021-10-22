@@ -26,8 +26,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentMapBinding
 import android.widget.RelativeLayout
-
-
+import androidx.navigation.fragment.findNavController
+import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.discover.Theme
 
 
 const val REQUEST_LOCATION_PERMISSION = 1
@@ -67,6 +68,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val mapView = binding.googleMap
         val locationButton = mapView.findViewById<View>("2".toInt())
         val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
+        binding.btnFilter.setOnClickListener {
+            findNavController().navigate(
+                MainNavigationDirections.navigateToFilterFragment()
+            )
+        }
 
         // set location btn margin
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)

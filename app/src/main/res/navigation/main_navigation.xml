@@ -38,7 +38,7 @@
         android:id="@+id/drinkFragment"
         android:name="com.mingyuwu.barurside.drink.DrinkFragment"
         android:label="DrinkFragment" />
-    <fragment
+    <dialog
         android:id="@+id/filterFragment"
         android:name="com.mingyuwu.barurside.filter.FilterFragment"
         android:label="FilterFragment" />
@@ -59,4 +59,24 @@
         android:id="@+id/mainActivity"
         android:name="com.mingyuwu.barurside.MainActivity"
         android:label="MainActivity" />
+    <fragment
+        android:id="@+id/discoverDetailFragment"
+        android:name="com.mingyuwu.barurside.discoverdetail.DiscoverDetailFragment"
+        android:label="DiscoverDetailFragment">
+        <argument
+            android:name="theme"
+            app:argType="com.mingyuwu.barurside.discover.Theme" />
+    </fragment>
+
+    <action
+        android:id="@+id/navigate_to_discover_detail_fragment"
+        app:destination="@id/discoverDetailFragment"></action>
+
+    <action
+        android:id="@+id/navigate_to_filter_fragment"
+        app:destination="@id/filterFragment"></action>
+
+    <action
+        android:id="@+id/navigate_to_random_fragment"
+        app:destination="@id/randomFragment"></action>
 </navigation>

@@ -4,6 +4,7 @@
     <color name="primaryLightColor">#b6ffff</color>
     <color name="primaryDarkColor">#4ba3c7</color>
     <color name="primaryTextColor">#000000</color>
+    <color name="translucent_40">#66000000</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
