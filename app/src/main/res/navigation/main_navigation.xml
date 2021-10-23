@@ -89,6 +89,15 @@
         android:name="com.mingyuwu.barurside.activity.ActivityPageFragment"
         android:label="ActivityPageFragment" />
 
+    <dialog
+        android:id="@+id/activityDetailDialog"
+        android:name="com.mingyuwu.barurside.activity.ActivityDetailDialog"
+        android:label="ActivityDetailDialog">
+        <argument
+            android:name="activity"
+            app:argType="com.mingyuwu.barurside.data.Activity" />
+    </dialog>
+
     <action
         android:id="@+id/navigate_to_discover_detail_fragment"
         app:destination="@id/discoverDetailFragment"></action>
@@ -121,5 +130,9 @@
         android:id="@+id/navigate_to_activity_fragment"
         app:destination="@id/activityFragment"
         app:popUpTo="@id/activityFragment"></action>
+
+    <action
+        android:id="@+id/navigate_to_activity_detail_dialog"
+        app:destination="@id/activityDetailDialog"></action>
 
 </navigation>

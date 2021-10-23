@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/background_dialog_corner.xml" value="0.4121552604698672" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_activity_detail.xml" value="0.2453125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_filter_level.xml" value="0.33425925925925926" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_map_search.xml" value="0.33425925925925926" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_rating_button.xml" value="0.2453125" />
@@ -21,10 +22,11 @@
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/activity_main.xml" value="0.16983695652173914" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/background_dialog_corner.xml" value="0.3278985507246377" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/collect_grid_list_item.xml" value="0.34601449275362317" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/dialog_activity_detail.xml" value="0.4" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/dialog_datetime_picker.xml" value="0.16304347826086957" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_activity.xml" value="0.3442028985507246" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_activity_page.xml" value="0.3278985507246377" />
-        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_add_activity.xml" value="0.264" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_add_activity.xml" value="0.4" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_collect.xml" value="0.34601449275362317" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_collect_page.xml" value="0.34601449275362317" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_discover.xml" value="0.264" />

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.databinding.FragmentActivityPageBinding
 import com.mingyuwu.barurside.discoverdetail.*
 import com.mingyuwu.barurside.ext.getVmFactory
@@ -55,7 +56,7 @@ class ActivityPageFragment() : Fragment() {
                 binding.btnAddActivity.visibility = View.GONE
             }
             ActivityTypeFilter.ACTIVITY -> {
-                adapter = DiscoverActivityAdapter()
+                adapter = DiscoverActivityAdapter(viewModel)
                 binding.activityList.adapter = adapter
             }
             ActivityTypeFilter.FOLLOW -> {
@@ -75,6 +76,16 @@ class ActivityPageFragment() : Fragment() {
             adapter.submitList(it)
         }
         )
+
+        // navigate to detail fragment
+        viewModel.navigateToDetail.observe(viewLifecycleOwner,Observer{
+            when (it) {
+                is Activity->{
+                    findNavController().navigate(MainNavigationDirections.navigateToActivityDetailDialog(it))
+                }
+            }
+//            viewModel.navigateToDetail.value=null
+        })
 
         return binding.root
     }

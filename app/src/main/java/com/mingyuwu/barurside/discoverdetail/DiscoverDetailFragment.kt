@@ -45,7 +45,7 @@ class DiscoverDetailFragment() : Fragment() {
         // set recyclerView adapter
         when (theme.order) {
             1 -> {
-                adapter = DiscoverActivityAdapter()
+                adapter = DiscoverActivityAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
             }
             in arrayOf(0, 3, 5) -> {

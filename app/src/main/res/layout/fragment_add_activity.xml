@@ -53,7 +53,7 @@
             app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
 
         <ImageView
-            android:id="@+id/img_add_activity_time2"
+            android:id="@+id/img_add_activity_address"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="32dp"
@@ -72,7 +72,7 @@
             android:background="@drawable/icons_24px_profile"
             android:backgroundTint="@color/black_3f3a3a"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_add_activity_time2" />
+            app:layout_constraintTop_toBottomOf="@+id/img_add_activity_address" />
 
         <ImageView
             android:id="@+id/img_add_activity_main"
@@ -133,8 +133,8 @@
             android:textSize="16sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_time2"
-            app:layout_constraintStart_toEndOf="@+id/img_add_activity_time2"
-            app:layout_constraintTop_toTopOf="@+id/img_add_activity_time2" />
+            app:layout_constraintStart_toEndOf="@+id/img_add_activity_address"
+            app:layout_constraintTop_toTopOf="@+id/img_add_activity_address" />
 
         <TextView
             android:id="@+id/add_activity_start"

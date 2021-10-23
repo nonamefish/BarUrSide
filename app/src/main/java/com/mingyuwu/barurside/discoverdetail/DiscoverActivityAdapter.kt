@@ -4,13 +4,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.activity.ActivityPageViewModel
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.databinding.ItemDiscoverObjectBinding
 
-class DiscoverActivityAdapter() :
+class DiscoverActivityAdapter(val viewModel: ViewModel) :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
 
     class DiscoverActivityViewHolder(private var binding: ItemDiscoverObjectBinding) :
@@ -25,13 +27,24 @@ class DiscoverActivityAdapter() :
             }
         }
 
-        fun bind(activity: Activity) {
-            binding.btnObjectInfo.visibility = View.GONE
+        fun bind(activity: Activity, viewModel: ViewModel) {
+            when(viewModel){
+                is DiscoverDetailViewModel->{
+
+                }
+                is ActivityPageViewModel ->{
+                    binding.btnObjectInfo.setOnClickListener {
+                        viewModel.navigateToDetail.value = activity
+                    }
+                }
+            }
             binding.name = activity.name
             binding.img = ""
             binding.category = activity.mainDrinking
             binding.info = activity.address
             binding.info2 = "上限: ${activity.peopleLimit} 人"
+
+
         }
     }
 
@@ -60,7 +73,7 @@ class DiscoverActivityAdapter() :
         when (holder) {
             is DiscoverActivityViewHolder -> {
                 Log.d("Ming", getItem(position).toString())
-                holder.bind((getItem(position) as Activity))
+                holder.bind((getItem(position) as Activity), viewModel)
             }
         }
     }

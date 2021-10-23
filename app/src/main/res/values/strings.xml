@@ -12,8 +12,10 @@
     <string name="activity_tab_activity">近期活動</string>
     <string name="activity_tab_follow">追蹤中</string>
 
-    <!--Venue Info -->
+    <!--    Venue Info -->
     <string name="venue_rating_info_view">(%,.1f)&#160;|&#160;%d則評論</string>
 
+    <!--    Activity detail -->
+    <string name="activity_detail_limit">%d/%d</string>
 
 </resources>

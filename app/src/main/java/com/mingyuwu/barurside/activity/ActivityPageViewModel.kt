@@ -15,6 +15,9 @@ class ActivityPageViewModel(val type: ActivityTypeFilter): ViewModel() {
     val activityData: MutableLiveData<List<Any>> // why cannot use LiveData<List<Any>>
         get() = _activityData
 
+    val navigateToDetail = MutableLiveData<Any?>()
+
+
     init{
         when (type) {
             ActivityTypeFilter.RECOMMEND -> {
