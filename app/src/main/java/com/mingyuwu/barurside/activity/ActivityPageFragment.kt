@@ -1,16 +1,21 @@
 package com.mingyuwu.barurside.activity
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentActivityPageBinding
 import com.mingyuwu.barurside.discoverdetail.*
@@ -21,6 +26,8 @@ class ActivityPageFragment() : Fragment() {
 
     private lateinit var binding: FragmentActivityPageBinding
     private lateinit var adapter: ListAdapter<Any, RecyclerView.ViewHolder>
+
+
     private val viewModel by viewModels<ActivityPageViewModel> {
         getVmFactory(
             requireArguments().get("type") as ActivityTypeFilter
@@ -58,12 +65,18 @@ class ActivityPageFragment() : Fragment() {
             }
         }
 
+        // set add activity on click listener
+        binding.btnAddActivity.setOnClickListener {
+            findNavController().navigate(MainNavigationDirections.navigateToAddActivityFragment())
+        }
+
         // assign value to recyclerView
         viewModel.activityData.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
-            }
+        }
         )
 
         return binding.root
     }
+
 }

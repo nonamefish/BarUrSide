@@ -32,4 +32,7 @@
 
     <!-- Black Series -->
     <color name="black_3f3a3a">#3f3a3a</color>
+
+    <!-- Green Series -->
+    <color name="green_0ead69">#0ead69</color>
 </resources>
