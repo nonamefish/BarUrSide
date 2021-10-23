@@ -6,12 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
+import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.mockdata.DrinkData
 import com.mingyuwu.barurside.data.mockdata.RatingData
 import com.mingyuwu.barurside.data.mockdata.VenueData
 import com.mingyuwu.barurside.databinding.FragmentDrinkBinding
-import com.mingyuwu.barurside.discoverdetail.DiscoverDetailFragmentArgs
 import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
@@ -44,9 +45,15 @@ class DrinkFragment : Fragment() {
 
         // set recyclerView Adapter
         binding.drinkRtgList.adapter = InfoRatingAdapter()
-        binding.drinkImgList.adapter = ImageAdapter(15,15)
+        binding.drinkImgList.adapter = ImageAdapter(80,100)
         binding.drinkRtgScoreList.adapter = RatingScoreAdapter(15,15)
 
+        // drink's venue info click listener
+        binding.btnVenueInfo.setOnClickListener {
+            findNavController().navigate(
+                MainNavigationDirections.navigateToVenueFragment(id) // set venue id
+            )
+        }
 
         return binding.root
     }

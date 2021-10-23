@@ -46,7 +46,7 @@ class VenueFragment : Fragment() {
 
         // set recyclerView Adapter
         binding.venueRtgList.adapter = InfoRatingAdapter()
-        binding.venueImgList.adapter = ImageAdapter(15,15)
+        binding.venueImgList.adapter = ImageAdapter(80,100)
         binding.venueRtgScoreList.adapter = RatingScoreAdapter(15,15)
 
         // set rating clock click listener

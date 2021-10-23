@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.addactivity.AddActivityViewModel" />
+    </data>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,6 +36,7 @@
             android:layout_marginEnd="24dp"
             android:ems="10"
             android:inputType="textPersonName"
+            android:text="@={viewModel.name}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_add_activity" />
@@ -122,6 +129,7 @@
             android:hint="輸入地點"
             android:inputType="text"
             android:singleLine="true"
+            android:text="@={viewModel.address}"
             android:textSize="16sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_time2"
@@ -136,6 +144,7 @@
             android:ems="10"
             android:hint="輸入開始時間"
             android:inputType="textPersonName"
+            android:text="@={viewModel.startTime}"
             android:textSize="16sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@+id/txt_add_activity_start"
@@ -150,6 +159,7 @@
             android:ems="10"
             android:hint="輸入結束時間"
             android:inputType="textPersonName"
+            android:text="@={viewModel.endTime}"
             android:textSize="16sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@+id/txt_add_activity_end"
@@ -164,6 +174,7 @@
             android:ems="10"
             android:hint="輸入人數上限"
             android:inputType="number"
+            android:text="@={viewModel.limit}"
             android:textSize="16sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_limit"
@@ -179,6 +190,7 @@
             android:hint="輸入主要品嚐酒類"
             android:inputType="text"
             android:singleLine="true"
+            android:text="@={viewModel.mainDrink}"
             android:textSize="16sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_main"
@@ -208,9 +220,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
             android:text="完成"
             android:textSize="16sp"
             app:backgroundTint="@color/green_0ead69"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_cancel"
             app:layout_constraintTop_toBottomOf="@+id/img_add_activity_main" />
 

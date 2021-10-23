@@ -33,7 +33,7 @@ class ProfileFragment : Fragment() {
         val rtg = RatingData.rating
 
         // test image adapter
-        val imgAdapter = ImageAdapter(15,15)
+        val imgAdapter = ImageAdapter(80,100)
         binding.venueImgList.adapter=imgAdapter
         imgAdapter.submitList(listOf("","",""))
 
