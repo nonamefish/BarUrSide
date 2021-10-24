@@ -1,11 +1,6 @@
 package com.mingyuwu.barurside.editrating
 
-import android.app.Activity
-import android.content.Intent
-import android.graphics.BitmapFactory
-import android.provider.MediaStore
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
@@ -46,7 +41,7 @@ class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
 
             // upload photo : set button click listener
             binding.btnAddImage.setOnClickListener {
-                viewModel.isClickBtn.value = true
+                viewModel.isUploadImgBtn.value = true
                 viewModel.clickPosition.value = position
             }
 

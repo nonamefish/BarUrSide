@@ -25,7 +25,7 @@ class EditRatingViewModel() : ViewModel() {
         get() = _tagFrd
 
     // control upload image
-    val isClickBtn = MutableLiveData<Boolean>()
+    val isUploadImgBtn = MutableLiveData<Boolean>()
     val clickPosition = MutableLiveData<Int>()
 
     // all rating item

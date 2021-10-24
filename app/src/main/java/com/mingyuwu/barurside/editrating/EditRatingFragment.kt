@@ -22,6 +22,8 @@ import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
 import com.mingyuwu.barurside.ext.getVmFactory
@@ -64,11 +66,17 @@ class EditRatingFragment : Fragment() {
             }
         )
 
-        viewModel.isClickBtn.observe(viewLifecycleOwner, Observer {
+        // click add photo button
+        viewModel.isUploadImgBtn.observe(viewLifecycleOwner, Observer {
             if (checkAndRequestPermissions(binding.root.context)) {
                 chooseImage(binding.root.context)
             }
         })
+
+        // set post rating button click listener
+        binding.btnRtgConfirm.setOnClickListener {
+            findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
+        }
 
         return binding.root
     }
