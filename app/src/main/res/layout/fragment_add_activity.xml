@@ -72,7 +72,7 @@
             android:background="@drawable/icons_24px_profile"
             android:backgroundTint="@color/black_3f3a3a"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_add_activity_address" />
+            app:layout_constraintTop_toBottomOf="@+id/add_activity_address" />
 
         <ImageView
             android:id="@+id/img_add_activity_main"
@@ -120,21 +120,19 @@
             app:layout_constraintStart_toStartOf="@+id/txt_add_activity_time"
             app:layout_constraintTop_toBottomOf="@+id/txt_add_activity_start" />
 
-        <EditText
+        <TextView
             android:id="@+id/add_activity_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
             android:layout_marginStart="16dp"
-            android:ems="10"
+            android:layout_marginEnd="16dp"
             android:hint="輸入地點"
-            android:inputType="text"
-            android:singleLine="true"
             android:text="@={viewModel.address}"
             android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_time2"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/img_add_activity_address"
-            app:layout_constraintTop_toTopOf="@+id/img_add_activity_address" />
+            app:layout_constraintTop_toTopOf="@+id/img_add_activity_address"
+            tools:text="輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點" />
 
         <TextView
             android:id="@+id/add_activity_start"
