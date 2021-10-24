@@ -5,21 +5,35 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.mingyuwu.barurside.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import androidx.navigation.fragment.findNavController
+import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.databinding.FragmentRandomBinding
 
 
 class RandomFragment : Fragment() {
+
+    private lateinit var binding: FragmentRandomBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val venue = RandomFragmentArgs.fromBundle(requireArguments()).venue
+        binding = FragmentRandomBinding.inflate(inflater, container, false)
+
+
+        // set button back click listener
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        // set button to venue
+        binding.btnToVenue.setOnClickListener {
+            findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(venue.id))
+        }
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_random, container, false)
+        return binding.root
     }
 }

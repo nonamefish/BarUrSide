@@ -197,6 +197,8 @@
 
             <Button
                 android:id="@+id/btn_confirm"
+                style="@style/RatingButton"
+                android:textSize="16sp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
@@ -204,6 +206,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="確認"
+                app:backgroundTint="@color/theme_700"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

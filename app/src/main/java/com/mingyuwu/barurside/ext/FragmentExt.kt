@@ -8,6 +8,7 @@ import com.mingyuwu.barurside.factory.ActivityPageViewModelFactory
 import com.mingyuwu.barurside.factory.CollectPageViewModelFactory
 import com.mingyuwu.barurside.factory.DiscoverDetailViewModelFactory
 import com.mingyuwu.barurside.factory.ViewModelFactory
+import com.mingyuwu.barurside.filter.FilterParameter
 
 
 fun Fragment.getVmFactory(): ViewModelFactory {
@@ -15,9 +16,12 @@ fun Fragment.getVmFactory(): ViewModelFactory {
     return ViewModelFactory()
 }
 
-fun Fragment.getVmFactory(theme: Theme): DiscoverDetailViewModelFactory {
+fun Fragment.getVmFactory(
+    theme: Theme,
+    filterParameter: FilterParameter?
+): DiscoverDetailViewModelFactory {
 //    val repository = (requireContext().applicationContext as StylishApplication).stylishRepository
-    return DiscoverDetailViewModelFactory(theme)
+    return DiscoverDetailViewModelFactory(theme, filterParameter)
 }
 
 fun Fragment.getVmFactory(isVenue: Boolean): CollectPageViewModelFactory {

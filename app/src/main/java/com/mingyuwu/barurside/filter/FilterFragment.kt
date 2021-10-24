@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentFilterBinding
+import com.mingyuwu.barurside.discover.Theme
 
 
 class FilterFragment : BottomSheetDialogFragment() {
@@ -26,6 +29,16 @@ class FilterFragment : BottomSheetDialogFragment() {
     ): View? {
 
         binding = FragmentFilterBinding.inflate(inflater, container, false)
+
+        // set confirm button click listener
+        binding.btnConfirm.setOnClickListener {
+            findNavController().navigate(
+                MainNavigationDirections.navigateToDiscoverDetailFragment(
+                    Theme.MAP_FILTER,
+                    FilterParameter(0,listOf(null),listOf(null),null)
+                )
+            )
+        }
 
         // Inflate the layout for this fragment
         return binding.root

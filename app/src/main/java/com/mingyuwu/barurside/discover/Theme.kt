@@ -6,6 +6,7 @@ enum class Theme (val order: Int) {
     HOT_DRINK(2),
     HOT_VENUE(3),
     HIGH_RATE_DRINK(4),
-    HIGH_RATE_VENUE(5)
+    HIGH_RATE_VENUE(5),
+    MAP_FILTER(6),
 }
 

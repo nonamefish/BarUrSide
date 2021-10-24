@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentDiscoverBinding
 
 class DiscoverFragment : Fragment() {
@@ -23,7 +22,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtAroundVenue.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.AROUND_VENUE
+                    Theme.AROUND_VENUE,null
                 )
             )
         }
@@ -31,7 +30,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtRecentActivity.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.RECENT_ACTIVITY
+                    Theme.RECENT_ACTIVITY,null
                 )
             )
         }
@@ -39,7 +38,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtHotDrink.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HOT_DRINK
+                    Theme.HOT_DRINK,null
                 )
             )
         }
@@ -47,7 +46,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtHotVenue.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HOT_VENUE
+                    Theme.HOT_VENUE,null
                 )
             )
         }
@@ -55,7 +54,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtHighRateDrink.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HIGH_RATE_DRINK
+                    Theme.HIGH_RATE_DRINK,null
                 )
             )
         }
@@ -63,7 +62,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtHighRateVenue.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HIGH_RATE_VENUE
+                    Theme.HIGH_RATE_VENUE,null
                 )
             )
         }
