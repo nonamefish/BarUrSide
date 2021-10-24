@@ -114,22 +114,13 @@
             android:layout_marginEnd="24dp"
             android:background="@drawable/border_map_search"
             android:ems="10"
-            android:hint="請輸入用餐體驗"
+            android:hint="輸入評論"
             android:inputType="textPersonName"
             android:padding="8sp"
             android:text=""
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_edit_star_1" />
-
-<!--        <Button-->
-<!--            android:id="@+id/btn_add_drink_rtg"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:text="新增酒類評價"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/constraint_tag_frds"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/constraint_tag_frds" />-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_upload_photo"
@@ -147,12 +138,12 @@
                 android:id="@+id/btn_add_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:background="@null"
                 android:drawableTop="@drawable/ic_baseline_image_24"
                 android:text="選取圖片"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -160,14 +151,13 @@
                 android:id="@+id/rating_add_img_list"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:orientation="horizontal"
                 app:imageBitmaps="@{viewModel.uploadImg[rtgOrder]}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_add_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -175,7 +165,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_tag_frds"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
@@ -184,25 +174,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraint_upload_photo">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <AutoCompleteTextView
                 android:id="@+id/btn_tag_frd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:drawableTop="@drawable/ic_baseline_tag_24"
-                android:text="標註朋友"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:completionThreshold="1"
+                android:hint="標註朋友"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rating_tag_frds_list"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
@@ -212,7 +200,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_tag_frd" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

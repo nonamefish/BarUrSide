@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -19,6 +20,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -55,7 +58,25 @@ class EditRatingFragment : Fragment() {
 
         // add drink rating : set button click listener
         binding.btnAddDrinkRtg.setOnClickListener {
-            viewModel.addNewRating()
+            val menuItem = arrayListOf("Old Fashion", "Gin Tonic")
+            val mBuilder = AlertDialog.Builder(activity)
+            val mView = LayoutInflater.from(context).inflate(R.layout.dialog_venue_menu,null)
+            val spinner = mView.findViewById<Spinner>(R.id.spinner)
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, menuItem)
+            spinner.adapter = adapter
+            mBuilder.setTitle("選取評價項目")
+
+            mBuilder.setPositiveButton("OK") { dialog, _ ->
+                Log.d("Ming", spinner.selectedItem.toString())
+                viewModel.addNewRating()
+                dialog.dismiss()
+            }
+
+            mBuilder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            mBuilder.setView(mView).show()
         }
 
         // viewModel observer
@@ -77,6 +98,8 @@ class EditRatingFragment : Fragment() {
         binding.btnRtgConfirm.setOnClickListener {
             findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
         }
+
+
 
         return binding.root
     }

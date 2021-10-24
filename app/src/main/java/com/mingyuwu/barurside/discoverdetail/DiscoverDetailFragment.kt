@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.mockdata.VenueData
@@ -84,6 +85,11 @@ class DiscoverDetailFragment() : Fragment() {
                 is Drink -> {
                     findNavController().navigate(
                         MainNavigationDirections.navigateToDrinkFragment(it.id)
+                    )
+                }
+                is Activity -> {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToActivityDetailDialog(it)
                     )
                 }
             }

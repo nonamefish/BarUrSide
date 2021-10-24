@@ -2,6 +2,7 @@ package com.mingyuwu.barurside.editrating
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -27,10 +28,10 @@ class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
             }
         }
 
-        fun bind(viewModel: EditRatingViewModel, position: Int) {
+        fun bind(viewModel: EditRatingViewModel, rtgOrder: Int) {
 
             binding.viewModel = viewModel
-            binding.rtgOrder = position
+            binding.rtgOrder = rtgOrder
 
             // set recyclerView adapter
             val imgAdapter = BitmapAdapter(60, 70)
@@ -42,12 +43,18 @@ class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
             // upload photo : set button click listener
             binding.btnAddImage.setOnClickListener {
                 viewModel.isUploadImgBtn.value = true
-                viewModel.clickPosition.value = position
+                viewModel.clickPosition.value = rtgOrder
             }
 
-            // tag friend : set button click listener
-            binding.btnTagFrd.setOnClickListener {
-                viewModel.addTagFrd(position, "")
+
+            // tag friend : set adapter and item click listener
+            val lunch = arrayListOf("Jason", "John", "Peter", "Allen", "Akuan")
+            val adapter = ArrayAdapter(binding.root.context, android.R.layout.simple_spinner_dropdown_item, lunch)
+            binding.btnTagFrd.setAdapter(adapter)
+
+            binding.btnTagFrd.setOnItemClickListener { _, _, position, _ ->
+                binding.btnTagFrd.setText("")
+                viewModel.addTagFrd(rtgOrder, "")
             }
         }
     }

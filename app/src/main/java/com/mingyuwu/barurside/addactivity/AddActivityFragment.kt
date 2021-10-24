@@ -87,7 +87,6 @@ class AddActivityFragment : Fragment() {
 
         // address edit text click listener
         binding.addActivityAddress.setOnClickListener{ // Set the fields to specify which types of place data to
-
             //start activity result
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
         }
