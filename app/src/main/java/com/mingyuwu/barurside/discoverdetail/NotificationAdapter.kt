@@ -30,7 +30,7 @@ class NotificationAdapter(val viewModel: ViewModel) :
         }
 
         fun bind(notification: Notification, viewModel: ViewModel) {
-
+            binding.notification = notification
         }
     }
 

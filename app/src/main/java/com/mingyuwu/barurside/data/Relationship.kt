@@ -8,4 +8,11 @@ import java.sql.Timestamp
 class Relationship(
     val id: String,
     val date: Timestamp
-) : Parcelable
+) : Parcelable{
+    companion object{
+        fun toHashMap(dt : Relationship) = hashMapOf(
+            "id" to dt.id,
+            "date" to dt.date
+        )
+    }
+}

@@ -9,8 +9,9 @@ class NotificationData {
             Notification(
                 "1",
                 "11",
+                "",
                 "Friend Request",
-                Timestamp(System.currentTimeMillis()),
+                Timestamp(1635004800274),
                 "1",
                 "1",
                 "<b>無尾熊</b>想要加你好友",
@@ -19,8 +20,9 @@ class NotificationData {
             Notification(
                 "2",
                 "11",
+                "",
                 "Friend Request",
-                Timestamp(System.currentTimeMillis()),
+                Timestamp(1635005300274),
                 "1",
                 "1",
                 "<b>Jason Mraz</b>想要加你好友",

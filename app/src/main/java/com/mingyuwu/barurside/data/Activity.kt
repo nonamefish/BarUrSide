@@ -15,4 +15,18 @@ data class Activity(
     val mainDrinking: String,
     val sponsor: String,
     val bookers: List<Relationship>
-): Parcelable
+): Parcelable {
+    companion object{
+        fun toHashMap(dt : Activity) = hashMapOf(
+            "id" to dt.id,
+            "name" to dt.name,
+            "startTime" to dt.startTime,
+            "endTime" to dt.endTime,
+            "address" to dt.address,
+            "peopleLimit" to dt.peopleLimit,
+            "mainDrinking" to dt.mainDrinking,
+            "sponsor" to dt.sponsor,
+            "bookers" to dt.bookers
+        )
+    }
+}

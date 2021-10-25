@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
-            name="friend"
-            type="com.mingyuwu.barurside.data.User" />
+            name="notification"
+            type="com.mingyuwu.barurside.data.Notification" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{friend.image}"
+                app:imageUrl="@{notification.image}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -42,9 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="@string/test"
+            app:notifyContent="@{notification.content}"
             app:layout_constraintStart_toEndOf="@+id/profile_base_img"
-            app:layout_constraintTop_toTopOf="@+id/profile_base_img" />
+            app:layout_constraintTop_toTopOf="@+id/profile_base_img"
+            tools:text="@string/test" />
 
         <TextView
             android:id="@+id/notify_date"
@@ -52,12 +54,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="2dp"
-            android:text="@{friend.name}"
             android:textColor="@color/theme_500"
             android:textSize="12sp"
             android:textStyle="normal"
             app:layout_constraintStart_toEndOf="@+id/profile_base_img"
             app:layout_constraintTop_toBottomOf="@+id/notify_title"
+            app:notifyPeriod="@{notification.date}"
             tools:text="一週前" />
 
         <Button

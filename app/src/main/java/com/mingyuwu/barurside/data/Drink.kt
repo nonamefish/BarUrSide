@@ -15,4 +15,18 @@ data class Drink(
     val images: List<String>,
     val avgRating: Double,
     val rtgCount: Number
-) : Parcelable
+) : Parcelable{
+    companion object{
+        fun toHashMap(dt : Drink) = hashMapOf(
+            "id" to dt.id,
+            "menuId" to dt.menuId,
+            "venueId" to dt.venueId,
+            "name" to dt.name,
+            "category" to dt.category,
+            "price" to dt.price,
+            "images" to dt.images,
+            "avgRating" to dt.avgRating,
+            "rtgCount" to dt.rtgCount
+        )
+    }
+}

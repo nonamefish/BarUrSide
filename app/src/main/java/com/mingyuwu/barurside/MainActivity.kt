@@ -7,9 +7,17 @@ import android.util.Log
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.mingyuwu.barurside.data.*
+import com.mingyuwu.barurside.data.mockdata.*
 import com.mingyuwu.barurside.databinding.ActivityMainBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.editrating.EditRatingFragment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,8 +43,19 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         }
-
+        addData()
         setContentView(binding.root)
     }
 
+    fun addData() {
+        val articles = FirebaseFirestore.getInstance()
+            .collection("user")
+
+        for( dt in  UserData.user.user){
+            val document = articles.document()
+            val data = User.toHashMap(dt)
+            document.set(data)
+        }
+    }
+    
 }

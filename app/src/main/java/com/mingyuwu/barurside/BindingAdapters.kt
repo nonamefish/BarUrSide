@@ -1,12 +1,17 @@
 package com.mingyuwu.barurside
 
 import android.graphics.Bitmap
+import android.icu.text.DateFormat.DAY
+import android.text.Html
 import android.text.format.DateFormat
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.fromHtml
+import androidx.core.util.rangeTo
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -16,10 +21,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.rating.*
 import java.sql.Timestamp
+import java.util.concurrent.TimeUnit
+import kotlin.math.round
 
 @BindingAdapter("stars")
 fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
-    Log.d("Ming", "stars: $stars")
     stars?.let {
         var starList = listOf<ScoreStatus>()
         for (i in 0 until stars.roundToInt()) {
@@ -38,7 +44,6 @@ fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
 
 @BindingAdapter("imageUrls")
 fun bindRecyclerViewWithImageUrls(recyclerView: RecyclerView, imageUrls: List<String>?) {
-    Log.d("Ming", "imageUrls: $imageUrls")
     imageUrls?.let {
         if (imageUrls != listOf(null)) {
             recyclerView.adapter?.apply {
@@ -70,7 +75,6 @@ fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean?) {
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
-    Log.d("Ming", "imgUrl: $imgUrl")
     imgUrl?.let {
         val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
         Glide.with(imgView.context)
@@ -133,7 +137,6 @@ fun bindRecyclerViewWithImageBitmap(imageView: ImageView, imageBitmap: Bitmap?) 
 
 @BindingAdapter("imageBitmaps")
 fun bindRecyclerViewWithImageBitmaps(recyclerView: RecyclerView, imageBitmaps: List<Bitmap>?) {
-    Log.d("Ming", "imageBitmaps: $imageBitmaps")
     imageBitmaps?.let {
         if (imageBitmaps != listOf(null)) {
             recyclerView.adapter?.apply {
@@ -147,3 +150,36 @@ fun bindRecyclerViewWithImageBitmaps(recyclerView: RecyclerView, imageBitmaps: L
     }
 }
 
+@BindingAdapter("notifyPeriod")
+fun bindNotificationPeriod(textView: TextView, date: Timestamp) {
+    date?.let {
+        val current = Timestamp(System.currentTimeMillis())
+        val diff = current.time - date.time
+        val diffHour = TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS)
+        val diffDay = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+        when {
+            diffHour<0 -> {
+                textView.text = "${TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS)}分鐘前"
+            }
+            diffHour<24 -> {
+                textView.text = "${diffHour}小時前"
+            }
+            diffDay<7 -> {
+                textView.text = "${diffDay}天前"
+            }
+            diffDay<30 -> {
+                textView.text = "${round(diffDay/7 as Double)+1}週前"
+            }
+            else -> {
+                textView.text = "幾個月前"
+            }
+        }
+    }
+}
+
+@BindingAdapter("notifyContent")
+fun bindNotificationContent(textView: TextView, content: String) {
+    content?.let {
+        textView.text = fromHtml(content, HtmlCompat.FROM_HTML_MODE_LEGACY)
+    }
+}

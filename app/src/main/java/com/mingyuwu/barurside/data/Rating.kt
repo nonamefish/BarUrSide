@@ -15,4 +15,18 @@ data class Rating(
     val images: List<String>,
     val postDate: Timestamp,
     val tagFriends: List<String>
-) : Parcelable
+) : Parcelable{
+    companion object{
+        fun toHashMap(dt : Rating) = hashMapOf(
+            "id" to dt.id,
+            "objectId" to dt.objectId,
+            "isVenue" to dt.isVenue,
+            "userId" to dt.userId,
+            "rating" to dt.rating,
+            "comment" to dt.comment,
+            "images" to dt.images,
+            "postDate" to dt.postDate,
+            "tagFriends" to dt.tagFriends
+        )
+    }
+}

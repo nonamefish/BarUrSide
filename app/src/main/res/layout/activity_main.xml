@@ -60,16 +60,19 @@
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_nav"
+                style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="bottom"
                 android:layout_weight="1"
-                app:itemIconSize="36dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                app:itemIconSize="24dp"
                 app:itemIconTint="@color/sl_nav_color"
                 app:itemRippleColor="@color/white"
                 app:itemTextColor="@color/sl_nav_color"
-                app:labelVisibilityMode="unlabeled"
+                app:labelVisibilityMode="labeled"
                 app:menu="@menu/menu_bottom_main" />
 
 

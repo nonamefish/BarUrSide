@@ -1,7 +1,6 @@
 package com.mingyuwu.barurside.data.mockdata
 
 import com.mingyuwu.barurside.data.Activity
-import com.mingyuwu.barurside.data.Collect
 import com.mingyuwu.barurside.data.Relationship
 import java.sql.Timestamp
 

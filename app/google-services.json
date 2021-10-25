@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "411833823153",
+    "project_id": "barurside",
+    "storage_bucket": "barurside.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411833823153:android:4d12e3eb3391dabfbe9790",
+        "android_client_info": {
+          "package_name": "com.mingyuwu.barurside"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411833823153-libohinog7r2q48najglsg1fr6gjhlff.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFzO_T1Dehm9s-6UvI_hgS8o4dSoOsi7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411833823153-libohinog7r2q48najglsg1fr6gjhlff.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
