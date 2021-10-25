@@ -6,9 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
+import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.mockdata.RatingData
 import com.mingyuwu.barurside.databinding.FragmentProfileBinding
+import com.mingyuwu.barurside.discover.Theme
+import com.mingyuwu.barurside.discoverdetail.DiscoverDetailFragmentArgs
 import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.UserRatingAdapter
 
@@ -21,6 +25,10 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
+        val id = ProfileFragmentArgs.fromBundle(requireArguments()).id
+
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -46,6 +54,17 @@ class ProfileFragment : Fragment() {
         val rtgDkAdapter = UserRatingAdapter()
         binding.userRtgDrinkList.adapter=rtgDkAdapter
         rtgDkAdapter.submitList(rtg.rating)
+
+        // test friend adapter
+
+        binding.myFriend.setOnClickListener {
+            findNavController().navigate(MainNavigationDirections.navigateToDiscoverDetailFragment(Theme.USER_FRIEND,id,null))
+        }
+
+        // test activity adapter
+        binding.myActivity.setOnClickListener {
+            findNavController().navigate(MainNavigationDirections.navigateToDiscoverDetailFragment(Theme.USER_ACTIVITY,id,null))
+        }
 
         return binding.root
     }

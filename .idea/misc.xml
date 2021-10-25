@@ -19,7 +19,7 @@
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/sl_bar_profile.xml" value="0.3907407407407407" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/sl_bar_search.xml" value="0.3907407407407407" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/sl_nav_color.xml" value="0.3907407407407407" />
-        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/activity_main.xml" value="0.16983695652173914" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/activity_main.xml" value="0.6" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/background_dialog_corner.xml" value="0.3278985507246377" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/collect_grid_list_item.xml" value="0.34601449275362317" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/dialog_activity_detail.xml" value="0.4" />
@@ -44,7 +44,9 @@
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_collect_grid.xml" value="0.4" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_discover_object.xml" value="0.3500697350069735" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_edit_rating_object.xml" value="0.4602272727272727" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_friend.xml" value="0.4" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_info_rating.xml" value="0.4" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_notification.xml" value="0.29528985507246375" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_rating_bitmap.xml" value="0.2776268115942029" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_rating_count.xml" value="0.34601449275362317" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_rating_image.xml" value="0.2" />

@@ -19,6 +19,7 @@ import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.mockdata.VenueData
 import com.mingyuwu.barurside.databinding.FragmentDiscoverDetailBinding
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.profile.FriendAdapter
 
 class DiscoverDetailFragment() : Fragment() {
 
@@ -47,7 +48,7 @@ class DiscoverDetailFragment() : Fragment() {
 
         // set recyclerView adapter
         when (theme.order) {
-            1 -> {
+            in arrayOf(1, 8) -> {
                 adapter = DiscoverActivityAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
@@ -55,6 +56,11 @@ class DiscoverDetailFragment() : Fragment() {
             6 -> {
                 adapter = DiscoverVenueAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
+            }
+            7 -> {
+                adapter = FriendAdapter(viewModel)
+                binding.discoverObjectList.adapter = adapter
+                binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
             in arrayOf(0, 3, 5) -> {
                 adapter = DiscoverVenueAdapter(viewModel)

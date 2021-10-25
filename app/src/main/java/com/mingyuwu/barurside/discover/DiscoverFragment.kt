@@ -22,7 +22,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtAroundVenue.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.AROUND_VENUE,null
+                    Theme.AROUND_VENUE,null,null
                 )
             )
         }
@@ -30,7 +30,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtRecentActivity.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.RECENT_ACTIVITY,null
+                    Theme.RECENT_ACTIVITY,null,null
                 )
             )
         }
@@ -38,7 +38,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtHotDrink.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HOT_DRINK,null
+                    Theme.HOT_DRINK,null,null
                 )
             )
         }
@@ -46,7 +46,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtHotVenue.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HOT_VENUE,null
+                    Theme.HOT_VENUE,null,null
                 )
             )
         }
@@ -54,7 +54,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtHighRateDrink.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HIGH_RATE_DRINK,null
+                    Theme.HIGH_RATE_DRINK,null,null
                 )
             )
         }
@@ -62,7 +62,7 @@ class DiscoverFragment : Fragment() {
         binding.cnstrtHighRateVenue.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HIGH_RATE_VENUE,null
+                    Theme.HIGH_RATE_VENUE,null,null
                 )
             )
         }

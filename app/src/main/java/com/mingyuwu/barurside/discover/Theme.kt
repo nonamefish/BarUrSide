@@ -8,5 +8,7 @@ enum class Theme (val order: Int) {
     HIGH_RATE_DRINK(4),
     HIGH_RATE_VENUE(5),
     MAP_FILTER(6),
+    USER_FRIEND(7),
+    USER_ACTIVITY(8)
 }
 

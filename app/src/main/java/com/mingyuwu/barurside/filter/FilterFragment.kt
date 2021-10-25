@@ -35,6 +35,7 @@ class FilterFragment : BottomSheetDialogFragment() {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
                     Theme.MAP_FILTER,
+                    null,
                     FilterParameter(0,listOf(null),listOf(null),null)
                 )
             )
