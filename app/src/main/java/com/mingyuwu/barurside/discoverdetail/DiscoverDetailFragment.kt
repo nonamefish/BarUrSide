@@ -62,6 +62,11 @@ class DiscoverDetailFragment() : Fragment() {
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
+            9->{
+                adapter = NotificationAdapter(viewModel)
+                binding.discoverObjectList.adapter = adapter
+                binding.btnRandom.visibility = View.GONE // set random button invisibility
+            }
             in arrayOf(0, 3, 5) -> {
                 adapter = DiscoverVenueAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter

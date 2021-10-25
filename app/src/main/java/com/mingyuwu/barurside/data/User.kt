@@ -10,7 +10,6 @@ data class User(
     val name: String,
     val image: String,
     val friends: List<Relationship>,
-    val requests: List<Relationship>,
     val shareCount: Number,
     val shareImageCount: Number,
 ) : Parcelable

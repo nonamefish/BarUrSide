@@ -4,10 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mingyuwu.barurside.data.mockdata.ActivityData
-import com.mingyuwu.barurside.data.mockdata.DrinkData
-import com.mingyuwu.barurside.data.mockdata.UserData
-import com.mingyuwu.barurside.data.mockdata.VenueData
+import com.mingyuwu.barurside.data.Notification
+import com.mingyuwu.barurside.data.mockdata.*
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.filter.FilterParameter
 
@@ -34,6 +32,9 @@ class DiscoverDetailViewModel(val theme: Theme, val filterParameter: FilterParam
             }
             7 -> {
                 _detailData.value = UserData.user.user
+            }
+            9 -> {
+                _detailData.value = NotificationData.notification.notification
             }
             in arrayOf(0, 3, 5) -> {
                 _detailData.value = VenueData.venue.venue

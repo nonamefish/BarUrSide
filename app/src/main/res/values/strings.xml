@@ -18,4 +18,6 @@
     <!--    Activity detail -->
     <string name="activity_detail_limit">%d/%d</string>
     <string name="tag_friend">標註朋友</string>
+
+    <string name="test"><b>無尾熊</b>想要加你好友</string>
 </resources>

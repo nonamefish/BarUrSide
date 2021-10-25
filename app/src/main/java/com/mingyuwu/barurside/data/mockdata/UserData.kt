@@ -13,10 +13,6 @@ class UserData {
                     Relationship("2", Timestamp(System.currentTimeMillis())),
                     Relationship("3", Timestamp(System.currentTimeMillis()))
                 ),
-                listOf(
-                    Relationship("4", Timestamp(System.currentTimeMillis())),
-                    Relationship("5", Timestamp(System.currentTimeMillis()))
-                ),
                 6, 7
             ),
             User(
@@ -24,10 +20,6 @@ class UserData {
                 listOf(
                     Relationship("21", Timestamp(System.currentTimeMillis())),
                     Relationship("31", Timestamp(System.currentTimeMillis()))
-                ),
-                listOf(
-                    Relationship("41", Timestamp(System.currentTimeMillis())),
-                    Relationship("51", Timestamp(System.currentTimeMillis()))
                 ),
                 6, 7
             ),
@@ -37,10 +29,6 @@ class UserData {
                     Relationship("21", Timestamp(System.currentTimeMillis())),
                     Relationship("31", Timestamp(System.currentTimeMillis()))
                 ),
-                listOf(
-                    Relationship("41", Timestamp(System.currentTimeMillis())),
-                    Relationship("51", Timestamp(System.currentTimeMillis()))
-                ),
                 6, 7
             ),
             User(
@@ -48,10 +36,6 @@ class UserData {
                 listOf(
                     Relationship("21", Timestamp(System.currentTimeMillis())),
                     Relationship("31", Timestamp(System.currentTimeMillis()))
-                ),
-                listOf(
-                    Relationship("41", Timestamp(System.currentTimeMillis())),
-                    Relationship("51", Timestamp(System.currentTimeMillis()))
                 ),
                 6, 7
             )
