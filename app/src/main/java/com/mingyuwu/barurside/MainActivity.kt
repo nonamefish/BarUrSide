@@ -47,15 +47,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    fun addData() {
-        val articles = FirebaseFirestore.getInstance()
-            .collection("venue")
-
-        for( dt in  VenueData.venue.venue){
-            val document = articles.document()
-            val data = Venue.toHashMap(dt)
-            document.set(data)
-        }
-    }
+//    fun addData() {
+//        val articles = FirebaseFirestore.getInstance()
+//            .collection("venue")
+//
+//        for( dt in  VenueData.venue.venue){
+//            val document = articles.document()
+//            val data = Venue.toHashMap(dt)
+//            document.set(data)
+//        }
+//    }
 
 }
