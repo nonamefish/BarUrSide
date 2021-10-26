@@ -19,7 +19,8 @@ class VenueData {
                 "https://www.google.com.tw/",
                 "02-12345678",
                 "新北市新莊區中正路1號",
-                LatLng(23.2, 111.1),
+                23.2,
+                111.1,
                 listOf("", ""),
                 3.5,
                 123
@@ -34,7 +35,8 @@ class VenueData {
                 "https://www.google.com.tw/",
                 "02-12345678",
                 "新北市新莊區中正路2號",
-                LatLng(23.2, 111.1),
+                23.2,
+                111.1,
                 listOf("", ""),
                 3.5,
                 123

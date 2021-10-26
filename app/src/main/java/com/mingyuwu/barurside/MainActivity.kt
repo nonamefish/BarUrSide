@@ -43,19 +43,19 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         }
-        addData()
+//        addData()
         setContentView(binding.root)
     }
 
     fun addData() {
         val articles = FirebaseFirestore.getInstance()
-            .collection("user")
+            .collection("venue")
 
-        for( dt in  UserData.user.user){
+        for( dt in  VenueData.venue.venue){
             val document = articles.document()
-            val data = User.toHashMap(dt)
+            val data = Venue.toHashMap(dt)
             document.set(data)
         }
     }
-    
+
 }

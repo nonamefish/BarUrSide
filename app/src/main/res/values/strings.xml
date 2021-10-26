@@ -19,11 +19,13 @@
     <string name="activity_detail_limit">%d/%d</string>
     <string name="tag_friend">標註朋友</string>
 
-<!--    Bottom Navigation Title-->
+    <!--    Bottom Navigation Title-->
     <string name="btm_nvgt_activity">Activity</string>
     <string name="btm_nvgt_map">Map</string>
     <string name="btm_nvgt_discovery">Discover</string>
     <string name="btm_nvgt_collect">Collect</string>
     <string name="btm_nvgt_profile">Profile</string>
+
+    <string name="fail_nothing">Nothing</string>
 
 </resources>

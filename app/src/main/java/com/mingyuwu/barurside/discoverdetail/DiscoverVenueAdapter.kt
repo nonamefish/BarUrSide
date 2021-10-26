@@ -26,7 +26,7 @@ class DiscoverVenueAdapter(val viewModel : DiscoverDetailViewModel) :
 
         fun bind(venue: Venue, viewModel:DiscoverDetailViewModel) {
             binding.name = venue.name
-            binding.img = venue.images[0]
+            binding.img = venue.images!![0]
             binding.category = venue.style
             binding.info = venue.address
             binding.info2 = venue.phone
