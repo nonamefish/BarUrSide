@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="Rating"
+            name="rating"
             type="com.mingyuwu.barurside.data.Rating" />
         <variable
             name="User"
@@ -161,7 +161,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/img_info_rtg"
                 app:layout_constraintTop_toBottomOf="@+id/info_rtg_object"
-                app:stars="@{Rating.rating.floatValue()}" />
+                app:stars="@{rating.rating.floatValue()}" />
 
             <TextView
                 android:id="@+id/discover_object_category"
@@ -170,7 +170,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="@{Rating.comment}"
+                android:text="@{rating.comment}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -197,7 +197,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
-                app:imageUrls="@{Rating.tagFriends}"
+                app:imageUrls="@{rating.tagFriends}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -212,7 +212,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginTop="4dp"
-            app:rtgData="@{Rating.postDate}"
+            app:rtgData="@{rating.postTimestamp}"
             tools:text="2021.10.15"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/constraint_rtg_info"

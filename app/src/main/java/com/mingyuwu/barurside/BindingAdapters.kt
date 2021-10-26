@@ -34,7 +34,7 @@ fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
         recyclerView.adapter?.apply {
             when (this) {
                 is RatingScoreAdapter -> {
-                    Log.d("Ming", "RatingScoreAdapter: $starList")
+//                    Log.d("Ming", "RatingScoreAdapter: $starList")
                     submitList(starList)
                 }
             }

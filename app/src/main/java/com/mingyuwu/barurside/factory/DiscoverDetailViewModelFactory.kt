@@ -2,6 +2,7 @@ package com.mingyuwu.barurside.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel
 import com.mingyuwu.barurside.filter.FilterParameter
@@ -9,6 +10,7 @@ import com.mingyuwu.barurside.filter.FilterParameter
 
 @Suppress("UNCHECKED_CAST")
 class DiscoverDetailViewModelFactory(
+    private val repository: BarUrSideRepository,
     private val theme: Theme,
     private val filterParameter: FilterParameter?
 ) : ViewModelProvider.Factory {
@@ -17,7 +19,7 @@ class DiscoverDetailViewModelFactory(
         with(modelClass) {
             when {
                 isAssignableFrom(DiscoverDetailViewModel::class.java) ->
-                    DiscoverDetailViewModel(theme, filterParameter)
+                    DiscoverDetailViewModel(repository, theme, filterParameter)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

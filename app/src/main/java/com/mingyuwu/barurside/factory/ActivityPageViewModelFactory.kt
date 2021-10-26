@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.mingyuwu.barurside.activity.ActivityPageViewModel
 import com.mingyuwu.barurside.activity.ActivityTypeFilter
 import com.mingyuwu.barurside.collect.CollectPageViewModel
+import com.mingyuwu.barurside.data.source.BarUrSideRepository
 
 @Suppress("UNCHECKED_CAST")
-class ActivityPageViewModelFactory (
+class ActivityPageViewModelFactory(
+    private val repository: BarUrSideRepository,
     private val type: ActivityTypeFilter
 ) : ViewModelProvider.Factory {
 
@@ -15,7 +17,7 @@ class ActivityPageViewModelFactory (
         with(modelClass) {
             when {
                 isAssignableFrom(ActivityPageViewModel::class.java) ->
-                    ActivityPageViewModel(type)
+                    ActivityPageViewModel(repository, type)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

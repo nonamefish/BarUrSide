@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.MainNavigationDirections
@@ -17,6 +19,8 @@ import com.mingyuwu.barurside.data.mockdata.VenueData
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.databinding.FragmentVenueBinding
 import com.mingyuwu.barurside.drink.DrinkFragmentArgs
+import com.mingyuwu.barurside.editrating.EditRatingViewModel
+import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
@@ -24,9 +28,16 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
+const val TAG = "VenueFragment"
+
 class VenueFragment : Fragment() {
 
     private lateinit var binding: FragmentVenueBinding
+    private val viewModel by viewModels<VenueViewModel> {
+        getVmFactory(
+            VenueFragmentArgs.fromBundle(requireArguments()).id
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,24 +47,9 @@ class VenueFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_venue, container, false
         )
+        binding.lifecycleOwner = this
 
-        // get id
         val id = VenueFragmentArgs.fromBundle(requireArguments()).id
-
-        // mockData
-//        val venue = VenueData.venue.venue
-        GlobalScope.launch {
-            val venue =
-                (requireContext().applicationContext as BarUrSideApplication).repository.getVenue("318HjHNdV8XMHJ6ubrKU")
-            binding.venue = venue.value
-            Log.d("Ming","venue.value : ${venue.value}")
-        }
-
-        val ratings = RatingData.rating.rating
-
-        // assign mock data to view variable
-        binding.ratings = ratings
-
 
         // set recyclerView Adapter
         binding.venueRtgList.adapter = InfoRatingAdapter()
@@ -66,6 +62,25 @@ class VenueFragment : Fragment() {
                 MainNavigationDirections.navigateToRatingFragment(id)
             )
         }
+
+        // set venue data mockData
+        // val venue = VenueData.venue.venue
+        viewModel.venueInfo.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "venue info: ${it}")
+            it?.let {
+                binding.venue = it
+            }
+        })
+
+        // set rating data mockData
+        // val venue = VenueData.venue.venue
+        viewModel.rtgInfo.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "rating info: ${it}")
+            it?.let {
+                binding.ratings = it
+            }
+        })
+
 
         return binding.root
     }

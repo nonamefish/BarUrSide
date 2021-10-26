@@ -6,10 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.mockdata.*
+import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.filter.FilterParameter
 
-class DiscoverDetailViewModel(val theme: Theme, val filterParameter: FilterParameter?) :
+class DiscoverDetailViewModel(
+    val repository: BarUrSideRepository,
+    val theme: Theme,
+    val filterParameter: FilterParameter?
+) :
     ViewModel() {
 
     private val _detailData = MutableLiveData<List<Any>>()
