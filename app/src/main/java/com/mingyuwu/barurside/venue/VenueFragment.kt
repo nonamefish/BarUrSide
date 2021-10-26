@@ -1,7 +1,8 @@
 package com.mingyuwu.barurside.venue
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,22 +11,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
-import com.mingyuwu.barurside.data.mockdata.DrinkData
-import com.mingyuwu.barurside.data.mockdata.RatingData
-import com.mingyuwu.barurside.data.mockdata.VenueData
-import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.databinding.FragmentVenueBinding
-import com.mingyuwu.barurside.drink.DrinkFragmentArgs
-import com.mingyuwu.barurside.editrating.EditRatingViewModel
+import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 
 const val TAG = "VenueFragment"
@@ -64,23 +57,35 @@ class VenueFragment : Fragment() {
         }
 
         // set venue data mockData
-        // val venue = VenueData.venue.venue
         viewModel.venueInfo.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "venue info: ${it}")
             it?.let {
                 binding.venue = it
             }
         })
 
         // set rating data mockData
-        // val venue = VenueData.venue.venue
         viewModel.rtgInfo.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "rating info: ${it}")
             it?.let {
-                binding.ratings = it
+                binding.ratings = it.take(3)
+                binding.imgs = viewModel.setImgs(it)
             }
         })
 
+        // set venue phone on click listener
+        binding.venuePhone.setOnClickListener {
+            val dialIntent = Intent(Intent.ACTION_DIAL)
+            dialIntent.data = Uri.parse("tel:" + viewModel.venueInfo.value?.phone)
+            startActivity(dialIntent)
+        }
+
+        // set menu on click listener
+        binding.venueMenu.setOnClickListener {
+            findNavController().navigate(
+                MainNavigationDirections.navigateToDiscoverDetailFragment(
+                    Theme.VENUE_MENU,id,null
+                )
+            )
+        }
 
         return binding.root
     }

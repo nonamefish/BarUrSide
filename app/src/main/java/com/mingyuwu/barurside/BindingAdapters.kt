@@ -2,11 +2,13 @@ package com.mingyuwu.barurside
 
 import android.graphics.Bitmap
 import android.icu.text.DateFormat.DAY
+import android.os.Build
 import android.text.Html
 import android.text.format.DateFormat
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat
@@ -21,6 +23,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.rating.*
 import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ofPattern
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.round
 
@@ -34,7 +41,6 @@ fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
         recyclerView.adapter?.apply {
             when (this) {
                 is RatingScoreAdapter -> {
-//                    Log.d("Ming", "RatingScoreAdapter: $starList")
                     submitList(starList)
                 }
             }
@@ -158,17 +164,17 @@ fun bindNotificationPeriod(textView: TextView, date: Timestamp) {
         val diffHour = TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS)
         val diffDay = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
         when {
-            diffHour<0 -> {
+            diffHour < 0 -> {
                 textView.text = "${TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS)}分鐘前"
             }
-            diffHour<24 -> {
+            diffHour < 24 -> {
                 textView.text = "${diffHour}小時前"
             }
-            diffDay<7 -> {
+            diffDay < 7 -> {
                 textView.text = "${diffDay}天前"
             }
-            diffDay<30 -> {
-                textView.text = "${round(diffDay/7 as Double)+1}週前"
+            diffDay < 30 -> {
+                textView.text = "${round(diffDay / 7 as Double) + 1}週前"
             }
             else -> {
                 textView.text = "幾個月前"
@@ -182,4 +188,45 @@ fun bindNotificationContent(textView: TextView, content: String) {
     content?.let {
         textView.text = fromHtml(content, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@BindingAdapter("isOpen")
+fun bindIsOpen(textView: TextView, serviceTime: String?) {
+    serviceTime?.let {
+        val open = serviceTime.split("-")[0]
+        val close = serviceTime.split("-")[1]
+        when (checkTime(open, close)) {
+            true -> {
+                if (open.split(":")[0].toInt() < close.split(":")[0].toInt()) {
+                    textView.text = "營業中 直至${close}"
+                }else{
+                    textView.text = "營業中 直至明日${close}"
+                }
+            }
+            false -> {
+                if (open.split(":")[0].toInt() < close.split(":")[0].toInt()) {
+                    textView.text = "休息中 開始營業時間：${open}"
+                }else{
+                    textView.text = "休息中 開始營業時間：明日${open}"
+                }
+            }
+        }
+    }
+}
+
+
+fun checkTime(open: String, close: String): Boolean {
+    val time1: Date = SimpleDateFormat("HH:mm").parse(open)
+    val calendar1: Calendar = Calendar.getInstance()
+    calendar1.time = time1
+    calendar1.add(Calendar.DATE, 1)
+
+    val time2: Date = SimpleDateFormat("HH:mm").parse(close)
+    val calendar2: Calendar = Calendar.getInstance()
+    calendar2.time = time2
+    calendar2.add(Calendar.DATE, 1)
+
+    val x = Date(System.currentTimeMillis())
+    return x.after(calendar1.time) && x.before(calendar2.time)
 }

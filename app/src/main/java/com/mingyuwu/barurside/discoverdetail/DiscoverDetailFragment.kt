@@ -62,7 +62,7 @@ class DiscoverDetailFragment() : Fragment() {
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
-            9->{
+            9 -> {
                 adapter = NotificationAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
@@ -72,7 +72,7 @@ class DiscoverDetailFragment() : Fragment() {
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
-            in arrayOf(2, 4) -> {
+            in arrayOf(2, 4, 10) -> {
                 adapter = DiscoverDrinkAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility

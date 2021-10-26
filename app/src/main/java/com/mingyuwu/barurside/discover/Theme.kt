@@ -10,6 +10,7 @@ enum class Theme (val order: Int) {
     MAP_FILTER(6),
     USER_FRIEND(7),
     USER_ACTIVITY(8),
-    NOTIFICATION(9)
+    NOTIFICATION(9),
+    VENUE_MENU(10)
 }
 
