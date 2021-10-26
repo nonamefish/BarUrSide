@@ -26,7 +26,7 @@ class DiscoverDrinkAdapter(val viewModel: DiscoverDetailViewModel) :
 
         fun bind(drink: Drink, viewModel: DiscoverDetailViewModel) {
             binding.name = drink.name
-            binding.img = drink.images[0]
+            binding.img = drink.images?.get(0) ?: ""
             binding.category = drink.category
             binding.info = drink.price.toString()
             binding.info2 = drink.venueId

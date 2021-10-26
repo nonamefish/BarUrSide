@@ -1,25 +1,33 @@
 package com.mingyuwu.barurside.drink
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
-import com.mingyuwu.barurside.data.mockdata.DrinkData
-import com.mingyuwu.barurside.data.mockdata.RatingData
-import com.mingyuwu.barurside.data.mockdata.VenueData
 import com.mingyuwu.barurside.databinding.FragmentDrinkBinding
+import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
 
+const val TAG = "Ming"
+
 class DrinkFragment : Fragment() {
 
     private lateinit var binding: FragmentDrinkBinding
+    private val viewModel by viewModels<DrinkViewModel> {
+        getVmFactory(
+            DrinkFragmentArgs.fromBundle(requireArguments()).id
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,18 +38,35 @@ class DrinkFragment : Fragment() {
             inflater, R.layout.fragment_drink, container, false
         )
 
+        binding.lifecycleOwner = this
+
         // get id
         val id = DrinkFragmentArgs.fromBundle(requireArguments()).id
+        viewModel.getDrinkResult("IdBo1aoiJ6AEpNovRvv4")
 
-        // mockData
-        val drink = DrinkData.drink.drink
-        val venue = VenueData.venue.venue
-        val ratings = RatingData.rating.rating
+        // set drink data
+        viewModel.drinkInfo.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.drink = it
+                viewModel.getVenueResult(it.venueId)
+                viewModel.getRatingResult(it.id, false)
 
-        // assign mock data to view variable
-        binding.drink = drink[0]
-        binding.venue = venue[0]
-        binding.ratings = ratings
+                // set venue data
+                viewModel.venueInfo.observe(viewLifecycleOwner, Observer {
+                    it?.let {
+                        binding.venue = it
+                    }
+                })
+
+                // set rating data
+                viewModel.rtgInfo.observe(viewLifecycleOwner, Observer {
+                    it?.let {
+                        binding.ratings = it.take(3)
+                        binding.imgs = viewModel.setImgs(it)
+                    }
+                })
+            }
+        })
 
         // set recyclerView Adapter
         binding.drinkRtgList.adapter = InfoRatingAdapter()
@@ -50,9 +75,11 @@ class DrinkFragment : Fragment() {
 
         // drink's venue info click listener
         binding.btnVenueInfo.setOnClickListener {
-            findNavController().navigate(
-                MainNavigationDirections.navigateToVenueFragment(id) // set venue id
-            )
+            viewModel.venueInfo.value?.id.let{
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToVenueFragment(it!!) // set venue id
+                )
+            }
         }
 
         return binding.root

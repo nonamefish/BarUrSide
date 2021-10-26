@@ -2,7 +2,9 @@ package com.mingyuwu.barurside.data.source.local
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Rating
+import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideDataSource
 
@@ -11,6 +13,14 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
     override fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<Rating>>{
+        TODO("Not yet implemented")
+    }
+
+    override fun getDrink(id: String): MutableLiveData<Drink> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getUser(id: String): MutableLiveData<User> {
         TODO("Not yet implemented")
     }
 }

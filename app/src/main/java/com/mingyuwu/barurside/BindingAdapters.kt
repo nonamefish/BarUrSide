@@ -25,6 +25,7 @@ import com.mingyuwu.barurside.rating.*
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatter.ofPattern
 import java.util.*
@@ -200,14 +201,14 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
             true -> {
                 if (open.split(":")[0].toInt() < close.split(":")[0].toInt()) {
                     textView.text = "營業中 直至${close}"
-                }else{
+                } else {
                     textView.text = "營業中 直至明日${close}"
                 }
             }
             false -> {
                 if (open.split(":")[0].toInt() < close.split(":")[0].toInt()) {
                     textView.text = "休息中 開始營業時間：${open}"
-                }else{
+                } else {
                     textView.text = "休息中 開始營業時間：明日${open}"
                 }
             }
@@ -216,17 +217,12 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun checkTime(open: String, close: String): Boolean {
-    val time1: Date = SimpleDateFormat("HH:mm").parse(open)
-    val calendar1: Calendar = Calendar.getInstance()
-    calendar1.time = time1
-    calendar1.add(Calendar.DATE, 1)
 
-    val time2: Date = SimpleDateFormat("HH:mm").parse(close)
-    val calendar2: Calendar = Calendar.getInstance()
-    calendar2.time = time2
-    calendar2.add(Calendar.DATE, 1)
+    val open = LocalTime.parse(open)
+    val close = LocalTime.parse(close)
+    val current = LocalTime.now()
 
-    val x = Date(System.currentTimeMillis())
-    return x.after(calendar1.time) && x.before(calendar2.time)
+    return current.isAfter(open) && current.isBefore(close)
 }

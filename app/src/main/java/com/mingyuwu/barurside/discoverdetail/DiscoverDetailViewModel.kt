@@ -42,7 +42,7 @@ class DiscoverDetailViewModel(
                 _detailData.value = NotificationData.notification.notification
             }
             10 -> {
-                _detailData.value = DrinkData.drink.drinkopen ud
+                _detailData.value = DrinkData.drink.drink
             }
             in arrayOf(0, 3, 5) -> {
                 _detailData.value = VenueData.venue.venue
