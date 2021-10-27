@@ -1,21 +1,20 @@
 package com.mingyuwu.barurside.data
 
 import android.os.Parcelable
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.parcelize.Parcelize
 import java.sql.Timestamp
 import java.util.*
 
 @Parcelize
 data class Rating(
-    val id: String = "",
+    var id: String = "",
     val objectId: String = "",
     val isVenue: Boolean? = null,
     val userId: String = "",
     val rating: Long? = -1,
     val comment: String = "",
     val images: List<String>? = null,
-    val postDate: Date? = null,
+    var postDate: Date? = null,
     val tagFriends: List<String>? = null
 ) : Parcelable {
 

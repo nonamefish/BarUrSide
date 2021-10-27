@@ -5,8 +5,20 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.mingyuwu.barurside.data.Rating
+import com.mingyuwu.barurside.data.User
+import com.mingyuwu.barurside.data.Result
+import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import java.sql.Timestamp
 
-class EditRatingViewModel() : ViewModel() {
+class EditRatingViewModel(val repository: BarUrSideRepository, private val venueId: String) :
+    ViewModel() {
 
     private val _star = MutableLiveData<MutableList<Int?>>()
     val star: LiveData<MutableList<Int?>>
@@ -16,35 +28,58 @@ class EditRatingViewModel() : ViewModel() {
     val comment: LiveData<MutableList<String?>>
         get() = _comment
 
-    private val _uploadImg = MutableLiveData<MutableList<List<Bitmap?>>>()
-    val uploadImg: LiveData<MutableList<List<Bitmap?>>>
+    private val _uploadImg = MutableLiveData<MutableList<MutableList<Bitmap?>>>()
+    val uploadImg: LiveData<MutableList<MutableList<Bitmap?>>>
         get() = _uploadImg
 
-    private val _tagFrd = MutableLiveData<MutableList<List<String?>>>()
-    val tagFrd: LiveData<MutableList<List<String?>>>
+    private val _uploadImgUrl = MutableLiveData<MutableList<MutableList<String?>>>()
+    val uploadImgUrl: LiveData<MutableList<MutableList<String?>>>
+        get() = _uploadImgUrl
+
+    private val _tagFrd = MutableLiveData<MutableList<String>?>(null)
+    val tagFrd: LiveData<MutableList<String>?>
         get() = _tagFrd
 
     // control upload image
     val isUploadImgBtn = MutableLiveData<Boolean>()
     val clickPosition = MutableLiveData<Int>()
 
-    // all rating item
-    private val _rtgList = MutableLiveData<MutableList<String>>()
-    val rtgList: LiveData<MutableList<String>>
-        get() = _rtgList
+    // all user item
+    private var _user = MutableLiveData<User>()
+    val user: LiveData<User>
+        get() = _user
 
-    // check rating lbject is venue or drink
-    private val _isVenue = MutableLiveData<MutableList<Boolean>>(listOf(true).toMutableList())
-    val isVenue: LiveData<MutableList<Boolean>>
-        get() = _isVenue
+    // all rating item
+    private val _frdList = MutableLiveData<List<User>>()
+    val frdList: LiveData<List<User>>
+        get() = _frdList
+
+    // error: The internal MutableLiveData that stores the error of the most recent request
+    private val _error = MutableLiveData<String?>()
+
+    val error: LiveData<String?>
+        get() = _error
+
+    // check rating object is venue or drink
+    private val _objectId = MutableLiveData<MutableList<String>>()
+    val objectId: LiveData<MutableList<String>>
+        get() = _objectId
+
+    // Create a Coroutine scope using a job to be able to cancel when needed
+    private var viewModelJob = Job()
+
+    // the Coroutine runs using the Main (UI) dispatcher
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
 
     init {
-        _rtgList.value = listOf("1").toMutableList()
-        _tagFrd.value = listOf(listOf(null)).toMutableList()
-        _uploadImg.value = listOf(listOf(null)).toMutableList()
-        _comment.value = listOf(null).toMutableList()
-        _star.value = listOf(null).toMutableList()
+        getUser()
+        _objectId.value = mutableListOf("7sg0kT3U39YI9K8AubfS")
+//        _objectId.value = listOf(venueId).toMutableList()
+        _uploadImg.value = mutableListOf(mutableListOf(null))
+        _uploadImgUrl.value = mutableListOf(mutableListOf(null))
+        _comment.value = mutableListOf(null)
+        _star.value = mutableListOf(null)
     }
 
     fun clickRatingStore(score: Int, rtgOrder: Int) {
@@ -58,56 +93,110 @@ class EditRatingViewModel() : ViewModel() {
         Log.d("Ming", "Fragment_star.value: ${_star.value}")
     }
 
-    fun addNewRating() {
-        _isVenue.value!! += listOf(false).toMutableList()
-        _rtgList.value!! += listOf("2").toMutableList()
-        _star.value!! += listOf(null).toMutableList()
-        _uploadImg.value!! += listOf(null).toMutableList()
-        _comment.value!! += listOf(null).toMutableList()
-        _tagFrd.value!! += listOf(listOf(null)).toMutableList()
-        _rtgList.value = _rtgList.value
+    fun addNewRating(drinkId: String) {
+        _objectId.value!!.add("IdBo1aoiJ6AEpNovRvv4")
+//        _objectId.value!!.add(drinkId)
+        _star.value!!.add(null)
+        _uploadImg.value!!.add(mutableListOf(null))
+        _uploadImgUrl.value!!.add(mutableListOf(null))
+        _comment.value!!.add(null)
+        _objectId.value = _objectId.value
     }
 
 
-    fun addUploadImg(position: Int, bitmap: Bitmap?) {
-        if(_uploadImg.value!![position][0]==null){
-            _uploadImg.value!![position] = listOf(bitmap).toMutableList()
-        }else{
-            _uploadImg.value!![position] += listOf(bitmap).toMutableList()
+    fun addUploadImg(position: Int, bitmap: Bitmap?, url: String) {
+        if (_uploadImg.value!![position][0] == null) {
+            _uploadImg.value!![position] = mutableListOf(bitmap)
+            _uploadImgUrl.value!![position] = mutableListOf(url)
+        } else {
+            _uploadImg.value!![position].add(bitmap)
+            _uploadImgUrl.value!![position].add(url)
         }
         _uploadImg.value = _uploadImg.value
+        _uploadImgUrl.value = _uploadImgUrl.value
     }
 
     fun addTagFrd(position: Int, frdId: String) {
-        if(_tagFrd.value!![position][0]==null){
-            _tagFrd.value!![position] = listOf(frdId).toMutableList()
-        }else{
-            _tagFrd.value!![position] += listOf(frdId).toMutableList()
+        if (_tagFrd.value == null) {
+            _tagFrd.value = mutableListOf(frdId)
+        } else {
+            _tagFrd.value!!.add(frdId)
         }
         _tagFrd.value = _tagFrd.value
     }
 
-    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {
-        var width = image.width
-        var height = image.height
-        val bitmapRatio = width.toFloat() / height.toFloat()
-        if (bitmapRatio > 1) {
-            width = maxSize
-            height = (width / bitmapRatio).toInt()
-        } else {
-            height = maxSize
-            width = (height * bitmapRatio).toInt()
+    fun postRating() {
+        coroutineScope.launch {
+            objectId.value?.let {
+                for (index in 0 until objectId.value!!.size) {
+
+                    val type = when (index) {
+                        0 -> "venue"
+                        else -> "drink"
+                    }
+
+                    val imgs = mutableListOf<String>()
+                    Log.d("Ming", index.toString())
+                    _uploadImgUrl.value?.get(index)?.forEach { it ->
+                        it?.let {
+                            uploadPhoto(type, it)
+                            imgs.add("$type/${it.substring(it.lastIndexOf('/') + 1)}")
+                        }
+                    }
+
+                    val rtg = Rating(
+                        "",
+                        objectId.value!![index],
+                        index == 0,
+                        "O6kHLHzc3Ollfe7rkfkR",
+                        star.value!![index]!!.toLong(),
+                        comment.value!![index] ?: "",
+                        imgs,
+                        Timestamp(System.currentTimeMillis()),
+                        tagFrd.value
+                    )
+                    repository.postRating(rtg)
+                }
+            }
         }
-        return Bitmap.createScaledBitmap(image, width, height, true)
     }
 
-    fun logLargeString(str: String) {
-        if (str.length > 3000) {
-            Log.i("Ming", str.substring(0, 3000))
-            logLargeString(str.substring(3000))
-        } else {
-            Log.i("Ming", str) // continuation
+    private fun uploadPhoto(type: String, url: String) {
+        val storage = Firebase.storage
+        val storageRef = storage.reference
+
+        coroutineScope.launch {
+            repository.uploadPhoto(storageRef, type, url)
         }
     }
 
+    private fun getUser(){
+        coroutineScope.launch {
+            _user = repository.getUser("6BhbnIMi1Ai91Ky4w9rI") // TODO:set user id
+        }
+    }
+
+    fun getFriendList(user: User){
+        coroutineScope.launch {
+
+            val result = repository.getFriend(user)
+            _frdList.value = when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    result.data
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+        }
+    }
 }

@@ -11,6 +11,9 @@
         <variable
             name="rtgOrder"
             type="int" />
+        <variable
+            name="view"
+            type="android.view.View" />
     </data>
 
 
@@ -117,7 +120,7 @@
             android:hint="輸入評論"
             android:inputType="textPersonName"
             android:padding="8sp"
-            android:text=""
+            android:text="@={viewModel.comment[rtgOrder]}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_edit_star_1" />
@@ -169,6 +172,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
+            android:visibility="@{rtgOrder==0 ? view.Visibility : view.GONE}"
             android:background="@drawable/border_map_search"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -194,7 +198,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
-                app:imageUrls="@{viewModel.tagFrd[rtgOrder]}"
+                app:imageUrls="@{viewModel.tagFrd}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -15,9 +15,6 @@ class ViewModelFactory constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
-                isAssignableFrom(EditRatingViewModel::class.java) ->
-                    EditRatingViewModel()
-
                 isAssignableFrom(AddActivityViewModel::class.java) ->
                     AddActivityViewModel()
 

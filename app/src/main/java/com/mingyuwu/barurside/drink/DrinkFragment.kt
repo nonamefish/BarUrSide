@@ -42,7 +42,6 @@ class DrinkFragment : Fragment() {
 
         // get id
         val id = DrinkFragmentArgs.fromBundle(requireArguments()).id
-        viewModel.getDrinkResult("IdBo1aoiJ6AEpNovRvv4")
 
         // set drink data
         viewModel.drinkInfo.observe(viewLifecycleOwner, Observer {

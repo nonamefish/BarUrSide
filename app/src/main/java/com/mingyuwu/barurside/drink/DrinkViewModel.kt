@@ -26,7 +26,8 @@ class DrinkViewModel(private val repository: BarUrSideRepository, id: String) : 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
-//        getDrinkResult("IdBo1aoiJ6AEpNovRvv4")
+        getDrinkResult("IdBo1aoiJ6AEpNovRvv4")
+//        getDrinkResult(id)
     }
 
     fun getDrinkResult(id: String) {
@@ -38,7 +39,6 @@ class DrinkViewModel(private val repository: BarUrSideRepository, id: String) : 
     }
 
     fun getVenueResult(id: String) {
-        Log.d("Ming", "getVenueResult")
         venueInfo = repository.getVenue(id)
     }
 

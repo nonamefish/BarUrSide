@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.data.mockdata
 
-import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Rating
 import java.sql.Timestamp
 

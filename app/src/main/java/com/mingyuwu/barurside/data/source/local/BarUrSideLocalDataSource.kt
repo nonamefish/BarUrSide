@@ -2,8 +2,10 @@ package com.mingyuwu.barurside.data.source.local
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.storage.StorageReference
 import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Rating
+import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideDataSource
@@ -21,6 +23,18 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     }
 
     override fun getUser(id: String): MutableLiveData<User> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postRating(rating: Rating): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun uploadPhoto(storageRef: StorageReference, type: String, localImage: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getFriend(user: User): Result<List<User>> {
         TODO("Not yet implemented")
     }
 }

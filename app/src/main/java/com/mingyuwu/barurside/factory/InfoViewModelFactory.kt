@@ -6,6 +6,7 @@ import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel
 import com.mingyuwu.barurside.drink.DrinkViewModel
+import com.mingyuwu.barurside.editrating.EditRatingViewModel
 import com.mingyuwu.barurside.filter.FilterParameter
 import com.mingyuwu.barurside.venue.VenueViewModel
 
@@ -22,6 +23,8 @@ class InfoViewModelFactory(
                     VenueViewModel(repository, id)
                 isAssignableFrom(DrinkViewModel::class.java) ->
                     DrinkViewModel(repository, id)
+                isAssignableFrom(EditRatingViewModel::class.java) ->
+                    EditRatingViewModel(repository, id)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

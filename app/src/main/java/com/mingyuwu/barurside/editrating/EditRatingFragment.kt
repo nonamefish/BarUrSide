@@ -28,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
+import com.mingyuwu.barurside.drink.DrinkFragmentArgs
 import com.mingyuwu.barurside.ext.getVmFactory
 import kotlin.collections.ArrayList
 
@@ -37,7 +38,9 @@ private const val REQUEST_ID_MULTIPLE_PERMISSIONS = 101
 class EditRatingFragment : Fragment() {
 
     private lateinit var binding: FragmentEditRatingBinding
-    private val viewModel by viewModels<EditRatingViewModel> { getVmFactory() }
+    private val viewModel by viewModels<EditRatingViewModel> { getVmFactory(
+        EditRatingFragmentArgs.fromBundle(requireArguments()).id
+    ) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,7 +70,7 @@ class EditRatingFragment : Fragment() {
 
             mBuilder.setPositiveButton("OK") { dialog, _ ->
                 Log.d("Ming", spinner.selectedItem.toString())
-                viewModel.addNewRating()
+                viewModel.addNewRating(spinner.selectedItem.toString())
                 dialog.dismiss()
             }
 
@@ -79,7 +82,7 @@ class EditRatingFragment : Fragment() {
         }
 
         // viewModel observer
-        viewModel.rtgList.observe(viewLifecycleOwner, Observer {
+        viewModel.objectId.observe(viewLifecycleOwner, Observer {
             Log.d("Ming","Fragment rtgList.value: $it")
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
@@ -93,11 +96,17 @@ class EditRatingFragment : Fragment() {
             }
         })
 
+        // get friend list
+        viewModel.user.observe(viewLifecycleOwner, Observer {
+            viewModel.getFriendList(it)
+            Log.d("Ming","frdList: $it")
+        })
+
         // set post rating button click listener
         binding.btnRtgConfirm.setOnClickListener {
-            findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
+//            findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
+            viewModel.postRating()
         }
-
 
 
         return binding.root
@@ -187,7 +196,7 @@ class EditRatingFragment : Fragment() {
                             val columnIndex: Int = cursor.getColumnIndex(filePathColumn[0])
                             val picturePath: String = cursor.getString(columnIndex)
                             val img = BitmapFactory.decodeFile(picturePath)
-                            addImageToRecyclerView(img)
+                            addImageToRecyclerView(getResizedBitmap(img,1000), picturePath)
                             cursor.close()
                         }
                     }
@@ -196,7 +205,21 @@ class EditRatingFragment : Fragment() {
         }
     }
 
-    private fun addImageToRecyclerView(bitmap: Bitmap?){
-        viewModel.addUploadImg(viewModel.clickPosition.value!!, bitmap)
+    private fun addImageToRecyclerView(bitmap: Bitmap?, url:String){
+        viewModel.addUploadImg(viewModel.clickPosition.value!!, bitmap, url)
+    }
+
+    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {
+        var width = image.width
+        var height = image.height
+        val bitmapRatio = width.toFloat() / height.toFloat()
+        if (bitmapRatio > 1) {
+            width = maxSize
+            height = (width / bitmapRatio).toInt()
+        } else {
+            height = maxSize
+            width = (height * bitmapRatio).toInt()
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true)
     }
 }
