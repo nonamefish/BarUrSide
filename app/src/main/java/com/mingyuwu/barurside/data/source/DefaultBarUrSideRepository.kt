@@ -40,4 +40,8 @@ class DefaultBarUrSideRepository(
     override suspend fun getFriend(user: User): Result<List<User>> {
         return remoteDataSource.getFriend(user)
     }
+
+    override suspend fun getMenu(venueId: String): Result<List<Drink>> {
+        return remoteDataSource.getMenu(venueId)
+    }
 }

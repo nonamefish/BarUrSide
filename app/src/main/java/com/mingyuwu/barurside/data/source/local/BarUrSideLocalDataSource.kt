@@ -37,4 +37,8 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     override suspend fun getFriend(user: User): Result<List<User>> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getMenu(venueId: String): Result<List<Drink>> {
+        TODO("Not yet implemented")
+    }
 }

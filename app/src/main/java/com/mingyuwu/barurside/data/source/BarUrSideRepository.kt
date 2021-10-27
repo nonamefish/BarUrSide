@@ -22,4 +22,6 @@ interface BarUrSideRepository {
     suspend fun uploadPhoto(storageRef: StorageReference, type: String, localImage: String)
 
     suspend fun getFriend(user: User): Result<List<User>>
+
+    suspend fun getMenu(venueId: String): Result<List<Drink>>
 }

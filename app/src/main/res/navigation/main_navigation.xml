@@ -26,8 +26,8 @@
         android:label="fragment_edit_rating"
         tools:layout="@layout/fragment_edit_rating" >
         <argument
-            android:name="id"
-            app:argType="string" />
+            android:name="venue"
+            app:argType="com.mingyuwu.barurside.data.Venue" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"

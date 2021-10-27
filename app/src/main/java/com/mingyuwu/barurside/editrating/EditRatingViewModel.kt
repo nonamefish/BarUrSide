@@ -4,12 +4,11 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.mingyuwu.barurside.data.Rating
-import com.mingyuwu.barurside.data.User
-import com.mingyuwu.barurside.data.Result
+import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.sql.Timestamp
 
-class EditRatingViewModel(val repository: BarUrSideRepository, private val venueId: String) :
+class EditRatingViewModel(val repository: BarUrSideRepository, private val venue: Venue) :
     ViewModel() {
 
     private val _star = MutableLiveData<MutableList<Int?>>()
@@ -54,6 +53,11 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     val frdList: LiveData<List<User>>
         get() = _frdList
 
+    // menu: all drink item
+    private val _menu = MutableLiveData<MutableList<Drink>>()
+    val menu: LiveData<MutableList<Drink>>
+        get() = _menu
+
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
 
@@ -65,6 +69,11 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     val objectId: LiveData<MutableList<String>>
         get() = _objectId
 
+    // check rating object is venue or drink
+    private val _objectName = MutableLiveData<MutableList<String>>()
+    val objectName: LiveData<MutableList<String>>
+        get() = _objectName
+
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
@@ -74,7 +83,10 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
 
     init {
         getUser()
-        _objectId.value = mutableListOf("7sg0kT3U39YI9K8AubfS")
+        getMenu("7sg0kT3U39YI9K8AubfS")
+//        getMenu(venue.id)
+        _objectId.value = mutableListOf(venue.id)
+        _objectName.value = mutableListOf(venue.name)
 //        _objectId.value = listOf(venueId).toMutableList()
         _uploadImg.value = mutableListOf(mutableListOf(null))
         _uploadImgUrl.value = mutableListOf(mutableListOf(null))
@@ -93,16 +105,15 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         Log.d("Ming", "Fragment_star.value: ${_star.value}")
     }
 
-    fun addNewRating(drinkId: String) {
-        _objectId.value!!.add("IdBo1aoiJ6AEpNovRvv4")
-//        _objectId.value!!.add(drinkId)
+    fun addNewRating(drink: Drink) {
+        _objectId.value!!.add(drink.id)
+        _objectName.value!!.add(drink.name)
         _star.value!!.add(null)
         _uploadImg.value!!.add(mutableListOf(null))
         _uploadImgUrl.value!!.add(mutableListOf(null))
         _comment.value!!.add(null)
         _objectId.value = _objectId.value
     }
-
 
     fun addUploadImg(position: Int, bitmap: Bitmap?, url: String) {
         if (_uploadImg.value!![position][0] == null) {
@@ -170,18 +181,17 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         }
     }
 
-    private fun getUser(){
-        coroutineScope.launch {
-            _user = repository.getUser("6BhbnIMi1Ai91Ky4w9rI") // TODO:set user id
-        }
+    private fun getUser() {
+        _user = repository.getUser("6BhbnIMi1Ai91Ky4w9rI") // TODO:set user id
     }
 
-    fun getFriendList(user: User){
+    fun getFriendList(user: User) {
         coroutineScope.launch {
 
             val result = repository.getFriend(user)
             _frdList.value = when (result) {
                 is Result.Success -> {
+                    Log.d("Ming", "frdList: ${result.data}")
                     _error.value = null
                     result.data
                 }
@@ -198,5 +208,36 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
                 }
             }
         }
+    }
+
+    private fun getMenu(venueId: String) {
+        coroutineScope.launch {
+
+            val result = repository.getMenu(venueId)
+            _menu.value = when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    result.data.toMutableList()
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+        }
+    }
+
+    fun removeMenuItem(position: Int){
+        Log.d("Ming","position: ${position}")
+        _menu.value?.removeAt(position)
+        _menu.value = _menu.value
+        Log.d("Ming","viewModel.menu: ${menu.value?.size}")
     }
 }

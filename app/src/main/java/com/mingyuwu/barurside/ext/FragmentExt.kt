@@ -3,6 +3,7 @@ package com.mingyuwu.barurside.ext
 import androidx.fragment.app.Fragment
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.activity.ActivityTypeFilter
+import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.factory.*
 import com.mingyuwu.barurside.filter.FilterParameter
@@ -34,4 +35,9 @@ fun Fragment.getVmFactory(type: ActivityTypeFilter): ActivityPageViewModelFactor
 fun Fragment.getVmFactory(id: String): InfoViewModelFactory {
     val repository = (requireContext().applicationContext as BarUrSideApplication).repository
     return InfoViewModelFactory(repository, id)
+}
+
+fun Fragment.getVmFactory(venue: Venue): EditRatingViewModelFactory {
+    val repository = (requireContext().applicationContext as BarUrSideApplication).repository
+    return EditRatingViewModelFactory(repository, venue)
 }

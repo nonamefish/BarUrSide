@@ -48,13 +48,15 @@ class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
 
 
             // tag friend : set adapter and item click listener
-            val lunch = arrayListOf("Jason", "John", "Peter", "Allen", "Akuan")
-            val adapter = ArrayAdapter(binding.root.context, android.R.layout.simple_spinner_dropdown_item, lunch)
-            binding.btnTagFrd.setAdapter(adapter)
+            viewModel.frdList.value?.let{
+                val friendList = viewModel.frdList.value?.map { it.name}
+                val adapter = ArrayAdapter(binding.root.context, android.R.layout.simple_spinner_dropdown_item, friendList!!)
+                binding.btnTagFrd.setAdapter(adapter)
 
-            binding.btnTagFrd.setOnItemClickListener { _, _, position, _ ->
-                binding.btnTagFrd.setText("")
-                viewModel.addTagFrd(rtgOrder, "")
+                binding.btnTagFrd.setOnItemClickListener { _, _, position, _ ->
+                    binding.btnTagFrd.setText("")
+                    viewModel.addTagFrd(rtgOrder, it[position].id)
+                }
             }
         }
     }

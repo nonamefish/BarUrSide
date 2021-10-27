@@ -99,7 +99,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
     override suspend fun getFriend(user: User): Result<List<User>> =
         suspendCoroutine { continuation ->
             val list = mutableListOf<User>()
-            for (friend in user.friends) {
+            for (friend in user.friends!!) {
                 FirebaseFirestore.getInstance()
                     .collection(PATH_USER)
                     .whereEqualTo("id", friend.id)
@@ -112,7 +112,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 val friend = document.toObject(User::class.java)
                                 list.add(friend)
                             }
-                            continuation.resume(Result.Success(list))
+                            if (list.size == user.friends.size) {
+                                continuation.resume(Result.Success(list))
+                            }
+
                         } else {
                             task.exception?.let {
                                 Log.w(
@@ -134,6 +137,43 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             }
         }
 
+    override suspend fun getMenu(venueId: String): Result<List<Drink>> =
+        suspendCoroutine { continuation ->
+            val list = mutableListOf<Drink>()
+            FirebaseFirestore.getInstance()
+                .collection(PATH_DRINK)
+                .whereEqualTo("venueId", venueId)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            Log.d(TAG, document.id + " => " + document.data)
+
+                            val drink = document.toObject(Drink::class.java)
+                            list.add(drink)
+                        }
+                        continuation.resume(Result.Success(list))
+
+                    } else {
+                        task.exception?.let {
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
 
     override fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<Rating>> {
         val liveData = MutableLiveData<List<Rating>>()
@@ -143,7 +183,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             .whereEqualTo("isVenue", isVenue)
             .whereEqualTo("objectId", id)
             .addSnapshotListener { snapshot, exception ->
-                Log.d(TAG, "getRating snapshot ${snapshot!!.documents}")
+//                Log.d(TAG, "getRating snapshot ${snapshot!!.documents}")
                 exception?.let {
                     Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
@@ -176,7 +216,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .set(Rating.toHashMap(rating))
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "Rating: $rating")
+//                        Log.d(TAG, "Rating: $rating")
 
                         continuation.resume(Result.Success(true))
                     } else {

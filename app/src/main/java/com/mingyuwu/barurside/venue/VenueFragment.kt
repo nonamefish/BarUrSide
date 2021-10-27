@@ -51,9 +51,11 @@ class VenueFragment : Fragment() {
 
         // set rating clock click listener
         binding.cnstrtEditRating.setOnClickListener {
-            findNavController().navigate(
-                MainNavigationDirections.navigateToRatingFragment(id)
-            )
+            viewModel.venueInfo.value?.let {
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToRatingFragment(it)
+                )
+            }
         }
 
         // set venue data mockData
@@ -82,7 +84,7 @@ class VenueFragment : Fragment() {
         binding.venueMenu.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.VENUE_MENU,id,null
+                    Theme.VENUE_MENU, id, null
                 )
             )
         }

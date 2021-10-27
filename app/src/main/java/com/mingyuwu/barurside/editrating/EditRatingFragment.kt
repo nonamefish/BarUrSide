@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -28,7 +29,6 @@ import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
-import com.mingyuwu.barurside.drink.DrinkFragmentArgs
 import com.mingyuwu.barurside.ext.getVmFactory
 import kotlin.collections.ArrayList
 
@@ -38,9 +38,11 @@ private const val REQUEST_ID_MULTIPLE_PERMISSIONS = 101
 class EditRatingFragment : Fragment() {
 
     private lateinit var binding: FragmentEditRatingBinding
-    private val viewModel by viewModels<EditRatingViewModel> { getVmFactory(
-        EditRatingFragmentArgs.fromBundle(requireArguments()).id
-    ) }
+    private val viewModel by viewModels<EditRatingViewModel> {
+        getVmFactory(
+            EditRatingFragmentArgs.fromBundle(requireArguments()).venue
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,42 +53,26 @@ class EditRatingFragment : Fragment() {
             inflater, R.layout.fragment_edit_rating, container, false
         )
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         // set adapter
         val adapter = EditRatingAdapter(viewModel)
         binding.venueRtgScoreList.adapter = adapter
 
-
         // add drink rating : set button click listener
         binding.btnAddDrinkRtg.setOnClickListener {
-            val menuItem = arrayListOf("Old Fashion", "Gin Tonic")
-            val mBuilder = AlertDialog.Builder(activity)
-            val mView = LayoutInflater.from(context).inflate(R.layout.dialog_venue_menu,null)
-            val spinner = mView.findViewById<Spinner>(R.id.spinner)
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, menuItem)
-            spinner.adapter = adapter
-            mBuilder.setTitle("選取評價項目")
-
-            mBuilder.setPositiveButton("OK") { dialog, _ ->
-                Log.d("Ming", spinner.selectedItem.toString())
-                viewModel.addNewRating(spinner.selectedItem.toString())
-                dialog.dismiss()
+            if(viewModel.menu.value!=null){
+                addDrinkRating()
+            }else{
+                Toast.makeText(binding.root.context, "無提供菜單", Toast.LENGTH_SHORT).show()
             }
-
-            mBuilder.setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-
-            mBuilder.setView(mView).show()
         }
 
         // viewModel observer
         viewModel.objectId.observe(viewLifecycleOwner, Observer {
-            Log.d("Ming","Fragment rtgList.value: $it")
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
-            }
+        }
         )
 
         // click add photo button
@@ -97,9 +83,13 @@ class EditRatingFragment : Fragment() {
         })
 
         // get friend list
-        viewModel.user.observe(viewLifecycleOwner, Observer {
-            viewModel.getFriendList(it)
-            Log.d("Ming","frdList: $it")
+        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
+            Log.d("Ming", "user: $user")
+            user.friends?.let {
+                viewModel.getFriendList(user)
+                Log.d("Ming", "frdList: ${viewModel.frdList.value}")
+            }
+
         })
 
         // set post rating button click listener
@@ -124,7 +114,7 @@ class EditRatingFragment : Fragment() {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) !== PackageManager.PERMISSION_GRANTED
             ) {
-                Log.d("Ming","onRequestPermissionsResult: Here")
+                Log.d("Ming", "onRequestPermissionsResult: Here")
             } else {
                 chooseImage(binding.root.context)
             }
@@ -163,9 +153,9 @@ class EditRatingFragment : Fragment() {
             if (optionsMenu[i] == "從照片選擇") {
                 // choose from  external storage
                 val pickPhoto = Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                    )
+                    Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                )
                 startActivityForResult(pickPhoto, 1)
             } else if (optionsMenu[i] == "Exit") {
                 dialogInterface.dismiss()
@@ -196,7 +186,7 @@ class EditRatingFragment : Fragment() {
                             val columnIndex: Int = cursor.getColumnIndex(filePathColumn[0])
                             val picturePath: String = cursor.getString(columnIndex)
                             val img = BitmapFactory.decodeFile(picturePath)
-                            addImageToRecyclerView(getResizedBitmap(img,1000), picturePath)
+                            addImageToRecyclerView(getResizedBitmap(img, 1000), picturePath)
                             cursor.close()
                         }
                     }
@@ -205,11 +195,11 @@ class EditRatingFragment : Fragment() {
         }
     }
 
-    private fun addImageToRecyclerView(bitmap: Bitmap?, url:String){
+    private fun addImageToRecyclerView(bitmap: Bitmap?, url: String) {
         viewModel.addUploadImg(viewModel.clickPosition.value!!, bitmap, url)
     }
 
-    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {
+    private fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {
         var width = image.width
         var height = image.height
         val bitmapRatio = width.toFloat() / height.toFloat()
@@ -221,5 +211,35 @@ class EditRatingFragment : Fragment() {
             width = (height * bitmapRatio).toInt()
         }
         return Bitmap.createScaledBitmap(image, width, height, true)
+    }
+
+    private fun addDrinkRating(){
+        // set add drink rating adapter
+        var menuItem = viewModel.menu.value?.map { it.name }
+        val mBuilder = AlertDialog.Builder(activity)
+        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_venue_menu, null)
+        val spinner = mView.findViewById<Spinner>(R.id.spinner)
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            menuItem!!
+        )
+        spinner.adapter = adapter
+        mBuilder.setTitle("選取評價項目")
+
+        // set OK button for alert dialog
+        mBuilder.setPositiveButton("OK") { dialog, _ ->
+            val selectedPosition = spinner.selectedItemPosition
+            viewModel.addNewRating(viewModel.menu.value!![selectedPosition])
+            viewModel.removeMenuItem(selectedPosition)
+
+            dialog.dismiss()
+        }
+        // set Cancel button for alert dialog
+        mBuilder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        mBuilder.setView(mView).show()
     }
 }
