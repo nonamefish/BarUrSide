@@ -33,8 +33,13 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.postRating(rating)
     }
 
-    override suspend fun uploadPhoto(storageRef: StorageReference, type: String, localImage: String) {
-        return remoteDataSource.uploadPhoto(storageRef, type, localImage)
+    override suspend fun uploadPhoto(
+        storageRef: StorageReference,
+        userId: String,
+        type: String,
+        localImage: String
+    ) {
+        return remoteDataSource.uploadPhoto(storageRef, userId, type, localImage)
     }
 
     override suspend fun getFriend(user: User): Result<List<User>> {
@@ -43,5 +48,21 @@ class DefaultBarUrSideRepository(
 
     override suspend fun getMenu(venueId: String): Result<List<Drink>> {
         return remoteDataSource.getMenu(venueId)
+    }
+
+    override suspend fun updateRating(
+        id: String,
+        isVenue: Boolean,
+        rating: Rating
+    ): Result<Boolean> {
+        return remoteDataSource.updateObjectRating(id, isVenue, rating)
+    }
+
+    override suspend fun updateUserShare(
+        userId: String,
+        addShareCnt: Int,
+        addShareImgCnt: Int
+    ): Result<Boolean> {
+        return remoteDataSource.updateUserShare(userId, addShareCnt, addShareImgCnt)
     }
 }

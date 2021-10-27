@@ -19,9 +19,22 @@ interface BarUrSideDataSource {
 
     suspend fun postRating(rating: Rating): Result<Boolean>
 
-    suspend fun uploadPhoto(storageRef: StorageReference, type: String, localImage: String)
+    suspend fun uploadPhoto(
+        storageRef: StorageReference,
+        userId: String,
+        type: String,
+        localImage: String
+    )
 
     suspend fun getFriend(user: User): Result<List<User>>
 
     suspend fun getMenu(venueId: String): Result<List<Drink>>
+
+    suspend fun updateObjectRating(id: String, isVenue: Boolean, rating: Rating): Result<Boolean>
+
+    suspend fun updateUserShare(
+        userId: String,
+        addShareCnt: Int,
+        addShareImgCnt: Int
+    ): Result<Boolean>
 }

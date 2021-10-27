@@ -84,7 +84,6 @@ class EditRatingFragment : Fragment() {
 
         // get friend list
         viewModel.user.observe(viewLifecycleOwner, Observer { user ->
-            Log.d("Ming", "user: $user")
             user.friends?.let {
                 viewModel.getFriendList(user)
                 Log.d("Ming", "frdList: ${viewModel.frdList.value}")
@@ -94,9 +93,14 @@ class EditRatingFragment : Fragment() {
 
         // set post rating button click listener
         binding.btnRtgConfirm.setOnClickListener {
-//            findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
             viewModel.postRating()
         }
+
+        // leave rating and to previous view
+        viewModel.leave.observe(viewLifecycleOwner, Observer {
+            findNavController().navigateUp()
+//            viewModel.onLeft()
+        })
 
 
         return binding.root

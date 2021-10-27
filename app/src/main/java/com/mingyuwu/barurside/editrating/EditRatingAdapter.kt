@@ -1,5 +1,6 @@
 package com.mingyuwu.barurside.editrating
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.databinding.ItemEditRatingObjectBinding
 import com.mingyuwu.barurside.rating.BitmapAdapter
 import com.mingyuwu.barurside.rating.UserImageAdapter
+import java.util.*
 
 
 class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
@@ -53,9 +55,12 @@ class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
                 val adapter = ArrayAdapter(binding.root.context, android.R.layout.simple_spinner_dropdown_item, friendList!!)
                 binding.btnTagFrd.setAdapter(adapter)
 
-                binding.btnTagFrd.setOnItemClickListener { _, _, position, _ ->
+                binding.btnTagFrd.setOnItemClickListener { parent, _, position, _ ->
+
+                    val selected = parent.getItemAtPosition(position)
+                    val pos = friendList.indexOf(selected)
                     binding.btnTagFrd.setText("")
-                    viewModel.addTagFrd(rtgOrder, it[position].id)
+                    viewModel.addTagFrd(rtgOrder, it[pos].id)
                 }
             }
         }

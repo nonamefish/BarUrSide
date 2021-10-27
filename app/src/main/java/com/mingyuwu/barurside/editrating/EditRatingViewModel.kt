@@ -19,6 +19,8 @@ import java.sql.Timestamp
 class EditRatingViewModel(val repository: BarUrSideRepository, private val venue: Venue) :
     ViewModel() {
 
+    private val userId = "6BhbnIMi1Ai91Ky4w9rI"
+
     private val _star = MutableLiveData<MutableList<Int?>>()
     val star: LiveData<MutableList<Int?>>
         get() = _star
@@ -74,6 +76,12 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     val objectName: LiveData<MutableList<String>>
         get() = _objectName
 
+    // after set rating
+    private val _leave = MutableLiveData<Boolean>()
+
+    val leave: LiveData<Boolean>
+        get() = _leave
+
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
@@ -82,12 +90,10 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
 
 
     init {
-        getUser()
-        getMenu("7sg0kT3U39YI9K8AubfS")
-//        getMenu(venue.id)
+        getUser(userId)
+        getMenu(venue.id)
         _objectId.value = mutableListOf(venue.id)
         _objectName.value = mutableListOf(venue.name)
-//        _objectId.value = listOf(venueId).toMutableList()
         _uploadImg.value = mutableListOf(mutableListOf(null))
         _uploadImgUrl.value = mutableListOf(mutableListOf(null))
         _comment.value = mutableListOf(null)
@@ -101,8 +107,6 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
             _star.value!![rtgOrder] = score
             _star.value = _star.value
         }
-
-        Log.d("Ming", "Fragment_star.value: ${_star.value}")
     }
 
     fun addNewRating(drink: Drink) {
@@ -116,6 +120,8 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     }
 
     fun addUploadImg(position: Int, bitmap: Bitmap?, url: String) {
+
+
         if (_uploadImg.value!![position][0] == null) {
             _uploadImg.value!![position] = mutableListOf(bitmap)
             _uploadImgUrl.value!![position] = mutableListOf(url)
@@ -125,6 +131,7 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         }
         _uploadImg.value = _uploadImg.value
         _uploadImgUrl.value = _uploadImgUrl.value
+        Log.d("Ming","url: ${_uploadImg.value}")
     }
 
     fun addTagFrd(position: Int, frdId: String) {
@@ -139,6 +146,9 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     fun postRating() {
         coroutineScope.launch {
             objectId.value?.let {
+                var addShare = 0
+                var addShareImg = 0
+
                 for (index in 0 until objectId.value!!.size) {
 
                     val type = when (index) {
@@ -147,11 +157,12 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
                     }
 
                     val imgs = mutableListOf<String>()
-                    Log.d("Ming", index.toString())
+
                     _uploadImgUrl.value?.get(index)?.forEach { it ->
                         it?.let {
                             uploadPhoto(type, it)
                             imgs.add("$type/${it.substring(it.lastIndexOf('/') + 1)}")
+                            addShareImg += 1
                         }
                     }
 
@@ -159,16 +170,22 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
                         "",
                         objectId.value!![index],
                         index == 0,
-                        "O6kHLHzc3Ollfe7rkfkR",
+                        userId,
                         star.value!![index]!!.toLong(),
                         comment.value!![index] ?: "",
                         imgs,
                         Timestamp(System.currentTimeMillis()),
                         tagFrd.value
                     )
+                    addShare += 1
                     repository.postRating(rtg)
+                    updateObjectRating(objectId.value!![index], index == 0, rtg)
                 }
+
+                updateUserShare(addShare, addShareImg)
+
             }
+            leave()
         }
     }
 
@@ -177,12 +194,12 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         val storageRef = storage.reference
 
         coroutineScope.launch {
-            repository.uploadPhoto(storageRef, type, url)
+            repository.uploadPhoto(storageRef, userId, type, url)
         }
     }
 
-    private fun getUser() {
-        _user = repository.getUser("6BhbnIMi1Ai91Ky4w9rI") // TODO:set user id
+    private fun getUser(id: String) {
+        _user = repository.getUser(id)
     }
 
     fun getFriendList(user: User) {
@@ -191,7 +208,6 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
             val result = repository.getFriend(user)
             _frdList.value = when (result) {
                 is Result.Success -> {
-                    Log.d("Ming", "frdList: ${result.data}")
                     _error.value = null
                     result.data
                 }
@@ -234,10 +250,35 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         }
     }
 
-    fun removeMenuItem(position: Int){
-        Log.d("Ming","position: ${position}")
+    fun removeMenuItem(position: Int) {
         _menu.value?.removeAt(position)
         _menu.value = _menu.value
-        Log.d("Ming","viewModel.menu: ${menu.value?.size}")
+    }
+
+    fun leave() {
+        _leave.value = true
+    }
+
+    fun onLeft() {
+        _leave.value = null
+    }
+
+    private fun updateObjectRating(
+        id: String,
+        isVenue: Boolean,
+        rating: Rating
+    ) {
+        coroutineScope.launch {
+            repository.updateRating(id, isVenue, rating)
+        }
+    }
+
+    private fun updateUserShare(
+        addShareCnt: Int,
+        addShareImgCnt: Int
+    ) {
+        coroutineScope.launch {
+            repository.updateUserShare(userId, addShareCnt, addShareImgCnt)
+        }
     }
 }

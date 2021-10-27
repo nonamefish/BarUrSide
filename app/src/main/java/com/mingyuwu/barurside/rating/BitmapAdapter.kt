@@ -27,11 +27,11 @@ class BitmapAdapter (val width: Int, val height: Int) :
     // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<Bitmap>() {
         override fun areItemsTheSame(oldItem: Bitmap, newItem: Bitmap): Boolean {
-            return oldItem === newItem
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: Bitmap, newItem: Bitmap): Boolean {
-            return oldItem == newItem
+            return true
         }
     }
 
@@ -53,7 +53,7 @@ class BitmapAdapter (val width: Int, val height: Int) :
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG,"getItemCount : ${super.getItemCount()}")
+        Log.d("Ming","getItemCount : ${super.getItemCount()}")
         return super.getItemCount()
     }
 }

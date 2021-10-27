@@ -60,6 +60,7 @@ fun bindRecyclerViewWithImageUrls(recyclerView: RecyclerView, imageUrls: List<St
                     }
                     is UserImageAdapter -> {
                         submitList(imageUrls)
+                        notifyDataSetChanged()
                     }
                 }
             }
@@ -144,12 +145,15 @@ fun bindRecyclerViewWithImageBitmap(imageView: ImageView, imageBitmap: Bitmap?) 
 
 @BindingAdapter("imageBitmaps")
 fun bindRecyclerViewWithImageBitmaps(recyclerView: RecyclerView, imageBitmaps: List<Bitmap>?) {
+
     imageBitmaps?.let {
         if (imageBitmaps != listOf(null)) {
             recyclerView.adapter?.apply {
                 when (this) {
                     is BitmapAdapter -> {
+                        Log.d("Ming","imageBitmaps: $imageBitmaps")
                         submitList(imageBitmaps)
+                        notifyDataSetChanged()
                     }
                 }
             }
