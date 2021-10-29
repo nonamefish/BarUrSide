@@ -15,6 +15,7 @@ import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.source.BarUrSideDataSource
+import com.mingyuwu.barurside.filter.FilterParameter
 import java.io.File
 import java.sql.Timestamp
 import java.util.*
@@ -150,13 +151,80 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             list.add(drink)
                         }
                         continuation.resume(Result.Success(list))
-
                     } else {
                         task.exception?.let {
                             Log.w(
                                 TAG,
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun getVenueByFilter(filter: FilterParameter): Result<List<Venue>> =
+        suspendCoroutine { continuation ->
+
+            val list = mutableListOf<Venue>()
+
+            // filter venue
+            FirebaseFirestore.getInstance()
+                .collection(PATH_VENUE)
+                .whereIn("style", filter.style ?: listOf())
+                .whereEqualTo("level", filter.level)
+                .get()
+                .addOnCompleteListener { venueTask ->
+
+                    if (venueTask.isSuccessful) {
+                        for (document in venueTask.result!!) {
+                            val venue = document.toObject(Venue::class.java)
+
+                            if (filter.category == null) {
+                                list.add(venue)
+
+                            } else {
+                                var venueCnt = 0
+                                // filter drink category
+                                FirebaseFirestore.getInstance()
+                                    .collection(PATH_DRINK)
+                                    .whereIn("category", filter.category)
+                                    .whereEqualTo("venueId", venue.id)
+                                    .get()
+                                    .addOnCompleteListener { drinkTask ->
+                                        if (drinkTask.isSuccessful && drinkTask.result.size() > 0) {
+                                            list.add(venue)
+
+                                        } else {
+                                            drinkTask.exception?.let {
+                                                continuation.resume(Result.Error(it))
+                                                return@addOnCompleteListener
+                                            }
+                                            continuation.resume(
+                                                Result.Fail(
+                                                    BarUrSideApplication.instance.getString(
+                                                        R.string.fail_nothing
+                                                    )
+                                                )
+                                            )
+                                        }
+                                        venueCnt += 1
+                                        if (venueCnt == venueTask.result.size()) {
+                                            continuation.resume(Result.Success(list))
+                                        }
+                                    }
+                            }
+                        }
+                    } else {
+                        venueTask.exception?.let {
                             continuation.resume(Result.Error(it))
                             return@addOnCompleteListener
                         }

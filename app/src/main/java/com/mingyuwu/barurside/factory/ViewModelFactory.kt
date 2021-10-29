@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.mingyuwu.barurside.addactivity.AddActivityViewModel
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.editrating.EditRatingViewModel
+import com.mingyuwu.barurside.filter.FilterViewModel
 
 
 @Suppress("UNCHECKED_CAST")
@@ -17,7 +18,8 @@ class ViewModelFactory constructor(
             when {
                 isAssignableFrom(AddActivityViewModel::class.java) ->
                     AddActivityViewModel()
-
+                isAssignableFrom(FilterViewModel::class.java) ->
+                    FilterViewModel()
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

@@ -41,4 +41,8 @@
 
     <!-- Green Series -->
     <color name="green_0ead69">#0ead69</color>
+
+    <!--    Red Series-->
+    <color name="red_e02401">#e02401</color>
+
 </resources>

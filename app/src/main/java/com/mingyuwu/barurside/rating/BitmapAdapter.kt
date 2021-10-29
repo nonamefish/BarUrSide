@@ -4,30 +4,46 @@ import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.collect.TAG
 import com.mingyuwu.barurside.databinding.ItemRatingBitmapBinding
-import com.mingyuwu.barurside.databinding.ItemRatingImageBinding
+import com.mingyuwu.barurside.editrating.EditRatingViewModel
 
-class BitmapAdapter (val width: Int, val height: Int) :
+class BitmapAdapter(val width: Int, val height: Int, val rtgOrder: Int, val viewModel: ViewModel) :
     ListAdapter<Bitmap, BitmapAdapter.ImageViewHolder>(DiffCallback) {
 
     class ImageViewHolder(private var binding: ItemRatingBitmapBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(img: Bitmap,width: Int,height: Int) {
-            binding.img=img
-            binding.width=width
-            binding.height=height
+        fun bind(
+            img: Bitmap,
+            width: Int,
+            height: Int,
+            rtgOrder: Int,
+            viewModel: ViewModel
+        ) {
+            binding.img = img
+            binding.width = width
+            binding.height = height
+
+            when (viewModel) {
+                is EditRatingViewModel -> {
+                    binding.btnCancel.setOnClickListener {
+                        viewModel.removeUploadImg(rtgOrder, adapterPosition)
+                    }
+                }
+            }
+
         }
     }
 
     // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<Bitmap>() {
         override fun areItemsTheSame(oldItem: Bitmap, newItem: Bitmap): Boolean {
-            return oldItem == newItem
+            return oldItem === newItem
         }
 
         override fun areContentsTheSame(oldItem: Bitmap, newItem: Bitmap): Boolean {
@@ -49,11 +65,16 @@ class BitmapAdapter (val width: Int, val height: Int) :
     // Replaces the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val img = getItem(position)
-        holder.bind(img,width,height)
+        when (holder) {
+            is ImageViewHolder -> {
+                holder.bind(img, width, height, rtgOrder, viewModel)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
-        Log.d("Ming","getItemCount : ${super.getItemCount()}")
+        Log.d("Ming", "getItemCount : ${super.getItemCount()}")
         return super.getItemCount()
     }
+
 }

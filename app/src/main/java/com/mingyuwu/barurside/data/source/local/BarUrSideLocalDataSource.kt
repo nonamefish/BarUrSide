@@ -9,6 +9,7 @@ import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideDataSource
+import com.mingyuwu.barurside.filter.FilterParameter
 
 class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     override fun getVenue(id: String): MutableLiveData<Venue> {
@@ -28,6 +29,10 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     }
 
     override suspend fun postRating(rating: Rating): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getVenueByFilter(filter: FilterParameter): Result<List<Venue>> {
         TODO("Not yet implemented")
     }
 

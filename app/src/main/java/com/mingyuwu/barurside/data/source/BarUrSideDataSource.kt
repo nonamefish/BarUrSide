@@ -7,6 +7,7 @@ import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.Venue
+import com.mingyuwu.barurside.filter.FilterParameter
 
 interface BarUrSideDataSource {
     fun getVenue(id: String): MutableLiveData<Venue>
@@ -37,4 +38,6 @@ interface BarUrSideDataSource {
         addShareCnt: Int,
         addShareImgCnt: Int
     ): Result<Boolean>
+
+    suspend fun getVenueByFilter(filter: FilterParameter): Result<List<Venue>>
 }

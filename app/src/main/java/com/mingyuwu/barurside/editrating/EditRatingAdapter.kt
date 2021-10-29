@@ -14,7 +14,7 @@ import com.mingyuwu.barurside.rating.UserImageAdapter
 import java.util.*
 
 
-class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
+class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
     ListAdapter<String, EditRatingAdapter.EditRatingViewHolder>(DiffCallback) {
 
     class EditRatingViewHolder(private var binding: ItemEditRatingObjectBinding) :
@@ -36,7 +36,7 @@ class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
             binding.rtgOrder = rtgOrder
 
             // set recyclerView adapter
-            val imgAdapter = BitmapAdapter(60, 70)
+            val imgAdapter = BitmapAdapter(60, 70, rtgOrder, viewModel)
             val tagFrdAdapter = UserImageAdapter(60)
             binding.ratingAddImgList.adapter = imgAdapter
             binding.ratingTagFrdsList.adapter = tagFrdAdapter
@@ -50,13 +50,16 @@ class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
 
 
             // tag friend : set adapter and item click listener
-            viewModel.frdList.value?.let{
-                val friendList = viewModel.frdList.value?.map { it.name}
-                val adapter = ArrayAdapter(binding.root.context, android.R.layout.simple_spinner_dropdown_item, friendList!!)
+            viewModel.frdList.value?.let {
+                val friendList = viewModel.frdList.value?.map { it.name }
+                val adapter = ArrayAdapter(
+                    binding.root.context,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    friendList!!
+                )
                 binding.btnTagFrd.setAdapter(adapter)
 
                 binding.btnTagFrd.setOnItemClickListener { parent, _, position, _ ->
-
                     val selected = parent.getItemAtPosition(position)
                     val pos = friendList.indexOf(selected)
                     binding.btnTagFrd.setText("")
@@ -73,7 +76,7 @@ class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
         }
 
         override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem == newItem
+            return true
         }
     }
 

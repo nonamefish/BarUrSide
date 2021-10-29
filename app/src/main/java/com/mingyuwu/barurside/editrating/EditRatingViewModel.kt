@@ -77,9 +77,9 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         get() = _objectName
 
     // after set rating
-    private val _leave = MutableLiveData<Boolean>()
+    private val _leave = MutableLiveData<Boolean?>()
 
-    val leave: LiveData<Boolean>
+    val leave: LiveData<Boolean?>
         get() = _leave
 
     // Create a Coroutine scope using a job to be able to cancel when needed
@@ -131,8 +131,19 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         }
         _uploadImg.value = _uploadImg.value
         _uploadImgUrl.value = _uploadImgUrl.value
-        Log.d("Ming","url: ${_uploadImg.value}")
+        Log.d("Ming", "url: ${_uploadImg.value}")
     }
+
+    fun removeUploadImg(rtgOrder: Int, position: Int) {
+
+        _uploadImg.value?.get(rtgOrder)?.removeAt(position)
+        _uploadImgUrl.value?.get(rtgOrder)?.removeAt(position)
+
+        _uploadImg.value = _uploadImg.value
+        _uploadImgUrl.value = _uploadImgUrl.value
+        Log.d("Ming", "url: ${_uploadImg.value}")
+    }
+
 
     fun addTagFrd(position: Int, frdId: String) {
         if (_tagFrd.value == null) {
@@ -280,5 +291,31 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         coroutineScope.launch {
             repository.updateUserShare(userId, addShareCnt, addShareImgCnt)
         }
+    }
+
+    fun checkRating(): Boolean {
+        _objectId?.value?.forEachIndexed { index, s ->
+            if (_star.value?.get(index) == null) {
+                return false
+            }
+        }
+        return true
+    }
+
+    fun removeRating(rtgOrder: Int) {
+        _menu.value?.add(
+            Drink(
+                id = _objectId.value!![rtgOrder],
+                name = _objectName.value!![rtgOrder]
+            )
+        )
+        _objectId.value!!.removeAt(rtgOrder)
+        _objectName.value!!.removeAt(rtgOrder)
+        _star.value?.removeAt(rtgOrder)
+        _uploadImg.value?.removeAt(rtgOrder)
+        _uploadImgUrl.value?.removeAt(rtgOrder)
+        _comment.value?.removeAt(rtgOrder)
+        _objectId.value = _objectId.value
+        _menu.value = _menu.value
     }
 }

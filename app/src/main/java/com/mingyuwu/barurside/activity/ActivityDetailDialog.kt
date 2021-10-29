@@ -1,5 +1,7 @@
 package com.mingyuwu.barurside.activity
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +12,6 @@ import com.mingyuwu.barurside.data.mockdata.UserData
 import com.mingyuwu.barurside.databinding.DialogActivityDetailBinding
 
 class ActivityDetailDialog: DialogFragment() {
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setStyle(STYLE_NO_FRAME, R.style.ActivityDetailDialog)
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,11 +24,15 @@ class ActivityDetailDialog: DialogFragment() {
 
         // set mock data
         binding.user = UserData.user.user[0]
-//        bindind.
 
         // book button on click listener
         binding.btnBookActivity.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        // Set transparent background and no title
+        if (dialog != null && dialog!!.window != null) {
+            dialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         }
 
         return binding.root

@@ -7,6 +7,7 @@ import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.Venue
+import com.mingyuwu.barurside.filter.FilterParameter
 
 class DefaultBarUrSideRepository(
     private val remoteDataSource: BarUrSideDataSource,
@@ -64,5 +65,9 @@ class DefaultBarUrSideRepository(
         addShareImgCnt: Int
     ): Result<Boolean> {
         return remoteDataSource.updateUserShare(userId, addShareCnt, addShareImgCnt)
+    }
+
+    override suspend fun getVenueByFilter(filter: FilterParameter): Result<List<Venue>> {
+        return remoteDataSource.getVenueByFilter(filter)
     }
 }

@@ -9,6 +9,8 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -26,11 +28,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import kotlin.collections.ArrayList
+import android.content.DialogInterface
+import android.widget.Button
 
 
 private const val REQUEST_ID_MULTIPLE_PERMISSIONS = 101
@@ -61,9 +64,9 @@ class EditRatingFragment : Fragment() {
 
         // add drink rating : set button click listener
         binding.btnAddDrinkRtg.setOnClickListener {
-            if(viewModel.menu.value!=null){
+            if (viewModel.menu.value != null) {
                 addDrinkRating()
-            }else{
+            } else {
                 Toast.makeText(binding.root.context, "無提供菜單", Toast.LENGTH_SHORT).show()
             }
         }
@@ -93,13 +96,19 @@ class EditRatingFragment : Fragment() {
 
         // set post rating button click listener
         binding.btnRtgConfirm.setOnClickListener {
-            viewModel.postRating()
+            if (viewModel.checkRating()) {
+                viewModel.postRating()
+            } else {
+                showRatingUncompleted()
+            }
         }
 
         // leave rating and to previous view
         viewModel.leave.observe(viewLifecycleOwner, Observer {
-            findNavController().navigateUp()
-//            viewModel.onLeft()
+            it?.let {
+                findNavController().navigateUp()
+                viewModel.onLeft()
+            }
         })
 
 
@@ -186,9 +195,12 @@ class EditRatingFragment : Fragment() {
                             null
                         )
                         if (cursor != null) {
+
+                            val columnIndex= cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
                             cursor.moveToFirst()
-                            val columnIndex: Int = cursor.getColumnIndex(filePathColumn[0])
+                            Log.d("Ming","columnIndex: $columnIndex")
                             val picturePath: String = cursor.getString(columnIndex)
+                            Log.d("Ming","picturePath: $picturePath")
                             val img = BitmapFactory.decodeFile(picturePath)
                             addImageToRecyclerView(getResizedBitmap(img, 1000), picturePath)
                             cursor.close()
@@ -217,10 +229,10 @@ class EditRatingFragment : Fragment() {
         return Bitmap.createScaledBitmap(image, width, height, true)
     }
 
-    private fun addDrinkRating(){
+    private fun addDrinkRating() {
         // set add drink rating adapter
         var menuItem = viewModel.menu.value?.map { it.name }
-        val mBuilder = AlertDialog.Builder(activity)
+        val mBuilder = AlertDialog.Builder(binding.root.context)
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_venue_menu, null)
         val spinner = mView.findViewById<Spinner>(R.id.spinner)
         val adapter = ArrayAdapter(
@@ -246,4 +258,22 @@ class EditRatingFragment : Fragment() {
 
         mBuilder.setView(mView).show()
     }
+
+    private fun showRatingUncompleted() {
+        val alertDialog = AlertDialog.Builder(binding.root.context)
+        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
+        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm) //連結關閉視窗的Button
+
+        alertDialog.setView(mView)
+        val dialog = alertDialog.create()
+
+        btDialog.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+        val layoutParameter = dialog.window?.attributes
+        layoutParameter?.width = 800
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
+
 }
+
