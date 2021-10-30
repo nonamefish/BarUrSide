@@ -495,19 +495,30 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-    override suspend fun getVenueByRating(id: String): Result<Venue> =
+    override suspend fun getVenueByLocation(
+        minLat: Double,
+        maxLat: Double,
+        minLng: Double,
+        maxLng: Double
+    ): Result<List<Venue>> =
         suspendCoroutine { continuation ->
+            val list = mutableListOf<Venue>()
+            val ref = FirebaseFirestore.getInstance().collection(PATH_VENUE)
 
-            FirebaseFirestore.getInstance()
-                .collection(PATH_VENUE)
-                .whereEqualTo("id", id)
+            ref.whereGreaterThan("latitude", minLat)
+                .whereLessThan("latitude", maxLat)
+
+            ref.whereGreaterThan("longitude", minLng)
+                .whereLessThan("longitude", maxLng)
                 .get()
                 .addOnCompleteListener { task ->
+
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
                             val venue = document.toObject(Venue::class.java)
-                            continuation.resume(Result.Success(venue))
+                            list.add(venue)
                         }
+                        continuation.resume(Result.Success(list))
                     } else {
                         task.exception?.let {
                             Log.w(
@@ -560,4 +571,41 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     }
                 }
         }
+
+    override suspend fun getVenueBySearch(search: String): Result<List<Venue>> =
+        suspendCoroutine { continuation ->
+
+            val list = mutableListOf<Venue>()
+
+            // filter venue
+            FirebaseFirestore.getInstance()
+                .collection(PATH_VENUE)
+                .orderBy("name")
+                .startAt(search)
+                .endAt("$search\uf8ff")
+                .get()
+                .addOnCompleteListener { venueTask ->
+
+                    if (venueTask.isSuccessful) {
+                        for (document in venueTask.result!!) {
+                            val venue = document.toObject(Venue::class.java)
+                            list.add(venue)
+                        }
+                        continuation.resume(Result.Success(list))
+                    } else {
+                        venueTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
 }

@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
@@ -14,22 +13,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentMapBinding
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.model.*
 import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.discover.Theme
+import com.mingyuwu.barurside.data.Venue
+import com.mingyuwu.barurside.ext.getVmFactory
 import com.permissionx.guolindev.PermissionX
 
 
@@ -42,6 +43,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentMapBinding
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private var locationPermissionGranted = false
+    private val viewModel by viewModels<MapViewModel> { getVmFactory() }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +55,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_map, container, false
         )
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+
         mContext = binding.root.context
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext)
 
@@ -65,6 +71,47 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 MainNavigationDirections.navigateToFilterFragment()
             )
         }
+
+        // search info: set auto completed text adapter
+        viewModel.searchInfo.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Log.d("Ming", "searchInfo: $it")
+                val venueList = it.map { venue -> venue.name }
+                val adapter = ArrayAdapter(
+                    binding.root.context,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    venueList!!
+                )
+                binding.autoMapFilter.setAdapter(adapter)
+
+                binding.autoMapFilter.setOnItemClickListener { parent, _, position, _ ->
+                    val selected = parent.getItemAtPosition(position)
+                    val pos = venueList.indexOf(selected)
+                    binding.autoMapFilter.setText("")
+                    Log.d("Ming", "selected venue: ${it[pos]}")
+                    addMapMark(it[pos], true)
+                }
+            }
+        })
+
+        // search venue after autocompleted text
+        viewModel.searchText.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it.length == 1) {
+                    viewModel.getVenueBySearch(it)
+                }
+            }
+        })
+
+        // init : nearby venue list
+        viewModel.venueList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Log.d("Ming", "venueList: $it")
+                for (item in it) {
+                    addMapMark(item, false)
+                }
+            }
+        })
 
         return binding.root
     }
@@ -87,6 +134,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         getLocationPermission()
     }
 
+
+    private fun addMapMark(venue: Venue, isSelected: Boolean) {
+        mMap?.addMarker(
+            MarkerOptions()
+                .position(LatLng(venue.latitude, venue.longitude))
+                .title(venue.name)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_64px_beer))
+        )
+        if (isSelected) {
+            mMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(venue.latitude, venue.longitude), 15f
+                )
+            )
+        }
+    }
+
     private fun getDeviceLocation() {
         try {
             if (locationPermissionGranted
@@ -98,29 +162,24 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 //更新次數，若沒設定，會持續更新
                 locationRequest.numUpdates = 1
 
-
+                // set request Location Updates
                 mFusedLocationProviderClient.requestLocationUpdates(
                     locationRequest,
                     object : LocationCallback() {
                         override fun onLocationResult(locationResult: LocationResult?) {
                             locationResult ?: return
-                            Log.d(
-                                "Ming",
-                                "緯度:${locationResult.lastLocation.latitude} , 經度:${locationResult.lastLocation.longitude} "
-                            )
                             val currentLocation =
                                 LatLng(
                                     locationResult.lastLocation.latitude,
                                     locationResult.lastLocation.longitude
                                 )
 
+                            // get near bar
+                            viewModel.getVenueByLocation(currentLocation)
+
                             // google map current location (blue point)
                             mMap.isMyLocationEnabled = true
                             mMap.uiSettings.isMyLocationButtonEnabled = true
-
-                            mMap?.addMarker(
-                                MarkerOptions().position(currentLocation).title("現在位置")
-                            )
                             mMap?.moveCamera(
                                 CameraUpdateFactory.newLatLngZoom(
                                     currentLocation, 15f
@@ -131,9 +190,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     },
                     null
                 )
-
             } else {
-                Log.d("Ming", "Not have location permission")
                 getLocationPermission()
             }
         } catch (e: SecurityException) {
@@ -165,12 +222,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
             .request { allGranted, _, deniedList ->
                 if (allGranted) {
-                    locationPermissionGranted=true
+                    locationPermissionGranted = true
                     checkGPSState()
-//                    Toast.makeText(binding.root.context, "All permissions are granted", Toast.LENGTH_LONG).show()
+//                    Toast.makeText(mContext, "All permissions are granted", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(
-                        binding.root.context,
+                        mContext,
                         "These permissions are denied: $deniedList",
                         Toast.LENGTH_LONG
                     ).show()
@@ -198,4 +255,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Log.d("Ming", "已獲取到位置權限且GPS已開啟，可以準備開始獲取經緯度")
         }
     }
+
+
 }

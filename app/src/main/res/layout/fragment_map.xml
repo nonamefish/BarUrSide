@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.map.MapViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -18,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <AutoCompleteTextView
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/auto_map_filter"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginStart="24dp"
@@ -29,9 +35,9 @@
             android:hint="Beers, Wine, pr venues"
             android:inputType="textPersonName"
             android:maxLines="1"
+            android:text="@={viewModel.searchText}"
             android:paddingStart="48dp"
             android:singleLine="true"
-            android:text="Name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -43,9 +49,9 @@
             android:layout_marginStart="16dp"
             android:backgroundTint="@color/gray_cccccc"
             android:src="@drawable/icons_24px_discover"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
-            app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
-            app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName" />
+            app:layout_constraintBottom_toBottomOf="@+id/auto_map_filter"
+            app:layout_constraintStart_toStartOf="@+id/auto_map_filter"
+            app:layout_constraintTop_toTopOf="@+id/auto_map_filter" />
 
         <ImageView
             android:id="@+id/btn_filter"
@@ -53,9 +59,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:src="@drawable/icons_24px_filter"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
-            app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName"
-            app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName" />
+            app:layout_constraintBottom_toBottomOf="@+id/auto_map_filter"
+            app:layout_constraintEnd_toEndOf="@+id/auto_map_filter"
+            app:layout_constraintTop_toTopOf="@+id/auto_map_filter" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

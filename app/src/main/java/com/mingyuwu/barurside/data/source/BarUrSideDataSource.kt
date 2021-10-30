@@ -36,6 +36,12 @@ interface BarUrSideDataSource {
     ): Result<Boolean>
 
     suspend fun getVenueByFilter(filter: FilterParameter): Result<List<Venue>>
-    suspend fun getVenueByRating(id: String): Result<Venue>
+    suspend fun getVenueByLocation(
+        minLat: Double,
+        maxLat: Double,
+        minLng: Double,
+        maxLng: Double
+    ): Result<List<Venue>>
     suspend fun getDrinkByRating(id: String): Result<Drink>
+    suspend fun getVenueBySearch(search: String): Result<List<Venue>>
 }

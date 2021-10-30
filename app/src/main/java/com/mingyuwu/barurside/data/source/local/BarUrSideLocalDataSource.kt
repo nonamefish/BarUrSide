@@ -16,6 +16,10 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getVenueBySearch(search: String): Result<List<Venue>> {
+        TODO("Not yet implemented")
+    }
+
     override fun getDrink(id: String): MutableLiveData<Drink> {
         TODO("Not yet implemented")
     }
@@ -49,7 +53,12 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getVenueByRating(id: String): Result<Venue> {
+    override suspend fun getVenueByLocation(
+        minLat: Double,
+        maxLat: Double,
+        minLng: Double,
+        maxLng: Double
+    ): Result<List<Venue>> {
         TODO("Not yet implemented")
     }
 

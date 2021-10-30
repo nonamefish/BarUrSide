@@ -67,11 +67,20 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getVenueByFilter(filter)
     }
 
-    override suspend fun getVenueByRating(id: String): Result<Venue> {
-        return remoteDataSource.getVenueByRating(id)
+    override suspend fun getVenueByLocation(
+        minLat: Double,
+        maxLat: Double,
+        minLng: Double,
+        maxLng: Double
+    ): Result<List<Venue>> {
+        return remoteDataSource.getVenueByLocation(minLat, maxLat, minLng, maxLng)
     }
 
     override suspend fun getDrinkByRating(id: String): Result<Drink> {
         return remoteDataSource.getDrinkByRating(id)
+    }
+
+    override suspend fun getVenueBySearch(search: String): Result<List<Venue>> {
+        return remoteDataSource.getVenueBySearch(search)
     }
 }

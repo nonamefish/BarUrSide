@@ -119,7 +119,6 @@ class EditRatingFragment : Fragment() {
         return binding.root
     }
 
-    // get and check location permission
     private fun getPhotoPermission() {
         PermissionX.init(activity)
             .permissions(
@@ -155,8 +154,6 @@ class EditRatingFragment : Fragment() {
                 }
             }
     }
-
-
 
     private fun chooseImage(context: Context) {
         val optionsMenu = arrayOf<CharSequence>("從照片選擇", "離開") // create a menuOption Array
@@ -276,7 +273,5 @@ class EditRatingFragment : Fragment() {
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
-
-
 }
 
