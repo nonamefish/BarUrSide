@@ -239,12 +239,13 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
     override fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>> {
         val liveData = MutableLiveData<List<RatingInfo>>()
 
+        // get rating data
         FirebaseFirestore.getInstance()
             .collection(PATH_RATING)
             .whereEqualTo("isVenue", isVenue)
             .whereEqualTo("objectId", id)
             .addSnapshotListener { snapshot, exception ->
-                Log.d(TAG, "getRating snapshot ${snapshot!!.documents}")
+
                 exception?.let {
                     Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
@@ -252,10 +253,54 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 val list = mutableListOf<RatingInfo>()
                 for (document in snapshot!!) {
                     val rating = document.toObject(RatingInfo::class.java)
-                    list.add(rating)
-                }
 
-                liveData.value = list
+                    // get user info
+                    FirebaseFirestore.getInstance()
+                        .collection(PATH_USER)
+                        .whereEqualTo("id", rating.userId)
+                        .get()
+                        .addOnCompleteListener { task ->
+                            for (document in task.result!!) {
+                                val user = document.toObject(User::class.java)
+                                rating.userInfo = user
+
+                                // get object info
+                                when (isVenue) {
+                                    true -> {
+                                        FirebaseFirestore.getInstance()
+                                            .collection(PATH_VENUE)
+                                            .whereEqualTo("id", id)
+                                            .get()
+                                            .addOnCompleteListener { task ->
+                                                for (document in task.result!!) {
+                                                    val venue = document.toObject(Venue::class.java)
+                                                    rating.objectName = venue.name
+                                                    rating.objectImg = venue.images?.get(0) ?: ""
+                                                }
+                                                list.add(rating)
+                                                liveData.value = list
+                                            }
+                                    }
+
+                                    false -> {
+                                        FirebaseFirestore.getInstance()
+                                            .collection(PATH_DRINK)
+                                            .whereEqualTo("id", id)
+                                            .get()
+                                            .addOnCompleteListener { task ->
+                                                for (document in task.result!!) {
+                                                    val drink = document.toObject(Drink::class.java)
+                                                    rating.objectName = drink.name
+                                                    rating.objectImg = drink.images?.get(0) ?: ""
+                                                }
+                                                list.add(rating)
+                                                liveData.value = list
+                                            }
+                                    }
+                                }
+                            }
+                        }
+                }
             }
 
         return liveData

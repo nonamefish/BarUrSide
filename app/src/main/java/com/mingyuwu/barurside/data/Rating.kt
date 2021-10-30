@@ -19,6 +19,7 @@ data class Rating(
 ) : Parcelable {
 
     val postTimestamp = postDate?.let { Timestamp(it.time) }
+
     companion object {
 
         fun toHashMap(dt: Rating) = hashMapOf(
@@ -47,8 +48,10 @@ data class RatingInfo(
     var postDate: Date? = null,
     val tagFriends: List<String>? = null,
     // add column
-    val objectName:String? = null,
-    val objectImg:String? = null,
-    val userInfo:User? = null,
+    var objectName: String? = null,
+    var objectImg: String? = null,
+    var userInfo: User? = null,
     val tagFriendsImg: List<String>? = null
-) : Parcelable
+) : Parcelable {
+    val postTimestamp = postDate?.let { Timestamp(it.time) }
+}

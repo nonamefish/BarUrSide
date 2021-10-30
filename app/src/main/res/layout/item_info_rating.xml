@@ -6,7 +6,7 @@
     <data>
         <variable
             name="rating"
-            type="com.mingyuwu.barurside.data.Rating" />
+            type="com.mingyuwu.barurside.data.RatingInfo" />
         <variable
             name="User"
             type="com.mingyuwu.barurside.data.User"/>
@@ -134,7 +134,7 @@
                 android:layout_height="42dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                app:imageUrl="@{objectImg}"
+                app:imageUrl="@{rating.objectImg}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
@@ -144,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{objectName}"
+                android:text="@{rating.objectName}"
                 app:layout_constraintStart_toEndOf="@+id/img_info_rtg"
                 app:layout_constraintTop_toTopOf="@+id/img_info_rtg"
                 tools:text="文青不要喝IPA" />

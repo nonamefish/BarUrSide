@@ -3,10 +3,8 @@ package com.mingyuwu.barurside.activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mingyuwu.barurside.data.mockdata.ActivityData
-import com.mingyuwu.barurside.data.mockdata.DrinkData
-import com.mingyuwu.barurside.data.mockdata.RatingData
-import com.mingyuwu.barurside.data.mockdata.VenueData
+import com.mingyuwu.barurside.data.RatingInfo
+import com.mingyuwu.barurside.data.mockdata.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 
@@ -22,13 +20,13 @@ class ActivityPageViewModel(private val repository: BarUrSideRepository, val typ
     init{
         when (type) {
             ActivityTypeFilter.RECOMMEND -> {
-                _activityData.value= RatingData.rating.rating
+                _activityData.value= RatingInfoData.rating.rating
             }
             ActivityTypeFilter.ACTIVITY -> {
                 _activityData.value= ActivityData.activity.activity
             }
             ActivityTypeFilter.FOLLOW -> {
-                _activityData.value= RatingData.rating.rating
+                _activityData.value= RatingInfoData.rating.rating
             }
         }
     }

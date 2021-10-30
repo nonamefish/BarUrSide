@@ -13,10 +13,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.data.Drink
-import com.mingyuwu.barurside.data.Rating
-import com.mingyuwu.barurside.data.Result
-import com.mingyuwu.barurside.data.Venue
+import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.mockdata.UserData
 import com.mingyuwu.barurside.databinding.ItemEditRatingObjectBinding
 import com.mingyuwu.barurside.databinding.ItemInfoRatingBinding
@@ -28,8 +25,6 @@ import kotlinx.coroutines.launch
 
 class InfoRatingAdapter() :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
-
-    private val adapterScope = CoroutineScope(Dispatchers.Default)
 
     class InfoRatingViewHolder(private var binding: ItemInfoRatingBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -44,7 +39,7 @@ class InfoRatingAdapter() :
             }
         }
 
-        fun bind(rating: Rating?, view: View, adapterScope: CoroutineScope) {
+        fun bind(rating: RatingInfo?, view: View) {
 
             // setting navigate to profile page
             binding.constraintUserInfo.setOnClickListener {
@@ -60,39 +55,10 @@ class InfoRatingAdapter() :
             binding.rating = rating
 
             // set user Info
-            binding.user = UserData.user.user[0]
-
-            // get object name
-            adapterScope.launch {
-                val repo = BarUrSideApplication.instance.repository
-                when (rating?.isVenue) {
-                    true -> {
-                        when (val result = repo.getVenueByRating(rating.id)) {
-                            is Result.Success -> {
-                                binding.objectName=result.data.name
-                                binding.objectImg= result.data.images?.get(0) ?: ""
-                            }
-                            is Result.Fail -> {
-                                null
-                            }
-                            is Result.Error -> {
-                                null
-                            }
-                            else -> {
-                                null
-                            }
-                        }
-                    }
-                    false -> {
-                        val obj = repo.getDrink(rating.objectId)
-                        binding.objectName = obj.value?.name
-                        binding.objectImg = obj.value?.images?.get(0) ?: ""
-                    }
-                    else -> null
-                }
-            }
+            binding.user = rating?.userInfo//UserData.user.user[0]
         }
     }
+
 
     // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<Any>() {
@@ -101,7 +67,7 @@ class InfoRatingAdapter() :
         }
 
         override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-            return (oldItem as Rating).id == (newItem as Rating).id
+            return (oldItem as RatingInfo).id == (newItem as RatingInfo).id
         }
     }
 
@@ -120,7 +86,7 @@ class InfoRatingAdapter() :
         when (holder) {
             is InfoRatingViewHolder -> {
                 Log.d("Ming", getItem(position).toString())
-                holder.bind((getItem(position) as Rating), holder.itemView, adapterScope)
+                holder.bind((getItem(position) as RatingInfo), holder.itemView)
             }
         }
     }
