@@ -34,12 +34,14 @@ import com.mingyuwu.barurside.ext.getVmFactory
 import kotlin.collections.ArrayList
 import android.content.DialogInterface
 import android.widget.Button
+import com.permissionx.guolindev.PermissionX
 
 
 private const val REQUEST_ID_MULTIPLE_PERMISSIONS = 101
 
 class EditRatingFragment : Fragment() {
 
+    private var photoPermissionGranted = false
     private lateinit var binding: FragmentEditRatingBinding
     private val viewModel by viewModels<EditRatingViewModel> {
         getVmFactory(
@@ -80,8 +82,10 @@ class EditRatingFragment : Fragment() {
 
         // click add photo button
         viewModel.isUploadImgBtn.observe(viewLifecycleOwner, Observer {
-            if (checkAndRequestPermissions(binding.root.context)) {
+            if (photoPermissionGranted) {
                 chooseImage(binding.root.context)
+            }else{
+                getPhotoPermission()
             }
         })
 
@@ -115,45 +119,44 @@ class EditRatingFragment : Fragment() {
         return binding.root
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            REQUEST_ID_MULTIPLE_PERMISSIONS -> if (
-                ContextCompat.checkSelfPermission(
-                    binding.root.context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) !== PackageManager.PERMISSION_GRANTED
-            ) {
-                Log.d("Ming", "onRequestPermissionsResult: Here")
-            } else {
-                chooseImage(binding.root.context)
-            }
-        }
-    }
-
-
-    private fun checkAndRequestPermissions(context: Context): Boolean {
-        val rExtStorePermission: Int = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-        val listPermissionsNeeded: MutableList<String> = ArrayList()
-        if (rExtStorePermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-        if (listPermissionsNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                requireActivity(), listPermissionsNeeded
-                    .toTypedArray(),
-                REQUEST_ID_MULTIPLE_PERMISSIONS
+    // get and check location permission
+    private fun getPhotoPermission() {
+        PermissionX.init(activity)
+            .permissions(
+                Manifest.permission.READ_EXTERNAL_STORAGE
             )
-            return false
-        }
-        return true
+            .onExplainRequestReason { scope, deniedList ->
+                scope.showRequestReasonDialog(
+                    deniedList,
+                    "請開通相片權限，以上傳照片",
+                    "確定",
+                    "忍痛拒絕"
+                )
+            }
+            .onForwardToSettings { scope, deniedList ->
+                scope.showForwardToSettingsDialog(
+                    deniedList,
+                    "請開通相片權限，以上傳照片",
+                    "確定",
+                    "忍痛拒絕"
+                )
+            }
+            .request { allGranted, _, deniedList ->
+                if (allGranted) {
+                    photoPermissionGranted=true
+                    chooseImage(binding.root.context)
+//                    Toast.makeText(binding.root.context, "All permissions are granted", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(
+                        binding.root.context,
+                        "These permissions are denied: $deniedList",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
     }
+
+
 
     private fun chooseImage(context: Context) {
         val optionsMenu = arrayOf<CharSequence>("從照片選擇", "離開") // create a menuOption Array

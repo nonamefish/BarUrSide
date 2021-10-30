@@ -264,7 +264,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 val user = document.toObject(User::class.java)
                                 rating.userInfo = user
 
-                                // get object info
+                                // get object info : venue
                                 when (isVenue) {
                                     true -> {
                                         FirebaseFirestore.getInstance()
@@ -281,7 +281,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                 liveData.value = list
                                             }
                                     }
-
+                                    // get object info : drink
                                     false -> {
                                         FirebaseFirestore.getInstance()
                                             .collection(PATH_DRINK)

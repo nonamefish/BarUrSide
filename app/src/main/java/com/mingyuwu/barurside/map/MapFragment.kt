@@ -26,9 +26,11 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentMapBinding
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.discover.Theme
+import com.permissionx.guolindev.PermissionX
 
 
 const val REQUEST_LOCATION_PERMISSION = 1
@@ -53,7 +55,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mContext = binding.root.context
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext)
 
-        val mapFragment = childFragmentManager.findFragmentById(binding.googleMap.id) as SupportMapFragment
+        val mapFragment =
+            childFragmentManager.findFragmentById(binding.googleMap.id) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         // set filter button on click listener
@@ -130,7 +133,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 )
 
             } else {
-                Log.d("Ming","Not have location permission")
+                Log.d("Ming", "Not have location permission")
                 getLocationPermission()
             }
         } catch (e: SecurityException) {
@@ -140,84 +143,39 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     // get and check location permission
     private fun getLocationPermission() {
-        //檢查權限
-        if (ActivityCompat.checkSelfPermission(
-                binding.root.context,
+        PermissionX.init(activity)
+            .permissions(
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            //已獲取到權限
-            Log.d("Ming", "已獲取到位置權限，可以準備開始獲取經緯度")
-            locationPermissionGranted = true
-            checkGPSState()
-        } else {
-            //詢問要求獲取權限
-            requestLocationPermission()
-        }
-    }
-
-    // request location permission
-    private fun requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION
             )
-        ) {
-            AlertDialog.Builder(binding.root.context)
-                .setMessage("此應用程式，需要位置權限才能正常使用")
-                .setPositiveButton("確定") { _, _ ->
-                    ActivityCompat.requestPermissions(
-                        requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        REQUEST_LOCATION_PERMISSION
-                    )
-                }
-                .setNegativeButton("取消") { _, _ -> requestLocationPermission() }
-                .show()
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION
-            )
-        }
-    }
-
-    // request permission callback
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            REQUEST_LOCATION_PERMISSION -> {
-                if (grantResults.isNotEmpty()) {
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        //已獲取到權限
-                        locationPermissionGranted = true
-                        //todo checkGPSState()
-                    } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                        if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                                requireActivity(),
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            )
-                        ) {
-                            //權限被永久拒絕
-                            Log.d("Ming", "位置權限已被關閉，功能將會無法正常使用")
-                            AlertDialog.Builder(binding.root.context)
-                                .setTitle("開啟位置權限")
-                                .setMessage("此應用程式，位置權限已被關閉，需開啟才能正常使用")
-                                .setPositiveButton("確定") { _, _ ->
-                                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                                    startActivityForResult(intent, REQUEST_LOCATION_PERMISSION)
-                                }
-                                .setNegativeButton("取消") { _, _ -> requestLocationPermission() }
-                                .show()
-                        } else {
-                            //權限被拒絕
-                            Log.d("Ming", "位置權限被拒絕，功能將會無法正常使用")
-                            requestLocationPermission()
-                        }
-                    }
+            .onExplainRequestReason { scope, deniedList ->
+                scope.showRequestReasonDialog(
+                    deniedList,
+                    "請開通地理定位，以提供您所在位置附近的優質酒館",
+                    "確定",
+                    "忍痛拒絕"
+                )
+            }
+            .onForwardToSettings { scope, deniedList ->
+                scope.showForwardToSettingsDialog(
+                    deniedList,
+                    "請開通地理定位，以提供您所在位置附近的優質酒館",
+                    "確定",
+                    "忍痛拒絕"
+                )
+            }
+            .request { allGranted, _, deniedList ->
+                if (allGranted) {
+                    locationPermissionGranted=true
+                    checkGPSState()
+//                    Toast.makeText(binding.root.context, "All permissions are granted", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(
+                        binding.root.context,
+                        "These permissions are denied: $deniedList",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
-        }
     }
 
     // check GPS state
