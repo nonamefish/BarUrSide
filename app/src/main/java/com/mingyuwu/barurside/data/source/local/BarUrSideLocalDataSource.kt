@@ -3,11 +3,7 @@ package com.mingyuwu.barurside.data.source.local
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.storage.StorageReference
-import com.mingyuwu.barurside.data.Drink
-import com.mingyuwu.barurside.data.Rating
-import com.mingyuwu.barurside.data.Result
-import com.mingyuwu.barurside.data.User
-import com.mingyuwu.barurside.data.Venue
+import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideDataSource
 import com.mingyuwu.barurside.filter.FilterParameter
 
@@ -16,7 +12,7 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<Rating>> {
+    override fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>> {
         TODO("Not yet implemented")
     }
 
@@ -50,6 +46,14 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     }
 
     override suspend fun getMenu(venueId: String): Result<List<Drink>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getVenueByRating(id: String): Result<Venue> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getDrinkByRating(id: String): Result<Drink> {
         TODO("Not yet implemented")
     }
 

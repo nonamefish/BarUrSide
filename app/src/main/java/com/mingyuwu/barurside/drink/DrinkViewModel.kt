@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.Rating
+import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,7 @@ class DrinkViewModel(private val repository: BarUrSideRepository, id: String) : 
     // set source data
     var drinkInfo = MutableLiveData<Drink>()
     var venueInfo = MutableLiveData<Venue>()
-    var rtgInfo = MutableLiveData<List<Rating>>()
+    var rtgInfo = MutableLiveData<List<RatingInfo>>()
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -42,7 +43,7 @@ class DrinkViewModel(private val repository: BarUrSideRepository, id: String) : 
         venueInfo = repository.getVenue(id)
     }
 
-    fun setImgs(rtgs: List<Rating>?): List<String> {
+    fun setImgs(rtgs: List<RatingInfo>?): List<String> {
         var list = listOf<String>()
         rtgs?.forEach {
             if (list.size > 10) return@forEach

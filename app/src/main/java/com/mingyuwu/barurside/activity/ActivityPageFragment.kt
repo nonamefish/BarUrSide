@@ -84,7 +84,6 @@ class ActivityPageFragment() : Fragment() {
                     findNavController().navigate(MainNavigationDirections.navigateToActivityDetailDialog(it))
                 }
             }
-//            viewModel.navigateToDetail.value=null
         })
 
         return binding.root

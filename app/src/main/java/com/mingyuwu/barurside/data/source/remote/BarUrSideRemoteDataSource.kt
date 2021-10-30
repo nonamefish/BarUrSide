@@ -9,11 +9,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.R
-import com.mingyuwu.barurside.data.Drink
-import com.mingyuwu.barurside.data.User
-import com.mingyuwu.barurside.data.Venue
-import com.mingyuwu.barurside.data.Rating
-import com.mingyuwu.barurside.data.Result
+import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideDataSource
 import com.mingyuwu.barurside.filter.FilterParameter
 import java.io.File
@@ -240,8 +236,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         }
 
 
-    override fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<Rating>> {
-        val liveData = MutableLiveData<List<Rating>>()
+    override fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>> {
+        val liveData = MutableLiveData<List<RatingInfo>>()
 
         FirebaseFirestore.getInstance()
             .collection(PATH_RATING)
@@ -253,11 +249,12 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
 
-                val list = mutableListOf<Rating>()
+                val list = mutableListOf<RatingInfo>()
                 for (document in snapshot!!) {
-                    val rating = document.toObject(Rating::class.java)
+                    val rating = document.toObject(RatingInfo::class.java)
                     list.add(rating)
                 }
+
                 liveData.value = list
             }
 
@@ -276,7 +273,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .set(Rating.toHashMap(rating))
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-
                         continuation.resume(Result.Success(true))
                     } else {
                         task.exception?.let {
@@ -330,11 +326,12 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 val newRtg =
                                     (venue?.rtgCount?.times(venue?.avgRating)
                                         ?.plus(rating!!.rating!!))?.div(venue?.rtgCount!!.plus(1))
-
+                                val imgs = rating.images?.plus(venue?.images) ?: venue?.images
                                 FirebaseFirestore.getInstance().collection(PATH_VENUE)
                                     .document(id)
                                     .update(
                                         hashMapOf(
+                                            "images" to imgs,
                                             "avgRating" to newRtg,
                                             "rtgCount" to venue?.rtgCount!!.plus(1)
                                         ) as Map<String, Any>
@@ -433,6 +430,72 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                         continuation.resume(Result.Success(true))
 
+                    } else {
+                        task.exception?.let {
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun getVenueByRating(id: String): Result<Venue> =
+        suspendCoroutine { continuation ->
+
+            FirebaseFirestore.getInstance()
+                .collection(PATH_VENUE)
+                .whereEqualTo("id", id)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            val venue = document.toObject(Venue::class.java)
+                            continuation.resume(Result.Success(venue))
+                        }
+                    } else {
+                        task.exception?.let {
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun getDrinkByRating(id: String): Result<Drink> =
+        suspendCoroutine { continuation ->
+
+            FirebaseFirestore.getInstance()
+                .collection(PATH_DRINK)
+                .whereEqualTo("id", id)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            val drink = document.toObject(Drink::class.java)
+                            continuation.resume(Result.Success(drink))
+                        }
                     } else {
                         task.exception?.let {
                             Log.w(

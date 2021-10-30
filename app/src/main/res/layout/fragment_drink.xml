@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:viewBindingIgnore="true" >
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <data>
@@ -14,7 +13,7 @@
             type="com.mingyuwu.barurside.data.Venue" />
         <variable
             name="ratings"
-            type="java.util.List&lt;com.mingyuwu.barurside.data.Rating&gt;" />
+            type="java.util.List&lt;com.mingyuwu.barurside.data.RatingInfo&gt;" />
         <variable
             name="imgs"
             type="java.util.List&lt;String&gt;" />

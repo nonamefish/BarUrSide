@@ -34,3 +34,21 @@ data class Rating(
         )
     }
 }
+
+@Parcelize
+data class RatingInfo(
+    var id: String = "",
+    val objectId: String = "",
+    val isVenue: Boolean? = null,
+    val userId: String = "",
+    val rating: Long? = -1,
+    val comment: String = "",
+    val images: List<String>? = null,
+    var postDate: Date? = null,
+    val tagFriends: List<String>? = null,
+    // add column
+    val objectName:String? = null,
+    val objectImg:String? = null,
+    val userInfo:User? = null,
+    val tagFriendsImg: List<String>? = null
+) : Parcelable

@@ -11,7 +11,7 @@
 
         <variable
             name="ratings"
-            type="java.util.List&lt;com.mingyuwu.barurside.data.Rating&gt;" />
+            type="java.util.List&lt;com.mingyuwu.barurside.data.RatingInfo&gt;" />
 
         <variable
             name="imgs"

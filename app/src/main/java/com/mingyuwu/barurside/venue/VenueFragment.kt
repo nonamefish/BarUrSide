@@ -58,14 +58,14 @@ class VenueFragment : Fragment() {
             }
         }
 
-        // set venue data mockData
+        // set venue data
         viewModel.venueInfo.observe(viewLifecycleOwner, Observer {
             it?.let {
                 binding.venue = it
             }
         })
 
-        // set rating data mockData
+        // set rating data
         viewModel.rtgInfo.observe(viewLifecycleOwner, Observer {
             it?.let {
                 binding.ratings = it.take(3)

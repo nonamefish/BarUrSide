@@ -4,25 +4,49 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Rating
+import com.mingyuwu.barurside.data.Result
+import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.mockdata.UserData
+import com.mingyuwu.barurside.databinding.ItemEditRatingObjectBinding
 import com.mingyuwu.barurside.databinding.ItemInfoRatingBinding
 import com.mingyuwu.barurside.discoverdetail.DiscoverActivityAdapter
+import com.mingyuwu.barurside.editrating.EditRatingAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class InfoRatingAdapter() :
-    ListAdapter<Any, RecyclerView.ViewHolder>(DiscoverActivityAdapter) {
+    ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
+
+    private val adapterScope = CoroutineScope(Dispatchers.Default)
 
     class InfoRatingViewHolder(private var binding: ItemInfoRatingBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(rating: Rating?, view: View) {
+        companion object {
+            fun from(parent: ViewGroup): InfoRatingViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemInfoRatingBinding.inflate(layoutInflater, parent, false)
+                binding.lifecycleOwner = parent.context as LifecycleOwner
 
+                return InfoRatingViewHolder(binding)
+            }
+        }
 
+        fun bind(rating: Rating?, view: View, adapterScope: CoroutineScope) {
+
+            // setting navigate to profile page
             binding.constraintUserInfo.setOnClickListener {
                 if (rating != null) {
                     view.findNavController()
@@ -30,13 +54,43 @@ class InfoRatingAdapter() :
                 }
             }
 
+            // set adapter
             binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
             binding.ratingTagFrdList.adapter = UserImageAdapter(60)
             binding.rating = rating
+
+            // set user Info
             binding.user = UserData.user.user[0]
-            binding.objectName = "大麻婆豆腐"
-            binding.objectImg =
-                "https://upload.wikimedia.org/wikipedia/commons/7/7f/%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.jpg"
+
+            // get object name
+            adapterScope.launch {
+                val repo = BarUrSideApplication.instance.repository
+                when (rating?.isVenue) {
+                    true -> {
+                        when (val result = repo.getVenueByRating(rating.id)) {
+                            is Result.Success -> {
+                                binding.objectName=result.data.name
+                                binding.objectImg= result.data.images?.get(0) ?: ""
+                            }
+                            is Result.Fail -> {
+                                null
+                            }
+                            is Result.Error -> {
+                                null
+                            }
+                            else -> {
+                                null
+                            }
+                        }
+                    }
+                    false -> {
+                        val obj = repo.getDrink(rating.objectId)
+                        binding.objectName = obj.value?.name
+                        binding.objectImg = obj.value?.images?.get(0) ?: ""
+                    }
+                    else -> null
+                }
+            }
         }
     }
 
@@ -66,7 +120,7 @@ class InfoRatingAdapter() :
         when (holder) {
             is InfoRatingViewHolder -> {
                 Log.d("Ming", getItem(position).toString())
-                holder.bind((getItem(position) as Rating), holder.itemView)
+                holder.bind((getItem(position) as Rating), holder.itemView, adapterScope)
             }
         }
     }

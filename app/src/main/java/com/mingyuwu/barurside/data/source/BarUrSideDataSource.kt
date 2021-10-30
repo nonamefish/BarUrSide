@@ -2,17 +2,13 @@ package com.mingyuwu.barurside.data.source
 
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.storage.StorageReference
-import com.mingyuwu.barurside.data.Drink
-import com.mingyuwu.barurside.data.Result
-import com.mingyuwu.barurside.data.Rating
-import com.mingyuwu.barurside.data.User
-import com.mingyuwu.barurside.data.Venue
+import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.filter.FilterParameter
 
 interface BarUrSideDataSource {
     fun getVenue(id: String): MutableLiveData<Venue>
 
-    fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<Rating>>
+    fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>>
 
     fun getDrink(id: String): MutableLiveData<Drink>
 
@@ -40,4 +36,6 @@ interface BarUrSideDataSource {
     ): Result<Boolean>
 
     suspend fun getVenueByFilter(filter: FilterParameter): Result<List<Venue>>
+    suspend fun getVenueByRating(id: String): Result<Venue>
+    suspend fun getDrinkByRating(id: String): Result<Drink>
 }

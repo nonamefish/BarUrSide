@@ -21,6 +21,7 @@ import com.bumptech.glide.load.engine.Resource
 import kotlin.math.roundToInt
 import com.bumptech.glide.request.RequestOptions
 import com.mingyuwu.barurside.data.Rating
+import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.rating.*
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
@@ -104,7 +105,7 @@ fun bindRtgData(textView: TextView, timeStamp: Timestamp?) {
 }
 
 @BindingAdapter("rtgList")
-fun bindRtgData(recyclerView: RecyclerView, rtgList: List<Rating>?) {
+fun bindRtgData(recyclerView: RecyclerView, rtgList: List<RatingInfo>?) {
     rtgList?.let {
         recyclerView.adapter?.apply {
             when (this) {
