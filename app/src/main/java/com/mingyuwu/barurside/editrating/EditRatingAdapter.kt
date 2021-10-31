@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.ItemEditRatingObjectBinding
 import com.mingyuwu.barurside.rating.BitmapAdapter
 import com.mingyuwu.barurside.rating.UserImageAdapter
@@ -50,13 +51,15 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
 
 
             // tag friend : set adapter and item click listener
-            viewModel.frdList.value?.let {
-                val friendList = viewModel.frdList.value?.map { it.name }
+            viewModel.frdList.observe(binding.lifecycleOwner!!, androidx.lifecycle.Observer {
+
+                val friendList = viewModel.frdList.value?.map { "${it.name} (${it.id}) " }
                 val adapter = ArrayAdapter(
                     binding.root.context,
-                    android.R.layout.simple_spinner_dropdown_item,
+                    R.layout.spinner_friend_list,
                     friendList!!
                 )
+
                 binding.btnTagFrd.setAdapter(adapter)
 
                 binding.btnTagFrd.setOnItemClickListener { parent, _, position, _ ->
@@ -65,7 +68,7 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
                     binding.btnTagFrd.setText("")
                     viewModel.addTagFrd(rtgOrder, it[pos].id)
                 }
-            }
+            })
         }
     }
 

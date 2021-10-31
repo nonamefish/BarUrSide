@@ -86,9 +86,8 @@ fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean?) {
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
-    imgUrl?.let {
-        Log.d("Ming","imageUrl")
-        val gsReference = "venue/1633098802576.jpg".let { Firebase.storage.reference.child(it) }
+    if (!imgUrl.isNullOrEmpty()) {
+        val gsReference = imgUrl.let { Firebase.storage.reference.child(it) }
         gsReference.downloadUrl.addOnSuccessListener { uri ->
             Glide.with(imgView.context)
                 .load(uri)
@@ -96,21 +95,26 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
                 .error(R.drawable.image_placeholder)
                 .into(imgView)
         }
-            .addOnFailureListener {
-                Log.d("Ming", it.toString())
+            .addOnFailureListener { exception ->
+                Log.d("Ming", exception.toString())
+                Glide.with(imgView.context)
+                    .load("")
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
+                    .into(imgView)
             }
     }
 }
 
-@BindingAdapter("rtgData")
-fun bindRtgData(textView: TextView, timeStamp: Timestamp?) {
+@BindingAdapter("rtgDate")
+fun bindRtgDate(textView: TextView, timeStamp: Timestamp?) {
     timeStamp?.let {
         textView.text = DateFormat.format("yyyy-MM-dd", timeStamp).toString()
     }
 }
 
 @BindingAdapter("rtgList")
-fun bindRtgData(recyclerView: RecyclerView, rtgList: List<RatingInfo>?) {
+fun bindRtgList(recyclerView: RecyclerView, rtgList: List<RatingInfo>?) {
     rtgList?.let {
         recyclerView.adapter?.apply {
             when (this) {

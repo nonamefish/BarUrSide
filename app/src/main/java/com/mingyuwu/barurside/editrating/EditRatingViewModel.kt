@@ -172,7 +172,7 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
                     _uploadImgUrl.value?.get(index)?.forEach { it ->
                         it?.let {
                             uploadPhoto(type, it)
-                            imgs.add("$type/${it.substring(it.lastIndexOf('/') + 1)}")
+                            imgs.add("$type/$userId/${it.substring(it.lastIndexOf('/') + 1)}")
                             addShareImg += 1
                         }
                     }

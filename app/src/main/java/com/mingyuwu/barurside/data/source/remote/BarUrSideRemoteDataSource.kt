@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
@@ -254,6 +255,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 val list = mutableListOf<RatingInfo>()
                 for (document in snapshot!!) {
                     val rating = document.toObject(RatingInfo::class.java)
+                    rating.postTimestamp = rating.postDate?.let { Timestamp(it.time) }
 
                     // get user info
                     FirebaseFirestore.getInstance()
@@ -473,7 +475,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     "shareImageCount" to user?.shareImageCount?.plus(addShareImgCnt)
                                 ) as Map<String, Any>
                             )
-
+                        Log.d("Ming","updateUserShare!!!!!!")
                         continuation.resume(Result.Success(true))
 
                     } else {

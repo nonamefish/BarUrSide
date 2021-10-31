@@ -40,6 +40,7 @@ class InfoRatingAdapter() :
         }
 
         fun bind(rating: RatingInfo?, view: View) {
+            Log.d("Ming","rating: $rating")
 
             // setting navigate to profile page
             binding.constraintUserInfo.setOnClickListener {

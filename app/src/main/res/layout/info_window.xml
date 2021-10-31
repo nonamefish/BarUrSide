@@ -1,91 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <data>
+    <ImageView
+        android:id="@+id/img_info"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
-        <variable
-            name="objectImg"
-            type="String" />
+    <TextView
+        android:id="@+id/info_venue_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@{rating.objectName}"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/img_info"
+        app:layout_constraintTop_toTopOf="@+id/img_info"
+        tools:text="文青不要喝IPA" />
 
-        <variable
-            name="objectName"
-            type="String" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/venue_score_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/info_venue_name"
+        app:layout_constraintTop_toBottomOf="@+id/info_venue_name">
 
-        <variable
-            name="avgRating"
-            type="double" />
+    </androidx.recyclerview.widget.RecyclerView>
 
-        <variable
-            name="shareCount"
-            type="Number" />
-    </data>
+    <TextView
+        android:id="@+id/venue_avg_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="7dp"
+        app:layout_constraintStart_toEndOf="@+id/venue_score_list"
+        app:layout_constraintTop_toBottomOf="@+id/info_venue_name"
+        tools:text="(4,1) | 66則評論" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/btn_venue_info"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_outline_info_24"
+        app:layout_constraintBottom_toBottomOf="@+id/info_venue_name"
+        app:layout_constraintStart_toEndOf="@+id/info_venue_name"
+        app:layout_constraintTop_toTopOf="@+id/info_venue_name" />
 
-        <ImageView
-            android:id="@+id/img_info"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:scaleType="centerCrop"
-            app:imageUrl="@{objectImg}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/info_venue_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@{objectName}"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/img_info"
-            app:layout_constraintTop_toTopOf="@+id/img_info"
-            tools:text="文青不要喝IPA" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/venue_score_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            app:stars="@{avgRating}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/info_venue_name"
-            app:layout_constraintTop_toBottomOf="@+id/info_venue_name">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-        <TextView
-            android:id="@+id/venue_avg_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="7dp"
-            android:text="@{@string/venue_rating_info_view(avgRating, shareCount)}"
-            app:layout_constraintStart_toEndOf="@+id/venue_score_list"
-            app:layout_constraintTop_toBottomOf="@+id/info_venue_name"
-            tools:text="(4,1) | 66則評論" />
-
-        <ImageView
-            android:id="@+id/btn_venue_info"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_outline_info_24"
-            app:layout_constraintBottom_toBottomOf="@+id/info_venue_name"
-            app:layout_constraintStart_toEndOf="@+id/info_venue_name"
-            app:layout_constraintTop_toTopOf="@+id/info_venue_name" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

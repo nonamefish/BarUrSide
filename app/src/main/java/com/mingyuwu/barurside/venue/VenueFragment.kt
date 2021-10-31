@@ -68,7 +68,7 @@ class VenueFragment : Fragment() {
         // set rating data
         viewModel.rtgInfo.observe(viewLifecycleOwner, Observer {
             it?.let {
-                binding.ratings = it.take(3)
+                binding.ratings = it.sortedByDescending { it.postDate }.take(3)
                 binding.imgs = viewModel.setImgs(it)
             }
         })

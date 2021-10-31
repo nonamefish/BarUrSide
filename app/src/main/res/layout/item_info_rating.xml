@@ -134,7 +134,7 @@
                 android:layout_height="42dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                app:imageUrl="@{rating.objectImg}"
+                app:imageUrl="@{rating.images[0]}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
@@ -212,7 +212,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginTop="4dp"
-            app:rtgData="@{rating.postTimestamp}"
+            app:rtgDate="@{rating.postTimestamp}"
             tools:text="2021.10.15"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/constraint_rtg_info"

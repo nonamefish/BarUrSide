@@ -53,5 +53,5 @@ data class RatingInfo(
     var userInfo: User? = null,
     val tagFriendsImg: List<String>? = null
 ) : Parcelable {
-    val postTimestamp = postDate?.let { Timestamp(it.time) }
+    var postTimestamp = postDate?.let { Timestamp(it.time) }
 }

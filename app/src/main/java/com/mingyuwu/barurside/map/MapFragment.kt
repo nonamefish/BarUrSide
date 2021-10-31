@@ -191,10 +191,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                         override fun onLocationResult(locationResult: LocationResult?) {
                             locationResult ?: return
                             val currentLocation =
-                                LatLng(
-                                    locationResult.lastLocation.latitude,
-                                    locationResult.lastLocation.longitude
-                                )
+                            LatLng(
+                                25.042652901628177,
+                                121.56559561872204
+                            )
+//                                LatLng(
+//                                    locationResult.lastLocation.latitude,
+//                                    locationResult.lastLocation.longitude
+//                                )
 
                             // get near bar
                             viewModel.getVenueByLocation(currentLocation)
