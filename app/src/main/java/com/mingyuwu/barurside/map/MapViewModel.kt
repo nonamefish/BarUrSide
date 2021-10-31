@@ -26,6 +26,8 @@ class MapViewModel(private val repository: BarUrSideRepository) : ViewModel() {
     var searchInfo = MutableLiveData<List<Venue>>()
     var searchText = MutableLiveData<String?>()
 
+    // navigate to venue
+    val navigateToVenue = MutableLiveData<String?>()
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()

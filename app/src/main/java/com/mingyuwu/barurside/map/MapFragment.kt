@@ -37,9 +37,10 @@ import com.permissionx.guolindev.PermissionX
 const val REQUEST_LOCATION_PERMISSION = 1
 const val REQUEST_ENABLE_GPS = 2
 
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
     private lateinit var mMap: GoogleMap
     private lateinit var mContext: Context
+    private lateinit var parent: ViewGroup
     private lateinit var binding: FragmentMapBinding
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private var locationPermissionGranted = false
@@ -57,7 +58,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         )
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-
+        if (container != null) {
+            parent = container
+        }
         mContext = binding.root.context
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext)
 
@@ -113,6 +116,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         })
 
+        // navigate to Venue
+        viewModel.navigateToVenue.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(it))
+            }
+        })
+
         return binding.root
     }
 
@@ -120,6 +130,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // set google map
         mMap = googleMap
         mMap.uiSettings.isZoomControlsEnabled = true
+
+        // set info window
+        mMap?.setInfoWindowAdapter(MapInfoWindowAdapter(mContext, viewModel, parent))
+        mMap?.setOnInfoWindowClickListener(this)
 
         // get location btn layout parameter
         val mapView = binding.googleMap
@@ -136,19 +150,27 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
 
     private fun addMapMark(venue: Venue, isSelected: Boolean) {
-        mMap?.addMarker(
-            MarkerOptions()
-                .position(LatLng(venue.latitude, venue.longitude))
-                .title(venue.name)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_64px_beer))
-        )
         if (isSelected) {
+            mMap.clear()
             mMap.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(venue.latitude, venue.longitude), 15f
                 )
             )
         }
+
+        mMap?.addMarker(
+            MarkerOptions()
+                .position(LatLng(venue.latitude, venue.longitude))
+                .title(venue.name)
+                .snippet(
+                    "${venue.id}," +
+                            "${venue.avgRating}," +
+                            "${venue.rtgCount}," +
+                            "${venue.images?.get(0)}"
+                )
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_64px_beer))
+        )
     }
 
     private fun getDeviceLocation() {
@@ -256,5 +278,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-
+    override fun onInfoWindowClick(marker: Marker?) {
+        marker?.title?.let { title ->
+            val info = marker.snippet.toString().split(",")
+            viewModel.navigateToVenue.value = info[0]
+        }
+    }
 }

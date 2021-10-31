@@ -26,10 +26,10 @@ class VenueViewModel(private val repository: BarUrSideRepository, id: String) : 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
-        getVenueResult("7sg0kT3U39YI9K8AubfS")
-        getRatingResult("7sg0kT3U39YI9K8AubfS", true)
-//        getVenueResult(id)
-//        getRatingResult(id, true)
+//        getVenueResult("7sg0kT3U39YI9K8AubfS")
+//        getRatingResult("7sg0kT3U39YI9K8AubfS", true)
+        getVenueResult(id)
+        getRatingResult(id, true)
     }
 
     private fun getVenueResult(id: String) {

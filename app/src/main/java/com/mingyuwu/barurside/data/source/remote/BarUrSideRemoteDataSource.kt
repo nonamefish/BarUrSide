@@ -3,6 +3,7 @@ package com.mingyuwu.barurside.data.source.remote
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
@@ -367,23 +368,22 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         .get()
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                val venue = task.result.toObject(Venue::class.java)
+                                var venue = task.result.toObject(Venue::class.java)
                                 val newRtg =
                                     (venue?.rtgCount?.times(venue?.avgRating)
                                         ?.plus(rating!!.rating!!))?.div(venue?.rtgCount!!.plus(1))
-                                val imgs = rating.images?.plus(venue?.images) ?: venue?.images
+
                                 FirebaseFirestore.getInstance().collection(PATH_VENUE)
                                     .document(id)
                                     .update(
-                                        hashMapOf(
-                                            "images" to imgs,
+                                        mapOf(
+                                            "images" to rating?.images?.plus(venue?.images as List<String>),
                                             "avgRating" to newRtg,
                                             "rtgCount" to venue?.rtgCount!!.plus(1)
-                                        ) as Map<String, Any>
+                                        )
                                     )
 
                                 continuation.resume(Result.Success(true))
-
                             } else {
                                 task.exception?.let {
                                     Log.w(
@@ -415,13 +415,14 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     (drink?.rtgCount?.times(drink?.avgRating)
                                         ?.plus(rating!!.rating!!))?.div(drink?.rtgCount!!.plus(1))
 
-                                FirebaseFirestore.getInstance().collection(PATH_VENUE)
+                                FirebaseFirestore.getInstance().collection(PATH_DRINK)
                                     .document(id)
                                     .update(
-                                        hashMapOf(
+                                        mapOf(
+                                            "images" to rating?.images?.plus(drink?.images as List<String>),
                                             "avgRating" to newRtg,
                                             "rtgCount" to drink?.rtgCount!!.plus(1)
-                                        ) as Map<String, Any>
+                                        )
                                     )
 
                                 continuation.resume(Result.Success(true))

@@ -20,6 +20,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.Resource
 import kotlin.math.roundToInt
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.rating.*
@@ -85,15 +87,18 @@ fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean?) {
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let {
-        val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
-        Glide.with(imgView.context)
-            .load(imgUri)
-            .apply(
-                RequestOptions()
-                    .placeholder(R.drawable.image_placeholder)
-                    .error(R.drawable.image_placeholder)
-            )
-            .into(imgView)
+        Log.d("Ming","imageUrl")
+        val gsReference = "venue/1633098802576.jpg".let { Firebase.storage.reference.child(it) }
+        gsReference.downloadUrl.addOnSuccessListener { uri ->
+            Glide.with(imgView.context)
+                .load(uri)
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(imgView)
+        }
+            .addOnFailureListener {
+                Log.d("Ming", it.toString())
+            }
     }
 }
 
@@ -152,7 +157,7 @@ fun bindRecyclerViewWithImageBitmaps(recyclerView: RecyclerView, imageBitmaps: L
             recyclerView.adapter?.apply {
                 when (this) {
                     is BitmapAdapter -> {
-                        Log.d("Ming","imageBitmaps: $imageBitmaps")
+                        Log.d("Ming", "imageBitmaps: $imageBitmaps")
                         submitList(imageBitmaps)
                         notifyDataSetChanged()
                     }
