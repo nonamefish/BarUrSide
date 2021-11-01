@@ -13,6 +13,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
+        android:background="@drawable/image_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
@@ -58,10 +59,10 @@
         android:id="@+id/btn_venue_info"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:src="@drawable/ic_outline_info_24"
         app:layout_constraintBottom_toBottomOf="@+id/info_venue_name"
-        app:layout_constraintStart_toEndOf="@+id/info_venue_name"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/info_venue_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
