@@ -81,7 +81,7 @@ class DiscoverDetailViewModel(
         }
     }
 
-    fun getMapFilterResult(filter: FilterParameter) {
+    private fun getMapFilterResult(filter: FilterParameter) {
         coroutineScope.launch {
 
             val result = repository.getVenueByFilter(filter)
@@ -103,8 +103,25 @@ class DiscoverDetailViewModel(
                 }
             }
 
-            Log.d("Ming","getMapFilterResult detailData: ${_detailData.value}")
+            Log.d("Ming", "getMapFilterResult detailData: ${_detailData.value}")
             _detailData.value = _detailData.value
         }
     }
+
+    private fun getHotVenueResult() {
+
+    }
+
+    private fun getHotDrinkResult() {
+
+    }
+
+    private fun getHighRateVenueResult() {
+
+    }
+
+    private fun getHighRateDrinkResult() {
+
+    }
+
 }

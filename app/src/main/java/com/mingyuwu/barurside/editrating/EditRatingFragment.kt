@@ -206,9 +206,7 @@ class EditRatingFragment : Fragment() {
                             val columnIndex =
                                 cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
                             cursor.moveToFirst()
-                            Log.d("Ming", "columnIndex: $columnIndex")
                             val picturePath: String = cursor.getString(columnIndex)
-                            Log.d("Ming", "picturePath: $picturePath")
                             val img = BitmapFactory.decodeFile(picturePath)
                             addImageToRecyclerView(getResizedBitmap(img, 1000), picturePath)
                             cursor.close()

@@ -204,12 +204,11 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
                 _uploadImgUrl.value?.get(index).let {
 
                     it?.forEachIndexed { listIndex, url ->
-
+                        Log.d("Ming", "_uploadImgUrl: $url")
                         url?.let {
                             when (val result =
                                 repository.uploadPhoto(storageRef, userId, type, url)) {
                                 is Result.Success -> {
-                                    Log.d("Ming", "_uploadImgUrl: ${result.data}")
                                     _error.value = null
                                     imgs.add(listIndex, result.data)
                                 }

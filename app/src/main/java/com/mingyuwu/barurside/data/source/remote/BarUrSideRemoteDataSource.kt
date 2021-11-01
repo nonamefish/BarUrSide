@@ -625,4 +625,178 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
+    override suspend fun getHotVenueResult(): Result<List<Venue>> =
+        suspendCoroutine { continuation ->
+
+            val list = mutableListOf<Venue>()
+
+            // get date
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.MONTH, -1)
+
+            // filter rating
+            FirebaseFirestore.getInstance()
+                .collection(PATH_RATING)
+                .whereEqualTo("isVenue",true)
+                .whereGreaterThan("postDate", calendar.time)
+                .get()
+                .addOnCompleteListener { venueTask ->
+
+                    if (venueTask.isSuccessful) {
+
+                        val venueRtgs = venueTask.result.toObjects(Venue::class.java)
+                        val hotVenueList = venueRtgs.groupingBy { it.id }.eachCount().toList()
+                            .sortedByDescending { it.second }.take(10)
+
+                        // filter venue
+                        FirebaseFirestore.getInstance()
+                            .collection(PATH_VENUE)
+                            .whereIn("id", hotVenueList)
+                            .get()
+                            .addOnCompleteListener { task ->
+                                for (document in task.result!!) {
+                                    val venue = document.toObject(Venue::class.java)
+                                    list.add(venue)
+                                }
+                                continuation.resume(Result.Success(list))
+                            }
+                    } else {
+                        venueTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun getHotDrinkResult(): Result<List<Drink>> =
+        suspendCoroutine { continuation ->
+
+            val list = mutableListOf<Drink>()
+
+            // get date
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.MONTH, -1)
+
+            // filter rating
+            FirebaseFirestore.getInstance()
+                .collection(PATH_RATING)
+                .whereEqualTo("isVenue",false)
+                .whereGreaterThan("postDate", calendar.time)
+                .get()
+                .addOnCompleteListener { venueTask ->
+
+                    if (venueTask.isSuccessful) {
+
+                        val venueRtgs = venueTask.result.toObjects(Venue::class.java)
+                        val hotVenueList = venueRtgs.groupingBy { it.id }.eachCount().toList()
+                            .sortedByDescending { it.second }.take(10)
+
+                        // filter drink
+                        FirebaseFirestore.getInstance()
+                            .collection(PATH_VENUE)
+                            .whereIn("id", hotVenueList)
+                            .get()
+                            .addOnCompleteListener { task ->
+                                for (document in task.result!!) {
+                                    val drink = document.toObject(Drink::class.java)
+                                    list.add(drink)
+                                }
+                                continuation.resume(Result.Success(list))
+                            }
+                    } else {
+                        venueTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+
+    override suspend fun getHighRateVenueResult(): Result<List<Venue>> =
+        suspendCoroutine { continuation ->
+
+            val list = mutableListOf<Venue>()
+
+            // filter venue
+            FirebaseFirestore.getInstance()
+                .collection(PATH_VENUE)
+                .orderBy("avgRating", Query.Direction.DESCENDING)
+                .orderBy("rtgCount", Query.Direction.DESCENDING)
+                .limit(10)
+                .get()
+                .addOnCompleteListener { venueTask ->
+
+                    if (venueTask.isSuccessful) {
+                        for (document in venueTask.result!!) {
+                            val venue = document.toObject(Venue::class.java)
+                            list.add(venue)
+                        }
+                        continuation.resume(Result.Success(list))
+                    } else {
+                        venueTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun getHighRateDrinkResult(): Result<List<Drink>> =
+        suspendCoroutine { continuation ->
+
+            val list = mutableListOf<Drink>()
+
+            // filter venue
+            FirebaseFirestore.getInstance()
+                .collection(PATH_DRINK)
+                .orderBy("avgRating", Query.Direction.DESCENDING)
+                .orderBy("rtgCount", Query.Direction.DESCENDING)
+                .limit(10)
+                .get()
+                .addOnCompleteListener { venueTask ->
+
+                    if (venueTask.isSuccessful) {
+                        for (document in venueTask.result!!) {
+                            val drink = document.toObject(Drink::class.java)
+                            list.add(drink)
+                        }
+                        continuation.resume(Result.Success(list))
+                    } else {
+                        venueTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
 }
