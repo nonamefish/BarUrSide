@@ -35,7 +35,7 @@ class DefaultBarUrSideRepository(
         userId: String,
         type: String,
         localImage: String
-    ) {
+    ): Result<String> {
         return remoteDataSource.uploadPhoto(storageRef, userId, type, localImage)
     }
 

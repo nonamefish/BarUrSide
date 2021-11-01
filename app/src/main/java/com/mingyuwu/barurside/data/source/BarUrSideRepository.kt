@@ -21,7 +21,7 @@ interface BarUrSideRepository {
         userId: String,
         type: String,
         localImage: String
-    )
+    ): Result<String>
 
     suspend fun getFriend(user: User): Result<List<User>>
 

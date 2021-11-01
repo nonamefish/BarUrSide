@@ -342,18 +342,26 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         userId: String,
         uploadType: String,
         localImage: String
-    ) {
-        val file = Uri.fromFile(File(localImage))
-        val eventsRef = storageRef.child("$uploadType/$userId/${file.lastPathSegment}" ?: "")
-        val uploadTask = eventsRef.putFile(file)
-        uploadTask
-            .addOnSuccessListener {
-                Log.i(TAG, "Success")
-            }
-            .addOnFailureListener { exception ->
-                Log.i(TAG, exception.toString())
-            }
-    }
+    ): Result<String> =
+        suspendCoroutine { continuation ->
+            val file = Uri.fromFile(File(localImage))
+            val eventsRef = storageRef.child("$uploadType/$userId/${file.lastPathSegment}" ?: "")
+            val uploadTask = eventsRef.putFile(file)
+            uploadTask
+                .addOnSuccessListener {
+
+                    eventsRef.downloadUrl.addOnSuccessListener {
+                        Log.i(TAG, "Success: $it")
+                        continuation.resume(Result.Success(it.toString()))
+                    }.addOnFailureListener { exception ->
+                        Log.i(TAG, exception.toString())
+                    }
+
+                }
+                .addOnFailureListener { exception ->
+                    Log.i(TAG, exception.toString())
+                }
+        }
 
     override suspend fun updateObjectRating(
         id: String,
@@ -370,7 +378,13 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         .get()
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
+
                                 var venue = task.result.toObject(Venue::class.java)
+                                val imgs = when (venue?.images) {
+                                    null -> rating?.images
+                                    else -> rating?.images?.plus(venue?.images as List<String>)
+                                }
+
                                 val newRtg =
                                     (venue?.rtgCount?.times(venue?.avgRating)
                                         ?.plus(rating!!.rating!!))?.div(venue?.rtgCount!!.plus(1))
@@ -379,7 +393,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     .document(id)
                                     .update(
                                         mapOf(
-                                            "images" to rating?.images?.plus(venue?.images as List<String>),
+                                            "images" to imgs,
                                             "avgRating" to newRtg,
                                             "rtgCount" to venue?.rtgCount!!.plus(1)
                                         )
@@ -475,7 +489,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     "shareImageCount" to user?.shareImageCount?.plus(addShareImgCnt)
                                 ) as Map<String, Any>
                             )
-                        Log.d("Ming","updateUserShare!!!!!!")
+                        Log.d("Ming", "updateUserShare!!!!!!")
                         continuation.resume(Result.Success(true))
 
                     } else {

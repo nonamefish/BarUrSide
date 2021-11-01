@@ -19,6 +19,7 @@ class DrinkViewModel(private val repository: BarUrSideRepository, id: String) : 
     var drinkInfo = MutableLiveData<Drink>()
     var venueInfo = MutableLiveData<Venue>()
     var rtgInfo = MutableLiveData<List<RatingInfo>>()
+    var isCollect = MutableLiveData<Boolean>(false)
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -41,6 +42,7 @@ class DrinkViewModel(private val repository: BarUrSideRepository, id: String) : 
 
     fun getVenueResult(id: String) {
         venueInfo = repository.getVenue(id)
+        venueInfo.value = venueInfo.value
     }
 
     fun setImgs(rtgs: List<RatingInfo>?): List<String> {
@@ -50,5 +52,16 @@ class DrinkViewModel(private val repository: BarUrSideRepository, id: String) : 
             list += it.images as List<String>
         }
         return list
+    }
+
+    fun setCollect() {
+        when (isCollect.value) {
+            true -> {
+                isCollect.value = false
+            }
+            false -> {
+                isCollect.value = true
+            }
+        }
     }
 }

@@ -41,7 +41,7 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         userId: String,
         type: String,
         localImage: String
-    ) {
+    ): Result<String>{
         TODO("Not yet implemented")
     }
 

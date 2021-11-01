@@ -57,7 +57,7 @@ class MapInfoWindowAdapter(_context: Context, viewModel: MapViewModel, parent: V
             viewModel.navigateToVenue.value = info[0]
         }
 
-        binding.executePendingBindings() // 即時觸發
+
 
         // set venue image
 //        val gsReference = info[3].let { Firebase.storage.reference.child(it) }
@@ -77,6 +77,7 @@ class MapInfoWindowAdapter(_context: Context, viewModel: MapViewModel, parent: V
                 .into(binding.imgInfo)
         }
 
+        binding.executePendingBindings() // 即時觸發
     }
 
     override fun getInfoContents(marker: Marker): View {
@@ -84,7 +85,7 @@ class MapInfoWindowAdapter(_context: Context, viewModel: MapViewModel, parent: V
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = InfoWindowBinding.inflate(layoutInflater, parent, false)
         binding.lifecycleOwner = parent.context as LifecycleOwner
-        
+
         render(marker, binding)
         return binding.root
     }

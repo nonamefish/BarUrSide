@@ -84,7 +84,7 @@ class EditRatingFragment : Fragment() {
         viewModel.isUploadImgBtn.observe(viewLifecycleOwner, Observer {
             if (photoPermissionGranted) {
                 chooseImage(binding.root.context)
-            }else{
+            } else {
                 getPhotoPermission()
             }
         })
@@ -102,11 +102,17 @@ class EditRatingFragment : Fragment() {
         // set post rating button click listener
         binding.btnRtgConfirm.setOnClickListener {
             if (viewModel.checkRating()) {
-                viewModel.postRating()
+                viewModel.uploadPhoto()
             } else {
                 showRatingUncompleted()
             }
         }
+
+        viewModel.firebaseImgUrl.observe(viewLifecycleOwner, Observer {
+            it?.let {
+
+            }
+        })
 
         // leave rating and to previous view
         viewModel.leave.observe(viewLifecycleOwner, Observer {
@@ -143,7 +149,7 @@ class EditRatingFragment : Fragment() {
             }
             .request { allGranted, _, deniedList ->
                 if (allGranted) {
-                    photoPermissionGranted=true
+                    photoPermissionGranted = true
                     chooseImage(binding.root.context)
 //                    Toast.makeText(binding.root.context, "All permissions are granted", Toast.LENGTH_LONG).show()
                 } else {
@@ -197,11 +203,12 @@ class EditRatingFragment : Fragment() {
                         )
                         if (cursor != null) {
 
-                            val columnIndex= cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
+                            val columnIndex =
+                                cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
                             cursor.moveToFirst()
-                            Log.d("Ming","columnIndex: $columnIndex")
+                            Log.d("Ming", "columnIndex: $columnIndex")
                             val picturePath: String = cursor.getString(columnIndex)
-                            Log.d("Ming","picturePath: $picturePath")
+                            Log.d("Ming", "picturePath: $picturePath")
                             val img = BitmapFactory.decodeFile(picturePath)
                             addImageToRecyclerView(getResizedBitmap(img, 1000), picturePath)
                             cursor.close()

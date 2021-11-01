@@ -37,6 +37,10 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     val uploadImgUrl: LiveData<MutableList<MutableList<String?>>>
         get() = _uploadImgUrl
 
+    private val _firebaseImgUrl = MutableLiveData<MutableList<MutableList<String>>>()
+    val firebaseImgUrl: LiveData<MutableList<MutableList<String>>>
+        get() = _firebaseImgUrl
+
     private val _tagFrd = MutableLiveData<MutableList<String>?>(null)
     val tagFrd: LiveData<MutableList<String>?>
         get() = _tagFrd
@@ -162,21 +166,6 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
 
                 for (index in 0 until objectId.value!!.size) {
 
-                    val type = when (index) {
-                        0 -> "venue"
-                        else -> "drink"
-                    }
-
-                    val imgs = mutableListOf<String>()
-
-                    _uploadImgUrl.value?.get(index)?.forEach { it ->
-                        it?.let {
-                            uploadPhoto(type, it)
-                            imgs.add("$type/$userId/${it.substring(it.lastIndexOf('/') + 1)}")
-                            addShareImg += 1
-                        }
-                    }
-
                     val rtg = Rating(
                         "",
                         objectId.value!![index],
@@ -184,28 +173,69 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
                         userId,
                         star.value!![index]!!.toLong(),
                         comment.value!![index] ?: "",
-                        imgs,
+                        _firebaseImgUrl?.value?.get(index) ?: null,
                         Timestamp(System.currentTimeMillis()),
                         tagFrd.value
                     )
                     addShare += 1
+                    addShareImg += _firebaseImgUrl?.value?.get(index)?.size ?: 0
                     repository.postRating(rtg)
                     updateObjectRating(objectId.value!![index], index == 0, rtg)
                 }
-
                 updateUserShare(addShare, addShareImg)
-
             }
             leave()
         }
     }
 
-    private fun uploadPhoto(type: String, url: String) {
+    fun uploadPhoto() {
         val storage = Firebase.storage
         val storageRef = storage.reference
 
         coroutineScope.launch {
-            repository.uploadPhoto(storageRef, userId, type, url)
+            val imgs = mutableListOf<String>()
+            for (index in 0 until objectId.value!!.size) {
+
+                val type = when (index) {
+                    0 -> "venue"
+                    else -> "drink"
+                }
+
+                _uploadImgUrl.value?.get(index).let {
+
+                    it?.forEachIndexed { listIndex, url ->
+
+                        url?.let {
+                            when (val result =
+                                repository.uploadPhoto(storageRef, userId, type, url)) {
+                                is Result.Success -> {
+                                    Log.d("Ming", "_uploadImgUrl: ${result.data}")
+                                    _error.value = null
+                                    imgs.add(listIndex, result.data)
+                                }
+                                is Result.Fail -> {
+                                    _error.value = result.error
+                                    null
+                                }
+                                is Result.Error -> {
+                                    _error.value = result.exception.toString()
+                                    null
+                                }
+                                else -> {
+                                    null
+                                }
+                            }
+                        }
+                    }
+                    if (_firebaseImgUrl.value == null) {
+                        _firebaseImgUrl.value = mutableListOf(imgs)
+                    } else {
+                        _firebaseImgUrl.value!!.add(imgs)
+                    }
+
+                }
+            }
+            postRating()
         }
     }
 

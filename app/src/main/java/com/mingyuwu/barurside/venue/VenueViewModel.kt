@@ -17,6 +17,7 @@ class VenueViewModel(private val repository: BarUrSideRepository, id: String) : 
     // set source data
     var venueInfo = MutableLiveData<Venue>()
     var rtgInfo = MutableLiveData<List<RatingInfo>>()
+    var isCollect = MutableLiveData<Boolean>(false)
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -42,10 +43,23 @@ class VenueViewModel(private val repository: BarUrSideRepository, id: String) : 
 
     fun setImgs(rtgs: List<RatingInfo>?): List<String> {
         var list = listOf<String>()
-        rtgs?.forEach {
-            if (list.size > 10) return@forEach
-            list += it.images as List<String>
+        rtgs?.forEach { ratingInfo ->
+            ratingInfo.images?.let{ imgs ->
+                if (list.size > 10) return@forEach
+                list += imgs
+            }
         }
         return list
+    }
+
+    fun setCollect() {
+        when (isCollect.value) {
+            true -> {
+                isCollect.value = false
+            }
+            false -> {
+                isCollect.value = true
+            }
+        }
     }
 }

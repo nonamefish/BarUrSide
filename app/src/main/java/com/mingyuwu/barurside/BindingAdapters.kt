@@ -87,20 +87,12 @@ fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean?) {
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     if (!imgUrl.isNullOrEmpty()) {
-        Log.d("Ming","bindImage: $imgUrl")
-        val gsReference = imgUrl.let { Firebase.storage.reference.child(it) }
-        gsReference.downloadUrl.addOnSuccessListener { uri ->
-            Log.d("Ming","uri: $uri")
-            Glide.with(imgView.context)
-                .load(uri)
-                .placeholder(R.drawable.image_placeholder)
-                .error(R.drawable.image_placeholder)
-                .into(imgView)
-        }
-            .addOnFailureListener { exception ->
-                Log.d("Ming", exception.toString())
-                imgView.setImageResource(R.drawable.image_placeholder)
-            }
+        Log.d("Ming", "bindImage: $imgUrl")
+        Glide.with(imgView.context)
+            .load(imgUrl)
+            .placeholder(R.drawable.image_placeholder)
+            .error(R.drawable.image_placeholder)
+            .into(imgView)
     }
 }
 
