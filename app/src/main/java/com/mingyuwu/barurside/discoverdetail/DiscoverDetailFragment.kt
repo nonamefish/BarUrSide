@@ -1,6 +1,7 @@
 package com.mingyuwu.barurside.discoverdetail
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.mockdata.VenueData
 import com.mingyuwu.barurside.databinding.FragmentDiscoverDetailBinding
+import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.profile.FriendAdapter
 
@@ -43,47 +45,41 @@ class DiscoverDetailFragment() : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_discover_detail, container, false
         )
-
         binding.lifecycleOwner = this
 
+
         // set recyclerView adapter
-        when (theme.order) {
-            in arrayOf(1, 8) -> {
+        when (theme) {
+            in arrayOf(Theme.RECENT_ACTIVITY, Theme.USER_ACTIVITY) -> {
                 adapter = DiscoverActivityAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
-            6 -> {
+            Theme.MAP_FILTER -> {
                 adapter = DiscoverVenueAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
             }
-            7 -> {
+            Theme.USER_FRIEND -> {
                 adapter = FriendAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
-            9->{
+            Theme.NOTIFICATION -> {
                 adapter = NotificationAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
-            in arrayOf(0, 3, 5) -> {
+            in arrayOf(Theme.AROUND_VENUE, Theme.HOT_VENUE, Theme.HIGH_RATE_VENUE) -> {
                 adapter = DiscoverVenueAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
-            in arrayOf(2, 4) -> {
+            in arrayOf(Theme.HOT_DRINK, Theme.HIGH_RATE_DRINK, Theme.VENUE_MENU) -> {
                 adapter = DiscoverDrinkAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
         }
-
-        // assign value to recyclerView
-        viewModel.detailData.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
-        }
-        )
 
         // click info button and navigate to info fragment
         viewModel.navigateToInfo.observe(viewLifecycleOwner, Observer {
@@ -104,6 +100,13 @@ class DiscoverDetailFragment() : Fragment() {
                     )
                 }
             }
+        }
+        )
+
+        // assign value to recyclerView
+        viewModel.detailData.observe(viewLifecycleOwner, Observer {
+            Log.d("Ming","detailData: $it")
+            adapter.submitList(it)
         }
         )
 

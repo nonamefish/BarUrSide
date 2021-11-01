@@ -6,15 +6,16 @@ import java.sql.Timestamp
 
 @Parcelize
 data class User(
-    val id: String,
-    val name: String,
-    val image: String,
-    val friends: List<Relationship>,
-    val shareCount: Number,
-    val shareImageCount: Number
-) : Parcelable{
-    companion object{
-        fun toHashMap(dt : User) = hashMapOf(
+    val id: String = "",
+    val name: String = "",
+    val image: String = "",
+    val friends: List<Relationship>? = null,
+    val shareCount: Long? = -1,
+    val shareImageCount: Long? = -1
+) : Parcelable {
+
+    companion object {
+        fun toHashMap(dt: User) = hashMapOf(
             "id" to dt.id,
             "name" to dt.name,
             "image" to dt.image,

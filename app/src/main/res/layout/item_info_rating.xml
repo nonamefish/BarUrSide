@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="Rating"
-            type="com.mingyuwu.barurside.data.Rating" />
+            name="rating"
+            type="com.mingyuwu.barurside.data.RatingInfo" />
         <variable
             name="User"
             type="com.mingyuwu.barurside.data.User"/>
@@ -134,7 +134,7 @@
                 android:layout_height="42dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                app:imageUrl="@{objectImg}"
+                app:imageUrl="@{rating.images[0]}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
@@ -144,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{objectName}"
+                android:text="@{rating.objectName}"
                 app:layout_constraintStart_toEndOf="@+id/img_info_rtg"
                 app:layout_constraintTop_toTopOf="@+id/img_info_rtg"
                 tools:text="文青不要喝IPA" />
@@ -161,7 +161,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/img_info_rtg"
                 app:layout_constraintTop_toBottomOf="@+id/info_rtg_object"
-                app:stars="@{Rating.rating.floatValue()}" />
+                app:stars="@{rating.rating.floatValue()}" />
 
             <TextView
                 android:id="@+id/discover_object_category"
@@ -170,7 +170,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="@{Rating.comment}"
+                android:text="@{rating.comment}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -197,7 +197,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
-                app:imageUrls="@{Rating.tagFriends}"
+                app:imageUrls="@{rating.tagFriends}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -212,7 +212,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginTop="4dp"
-            app:rtgData="@{Rating.postDate}"
+            app:rtgDate="@{rating.postTimestamp}"
             tools:text="2021.10.15"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/constraint_rtg_info"

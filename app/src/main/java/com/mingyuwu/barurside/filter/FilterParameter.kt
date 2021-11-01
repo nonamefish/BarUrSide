@@ -8,8 +8,8 @@ import java.sql.Timestamp
 
 @Parcelize
 data class FilterParameter(
-    val level: Number,
-    val category: List<String?>,
-    val style: List<String?>,
+    val level: Number?,
+    val category: List<String>?,
+    val style: List<String>?,
     val distance: Double?
 ): Parcelable

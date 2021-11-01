@@ -1,5 +1,6 @@
 package com.mingyuwu.barurside.editrating
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -7,12 +8,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.ItemEditRatingObjectBinding
 import com.mingyuwu.barurside.rating.BitmapAdapter
 import com.mingyuwu.barurside.rating.UserImageAdapter
+import java.util.*
 
 
-class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
+class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
     ListAdapter<String, EditRatingAdapter.EditRatingViewHolder>(DiffCallback) {
 
     class EditRatingViewHolder(private var binding: ItemEditRatingObjectBinding) :
@@ -34,7 +37,7 @@ class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
             binding.rtgOrder = rtgOrder
 
             // set recyclerView adapter
-            val imgAdapter = BitmapAdapter(60, 70)
+            val imgAdapter = BitmapAdapter(60, 70, rtgOrder, viewModel)
             val tagFrdAdapter = UserImageAdapter(60)
             binding.ratingAddImgList.adapter = imgAdapter
             binding.ratingTagFrdsList.adapter = tagFrdAdapter
@@ -48,14 +51,24 @@ class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
 
 
             // tag friend : set adapter and item click listener
-            val lunch = arrayListOf("Jason", "John", "Peter", "Allen", "Akuan")
-            val adapter = ArrayAdapter(binding.root.context, android.R.layout.simple_spinner_dropdown_item, lunch)
-            binding.btnTagFrd.setAdapter(adapter)
+            viewModel.frdList.observe(binding.lifecycleOwner!!, androidx.lifecycle.Observer {
 
-            binding.btnTagFrd.setOnItemClickListener { _, _, position, _ ->
-                binding.btnTagFrd.setText("")
-                viewModel.addTagFrd(rtgOrder, "")
-            }
+                val friendList = viewModel.frdList.value?.map { "${it.name} (${it.id}) " }
+                val adapter = ArrayAdapter(
+                    binding.root.context,
+                    R.layout.spinner_friend_list,
+                    friendList!!
+                )
+
+                binding.btnTagFrd.setAdapter(adapter)
+
+                binding.btnTagFrd.setOnItemClickListener { parent, _, position, _ ->
+                    val selected = parent.getItemAtPosition(position)
+                    val pos = friendList.indexOf(selected)
+                    binding.btnTagFrd.setText("")
+                    viewModel.addTagFrd(rtgOrder, it[pos].id)
+                }
+            })
         }
     }
 
@@ -66,7 +79,7 @@ class EditRatingAdapter( private val viewModel: EditRatingViewModel ) :
         }
 
         override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem == newItem
+            return true
         }
     }
 

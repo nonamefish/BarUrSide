@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
@@ -14,32 +13,39 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentMapBinding
 import android.widget.RelativeLayout
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.model.*
 import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.discover.Theme
+import com.mingyuwu.barurside.data.Venue
+import com.mingyuwu.barurside.ext.getVmFactory
+import com.permissionx.guolindev.PermissionX
 
 
 const val REQUEST_LOCATION_PERMISSION = 1
 const val REQUEST_ENABLE_GPS = 2
 
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
     private lateinit var mMap: GoogleMap
     private lateinit var mContext: Context
+    private lateinit var parent: ViewGroup
     private lateinit var binding: FragmentMapBinding
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private var locationPermissionGranted = false
+    private val viewModel by viewModels<MapViewModel> { getVmFactory() }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,10 +56,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_map, container, false
         )
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+        if (container != null) {
+            parent = container
+        }
         mContext = binding.root.context
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext)
 
-        val mapFragment = childFragmentManager.findFragmentById(binding.googleMap.id) as SupportMapFragment
+        val mapFragment =
+            childFragmentManager.findFragmentById(binding.googleMap.id) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         // set filter button on click listener
@@ -63,6 +75,54 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             )
         }
 
+        // search info: set auto completed text adapter
+        viewModel.searchInfo.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Log.d("Ming", "searchInfo: $it")
+                val venueList = it.map { venue -> venue.name }
+                val adapter = ArrayAdapter(
+                    binding.root.context,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    venueList!!
+                )
+                binding.autoMapFilter.setAdapter(adapter)
+
+                binding.autoMapFilter.setOnItemClickListener { parent, _, position, _ ->
+                    val selected = parent.getItemAtPosition(position)
+                    val pos = venueList.indexOf(selected)
+                    binding.autoMapFilter.setText("")
+                    Log.d("Ming", "selected venue: ${it[pos]}")
+                    addMapMark(it[pos], true)
+                }
+            }
+        })
+
+        // search venue after autocompleted text
+        viewModel.searchText.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it.length == 1) {
+                    viewModel.getVenueBySearch(it)
+                }
+            }
+        })
+
+        // init : nearby venue list
+        viewModel.venueList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Log.d("Ming", "venueList: $it")
+                for (item in it) {
+                    addMapMark(item, false)
+                }
+            }
+        })
+
+        // navigate to Venue
+        viewModel.navigateToVenue.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(it))
+            }
+        })
+
         return binding.root
     }
 
@@ -70,6 +130,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // set google map
         mMap = googleMap
         mMap.uiSettings.isZoomControlsEnabled = true
+
+        // set info window
+        mMap?.setInfoWindowAdapter(MapInfoWindowAdapter(mContext, viewModel, parent))
+        mMap?.setOnInfoWindowClickListener(this)
 
         // get location btn layout parameter
         val mapView = binding.googleMap
@@ -84,6 +148,31 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         getLocationPermission()
     }
 
+
+    private fun addMapMark(venue: Venue, isSelected: Boolean) {
+        if (isSelected) {
+            mMap.clear()
+            mMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(venue.latitude, venue.longitude), 15f
+                )
+            )
+        }
+
+        mMap?.addMarker(
+            MarkerOptions()
+                .position(LatLng(venue.latitude, venue.longitude))
+                .title(venue.name)
+                .snippet(
+                    "${venue.id}," +
+                            "${venue.avgRating}," +
+                            "${venue.rtgCount}," +
+                            "${venue.images?.get(0)}"
+                )
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_64px_beer))
+        )
+    }
+
     private fun getDeviceLocation() {
         try {
             if (locationPermissionGranted
@@ -95,29 +184,28 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 //更新次數，若沒設定，會持續更新
                 locationRequest.numUpdates = 1
 
-
+                // set request Location Updates
                 mFusedLocationProviderClient.requestLocationUpdates(
                     locationRequest,
                     object : LocationCallback() {
                         override fun onLocationResult(locationResult: LocationResult?) {
                             locationResult ?: return
-                            Log.d(
-                                "Ming",
-                                "緯度:${locationResult.lastLocation.latitude} , 經度:${locationResult.lastLocation.longitude} "
-                            )
                             val currentLocation =
-                                LatLng(
-                                    locationResult.lastLocation.latitude,
-                                    locationResult.lastLocation.longitude
-                                )
+                            LatLng(
+                                25.042652901628177,
+                                121.56559561872204
+                            )
+//                                LatLng(
+//                                    locationResult.lastLocation.latitude,
+//                                    locationResult.lastLocation.longitude
+//                                )
+
+                            // get near bar
+                            viewModel.getVenueByLocation(currentLocation)
 
                             // google map current location (blue point)
                             mMap.isMyLocationEnabled = true
                             mMap.uiSettings.isMyLocationButtonEnabled = true
-
-                            mMap?.addMarker(
-                                MarkerOptions().position(currentLocation).title("現在位置")
-                            )
                             mMap?.moveCamera(
                                 CameraUpdateFactory.newLatLngZoom(
                                     currentLocation, 15f
@@ -128,9 +216,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     },
                     null
                 )
-
             } else {
-                Log.d("Ming","Not have location permission")
                 getLocationPermission()
             }
         } catch (e: SecurityException) {
@@ -140,84 +226,39 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     // get and check location permission
     private fun getLocationPermission() {
-        //檢查權限
-        if (ActivityCompat.checkSelfPermission(
-                binding.root.context,
+        PermissionX.init(activity)
+            .permissions(
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            //已獲取到權限
-            Log.d("Ming", "已獲取到位置權限，可以準備開始獲取經緯度")
-            locationPermissionGranted = true
-            checkGPSState()
-        } else {
-            //詢問要求獲取權限
-            requestLocationPermission()
-        }
-    }
-
-    // request location permission
-    private fun requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION
             )
-        ) {
-            AlertDialog.Builder(binding.root.context)
-                .setMessage("此應用程式，需要位置權限才能正常使用")
-                .setPositiveButton("確定") { _, _ ->
-                    ActivityCompat.requestPermissions(
-                        requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        REQUEST_LOCATION_PERMISSION
-                    )
-                }
-                .setNegativeButton("取消") { _, _ -> requestLocationPermission() }
-                .show()
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION
-            )
-        }
-    }
-
-    // request permission callback
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            REQUEST_LOCATION_PERMISSION -> {
-                if (grantResults.isNotEmpty()) {
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        //已獲取到權限
-                        locationPermissionGranted = true
-                        //todo checkGPSState()
-                    } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                        if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                                requireActivity(),
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            )
-                        ) {
-                            //權限被永久拒絕
-                            Log.d("Ming", "位置權限已被關閉，功能將會無法正常使用")
-                            AlertDialog.Builder(binding.root.context)
-                                .setTitle("開啟位置權限")
-                                .setMessage("此應用程式，位置權限已被關閉，需開啟才能正常使用")
-                                .setPositiveButton("確定") { _, _ ->
-                                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                                    startActivityForResult(intent, REQUEST_LOCATION_PERMISSION)
-                                }
-                                .setNegativeButton("取消") { _, _ -> requestLocationPermission() }
-                                .show()
-                        } else {
-                            //權限被拒絕
-                            Log.d("Ming", "位置權限被拒絕，功能將會無法正常使用")
-                            requestLocationPermission()
-                        }
-                    }
+            .onExplainRequestReason { scope, deniedList ->
+                scope.showRequestReasonDialog(
+                    deniedList,
+                    "請開通地理定位，以提供您所在位置附近的優質酒館",
+                    "確定",
+                    "忍痛拒絕"
+                )
+            }
+            .onForwardToSettings { scope, deniedList ->
+                scope.showForwardToSettingsDialog(
+                    deniedList,
+                    "請開通地理定位，以提供您所在位置附近的優質酒館",
+                    "確定",
+                    "忍痛拒絕"
+                )
+            }
+            .request { allGranted, _, deniedList ->
+                if (allGranted) {
+                    locationPermissionGranted = true
+                    checkGPSState()
+//                    Toast.makeText(mContext, "All permissions are granted", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(
+                        mContext,
+                        "These permissions are denied: $deniedList",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
-        }
     }
 
     // check GPS state
@@ -238,6 +279,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         } else {
             getDeviceLocation()
             Log.d("Ming", "已獲取到位置權限且GPS已開啟，可以準備開始獲取經緯度")
+        }
+    }
+
+    override fun onInfoWindowClick(marker: Marker?) {
+        marker?.title?.let { title ->
+            val info = marker.snippet.toString().split(",")
+            viewModel.navigateToVenue.value = info[0]
         }
     }
 }

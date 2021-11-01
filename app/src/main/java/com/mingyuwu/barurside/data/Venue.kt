@@ -17,9 +17,9 @@ data class Venue(
     val address: String = "",
     val latitude: Double = 0.0,
     val longitude: Double = 0.0,
-    val images: List<String>? = null,
-    val avgRating: Double = -1.0,
-    val rtgCount: Long? = -1
+    var images: List<String>? = null,
+    var avgRating: Double = -1.0,
+    var rtgCount: Long? = -1
 ) : Parcelable {
 
     companion object {

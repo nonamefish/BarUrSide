@@ -6,15 +6,15 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Drink(
-    val id: String,
-    val menuId: String,
-    val venueId: String,
-    val name: String,
-    val category: String,
-    val price: Number,
-    val images: List<String>,
-    val avgRating: Double,
-    val rtgCount: Number
+    val id: String= "",
+    val menuId: String= "",
+    val venueId: String= "",
+    val name: String= "",
+    val category: String= "",
+    val price: Long? = -1,
+    val images: List<String>? = null,
+    val avgRating: Double= -1.0,
+    val rtgCount: Long? = -1
 ) : Parcelable{
     companion object{
         fun toHashMap(dt : Drink) = hashMapOf(

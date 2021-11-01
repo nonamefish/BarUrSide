@@ -10,7 +10,7 @@ class VenueData {
     object venue {
         val venue = listOf(
             Venue(
-                "1",
+                "11111111",
                 "1",
                 "楊泉酒家",
                 "酒館",

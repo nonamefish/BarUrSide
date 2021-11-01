@@ -1,32 +1,36 @@
 package com.mingyuwu.barurside.venue
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
-import com.mingyuwu.barurside.data.mockdata.DrinkData
-import com.mingyuwu.barurside.data.mockdata.RatingData
-import com.mingyuwu.barurside.data.mockdata.VenueData
-import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.databinding.FragmentVenueBinding
-import com.mingyuwu.barurside.drink.DrinkFragmentArgs
+import com.mingyuwu.barurside.discover.Theme
+import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
+
+const val TAG = "VenueFragment"
 
 class VenueFragment : Fragment() {
 
     private lateinit var binding: FragmentVenueBinding
+    private val viewModel by viewModels<VenueViewModel> {
+        getVmFactory(
+            VenueFragmentArgs.fromBundle(requireArguments()).id
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,24 +40,9 @@ class VenueFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_venue, container, false
         )
+        binding.lifecycleOwner = this
 
-        // get id
         val id = VenueFragmentArgs.fromBundle(requireArguments()).id
-
-        // mockData
-//        val venue = VenueData.venue.venue
-        GlobalScope.launch {
-            val venue =
-                (requireContext().applicationContext as BarUrSideApplication).repository.getVenue("318HjHNdV8XMHJ6ubrKU")
-            binding.venue = venue.value
-            Log.d("Ming","venue.value : ${venue.value}")
-        }
-
-        val ratings = RatingData.rating.rating
-
-        // assign mock data to view variable
-        binding.ratings = ratings
-
 
         // set recyclerView Adapter
         binding.venueRtgList.adapter = InfoRatingAdapter()
@@ -62,8 +51,41 @@ class VenueFragment : Fragment() {
 
         // set rating clock click listener
         binding.cnstrtEditRating.setOnClickListener {
+            viewModel.venueInfo.value?.let {
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToRatingFragment(it)
+                )
+            }
+        }
+
+        // set venue data
+        viewModel.venueInfo.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.venue = it
+            }
+        })
+
+        // set rating data
+        viewModel.rtgInfo.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.ratings = it.sortedByDescending { it.postDate }.take(3)
+                binding.imgs = viewModel.setImgs(it)
+            }
+        })
+
+        // set venue phone on click listener
+        binding.venuePhone.setOnClickListener {
+            val dialIntent = Intent(Intent.ACTION_DIAL)
+            dialIntent.data = Uri.parse("tel:" + viewModel.venueInfo.value?.phone)
+            startActivity(dialIntent)
+        }
+
+        // set menu on click listener
+        binding.venueMenu.setOnClickListener {
             findNavController().navigate(
-                MainNavigationDirections.navigateToRatingFragment(id)
+                MainNavigationDirections.navigateToDiscoverDetailFragment(
+                    Theme.VENUE_MENU, id, null
+                )
             )
         }
 

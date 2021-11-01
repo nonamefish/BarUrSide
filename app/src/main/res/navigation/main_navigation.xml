@@ -21,13 +21,13 @@
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
     <fragment
-        android:id="@+id/ratingFragment"
+        android:id="@+id/editRatingFragment"
         android:name="com.mingyuwu.barurside.editrating.EditRatingFragment"
-        android:label="fragment_rating"
+        android:label="fragment_edit_rating"
         tools:layout="@layout/fragment_edit_rating" >
         <argument
-            android:name="id"
-            app:argType="string" />
+            android:name="venue"
+            app:argType="com.mingyuwu.barurside.data.Venue" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -137,7 +137,7 @@
 
     <action
         android:id="@+id/navigate_to_rating_fragment"
-        app:destination="@id/ratingFragment"></action>
+        app:destination="@id/editRatingFragment"></action>
 
     <action
         android:id="@+id/navigate_to_add_activity_fragment"

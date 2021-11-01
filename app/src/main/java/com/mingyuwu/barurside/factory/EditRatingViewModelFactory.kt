@@ -2,24 +2,26 @@ package com.mingyuwu.barurside.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel
+import com.mingyuwu.barurside.drink.DrinkViewModel
+import com.mingyuwu.barurside.editrating.EditRatingViewModel
 import com.mingyuwu.barurside.filter.FilterParameter
-
+import com.mingyuwu.barurside.venue.VenueViewModel
 
 @Suppress("UNCHECKED_CAST")
-class DiscoverDetailViewModelFactory(
+class EditRatingViewModelFactory(
     private val repository: BarUrSideRepository,
-    private val theme: Theme,
-    private val filterParameter: FilterParameter?
+    private val venue: Venue
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
-                isAssignableFrom(DiscoverDetailViewModel::class.java) ->
-                    DiscoverDetailViewModel(repository, theme, filterParameter)
+                isAssignableFrom(EditRatingViewModel::class.java) ->
+                    EditRatingViewModel(repository, venue)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
