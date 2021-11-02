@@ -1,15 +1,26 @@
 package com.mingyuwu.barurside.discover
 
+import android.R
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.data.Drink
+import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.FragmentDiscoverBinding
+import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.map.MapViewModel
 
 class DiscoverFragment : Fragment() {
+
+    private val viewModel by viewModels<DiscoverViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -17,57 +28,99 @@ class DiscoverFragment : Fragment() {
     ): View? {
 
         val binding = FragmentDiscoverBinding.inflate(layoutInflater)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
-        // set onclick listener
-        binding.cnstrtAroundVenue.setOnClickListener {
-            findNavController().navigate(
-                MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.AROUND_VENUE,null,null
+        // observe search type
+        viewModel.searchType.observe(viewLifecycleOwner, Observer {
+            binding.autoDiscoverFilter.setText("")
+            viewModel.searchInfo.value = null
+        })
+
+
+        // search venue after autocompleted text
+        viewModel.searchText.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it.isNotEmpty()) {
+                    if (viewModel.searchInfo.value == null) {
+                        when (viewModel.searchType.value) {
+                            true -> viewModel.getDrinkBySearch(it)
+                            false -> viewModel.getVenueBySearch(it)
+                        }
+                    }
+                } else {
+                    viewModel.searchInfo.value = null
+                }
+            }
+        })
+
+        // search info: set auto completed text adapter
+        viewModel.searchInfo.observe(viewLifecycleOwner, Observer {
+            it?.let {
+
+                val list = when (viewModel.searchType.value) {
+                    true -> (it as List<Drink>).map { drink -> drink.name }
+                    false -> (it as List<Venue>).map { venue -> venue.name }
+                    else -> listOf()
+                }
+
+                val id = when (viewModel.searchType.value) {
+                    true -> (it as List<Drink>).map { drink -> drink.id }
+                    false -> (it as List<Venue>).map { venue -> venue.id }
+                    else -> listOf()
+                }
+
+                // set adapter
+                val adapter = ArrayAdapter(
+                    binding.root.context,
+                    R.layout.simple_spinner_dropdown_item,
+                    list!!
                 )
-            )
-        }
+                binding.autoDiscoverFilter.setAdapter(adapter)
 
-        binding.cnstrtRecentActivity.setOnClickListener {
-            findNavController().navigate(
-                MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.RECENT_ACTIVITY,null,null
+                // auto complete text click listener
+                binding.autoDiscoverFilter.setOnItemClickListener { parent, _, position, _ ->
+                    val selected = parent.getItemAtPosition(position)
+                    val pos = list.indexOf(selected)
+                    binding.autoDiscoverFilter.setText("")
+
+                    // navigate
+                    viewModel.setNavigateToObject(id[pos])
+                }
+            }
+        })
+
+        // navigate to object info
+        viewModel.navigateToObject.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                when (viewModel.searchType.value) {
+                    true -> {
+                        findNavController().navigate(
+                            MainNavigationDirections.navigateToDrinkFragment(it)
+                        )
+                    }
+                    false -> {
+                        findNavController().navigate(
+                            MainNavigationDirections.navigateToVenueFragment(it)
+                        )
+                    }
+                }
+                viewModel.onLeft()
+            }
+        })
+
+        // navigate to theme
+        viewModel.navigateToTheme.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToDiscoverDetailFragment(
+                        it, null, null
+                    )
                 )
-            )
-        }
+                viewModel.onLeft()
+            }
+        })
 
-        binding.cnstrtHotDrink.setOnClickListener {
-            findNavController().navigate(
-                MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HOT_DRINK,null,null
-                )
-            )
-        }
-
-        binding.cnstrtHotVenue.setOnClickListener {
-            findNavController().navigate(
-                MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HOT_VENUE,null,null
-                )
-            )
-        }
-
-        binding.cnstrtHighRateDrink.setOnClickListener {
-            findNavController().navigate(
-                MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HIGH_RATE_DRINK,null,null
-                )
-            )
-        }
-
-        binding.cnstrtHighRateVenue.setOnClickListener {
-            findNavController().navigate(
-                MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.HIGH_RATE_VENUE,null,null
-                )
-            )
-        }
-
-        // Inflate the layout for this fragment
         return binding.root
     }
 }

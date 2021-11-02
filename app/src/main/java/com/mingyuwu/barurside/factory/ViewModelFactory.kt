@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.mingyuwu.barurside.MainViewModel
 import com.mingyuwu.barurside.addactivity.AddActivityViewModel
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import com.mingyuwu.barurside.discover.DiscoverViewModel
+import com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel
 import com.mingyuwu.barurside.editrating.EditRatingViewModel
 import com.mingyuwu.barurside.filter.FilterViewModel
 import com.mingyuwu.barurside.map.MapViewModel
@@ -26,6 +28,8 @@ class ViewModelFactory constructor(
                     FilterViewModel()
                 isAssignableFrom(MapViewModel::class.java) ->
                     MapViewModel(repository)
+                isAssignableFrom(DiscoverViewModel::class.java) ->
+                    DiscoverViewModel(repository)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

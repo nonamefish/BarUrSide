@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".discover.DiscoverFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.discover.DiscoverViewModel" />
+
+        <variable
+            name="theme"
+            type="com.mingyuwu.barurside.discover.Theme" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,24 +28,38 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/editTextTextPersonName"
+        <AutoCompleteTextView
+            android:id="@+id/auto_discover_filter"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/border_map_search"
             android:ems="10"
-            android:hint="Beers, Wine, pr venues"
+            android:hint="@{viewModel.searchType ? `Search drink` : `Search Venue`}"
             android:inputType="textPersonName"
             android:maxLines="1"
             android:paddingStart="48dp"
             android:singleLine="true"
-            android:text=""
+            android:text="@={viewModel.searchText}"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:checked="@={viewModel.searchType}"
+            app:track="@drawable/track_is_venue"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:thumb="@drawable/thumb_is_venue"
+            app:layout_constraintBottom_toBottomOf="@+id/auto_discover_filter"
+            app:layout_constraintEnd_toEndOf="@+id/auto_discover_filter"
+            app:layout_constraintTop_toTopOf="@+id/auto_discover_filter"></androidx.appcompat.widget.SwitchCompat>
 
         <ImageView
             android:id="@+id/btn_search"
@@ -46,18 +68,19 @@
             android:layout_marginStart="16dp"
             android:backgroundTint="@color/gray_cccccc"
             android:src="@drawable/icons_24px_discover"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
-            app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
-            app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName" />
+            app:layout_constraintBottom_toBottomOf="@+id/auto_discover_filter"
+            app:layout_constraintStart_toStartOf="@+id/auto_discover_filter"
+            app:layout_constraintTop_toTopOf="@+id/auto_discover_filter" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cnstrt_recent_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{()->viewModel.setNavigateToTheme(theme.RECENT_ACTIVITY)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view1"
-            android:clickable="true">
+            app:layout_constraintTop_toBottomOf="@+id/view1">
 
             <ImageView
                 android:id="@+id/img_recent_activity"
@@ -98,10 +121,11 @@
             android:id="@+id/cnstrt_around_venue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{()->viewModel.setNavigateToTheme(theme.AROUND_VENUE)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cnstrt_recent_activity"
-            android:clickable="true">
+            app:layout_constraintTop_toBottomOf="@+id/cnstrt_recent_activity">
 
             <ImageView
                 android:id="@+id/img_around_venue"
@@ -142,10 +166,11 @@
             android:id="@+id/cnstrt_hot_drink"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{()->viewModel.setNavigateToTheme(theme.HOT_DRINK)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cnstrt_around_venue"
-            android:clickable="true">
+            app:layout_constraintTop_toBottomOf="@+id/cnstrt_around_venue">
 
             <ImageView
                 android:id="@+id/img_hot_drink"
@@ -187,10 +212,11 @@
             android:id="@+id/cnstrt_hot_venue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{()->viewModel.setNavigateToTheme(theme.HOT_VENUE)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_drink"
-            android:clickable="true">
+            app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_drink">
 
             <ImageView
                 android:id="@+id/img_hot_venue"
@@ -232,10 +258,11 @@
             android:id="@+id/cnstrt_high_rate_drink"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{()->viewModel.setNavigateToTheme(theme.HIGH_RATE_DRINK)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_venue"
-            android:clickable="true">
+            app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_venue">
 
             <ImageView
                 android:id="@+id/img_high_rate_drink"
@@ -276,10 +303,11 @@
             android:id="@+id/cnstrt_high_rate_venue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{()->viewModel.setNavigateToTheme(theme.HIGH_RATE_VENUE)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cnstrt_high_rate_drink"
-            android:clickable="true">
+            app:layout_constraintTop_toBottomOf="@+id/cnstrt_high_rate_drink">
 
             <ImageView
                 android:id="@+id/img_high_rate_venue"
@@ -318,4 +346,4 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</layout>

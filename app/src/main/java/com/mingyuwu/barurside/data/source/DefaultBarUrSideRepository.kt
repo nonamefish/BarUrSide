@@ -103,4 +103,8 @@ class DefaultBarUrSideRepository(
     override suspend fun getActivityResult(): Result<List<Activity>> {
         return remoteDataSource.getActivityResult()
     }
+
+    override suspend fun getDrinkBySearch(search: String): Result<List<Drink>> {
+        return remoteDataSource.getDrinkBySearch(search)
+    }
 }

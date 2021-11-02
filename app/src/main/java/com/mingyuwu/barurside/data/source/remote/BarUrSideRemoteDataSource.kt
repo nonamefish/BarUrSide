@@ -627,6 +627,42 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
+    override suspend fun getDrinkBySearch(search: String): Result<List<Drink>> =
+        suspendCoroutine { continuation ->
+
+            val list = mutableListOf<Drink>()
+
+            // filter venue
+            FirebaseFirestore.getInstance()
+                .collection(PATH_DRINK)
+                .orderBy("name")
+                .startAt(search.uppercase())
+                .endAt("${search.lowercase()}\uf8ff")
+                .get()
+                .addOnCompleteListener { venueTask ->
+
+                    if (venueTask.isSuccessful) {
+                        for (document in venueTask.result!!) {
+                            val drink = document.toObject(Drink::class.java)
+                            list.add(drink)
+                        }
+                        continuation.resume(Result.Success(list))
+                    } else {
+                        venueTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
     override suspend fun getHotVenueResult(): Result<List<Venue>> =
         suspendCoroutine { continuation ->
 

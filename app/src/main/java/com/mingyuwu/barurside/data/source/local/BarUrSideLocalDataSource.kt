@@ -101,4 +101,8 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     ): Result<Boolean> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getDrinkBySearch(search: String): Result<List<Drink>> {
+        TODO("Not yet implemented")
+    }
 }
