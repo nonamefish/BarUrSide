@@ -99,4 +99,8 @@ class DefaultBarUrSideRepository(
     override suspend fun getHighRateDrinkResult(): Result<List<Drink>> {
         return remoteDataSource.getHighRateDrinkResult()
     }
+
+    override suspend fun getActivityResult(): Result<List<Activity>> {
+        return remoteDataSource.getActivityResult()
+    }
 }

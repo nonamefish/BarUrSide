@@ -191,14 +191,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                         override fun onLocationResult(locationResult: LocationResult?) {
                             locationResult ?: return
                             val currentLocation =
-                            LatLng(
-                                25.042652901628177,
-                                121.56559561872204
-                            )
-//                                LatLng(
-//                                    locationResult.lastLocation.latitude,
-//                                    locationResult.lastLocation.longitude
-//                                )
+                                LatLng(
+                                    locationResult.lastLocation.latitude,
+                                    locationResult.lastLocation.longitude
+                                )
 
                             // get near bar
                             viewModel.getVenueByLocation(currentLocation)
@@ -233,7 +229,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             .onExplainRequestReason { scope, deniedList ->
                 scope.showRequestReasonDialog(
                     deniedList,
-                    "請開通地理定位，以提供您所在位置附近的優質酒館",
+                    "請開通位置存取權，以提供您所在位置附近的優質酒館",
                     "確定",
                     "忍痛拒絕"
                 )
@@ -241,7 +237,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             .onForwardToSettings { scope, deniedList ->
                 scope.showForwardToSettingsDialog(
                     deniedList,
-                    "請開通地理定位，以提供您所在位置附近的優質酒館",
+                    "請開通位置存取權，以提供您所在位置附近的優質酒館",
                     "確定",
                     "忍痛拒絕"
                 )
@@ -267,7 +263,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertDialog.Builder(mContext)
                 .setTitle("GPS 尚未開啟")
-                .setMessage("使用此功能需要開啟 GSP 定位功能")
+                .setMessage("使用此功能需要開啟 GPS 定位功能")
                 .setPositiveButton("前往開啟",
                     DialogInterface.OnClickListener { _, _ ->
                         startActivityForResult(

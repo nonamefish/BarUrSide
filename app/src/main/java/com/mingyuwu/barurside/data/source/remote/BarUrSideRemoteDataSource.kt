@@ -28,6 +28,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
     private const val PATH_USER = "user"
     private const val PATH_DRINK = "drink"
     private const val PATH_RATING = "rating"
+    private const val PATH_ACTIVITY = "activity"
+    private const val PATH_COLLECT = "collect"
 
     override fun getVenue(id: String): MutableLiveData<Venue> {
         val liveData = MutableLiveData<Venue>()
@@ -644,14 +646,14 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                     if (venueTask.isSuccessful) {
 
-                        val venueRtgs = venueTask.result.toObjects(Venue::class.java)
-                        val hotVenueList = venueRtgs.groupingBy { it.id }.eachCount().toList()
+                        val venueRtgs = venueTask.result.toObjects(Rating::class.java)
+                        val hotVenueList = venueRtgs.groupingBy { it.objectId }.eachCount().toList()
                             .sortedByDescending { it.second }.take(10)
 
                         // filter venue
                         FirebaseFirestore.getInstance()
                             .collection(PATH_VENUE)
-                            .whereIn("id", hotVenueList)
+                            .whereIn("id", hotVenueList.map { it.first })
                             .get()
                             .addOnCompleteListener { task ->
                                 for (document in task.result!!) {
@@ -691,18 +693,18 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .whereEqualTo("isVenue",false)
                 .whereGreaterThan("postDate", calendar.time)
                 .get()
-                .addOnCompleteListener { venueTask ->
+                .addOnCompleteListener { drinkTask ->
 
-                    if (venueTask.isSuccessful) {
+                    if (drinkTask.isSuccessful) {
 
-                        val venueRtgs = venueTask.result.toObjects(Venue::class.java)
-                        val hotVenueList = venueRtgs.groupingBy { it.id }.eachCount().toList()
+                        val drinkRtgs = drinkTask.result.toObjects(Rating::class.java)
+                        val hotDrinkList = drinkRtgs.groupingBy { it.objectId }.eachCount().toList()
                             .sortedByDescending { it.second }.take(10)
 
                         // filter drink
                         FirebaseFirestore.getInstance()
-                            .collection(PATH_VENUE)
-                            .whereIn("id", hotVenueList)
+                            .collection(PATH_DRINK)
+                            .whereIn("id", hotDrinkList.map { it.first })
                             .get()
                             .addOnCompleteListener { task ->
                                 for (document in task.result!!) {
@@ -712,7 +714,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 continuation.resume(Result.Success(list))
                             }
                     } else {
-                        venueTask.exception?.let {
+                        drinkTask.exception?.let {
                             continuation.resume(Result.Error(it))
                             return@addOnCompleteListener
                         }
@@ -743,7 +745,9 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .addOnCompleteListener { venueTask ->
 
                     if (venueTask.isSuccessful) {
+
                         for (document in venueTask.result!!) {
+                            Log.d(TAG, document.id + " => " + document.data)
                             val venue = document.toObject(Venue::class.java)
                             list.add(venue)
                         }
@@ -776,16 +780,52 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .orderBy("rtgCount", Query.Direction.DESCENDING)
                 .limit(10)
                 .get()
-                .addOnCompleteListener { venueTask ->
+                .addOnCompleteListener { drinkTask ->
 
-                    if (venueTask.isSuccessful) {
-                        for (document in venueTask.result!!) {
+                    if (drinkTask.isSuccessful) {
+                        for (document in drinkTask.result!!) {
                             val drink = document.toObject(Drink::class.java)
                             list.add(drink)
                         }
                         continuation.resume(Result.Success(list))
                     } else {
-                        venueTask.exception?.let {
+                        drinkTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun getActivityResult() : Result<List<Activity>> =
+        suspendCoroutine { continuation ->
+
+            val list = mutableListOf<Activity>()
+
+            // filter activity
+            FirebaseFirestore.getInstance()
+                .collection(PATH_ACTIVITY)
+                .orderBy("startTime")
+                .get()
+                .addOnCompleteListener { activityTask ->
+                    Log.d(TAG,"========================================")
+                    Log.d(TAG, activityTask.result.toString())
+                    Log.d(TAG,"========================================")
+                    if (activityTask.isSuccessful) {
+                        for (document in activityTask.result!!) {
+                            val activity = document.toObject(Activity::class.java)
+                            list.add(activity)
+                        }
+                        continuation.resume(Result.Success(list))
+                    } else {
+                        activityTask.exception?.let {
                             continuation.resume(Result.Error(it))
                             return@addOnCompleteListener
                         }

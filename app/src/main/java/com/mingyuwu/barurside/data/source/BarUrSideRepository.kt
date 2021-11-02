@@ -48,4 +48,5 @@ interface BarUrSideRepository {
     suspend fun getHotDrinkResult(): Result<List<Drink>>
     suspend fun getHighRateVenueResult(): Result<List<Venue>>
     suspend fun getHighRateDrinkResult(): Result<List<Drink>>
+    suspend fun getActivityResult() : Result<List<Activity>>
 }

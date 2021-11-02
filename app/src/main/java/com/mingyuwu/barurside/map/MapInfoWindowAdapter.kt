@@ -57,21 +57,10 @@ class MapInfoWindowAdapter(_context: Context, viewModel: MapViewModel, parent: V
             viewModel.navigateToVenue.value = info[0]
         }
 
-
-
         // set venue image
-//        val gsReference = info[3].let { Firebase.storage.reference.child(it) }
-//        gsReference.downloadUrl.addOnSuccessListener { uri ->
-//            Glide.with(context)
-//                .load("https://firebasestorage.googleapis.com/v0/b/barurside.appspot.com/o/venue%2F6BhbnIMi1Ai91Ky4w9rI%2Fcf37210421225814.jpg?alt=media&token=5d85c533-59e3-4fd6-bc0e-b273ce53be84")
-//                .placeholder(R.drawable.image_placeholder)
-//                .listener(MarkerCallback(marker))
-//                .into(binding.imgInfo)
-//        }
-
         if (info[3] != null) {
             Glide.with(context)
-                .load("https://firebasestorage.googleapis.com/v0/b/barurside.appspot.com/o/venue%2F6BhbnIMi1Ai91Ky4w9rI%2Fcf37210421225814.jpg?alt=media&token=5d85c533-59e3-4fd6-bc0e-b273ce53be84")
+                .load(info[3])
                 .placeholder(R.drawable.image_placeholder)
                 .listener(MarkerCallback(marker))
                 .into(binding.imgInfo)
