@@ -158,7 +158,7 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         _tagFrd.value = _tagFrd.value
     }
 
-    fun postRating() {
+    private fun postRating() {
         coroutineScope.launch {
             objectId.value?.let {
                 var addShare = 0

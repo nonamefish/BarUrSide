@@ -102,7 +102,19 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
 
+    override suspend fun postCollect(collect: Collect): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getDrinkBySearch(search: String): Result<List<Drink>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getCollect(userId: String): Result<List<Collect>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeCollect(id: String, userId: String): Result<Boolean> {
         TODO("Not yet implemented")
     }
 }

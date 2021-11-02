@@ -58,12 +58,6 @@ class VenueFragment : Fragment() {
             }
         }
 
-        // set venue data
-//        viewModel.venueInfo.observe(viewLifecycleOwner, Observer {
-//            it?.let {
-//                binding.venue = it
-//            }
-//        })
         binding.viewModel = viewModel
 
         // set rating data

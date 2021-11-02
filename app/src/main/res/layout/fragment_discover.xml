@@ -22,7 +22,7 @@
         <View
             android:id="@+id/view1"
             android:layout_width="match_parent"
-            android:layout_height="85dp"
+            android:layout_height="90dp"
             android:background="@color/primaryDarkColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
             android:layout_marginEnd="24dp"
             android:background="@drawable/border_map_search"
             android:ems="10"
-            android:hint="@{viewModel.searchType ? `Search drink` : `Search Venue`}"
+            android:hint="@{viewModel.searchType ? `Search for drink` : `Search for venue`}"
             android:inputType="textPersonName"
             android:maxLines="1"
             android:paddingStart="48dp"

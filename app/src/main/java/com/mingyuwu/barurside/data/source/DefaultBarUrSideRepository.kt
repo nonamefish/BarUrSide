@@ -107,4 +107,16 @@ class DefaultBarUrSideRepository(
     override suspend fun getDrinkBySearch(search: String): Result<List<Drink>> {
         return remoteDataSource.getDrinkBySearch(search)
     }
+
+    override suspend fun postCollect(collect: Collect): Result<Boolean>{
+        return remoteDataSource.postCollect(collect)
+    }
+
+    override suspend fun getCollect(userId: String): Result<List<Collect>> {
+        return remoteDataSource.getCollect(userId)
+    }
+
+    override suspend fun removeCollect(id: String, userId: String): Result<Boolean> {
+        return remoteDataSource.removeCollect(id, userId)
+    }
 }

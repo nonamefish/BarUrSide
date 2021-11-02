@@ -12,7 +12,7 @@ import com.mingyuwu.barurside.rating.RatingScoreAdapter
 
 const val TAG = "CollectGridAdapter"
 
-class CollectGridAdapter(val onClickListener: CollectGridAdapter.OnClickListener) :
+class CollectGridAdapter(val onClickListener: OnClickListener) :
     ListAdapter<Collect, CollectGridAdapter.CollectGridViewHolder>(DiffCallback) {
 
     class CollectGridViewHolder(private var binding: ItemCollectGridBinding) :

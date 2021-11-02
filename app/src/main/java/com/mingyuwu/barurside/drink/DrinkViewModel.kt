@@ -4,22 +4,27 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mingyuwu.barurside.data.Drink
-import com.mingyuwu.barurside.data.Venue
-import com.mingyuwu.barurside.data.Rating
-import com.mingyuwu.barurside.data.RatingInfo
+import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-class DrinkViewModel(private val repository: BarUrSideRepository, id: String) : ViewModel() {
+class DrinkViewModel(private val repository: BarUrSideRepository, val id: String) : ViewModel() {
 
     // set source data
     var drinkInfo = MutableLiveData<Drink>()
     var venueInfo = MutableLiveData<Venue>()
     var rtgInfo = MutableLiveData<List<RatingInfo>>()
-    var isCollect = MutableLiveData<Boolean>(false)
+    var isCollect = MutableLiveData<Boolean?>()
+    val userId = "6BhbnIMi1Ai91Ky4w9rI"
+
+    // error: The internal MutableLiveData that stores the error of the most recent request
+    private val _error = MutableLiveData<String?>()
+
+    val error: LiveData<String?>
+        get() = _error
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -28,11 +33,11 @@ class DrinkViewModel(private val repository: BarUrSideRepository, id: String) : 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
-        getDrinkResult("IdBo1aoiJ6AEpNovRvv4")
-//        getDrinkResult(id)
+        getCollect(userId)
+        getDrinkResult(id)
     }
 
-    fun getDrinkResult(id: String) {
+    private fun getDrinkResult(id: String) {
         drinkInfo = repository.getDrink(id)
     }
 
@@ -54,13 +59,85 @@ class DrinkViewModel(private val repository: BarUrSideRepository, id: String) : 
         return list
     }
 
+    private fun getCollect(userId: String) {
+        coroutineScope.launch {
+            val result = repository.getCollect(userId)
+            isCollect.value = when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    result.data.any { it.objectId == id }
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+        }
+    }
+
     fun setCollect() {
         when (isCollect.value) {
             true -> {
                 isCollect.value = false
+                removeCollect(id,userId)
             }
             false -> {
+                val postItem = Collect("", false, userId, id)
+                postCollect(postItem)
                 isCollect.value = true
+            }
+        }
+    }
+
+    private fun postCollect(collect: Collect) {
+        coroutineScope.launch {
+            val result = repository.postCollect(collect)
+            when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    result.data
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+        }
+    }
+
+    private fun removeCollect(id: String, userId: String) {
+        coroutineScope.launch {
+            val result = repository.removeCollect(id,userId)
+            when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    result.data
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
             }
         }
     }

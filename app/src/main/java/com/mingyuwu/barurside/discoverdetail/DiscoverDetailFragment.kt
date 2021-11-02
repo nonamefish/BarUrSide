@@ -91,7 +91,7 @@ class DiscoverDetailFragment() : Fragment() {
             Theme.AROUND_VENUE -> {
                 viewModel.mLocation = mainViewModel.location
 
-                if(mainViewModel.location.value==null){
+                if (mainViewModel.location.value == null) {
                     getLocationPermission()
                 }
 
@@ -140,15 +140,16 @@ class DiscoverDetailFragment() : Fragment() {
 
         // assign value to recyclerView
         viewModel.detailData.observe(viewLifecycleOwner, Observer {
-            Log.d("Ming","detailData: $it")
+            Log.d("Ming", "detailData: $it")
             adapter.submitList(it)
         }
         )
 
         // set random button click listener
         binding.btnRandom.setOnClickListener {
-            viewModel.detailData.value?.let{
-                findNavController().navigate(MainNavigationDirections.navigateToRandomFragment(it.toTypedArray() as Array<Venue>))
+            viewModel.detailData.value?.let {
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToRandomFragment((it as List<Venue>).toTypedArray()))
             }
         }
 

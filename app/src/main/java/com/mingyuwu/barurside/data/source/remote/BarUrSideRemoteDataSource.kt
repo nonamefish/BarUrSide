@@ -339,6 +339,79 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
+    override suspend fun getCollect(userId: String): Result<List<Collect>> =
+        suspendCoroutine { continuation ->
+            val list = mutableListOf<Collect>()
+            FirebaseFirestore.getInstance()
+                .collection(PATH_COLLECT)
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+
+                        for (document in task.result!!) {
+                            Log.d("Ming","document: $document")
+                            val collect = document.toObject(Collect::class.java)
+                            Log.d("Ming","collect: $collect")
+                            list.add(collect)
+                        }
+                        continuation.resume(Result.Success(list))
+                    } else {
+                        task.exception?.let {
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun removeCollect(id: String, userId: String): Result<Boolean> =
+        suspendCoroutine { continuation ->
+            Log.d("Ming", "id: $id, userId: $userId")
+            FirebaseFirestore.getInstance()
+                .collection(PATH_COLLECT)
+                .whereEqualTo("objectId", id)
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("Ming", task.result.documents.toString())
+                        for (document in task.result!!) {
+                            Log.d("Ming", "document: $document")
+                            document.reference.delete()
+                        }
+                        continuation.resume(Result.Success(true))
+                    } else {
+                        task.exception?.let {
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
     override suspend fun uploadPhoto(
         storageRef: StorageReference,
         userId: String,
@@ -675,7 +748,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             // filter rating
             FirebaseFirestore.getInstance()
                 .collection(PATH_RATING)
-                .whereEqualTo("isVenue",true)
+                .whereEqualTo("isVenue", true)
                 .whereGreaterThan("postDate", calendar.time)
                 .get()
                 .addOnCompleteListener { venueTask ->
@@ -726,7 +799,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             // filter rating
             FirebaseFirestore.getInstance()
                 .collection(PATH_RATING)
-                .whereEqualTo("isVenue",false)
+                .whereEqualTo("isVenue", false)
                 .whereGreaterThan("postDate", calendar.time)
                 .get()
                 .addOnCompleteListener { drinkTask ->
@@ -840,7 +913,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-    override suspend fun getActivityResult() : Result<List<Activity>> =
+    override suspend fun getActivityResult(): Result<List<Activity>> =
         suspendCoroutine { continuation ->
 
             val list = mutableListOf<Activity>()
@@ -851,9 +924,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .orderBy("startTime")
                 .get()
                 .addOnCompleteListener { activityTask ->
-                    Log.d(TAG,"========================================")
-                    Log.d(TAG, activityTask.result.toString())
-                    Log.d(TAG,"========================================")
+
                     if (activityTask.isSuccessful) {
                         for (document in activityTask.result!!) {
                             val activity = document.toObject(Activity::class.java)
@@ -872,6 +943,34 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 )
                             )
                         )
+                    }
+                }
+        }
+
+    override suspend fun postCollect(collect: Collect): Result<Boolean> =
+        suspendCoroutine { continuation ->
+            val postCollect = FirebaseFirestore.getInstance().collection(PATH_COLLECT)
+            val document = postCollect.document()
+
+            collect.id = document.id
+
+            document
+                .set(Collect.toHashMap(collect))
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "postCollect: isSuccessful")
+                        continuation.resume(Result.Success(true))
+                    } else {
+                        task.exception?.let {
+                            Log.d(TAG, "postCollect: $it")
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(Result.Fail(BarUrSideApplication.instance.getString(R.string.fail_nothing)))
                     }
                 }
         }
