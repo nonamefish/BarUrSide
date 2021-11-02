@@ -24,11 +24,13 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentMapBinding
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.*
 import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.MainViewModel
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.permissionx.guolindev.PermissionX
@@ -45,6 +47,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private var locationPermissionGranted = false
     private val viewModel by viewModels<MapViewModel> { getVmFactory() }
+    private val mainViewModel by viewModels<MainViewModel> { getVmFactory() }
 
 
     override fun onCreateView(
@@ -190,21 +193,21 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                     object : LocationCallback() {
                         override fun onLocationResult(locationResult: LocationResult?) {
                             locationResult ?: return
-                            val currentLocation =
+                            mainViewModel.location.value =
                                 LatLng(
                                     locationResult.lastLocation.latitude,
                                     locationResult.lastLocation.longitude
                                 )
 
                             // get near bar
-                            viewModel.getVenueByLocation(currentLocation)
+                            viewModel.getVenueByLocation(mainViewModel.location.value!!)
 
                             // google map current location (blue point)
                             mMap.isMyLocationEnabled = true
                             mMap.uiSettings.isMyLocationButtonEnabled = true
                             mMap?.moveCamera(
                                 CameraUpdateFactory.newLatLngZoom(
-                                    currentLocation, 15f
+                                    mainViewModel.location.value, 15f
                                 )
                             )
                         }

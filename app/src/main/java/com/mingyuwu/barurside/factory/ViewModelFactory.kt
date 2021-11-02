@@ -2,6 +2,7 @@ package com.mingyuwu.barurside.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mingyuwu.barurside.MainViewModel
 import com.mingyuwu.barurside.addactivity.AddActivityViewModel
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.editrating.EditRatingViewModel
@@ -17,6 +18,8 @@ class ViewModelFactory constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
+                isAssignableFrom(MainViewModel::class.java) ->
+                    MainViewModel()
                 isAssignableFrom(AddActivityViewModel::class.java) ->
                     AddActivityViewModel()
                 isAssignableFrom(FilterViewModel::class.java) ->

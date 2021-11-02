@@ -32,6 +32,8 @@ class DiscoverDetailViewModel(
     val navigateToInfo = MutableLiveData<Any>()
     private lateinit var result: Result<Any>
 
+    var mLocation = MutableLiveData<LatLng>()
+
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
 
@@ -50,7 +52,6 @@ class DiscoverDetailViewModel(
 
             when (theme) {
                 Theme.RECENT_ACTIVITY -> {
-
                     result = repository.getActivityResult()
                 }
                 Theme.USER_ACTIVITY -> {
@@ -72,7 +73,12 @@ class DiscoverDetailViewModel(
                     _detailData.value = DrinkData.drink.drink
                 }
                 Theme.AROUND_VENUE -> {
-                    _detailData.value = VenueData.venue.venue
+                    result = if (mLocation.value != null) {
+                        val range = getRectangleRange(mLocation.value!!, 1.0)
+                        repository.getVenueByLocation(range[0], range[1], range[2], range[3])
+                    } else {
+                        Result.Fail("hasn't get location information")
+                    }
                 }
                 Theme.HOT_VENUE -> {
                     result = repository.getHotVenueResult()
@@ -90,7 +96,43 @@ class DiscoverDetailViewModel(
 
             _detailData.value = when (result) {
                 is Result.Success -> {
-                    Log.d("Ming","result:  ${(result as Result.Success<Any>).data.toString()}")
+                    Log.d("Ming", "result:  ${(result as Result.Success<Any>).data}")
+                    _error.value = null
+                    (result as Result.Success<Any>).data as List<Any>
+                }
+                is Result.Fail -> {
+                    _error.value = (result as Result.Fail).error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = (result as Result.Error).exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+        }
+    }
+
+    private fun getRectangleRange(location: LatLng, distance: Double): List<Double> {
+        //1緯度的距離大約為 69 英里 (111.11公里)
+        //1經度的距離大約為 111.11 * cos(theta) km
+        val minLat = location.latitude - (distance / 111.11)
+        val maxLat = location.latitude + (distance / 111.11)
+        val minLng = location.longitude - (distance / 111.11 / cos(location.latitude))
+        val maxLng = location.longitude + (distance / 111.11 / cos(location.latitude))
+        return listOf(minLat, maxLat, minLng, maxLng)
+    }
+
+    fun getAroundVenue(location: LatLng) {
+        coroutineScope.launch {
+            val range = getRectangleRange(location, 1.0)
+            result = repository.getVenueByLocation(range[0], range[1], range[2], range[3])
+
+            _detailData.value = when (result) {
+                is Result.Success -> {
+                    Log.d("Ming", "result:  ${(result as Result.Success<Any>).data.toString()}")
                     _error.value = null
                     (result as Result.Success<Any>).data as List<Any>
                 }
@@ -108,16 +150,6 @@ class DiscoverDetailViewModel(
             }
 
         }
-    }
-
-    private fun getRectangleRange(location: LatLng, distance: Double): List<Double> {
-        //1緯度的距離大約為 69 英里 (111.11公里)
-        //1經度的距離大約為 111.11 * cos(theta) km
-        val minLat = location.latitude - (distance / 111.11)
-        val maxLat = location.latitude + (distance / 111.11)
-        val minLng = location.longitude - (distance / 111.11 / cos(location.latitude))
-        val maxLng = location.longitude + (distance / 111.11 / cos(location.latitude))
-        return listOf(minLat, maxLat, minLng, maxLng)
     }
 
 }

@@ -3,14 +3,17 @@ package com.mingyuwu.barurside
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.mingyuwu.barurside.databinding.ActivityMainBinding
 import com.mingyuwu.barurside.discover.Theme
+import com.mingyuwu.barurside.ext.getVmFactory
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

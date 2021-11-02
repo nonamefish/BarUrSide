@@ -74,7 +74,7 @@
         tools:layout="@layout/fragment_random">
         <argument
             android:name="venue"
-            app:argType="com.mingyuwu.barurside.data.Venue" />
+            app:argType="com.mingyuwu.barurside.data.Venue[]" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"

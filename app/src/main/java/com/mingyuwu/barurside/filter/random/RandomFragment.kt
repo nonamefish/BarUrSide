@@ -19,7 +19,7 @@ class RandomFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val venue = RandomFragmentArgs.fromBundle(requireArguments()).venue
+        val venue = RandomFragmentArgs.fromBundle(requireArguments()).venue.toList()
         binding = FragmentRandomBinding.inflate(inflater, container, false)
 
 
@@ -30,7 +30,7 @@ class RandomFragment : Fragment() {
 
         // set button to venue
         binding.btnToVenue.setOnClickListener {
-            findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(venue.id))
+            findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(venue[0].id))
         }
 
         // Inflate the layout for this fragment
