@@ -10,12 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
-import com.mingyuwu.barurside.data.mockdata.CollectData
 import com.mingyuwu.barurside.databinding.FragmentCollectPageBinding
-import com.mingyuwu.barurside.drink.DrinkFragmentArgs
-import com.mingyuwu.barurside.drink.DrinkViewModel
 import com.mingyuwu.barurside.ext.getVmFactory
 
 class CollectPageFragment() : Fragment() {
@@ -41,15 +39,22 @@ class CollectPageFragment() : Fragment() {
         val isVenue = this.requireArguments().getBoolean("isVenue")
 
         // set collect grid adapter
-        val adapter = CollectGridAdapter(
-            CollectGridAdapter.OnClickListener {
-                viewModel.setNavigateToObject(it.id)
+        val adapter = CollectAdapter(
+            viewModel,
+            CollectAdapter.OnClickListener {
+                viewModel.setNavigateToObject(it)
             }
         )
         binding.collectList.adapter = adapter
         viewModel.collectInfo.observe(viewLifecycleOwner, Observer {
+            Log.d("Ming","$isVenue collect: $it")
+            if(!it.isNullOrEmpty()){
+                viewModel.getObjectInfo(isVenue, it)
+            }
+        })
+
+        viewModel.objectInfo.observe(viewLifecycleOwner, Observer {
             it?.let{
-                Log.d("Ming", "viewModel.collectInfo: $it")
                 adapter.submitList(it)
             }
         })

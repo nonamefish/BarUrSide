@@ -119,4 +119,12 @@ class DefaultBarUrSideRepository(
     override suspend fun removeCollect(id: String, userId: String): Result<Boolean> {
         return remoteDataSource.removeCollect(id, userId)
     }
+
+    override suspend fun getVenueByIds(ids: List<String>): Result<List<Venue>> {
+        return remoteDataSource.getVenueByIds(ids)
+    }
+
+    override suspend fun getDrinksByIds(ids: List<String>): Result<List<Drink>> {
+        return remoteDataSource.getDrinksByIds(ids)
+    }
 }

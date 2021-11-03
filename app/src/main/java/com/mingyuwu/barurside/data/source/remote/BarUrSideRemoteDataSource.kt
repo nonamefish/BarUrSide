@@ -350,9 +350,9 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     if (task.isSuccessful) {
 
                         for (document in task.result!!) {
-                            Log.d("Ming","document: $document")
+                            Log.d("Ming", "document: $document")
                             val collect = document.toObject(Collect::class.java)
-                            Log.d("Ming","collect: $collect")
+                            Log.d("Ming", "collect: $collect")
                             list.add(collect)
                         }
                         continuation.resume(Result.Success(list))
@@ -699,6 +699,75 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     }
                 }
         }
+
+    override suspend fun getVenueByIds(ids: List<String>): Result<List<Venue>> =
+        suspendCoroutine { continuation ->
+
+            val list = mutableListOf<Venue>()
+
+            // filter venue
+            FirebaseFirestore.getInstance()
+                .collection(PATH_VENUE)
+                .whereIn("id", ids)
+                .get()
+                .addOnCompleteListener { venueTask ->
+
+                    if (venueTask.isSuccessful) {
+                        for (document in venueTask.result!!) {
+                            val venue = document.toObject(Venue::class.java)
+                            list.add(venue)
+                        }
+                        continuation.resume(Result.Success(list))
+                    } else {
+                        venueTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun getDrinksByIds(ids: List<String>): Result<List<Drink>> =
+        suspendCoroutine { continuation ->
+
+            val list = mutableListOf<Drink>()
+
+            // filter venue
+            FirebaseFirestore.getInstance()
+                .collection(PATH_DRINK)
+                .whereIn("id", ids)
+                .get()
+                .addOnCompleteListener { drinkTask ->
+
+                    if (drinkTask.isSuccessful) {
+                        for (document in drinkTask.result!!) {
+                            val drink = document.toObject(Drink::class.java)
+                            list.add(drink)
+                        }
+                        continuation.resume(Result.Success(list))
+                    } else {
+                        drinkTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
 
     override suspend fun getDrinkBySearch(search: String): Result<List<Drink>> =
         suspendCoroutine { continuation ->

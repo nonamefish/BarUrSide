@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.collect.CollectPageViewModel" />
+
+        <variable
+            name="drink"
+            type="com.mingyuwu.barurside.data.Drink" />
+
+        <variable
+            name="venue"
+            type="com.mingyuwu.barurside.data.Venue" />
+
+        <variable
+            name="isVanue"
+            type="boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/catalog_product_img"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{isVanue ? venue.images[0]:drink.images[0]}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/placeholder" />
+
+        <TextView
+            android:id="@+id/catalog_product_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:text="@{isVanue ? venue.name :drink.name}"
+            android:textColor="@color/black_3f3a3a"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/catalog_product_img"
+            tools:text="文青不要喝IPA" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rating_score_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/catalog_product_name"
+            app:stars="@{isVanue ? venue.avgRating :drink.avgRating}" />
+
+        <ImageView
+            android:id="@+id/img_collect_filled_filled"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/ic_baseline_favorite_36"
+            android:backgroundTint="@{viewModel.isCollect ? @color/red_e02401 : @color/gray_888888}"
+            android:onClickListener="@{()->viewModel.setCollect(isVanue ?venue.id :drink.id)}"
+            app:alpha="@{viewModel.isCollect ?  1.0f : 0.5f }"
+            app:layout_constraintBottom_toBottomOf="@+id/catalog_product_img"
+            app:layout_constraintEnd_toEndOf="@+id/catalog_product_img" />
+
+        <ImageView
+            android:id="@+id/img_collect_border"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/catalog_product_img"
+            app:layout_constraintEnd_toEndOf="@+id/catalog_product_img"
+            app:srcCompat="@drawable/ic_baseline_favorite_border_36"
+            app:tint="@color/white" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

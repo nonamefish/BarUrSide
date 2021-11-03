@@ -46,7 +46,7 @@
             app:notifyContent="@{notification.content}"
             app:layout_constraintStart_toEndOf="@+id/profile_base_img"
             app:layout_constraintTop_toTopOf="@+id/profile_base_img"
-            tools:text="@string/test" />
+            tools:text="通知" />
 
         <TextView
             android:id="@+id/notify_date"

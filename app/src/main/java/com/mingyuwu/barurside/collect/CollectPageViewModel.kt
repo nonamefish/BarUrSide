@@ -18,6 +18,8 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
 
     // set source data
     var collectInfo = MutableLiveData<List<Collect>>()
+    var objectInfo = MutableLiveData<List<Any>>()
+    var isCollect = MutableLiveData<Boolean?>(true)
     val navigateToObject = MutableLiveData<String?>()
     val userId = "6BhbnIMi1Ai91Ky4w9rI"
 
@@ -60,6 +62,95 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
             }
         }
     }
+
+    fun getObjectInfo(isVenue: Boolean, collectInfo: List<Collect>) {
+        coroutineScope.launch {
+            val result = when (isVenue) {
+                true -> repository.getVenueByIds(collectInfo.map { it.objectId })
+                false -> repository.getDrinksByIds(collectInfo.map { it.objectId })
+            }
+
+            objectInfo.value = when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    Log.d("Ming", "result.data: ${result.data}")
+                    result.data
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+        }
+    }
+
+    fun setCollect(id: String) {
+        when (isCollect.value) {
+            true -> {
+                isCollect.value = false
+                removeCollect(id, userId)
+            }
+            false -> {
+                val postItem = Collect("", false, userId, id)
+                postCollect(postItem)
+                isCollect.value = true
+            }
+        }
+    }
+
+    private fun postCollect(collect: Collect) {
+        coroutineScope.launch {
+            val result = repository.postCollect(collect)
+            when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    result.data
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+        }
+    }
+
+    private fun removeCollect(id: String, userId: String) {
+        coroutineScope.launch {
+            val result = repository.removeCollect(id, userId)
+            when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    result.data
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+        }
+    }
+
 
     fun setNavigateToObject(id: String) {
         navigateToObject.value = id

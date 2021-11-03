@@ -117,4 +117,12 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     override suspend fun removeCollect(id: String, userId: String): Result<Boolean> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getVenueByIds(ids: List<String>): Result<List<Venue>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getDrinksByIds(ids: List<String>): Result<List<Drink>> {
+        TODO("Not yet implemented")
+    }
 }

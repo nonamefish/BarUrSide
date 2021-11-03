@@ -93,6 +93,8 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
             .placeholder(R.drawable.image_placeholder)
             .error(R.drawable.image_placeholder)
             .into(imgView)
+    }else{
+        imgView.setBackgroundResource(R.drawable.image_placeholder)
     }
 }
 

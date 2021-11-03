@@ -53,4 +53,6 @@ interface BarUrSideDataSource {
     suspend fun postCollect(collect: Collect): Result<Boolean>
     suspend fun getCollect(userId: String): Result<List<Collect>>
     suspend fun removeCollect(id: String, userId: String): Result<Boolean>
+    suspend fun getVenueByIds(ids: List<String>): Result<List<Venue>>
+    suspend fun getDrinksByIds(ids: List<String>): Result<List<Drink>>
 }
