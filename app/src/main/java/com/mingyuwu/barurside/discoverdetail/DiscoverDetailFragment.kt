@@ -45,6 +45,7 @@ class DiscoverDetailFragment() : Fragment() {
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private val viewModel by viewModels<DiscoverDetailViewModel> {
         getVmFactory(
+            DiscoverDetailFragmentArgs.fromBundle(requireArguments()).id?.toList(),
             DiscoverDetailFragmentArgs.fromBundle(requireArguments()).theme,
             DiscoverDetailFragmentArgs.fromBundle(requireArguments()).filterParameter,
         )

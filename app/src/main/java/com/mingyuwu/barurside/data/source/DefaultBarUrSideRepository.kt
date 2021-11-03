@@ -14,8 +14,8 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getVenue(id)
     }
 
-    override fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>> {
-        return remoteDataSource.getRating(id, isVenue)
+    override fun getRatingByObject(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>> {
+        return remoteDataSource.getRatingByObject(id, isVenue)
     }
 
     override fun getDrink(id: String): MutableLiveData<Drink> {
@@ -39,8 +39,8 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.uploadPhoto(storageRef, userId, type, localImage)
     }
 
-    override suspend fun getFriend(user: User): Result<List<User>> {
-        return remoteDataSource.getFriend(user)
+    override suspend fun getFriend(frds: List<String>): Result<List<User>> {
+        return remoteDataSource.getFriend(frds)
     }
 
     override suspend fun getMenu(venueId: String): Result<List<Drink>> {
@@ -126,5 +126,13 @@ class DefaultBarUrSideRepository(
 
     override suspend fun getDrinksByIds(ids: List<String>): Result<List<Drink>> {
         return remoteDataSource.getDrinksByIds(ids)
+    }
+
+    override suspend fun getRatingByUser(userId: String): Result<List<RatingInfo>> {
+        return remoteDataSource.getRatingByUser(userId)
+    }
+
+    override suspend fun getActivityByUser(userId: String): Result<List<Activity>> {
+        return remoteDataSource.getActivityByUser(userId)
     }
 }

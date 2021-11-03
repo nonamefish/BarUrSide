@@ -11,6 +11,7 @@ import com.mingyuwu.barurside.filter.FilterParameter
 @Suppress("UNCHECKED_CAST")
 class DiscoverDetailViewModelFactory(
     private val repository: BarUrSideRepository,
+    private val id: List<String>?,
     private val theme: Theme,
     private val filterParameter: FilterParameter?
 ) : ViewModelProvider.Factory {
@@ -19,7 +20,7 @@ class DiscoverDetailViewModelFactory(
         with(modelClass) {
             when {
                 isAssignableFrom(DiscoverDetailViewModel::class.java) ->
-                    DiscoverDetailViewModel(repository, theme, filterParameter)
+                    DiscoverDetailViewModel(repository, id, theme, filterParameter)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

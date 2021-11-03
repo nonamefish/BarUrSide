@@ -79,7 +79,7 @@ class VenueFragment : Fragment() {
         binding.venueMenu.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.VENUE_MENU, id, null
+                    Theme.VENUE_MENU, listOf(id!!).toTypedArray(), null
                 )
             )
         }

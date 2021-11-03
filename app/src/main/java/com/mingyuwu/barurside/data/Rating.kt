@@ -9,7 +9,7 @@ import java.util.*
 data class Rating(
     var id: String = "",
     val objectId: String = "",
-    val isVenue: Boolean? = null,
+    @JvmField val isVenue: Boolean? = null,
     val userId: String = "",
     val rating: Long? = -1,
     val comment: String = "",
@@ -40,7 +40,7 @@ data class Rating(
 data class RatingInfo(
     var id: String = "",
     val objectId: String = "",
-    val isVenue: Boolean? = null,
+    @JvmField val isVenue: Boolean? = null,
     val userId: String = "",
     val rating: Long? = -1,
     val comment: String = "",

@@ -26,6 +26,9 @@
     <string name="btm_nvgt_collect">Collect</string>
     <string name="btm_nvgt_profile">Profile</string>
 
+<!--    Profile Page-->
+    <string name="profile_frds_cnt">%d位好友</string>
+
     <string name="fail_nothing">Nothing</string>
 
 </resources>

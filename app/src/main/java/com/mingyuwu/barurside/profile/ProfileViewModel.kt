@@ -1,39 +1,28 @@
 package com.mingyuwu.barurside.profile
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.findNavController
-import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.R
-import com.mingyuwu.barurside.data.Drink
+import com.mingyuwu.barurside.data.Collect
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.data.Result
-import com.mingyuwu.barurside.data.Venue
-import com.mingyuwu.barurside.data.mockdata.RatingData
+import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
-import com.mingyuwu.barurside.databinding.FragmentProfileBinding
-import com.mingyuwu.barurside.discover.Theme
-import com.mingyuwu.barurside.discoverdetail.DiscoverDetailFragmentArgs
-import com.mingyuwu.barurside.rating.ImageAdapter
-import com.mingyuwu.barurside.rating.UserRatingAdapter
+import com.mingyuwu.barurside.login.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 
-class ProfileViewModel(private val repository: BarUrSideRepository, val userId: String) : ViewModel() {
+class ProfileViewModel(private val repository: BarUrSideRepository, val userId: String) :
+    ViewModel() {
 
     // set source data
-    var userInfo = MutableLiveData<Drink>()
+    var userInfo = MutableLiveData<User>()
     var rtgInfo = MutableLiveData<List<RatingInfo>>()
+    var isMyself = userId == UserManager.user.value!!.id
     val userId_test = "6BhbnIMi1Ai91Ky4w9rI"
 
     // error: The internal MutableLiveData that stores the error of the most recent request
@@ -49,53 +38,50 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
-
+        getUserInfo(userId)
+        getRatingInfo(userId)
+        Log.d("Ming","userId: $userId , myself: ${UserManager.user.value!!.id}")
+        Log.d("Ming","isMyself: $isMyself")
     }
 
-    fun getUserInfo(userId:String){
+    private fun getUserInfo(userId: String) {
+        userInfo = repository.getUser(userId)
+    }
+
+    private fun getRatingInfo(userId: String) {
         coroutineScope.launch {
-//            val result = repository.getCollect(userId)
-//            isCollect.value = when (result) {
-//                is Result.Success -> {
-//                    _error.value = null
-//                    result.data.any { it.objectId == id }
-//                }
-//                is Result.Fail -> {
-//                    _error.value = result.error
-//                    null
-//                }
-//                is Result.Error -> {
-//                    _error.value = result.exception.toString()
-//                    null
-//                }
-//                else -> {
-//                    null
-//                }
-//            }
+            Log.d("Ming","getRatingInfo: $userId")
+            val result = repository.getRatingByUser(userId)
+            rtgInfo.value = when (result) {
+                is Result.Success -> {
+                    Log.d("Ming","user rating: ${result.data}")
+                    _error.value = null
+                    result.data
+                }
+                is Result.Fail -> {
+                    Log.d("Ming","user rating: ${result.error}")
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    Log.d("Ming","user rating: ${result.exception}")
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
         }
     }
 
-    fun getRatingInfo(userId:String){
-        coroutineScope.launch {
-//            val result = repository.getCollect(userId)
-//            isCollect.value = when (result) {
-//                is Result.Success -> {
-//                    _error.value = null
-//                    result.data.any { it.objectId == id }
-//                }
-//                is Result.Fail -> {
-//                    _error.value = result.error
-//                    null
-//                }
-//                is Result.Error -> {
-//                    _error.value = result.exception.toString()
-//                    null
-//                }
-//                else -> {
-//                    null
-//                }
-//            }
+    fun setImgs(rtgs: List<RatingInfo>?): List<String> {
+        var list = listOf<String>()
+        rtgs?.forEach {
+            if (list.size > 10) return@forEach
+            list += it.images as List<String>
         }
+        return list
     }
 
 }

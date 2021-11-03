@@ -36,7 +36,8 @@
         <argument
             android:name="id"
             app:argType="string"
-            android:defaultValue="com.mingyuwu.barurside.data.mockdata.UserData.user.user[0].id"/>
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
     <fragment
         android:id="@+id/activityFragment"
@@ -90,7 +91,7 @@
         <argument
             android:name="id"
             app:nullable="true"
-            app:argType="string" />
+            app:argType="string[]" />
         <argument
             android:name="filterParameter"
             app:nullable="true"

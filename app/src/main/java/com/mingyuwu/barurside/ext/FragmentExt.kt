@@ -15,11 +15,12 @@ fun Fragment.getVmFactory(): ViewModelFactory {
 }
 
 fun Fragment.getVmFactory(
+    id: List<String>?,
     theme: Theme,
     filterParameter: FilterParameter?
 ): DiscoverDetailViewModelFactory {
     val repository = (requireContext().applicationContext as BarUrSideApplication).repository
-    return DiscoverDetailViewModelFactory(repository, theme, filterParameter)
+    return DiscoverDetailViewModelFactory(repository, id, theme, filterParameter)
 }
 
 fun Fragment.getVmFactory(isVenue: Boolean): CollectPageViewModelFactory {

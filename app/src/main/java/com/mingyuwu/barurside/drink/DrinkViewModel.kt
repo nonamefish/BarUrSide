@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.drink
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,7 +41,7 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
     }
 
     fun getRatingResult(id: String, isVenue: Boolean) {
-        rtgInfo = repository.getRating(id, isVenue)
+        rtgInfo = repository.getRatingByObject(id, isVenue)
     }
 
     fun getVenueResult(id: String) {

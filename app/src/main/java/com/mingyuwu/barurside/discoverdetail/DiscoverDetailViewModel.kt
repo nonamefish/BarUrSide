@@ -20,6 +20,7 @@ import kotlin.math.cos
 
 class DiscoverDetailViewModel(
     val repository: BarUrSideRepository,
+    val id: List<String>?,
     val theme: Theme,
     val filterParameter: FilterParameter?
 ) :
@@ -51,27 +52,34 @@ class DiscoverDetailViewModel(
         coroutineScope.launch {
 
             when (theme) {
-                Theme.RECENT_ACTIVITY -> {
-                    result = repository.getActivityResult()
+                Theme.NOTIFICATION -> {
+                    _detailData.value = NotificationData.notification.notification
                 }
-                Theme.USER_ACTIVITY -> {
-
-                    _detailData.value = ActivityData.activity.activity
-                }
+                // Map Fragment
                 Theme.MAP_FILTER -> {
                     if (filterParameter != null) {
                         result = repository.getVenueByFilter(filterParameter)
                     }
                 }
-                Theme.USER_FRIEND -> {
-                    _detailData.value = UserData.user.user
-                }
-                Theme.NOTIFICATION -> {
-                    _detailData.value = NotificationData.notification.notification
-                }
+                // Venue Info
                 Theme.VENUE_MENU -> {
                     _detailData.value = DrinkData.drink.drink
                 }
+                // Profile Page
+                Theme.USER_FRIEND -> {
+                    id?.let{
+                        result = repository.getFriend(id)
+                    }
+                }
+                Theme.RECENT_ACTIVITY -> {
+                    result = repository.getActivityResult()
+                }
+                Theme.USER_ACTIVITY -> {
+                    id?.get(0)?.let{
+                        result = repository.getActivityByUser(id[0])
+                    }
+                }
+                // Discover Page
                 Theme.AROUND_VENUE -> {
                     result = if (mLocation.value != null) {
                         val range = getRectangleRange(mLocation.value!!, 1.0)
@@ -94,22 +102,24 @@ class DiscoverDetailViewModel(
                 }
             }
 
-            _detailData.value = when (result) {
-                is Result.Success -> {
-                    Log.d("Ming", "result:  ${(result as Result.Success<Any>).data}")
-                    _error.value = null
-                    (result as Result.Success<Any>).data as List<Any>
-                }
-                is Result.Fail -> {
-                    _error.value = (result as Result.Fail).error
-                    null
-                }
-                is Result.Error -> {
-                    _error.value = (result as Result.Error).exception.toString()
-                    null
-                }
-                else -> {
-                    null
+            if (::result.isInitialized) {
+                _detailData.value = when (result) {
+                    is Result.Success -> {
+                        Log.d("Ming", "result:  ${(result as Result.Success<Any>).data}")
+                        _error.value = null
+                        (result as Result.Success<Any>).data as List<Any>
+                    }
+                    is Result.Fail -> {
+                        _error.value = (result as Result.Fail).error
+                        null
+                    }
+                    is Result.Error -> {
+                        _error.value = (result as Result.Error).exception.toString()
+                        null
+                    }
+                    else -> {
+                        null
+                    }
                 }
             }
         }

@@ -97,13 +97,13 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         return liveData
     }
 
-    override suspend fun getFriend(user: User): Result<List<User>> =
+    override suspend fun getFriend(frds: List<String>): Result<List<User>> =
         suspendCoroutine { continuation ->
             val list = mutableListOf<User>()
 
             FirebaseFirestore.getInstance()
                 .collection(PATH_USER)
-                .whereIn("id", user.friends!!.map { it.id })
+                .whereIn("id", frds)
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -240,7 +240,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         }
 
 
-    override fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>> {
+    override fun getRatingByObject(
+        id: String,
+        isVenue: Boolean
+    ): MutableLiveData<List<RatingInfo>> {
         val liveData = MutableLiveData<List<RatingInfo>>()
 
         // get rating data
@@ -310,6 +313,87 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
         return liveData
     }
+
+    override suspend fun getRatingByUser(userId: String): Result<List<RatingInfo>> =
+        suspendCoroutine { continuation ->
+
+            FirebaseFirestore.getInstance()
+                .collection(PATH_RATING)
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener { rtgTask ->
+                    if (rtgTask.isSuccessful) {
+                        val list = mutableListOf<RatingInfo>()
+
+                        for (document in rtgTask.result!!) {
+                            val rating = document.toObject(RatingInfo::class.java)
+
+                            rating.postTimestamp = rating.postDate?.let { Timestamp(it.time) }
+
+                            // get object info : venue
+                            when (rating.isVenue) {
+                                true -> {
+                                    FirebaseFirestore.getInstance()
+                                        .collection(PATH_VENUE)
+                                        .whereEqualTo("id", rating.objectId)
+                                        .get()
+                                        .addOnCompleteListener { task ->
+                                            for (document in task.result!!) {
+                                                val venue = document.toObject(Venue::class.java)
+                                                rating.objectName = venue.name
+                                                rating.objectImg = venue.images?.get(0) ?: ""
+                                            }
+                                            list.add(rating)
+
+                                            if (document == rtgTask.result!!.last()) {
+                                                Log.d("Ming", "getRatingByUser list: $list")
+                                                continuation.resume(Result.Success(list))
+                                            }
+                                        }
+                                }
+                                // get object info : drink
+                                false -> {
+                                    FirebaseFirestore.getInstance()
+                                        .collection(PATH_DRINK)
+                                        .whereEqualTo("id", rating.objectId)
+                                        .get()
+                                        .addOnCompleteListener { task ->
+                                            for (document in task.result!!) {
+                                                val drink = document.toObject(Drink::class.java)
+                                                rating.objectName = drink.name
+                                                rating.objectImg = drink.images?.get(0) ?: ""
+                                            }
+                                            list.add(rating)
+
+                                            if (document == rtgTask.result!!.last()) {
+                                                Log.d("Ming", "getRatingByUser list: $list")
+                                                continuation.resume(Result.Success(list))
+                                            }
+
+                                        }
+                                }
+                            }
+
+                        }
+                    } else {
+                        rtgTask.exception?.let {
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
 
     override suspend fun postRating(rating: Rating): Result<Boolean> =
         suspendCoroutine { continuation ->
@@ -998,6 +1082,43 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         for (document in activityTask.result!!) {
                             val activity = document.toObject(Activity::class.java)
                             list.add(activity)
+                        }
+                        continuation.resume(Result.Success(list))
+                    } else {
+                        activityTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun getActivityByUser(userId: String): Result<List<Activity>> =
+        suspendCoroutine { continuation ->
+            val list = mutableListOf<Activity>()
+
+            // filter activity
+            FirebaseFirestore.getInstance()
+                .collection(PATH_ACTIVITY)
+//                .whereArrayContains("bookers", mapOf("id" to userId, "date" to null))
+                .get()
+                .addOnCompleteListener { activityTask ->
+                    Log.d("Ming", "activityTask: ${activityTask.result.documents}")
+                    if (activityTask.isSuccessful) {
+                        for (document in activityTask.result!!) {
+                            val activity = document.toObject(Activity::class.java)
+                            activity.bookers?.let{ bookers->
+                                if(bookers.any { it.id == userId }){
+                                    list.add(activity)
+                                }
+                            }
                         }
                         continuation.resume(Result.Success(list))
                     } else {

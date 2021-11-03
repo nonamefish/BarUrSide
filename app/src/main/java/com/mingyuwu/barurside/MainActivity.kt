@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding.imgNotification.setOnClickListener {
             navController.navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.NOTIFICATION,"",null // TODO: set User ID
+                    Theme.NOTIFICATION,null,null // TODO: set User ID
                 )
             )
         }

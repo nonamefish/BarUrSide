@@ -1,12 +1,10 @@
 package com.mingyuwu.barurside.venue
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.Collect
 import com.mingyuwu.barurside.data.Venue
-import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
@@ -46,7 +44,7 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
     }
 
     private fun getRatingResult(id: String, isVenue: Boolean) {
-        rtgInfo = repository.getRating(id, isVenue)
+        rtgInfo = repository.getRatingByObject(id, isVenue)
     }
 
     private fun getCollect(userId: String) {

@@ -7,15 +7,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.data.Rating
+import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.databinding.ItemUserRatingBinding
 
 class UserRatingAdapter() :
-    ListAdapter<Rating?, UserRatingAdapter.UserRatingViewHolder>(DiffCallback) {
+    ListAdapter<RatingInfo?, UserRatingAdapter.UserRatingViewHolder>(DiffCallback) {
 
     class UserRatingViewHolder(private var binding: ItemUserRatingBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(rating: Rating?) {
+        fun bind(rating: RatingInfo?) {
             binding.rating = rating
             binding.img=""
             binding.title="還沒串起來"
@@ -25,12 +26,12 @@ class UserRatingAdapter() :
     }
 
     // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
-    companion object DiffCallback : DiffUtil.ItemCallback<Rating?>() {
-        override fun areItemsTheSame(oldItem: Rating, newItem: Rating): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<RatingInfo?>() {
+        override fun areItemsTheSame(oldItem: RatingInfo, newItem: RatingInfo): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: Rating, newItem: Rating): Boolean {
+        override fun areContentsTheSame(oldItem: RatingInfo, newItem: RatingInfo): Boolean {
             return oldItem.id == newItem.id
         }
     }

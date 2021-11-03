@@ -8,7 +8,7 @@ import com.mingyuwu.barurside.filter.FilterParameter
 interface BarUrSideRepository {
     fun getVenue(id: String): MutableLiveData<Venue>
 
-    fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>>
+    fun getRatingByObject(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>>
 
     fun getDrink(id: String): MutableLiveData<Drink>
 
@@ -23,7 +23,7 @@ interface BarUrSideRepository {
         localImage: String
     ): Result<String>
 
-    suspend fun getFriend(user: User): Result<List<User>>
+    suspend fun getFriend(frds: List<String>): Result<List<User>>
 
     suspend fun getMenu(venueId: String): Result<List<Drink>>
 
@@ -55,4 +55,6 @@ interface BarUrSideRepository {
     suspend fun removeCollect(id: String, userId: String): Result<Boolean>
     suspend fun getVenueByIds(ids: List<String>): Result<List<Venue>>
     suspend fun getDrinksByIds(ids: List<String>): Result<List<Drink>>
+    suspend fun getRatingByUser(userId: String): Result<List<RatingInfo>>
+    suspend fun getActivityByUser(userId: String): Result<List<Activity>>
 }

@@ -28,7 +28,6 @@ class ActivityPageFragment() : Fragment() {
     private lateinit var binding: FragmentActivityPageBinding
     private lateinit var adapter: ListAdapter<Any, RecyclerView.ViewHolder>
 
-
     private val viewModel by viewModels<ActivityPageViewModel> {
         getVmFactory(
             requireArguments().get("type") as ActivityTypeFilter
@@ -73,7 +72,9 @@ class ActivityPageFragment() : Fragment() {
 
         // assign value to recyclerView
         viewModel.activityData.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
+            it?.let{
+                adapter.submitList(it)
+            }
         }
         )
 

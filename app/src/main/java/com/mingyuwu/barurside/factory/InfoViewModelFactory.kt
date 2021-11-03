@@ -8,6 +8,7 @@ import com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel
 import com.mingyuwu.barurside.drink.DrinkViewModel
 import com.mingyuwu.barurside.editrating.EditRatingViewModel
 import com.mingyuwu.barurside.filter.FilterParameter
+import com.mingyuwu.barurside.profile.ProfileViewModel
 import com.mingyuwu.barurside.venue.VenueViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -23,6 +24,8 @@ class InfoViewModelFactory(
                     VenueViewModel(repository, id)
                 isAssignableFrom(DrinkViewModel::class.java) ->
                     DrinkViewModel(repository, id)
+                isAssignableFrom(ProfileViewModel::class.java) ->
+                    ProfileViewModel(repository, id)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
