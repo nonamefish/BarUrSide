@@ -31,8 +31,6 @@ class ViewModelFactory constructor(
                     MapViewModel(repository)
                 isAssignableFrom(DiscoverViewModel::class.java) ->
                     DiscoverViewModel(repository)
-                isAssignableFrom(ActivityDetailViewModel::class.java) ->
-                    ActivityDetailViewModel(repository)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

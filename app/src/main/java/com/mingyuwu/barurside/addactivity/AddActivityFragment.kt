@@ -28,7 +28,8 @@ import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 
 
 const val AUTOCOMPLETE_REQUEST_CODE = 101
@@ -109,7 +110,7 @@ class AddActivityFragment : Fragment() {
 
         DatePickerDialog(
             binding.root.context,
-            R.style.ThemeOverlay_App_DatePicker,
+            R.style.ThemeOverlay_MaterialComponents_TimePicker,
             dateListener,
             calender.get(Calendar.YEAR),
             calender.get(Calendar.MONTH),
@@ -124,14 +125,15 @@ class AddActivityFragment : Fragment() {
             format(" a HH:mm", datetime)
         }
 
-        TimePickerDialog(
+        val timePicker = TimePickerDialog(
             binding.root.context,
-            R.style.ThemeOverlay_App_DatePicker,
+            R.style.ThemeOverlay_MaterialComponents_TimePicker,
             timeListener,
             calender.get(Calendar.HOUR_OF_DAY),
             calender.get(Calendar.MINUTE),
-            true
-        ).show()
+            false)
+
+        timePicker.show()
     }
 
     private fun format(format: String, datetime: MutableLiveData<String>) {

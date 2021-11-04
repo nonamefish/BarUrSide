@@ -5,9 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.Activity
-import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.data.Result
-import com.mingyuwu.barurside.data.mockdata.*
+import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
@@ -18,12 +17,20 @@ import kotlinx.coroutines.launch
 
 class ActivityDetailViewModel(
     private val repository: BarUrSideRepository,
+    val activity: Activity
 ) : ViewModel() {
 
     private val userId = UserManager.user.value!!.id
+    val isBook = activity.bookers!!.any { it.id == userId }
 
     // navigate to activity detail
     val navigateToDetail = MutableLiveData<Any?>()
+
+    // error: The internal MutableLiveData that stores the error of the most recent request
+    private var _sponsor = MutableLiveData<User>()
+
+    val sponsor: LiveData<User?>
+        get() = _sponsor
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
@@ -38,17 +45,25 @@ class ActivityDetailViewModel(
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
 
+    init{
+        getSponsorData()
+    }
 
-    fun modifyActivity(activityId: String,useId: String) {
+    fun modifyActivity() {
         coroutineScope.launch {
-            repository.modifyActivity(activityId,userId)
+            repository.modifyActivity(activity.id, userId)
+            navigateToDetail.value = true
         }
     }
 
-    fun bookActivity(activityId: String,useId: String) {
+    fun bookActivity() {
         coroutineScope.launch {
-            repository.modifyActivity(activityId,userId)
+            repository.bookActivity(activity.id, userId)
+            navigateToDetail.value = true
         }
     }
 
+    private fun getSponsorData(){
+        _sponsor = repository.getUser(activity.sponsor)
+    }
 }
