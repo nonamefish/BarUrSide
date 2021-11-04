@@ -106,6 +106,10 @@
         android:id="@+id/activityPageFragment"
         android:name="com.mingyuwu.barurside.activity.ActivityPageFragment"
         android:label="ActivityPageFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.mingyuwu.barurside.login.LoginFragment"
+        android:label="LoginFragment" />
 
     <dialog
         android:id="@+id/activityDetailDialog"
@@ -157,5 +161,9 @@
     <action
         android:id="@+id/navigate_to_profile_fragment"
         app:destination="@id/profileFragment"></action>
+
+    <action
+        android:id="@+id/navigate_to_login_fragment"
+        app:destination="@id/loginFragment"></action>
 
 </navigation>
