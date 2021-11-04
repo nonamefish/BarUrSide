@@ -64,6 +64,7 @@ class ActivityDetailViewModel(
     }
 
     private fun getSponsorData(){
+        Log.d("Ming","sponsor: ${activity.sponsor}")
         _sponsor = repository.getUser(activity.sponsor)
     }
 }

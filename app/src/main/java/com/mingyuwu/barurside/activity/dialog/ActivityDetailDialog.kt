@@ -34,8 +34,6 @@ class ActivityDetailDialog: DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val viewModel = viewModel
-
         binding = DataBindingUtil.inflate(
             inflater, R.layout.dialog_activity_detail, container, false
         )

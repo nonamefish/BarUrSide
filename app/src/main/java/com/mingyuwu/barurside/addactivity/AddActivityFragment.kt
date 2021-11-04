@@ -2,6 +2,7 @@ package com.mingyuwu.barurside.addactivity
 
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
@@ -22,14 +23,16 @@ import com.google.android.libraries.places.api.Places
 import com.mingyuwu.barurside.R
 import com.google.android.libraries.places.widget.Autocomplete
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.lifecycle.Observer
 import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
 
 
 const val AUTOCOMPLETE_REQUEST_CODE = 101
@@ -75,7 +78,11 @@ class AddActivityFragment : Fragment() {
 
         // confirm button
         binding.btnAddActovityConfirm.setOnClickListener {
-            viewModel.postActivity()
+            if(viewModel.checkValue()){
+                viewModel.postActivity()
+            }else{
+                showRatingUncompleted()
+            }
         }
 
         // cancel button
@@ -161,5 +168,28 @@ class AddActivityFragment : Fragment() {
                 Log.d("Ming","RESULT_CANCELED")
             }
         }
+    }
+
+    private fun showRatingUncompleted() {
+        // set alert dialog view
+        val alertDialog = AlertDialog.Builder(binding.root.context)
+        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
+        alertDialog.setView(mView)
+        val dialog = alertDialog.create()
+
+        // set dialog content
+        val txtDialog = mView!!.findViewById<TextView>(R.id.dialog_content)
+        txtDialog.text = "活動資訊填寫不完整"
+
+        // set button click listener
+        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm) //連結關閉視窗的Button
+        btDialog.setOnClickListener { dialog.dismiss() }
+
+        dialog.show()
+
+        // set border as transparent
+        val layoutParameter = dialog.window?.attributes
+        layoutParameter?.width = 800
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 }

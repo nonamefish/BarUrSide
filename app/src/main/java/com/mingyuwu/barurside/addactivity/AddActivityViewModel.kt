@@ -72,4 +72,17 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
     fun onLeft() {
         navigateToDetail.value = null
     }
+
+    fun checkValue(): Boolean {
+        if (name.value == null ||
+            startTime.value == null ||
+            endTime.value == null ||
+            address.value == null ||
+            limit.value == null ||
+            mainDrink.value == null
+        ) {
+            return false
+        }
+        return true
+    }
 }
