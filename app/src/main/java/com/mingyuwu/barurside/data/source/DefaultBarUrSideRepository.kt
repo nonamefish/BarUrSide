@@ -100,7 +100,7 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getHighRateDrinkResult()
     }
 
-    override suspend fun getActivityResult(): Result<List<Activity>> {
+    override fun getActivityResult(): MutableLiveData<List<Activity>> {
         return remoteDataSource.getActivityResult()
     }
 
@@ -134,5 +134,25 @@ class DefaultBarUrSideRepository(
 
     override suspend fun getActivityByUser(userId: String): Result<List<Activity>> {
         return remoteDataSource.getActivityByUser(userId)
+    }
+
+    override suspend fun getRatingByRecommend(): Result<List<RatingInfo>> {
+        return remoteDataSource.getRatingByRecommend()
+    }
+
+    override suspend fun getRatingByFriends(userId: String): Result<List<RatingInfo>> {
+        return remoteDataSource.getRatingByFriends(userId)
+    }
+
+    override suspend fun postActivity(activity: Activity): Result<Boolean> {
+        return remoteDataSource.postActivity(activity)
+    }
+
+    override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> {
+        return remoteDataSource.modifyActivity(activityId,userId)
+    }
+
+    override suspend fun bookActivity(activityId: String, userId: String): Result<Boolean> {
+        return remoteDataSource.bookActivity(activityId, userId)
     }
 }

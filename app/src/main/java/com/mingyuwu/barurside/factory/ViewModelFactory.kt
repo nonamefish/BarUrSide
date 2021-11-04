@@ -3,6 +3,7 @@ package com.mingyuwu.barurside.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mingyuwu.barurside.MainViewModel
+import com.mingyuwu.barurside.activity.dialog.ActivityDetailViewModel
 import com.mingyuwu.barurside.addactivity.AddActivityViewModel
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.discover.DiscoverViewModel
@@ -23,13 +24,15 @@ class ViewModelFactory constructor(
                 isAssignableFrom(MainViewModel::class.java) ->
                     MainViewModel()
                 isAssignableFrom(AddActivityViewModel::class.java) ->
-                    AddActivityViewModel()
+                    AddActivityViewModel(repository)
                 isAssignableFrom(FilterViewModel::class.java) ->
                     FilterViewModel()
                 isAssignableFrom(MapViewModel::class.java) ->
                     MapViewModel(repository)
                 isAssignableFrom(DiscoverViewModel::class.java) ->
                     DiscoverViewModel(repository)
+                isAssignableFrom(ActivityDetailViewModel::class.java) ->
+                    ActivityDetailViewModel(repository)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

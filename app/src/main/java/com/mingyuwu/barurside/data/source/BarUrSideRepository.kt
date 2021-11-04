@@ -48,7 +48,7 @@ interface BarUrSideRepository {
     suspend fun getHotDrinkResult(): Result<List<Drink>>
     suspend fun getHighRateVenueResult(): Result<List<Venue>>
     suspend fun getHighRateDrinkResult(): Result<List<Drink>>
-    suspend fun getActivityResult() : Result<List<Activity>>
+    fun getActivityResult() : MutableLiveData<List<Activity>>
     suspend fun getDrinkBySearch(search: String): Result<List<Drink>>
     suspend fun postCollect(collect: Collect): Result<Boolean>
     suspend fun getCollect(userId: String): Result<List<Collect>>
@@ -57,4 +57,9 @@ interface BarUrSideRepository {
     suspend fun getDrinksByIds(ids: List<String>): Result<List<Drink>>
     suspend fun getRatingByUser(userId: String): Result<List<RatingInfo>>
     suspend fun getActivityByUser(userId: String): Result<List<Activity>>
+    suspend fun getRatingByRecommend(): Result<List<RatingInfo>>
+    suspend fun getRatingByFriends(userId: String): Result<List<RatingInfo>>
+    suspend fun postActivity(activity: Activity): Result<Boolean>
+    suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean>
+    suspend fun bookActivity(activityId: String, userId: String): Result<Boolean>
 }

@@ -7,7 +7,7 @@ import java.util.*
 
 @Parcelize
 data class Activity(
-    val id: String= "",
+    var id: String= "",
     val name: String= "",
     val startTime: Date? = null,
     val endTime: Date? = null,

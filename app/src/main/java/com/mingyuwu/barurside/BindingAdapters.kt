@@ -232,3 +232,10 @@ fun checkTime(open: String, close: String): Boolean {
 
     return current.isAfter(open) && current.isBefore(close)
 }
+
+@BindingAdapter("activityTime")
+fun bindTimeActivityTime(textView: TextView, activityTime: Timestamp) {
+    activityTime?.let {
+        textView.text = DateFormat.format("yyyy/MM/dd a hh:mm", activityTime).toString()
+    }
+}

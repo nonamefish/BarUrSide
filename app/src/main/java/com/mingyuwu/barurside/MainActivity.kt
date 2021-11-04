@@ -6,6 +6,9 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.google.firebase.firestore.FirebaseFirestore
+import com.mingyuwu.barurside.data.Activity
+import com.mingyuwu.barurside.data.mockdata.ActivityData
 import com.mingyuwu.barurside.databinding.ActivityMainBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
@@ -39,15 +42,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-//    fun addData() {
-//        val articles = FirebaseFirestore.getInstance()
-//            .collection("rating")
-//
-//        for( dt in  RatingData.rating.rating){
-//            val document = articles.document()
-//            val data = Rating.toHashMap(dt)
-//            document.set(data)
-//        }
-//    }
+    fun addData() {
+        val articles = FirebaseFirestore.getInstance()
+            .collection("activity")
+
+        for( dt in  ActivityData.activity.activity){
+            val document = articles.document()
+            val data = Activity.toHashMap(dt)
+            document.set(data)
+        }
+    }
 
 }

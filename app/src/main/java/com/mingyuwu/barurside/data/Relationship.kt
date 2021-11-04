@@ -10,7 +10,6 @@ class Relationship(
     val id: String = "",
     val date: Date? = null
 ) : Parcelable{
-    val dateTimestamp = date?.let { Timestamp(it.time) }
     companion object{
         fun toHashMap(dt : Relationship) = hashMapOf(
             "id" to dt.id,

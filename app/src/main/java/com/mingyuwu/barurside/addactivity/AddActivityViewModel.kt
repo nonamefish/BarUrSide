@@ -5,20 +5,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.Activity
+import com.mingyuwu.barurside.data.Relationship
 import com.mingyuwu.barurside.data.Result
+import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import com.mingyuwu.barurside.login.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 
-class AddActivityViewModel : ViewModel() {
+class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewModel() {
 
+    // activity information
     val name = MutableLiveData<String>()
     val address = MutableLiveData<String>()
     val limit = MutableLiveData<String>()
     val mainDrink = MutableLiveData<String>()
     val startTime = MutableLiveData<String>()
     val endTime = MutableLiveData<String>()
+    val userId = UserManager.user.value!!.id
+
+    // navigate to home
+    val navigateToDetail = MutableLiveData<Boolean?>()
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
@@ -33,15 +44,32 @@ class AddActivityViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
 
-    fun convertStringToTimestamp(time: String){
-
+    private fun convertStringToTimestamp(time: String): Timestamp {
+        val dateFormat = SimpleDateFormat("yyyy/MM/dd  a HH:mm", Locale.TAIWAN)
+        val parsedDate = dateFormat.parse(time)
+        return Timestamp(parsedDate.time)
     }
 
-    fun postActivity(){
+
+    fun postActivity() {
         coroutineScope.launch {
-            val activity = Activity()
+            val activity = Activity(
+                "",
+                name.value!!,
+                convertStringToTimestamp(startTime.value!!),
+                convertStringToTimestamp(endTime.value!!),
+                address.value!!,
+                limit.value!!.toLong(),
+                mainDrink.value!!,
+                userId,
+                listOf(Relationship(userId, Timestamp(System.currentTimeMillis())))
+            )
+            repository.postActivity(activity)
+            navigateToDetail.value = true
         }
     }
 
-
+    fun onLeft() {
+        navigateToDetail.value = null
+    }
 }

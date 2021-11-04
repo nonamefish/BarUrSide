@@ -26,8 +26,11 @@
     <string name="btm_nvgt_collect">Collect</string>
     <string name="btm_nvgt_profile">Profile</string>
 
-<!--    Profile Page-->
+    <!--    Profile Page-->
     <string name="profile_frds_cnt">%d位好友</string>
+
+    <!--    Activity Detail Page-->
+    <string name="activity_time_range">%s至%s</string>
 
     <string name="fail_nothing">Nothing</string>
 

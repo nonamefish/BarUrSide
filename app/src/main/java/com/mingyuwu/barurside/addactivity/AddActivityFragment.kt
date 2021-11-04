@@ -20,16 +20,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 import com.google.android.libraries.places.api.Places
 import com.mingyuwu.barurside.R
-
 import com.google.android.libraries.places.widget.Autocomplete
-
 import android.content.Intent
+import androidx.lifecycle.Observer
 import android.util.Log
 import com.google.android.gms.common.api.Status
-
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+
 
 
 const val AUTOCOMPLETE_REQUEST_CODE = 101
@@ -63,7 +62,6 @@ class AddActivityFragment : Fragment() {
             .setCountries(listOf("TW"))
             .build(binding.root.context)
 
-
         // activity start time
         binding.addActivityStart.setOnClickListener {
             datePicker(viewModel.startTime)
@@ -76,8 +74,7 @@ class AddActivityFragment : Fragment() {
 
         // confirm button
         binding.btnAddActovityConfirm.setOnClickListener {
-            findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
-
+            viewModel.postActivity()
         }
 
         // cancel button
@@ -90,6 +87,14 @@ class AddActivityFragment : Fragment() {
             //start activity result
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
         }
+
+        // after post activity then navigate to activity fragment
+        viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
+                viewModel.onLeft()
+            }
+        })
 
         return binding.root
     }
@@ -132,6 +137,7 @@ class AddActivityFragment : Fragment() {
     private fun format(format: String, datetime: MutableLiveData<String>) {
         val time = SimpleDateFormat(format, Locale.TAIWAN)
         datetime.value = "${datetime.value} ${time.format(calender.time)}"
+        Log.d("Ming",datetime.value.toString())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

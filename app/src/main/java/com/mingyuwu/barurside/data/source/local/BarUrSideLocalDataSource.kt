@@ -49,7 +49,7 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getActivityResult(): Result<List<Activity>> {
+    override fun getActivityResult(): MutableLiveData<List<Activity>> {
         TODO("Not yet implemented")
     }
 
@@ -131,6 +131,26 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     }
 
     override suspend fun getActivityByUser(userId: String): Result<List<Activity>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getRatingByRecommend(): Result<List<RatingInfo>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getRatingByFriends(userId: String): Result<List<RatingInfo>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postActivity(activity: Activity): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun bookActivity(activityId: String, userId: String): Result<Boolean> {
         TODO("Not yet implemented")
     }
 }

@@ -109,7 +109,7 @@
 
     <dialog
         android:id="@+id/activityDetailDialog"
-        android:name="com.mingyuwu.barurside.activity.ActivityDetailDialog"
+        android:name="com.mingyuwu.barurside.activity.dialog.ActivityDetailDialog"
         android:label="ActivityDetailDialog">
         <argument
             android:name="activity"

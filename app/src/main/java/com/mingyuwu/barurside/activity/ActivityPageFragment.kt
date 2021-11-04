@@ -65,18 +65,13 @@ class ActivityPageFragment() : Fragment() {
             }
         }
 
-        // set add activity on click listener
-        binding.btnAddActivity.setOnClickListener {
-            findNavController().navigate(MainNavigationDirections.navigateToAddActivityFragment())
-        }
 
         // assign value to recyclerView
-        viewModel.activityData.observe(viewLifecycleOwner, Observer {
+        viewModel.rtgData.observe(viewLifecycleOwner, Observer {
             it?.let{
                 adapter.submitList(it)
             }
-        }
-        )
+        })
 
         // navigate to detail fragment
         viewModel.navigateToDetail.observe(viewLifecycleOwner,Observer{
@@ -86,6 +81,12 @@ class ActivityPageFragment() : Fragment() {
                 }
             }
         })
+
+        // set add activity on click listener
+        binding.btnAddActivity.setOnClickListener {
+            findNavController().navigate(MainNavigationDirections.navigateToAddActivityFragment())
+        }
+
 
         return binding.root
     }

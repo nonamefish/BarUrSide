@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="activity"
             type="com.mingyuwu.barurside.data.Activity" />
@@ -16,9 +17,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:background="@drawable/drawable_round_edge"
-        android:backgroundTint="@color/white"
-        android:layout_gravity="center">
+        android:backgroundTint="@color/white">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="350dp"
@@ -29,43 +30,75 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
             <ImageView
                 android:id="@+id/img_add_activity_time"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/ic_baseline_access_time_24"
                 android:backgroundTint="@color/black_3f3a3a"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_detail_endtime"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/txt_time_from" />
 
             <TextView
                 android:id="@+id/activity_detail_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="2021/10/1 下午 1:00 至 2021/10/1 下午 3:00"
-                app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_time"
+                app:activityTime="@{activity.startTimestamp}"
                 app:layout_constraintStart_toEndOf="@+id/img_add_activity_time"
-                app:layout_constraintTop_toTopOf="@+id/img_add_activity_time"
-                tools:text="2021/10/1 下午 1:00 至 2021/10/1 下午 3:00" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_time_from"
+                tools:text="2021/10/1 下午 1:00" />
+
+            <TextView
+                android:id="@+id/activity_time_dash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/activity_detail_time"
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_time"
+                android:text="to" />
+
+            <TextView
+                android:id="@+id/txt_time_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/activity_detail_time"
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_name"
+                android:text="from" />
+
+            <TextView
+                android:id="@+id/activity_detail_endtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@+id/img_add_activity_time"
+                app:layout_constraintTop_toBottomOf="@+id/activity_time_dash"
+                app:activityTime="@{activity.endTimestamp}"
+                tools:text="2021/10/1 下午 3:00" />
 
             <TextView
                 android:id="@+id/activity_detail_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="@{activity.name}"
                 android:textColor="@color/black_3f3a3a"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_add_activity_time"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="酒中豪傑 Crazy Friday" />
 
             <ImageView
@@ -77,7 +110,7 @@
                 android:background="@drawable/ic_baseline_location_on_24"
                 android:backgroundTint="@color/black_3f3a3a"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_detail_name" />
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_endtime" />
 
             <TextView
                 android:id="@+id/activity_detail_address"

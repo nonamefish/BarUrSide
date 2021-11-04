@@ -4,10 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.mockdata.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,9 +21,12 @@ class ActivityPageViewModel(
     val type: ActivityTypeFilter
 ) : ViewModel() {
 
-    private val _activityData = MutableLiveData<List<Any>>()
-    val activityData: MutableLiveData<List<Any>> // why cannot use LiveData<List<Any>>
-        get() = _activityData
+
+    private val userId = UserManager.user.value!!.id
+
+    private var _rtgData = MutableLiveData<List<Any>>()
+    val rtgData : LiveData<List<Any>>
+        get() = _rtgData
 
     // navigate to activity detail
     val navigateToDetail = MutableLiveData<Any?>()
@@ -42,32 +47,58 @@ class ActivityPageViewModel(
     init {
         when (type) {
             ActivityTypeFilter.RECOMMEND -> {
-                _activityData.value = RatingInfoData.rating.rating
+                getRatingByRecommend()
             }
             ActivityTypeFilter.ACTIVITY -> {
                 getRecentActivity()
             }
             ActivityTypeFilter.FOLLOW -> {
-                _activityData.value = RatingInfoData.rating.rating
+                getRatingByFriend(userId)
             }
         }
     }
 
     private fun getRecentActivity() {
+        _rtgData = repository.getActivityResult() as MutableLiveData<List<Any>>
+    }
+
+    private fun getRatingByRecommend() {
         coroutineScope.launch {
-            val result = repository.getActivityResult()
-            activityData.value = when (result) {
+            val result = repository.getRatingByRecommend()
+            _rtgData.value = when (result) {
                 is Result.Success -> {
-                    Log.d("Ming", "result:  ${(result as Result.Success<Any>).data}")
                     _error.value = null
-                    (result as Result.Success<Any>).data as List<Any>
+                    result.data
                 }
                 is Result.Fail -> {
-                    _error.value = (result as Result.Fail).error
+                    _error.value = result.error
                     null
                 }
                 is Result.Error -> {
-                    _error.value = (result as Result.Error).exception.toString()
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+        }
+    }
+
+    private fun getRatingByFriend(userId: String) {
+        coroutineScope.launch {
+            val result = repository.getRatingByFriends(userId)
+            _rtgData.value = when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    result.data
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
                     null
                 }
                 else -> {

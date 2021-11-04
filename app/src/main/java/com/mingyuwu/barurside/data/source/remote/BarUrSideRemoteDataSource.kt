@@ -55,6 +55,33 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         return liveData
     }
 
+    override fun getActivityResult(): MutableLiveData<List<Activity>> {
+
+        val liveData = MutableLiveData<List<Activity>>()
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_ACTIVITY)
+            .whereGreaterThan("endTime", Timestamp(System.currentTimeMillis()))
+            .orderBy("endTime")
+            .addSnapshotListener { snapshot, exception ->
+
+                exception?.let {
+                    Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+                val list = mutableListOf<Activity>()
+                for (document in snapshot!!) {
+                    val activity = document.toObject(Activity::class.java)
+                    activity.startTimestamp = activity.startTime?.let { Timestamp(it.time) }
+                    activity.endTimestamp = activity.endTime?.let { Timestamp(it.time) }
+                    list.add(activity)
+                    Log.d("Ming", "getActivityResult list $list")
+                }
+
+                liveData.value = list
+            }
+        return liveData
+    }
+
     override fun getDrink(id: String): MutableLiveData<Drink> {
         val liveData = MutableLiveData<Drink>()
 
@@ -1066,39 +1093,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-    override suspend fun getActivityResult(): Result<List<Activity>> =
-        suspendCoroutine { continuation ->
 
-            val list = mutableListOf<Activity>()
-
-            // filter activity
-            FirebaseFirestore.getInstance()
-                .collection(PATH_ACTIVITY)
-                .orderBy("startTime")
-                .get()
-                .addOnCompleteListener { activityTask ->
-
-                    if (activityTask.isSuccessful) {
-                        for (document in activityTask.result!!) {
-                            val activity = document.toObject(Activity::class.java)
-                            list.add(activity)
-                        }
-                        continuation.resume(Result.Success(list))
-                    } else {
-                        activityTask.exception?.let {
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
-                        }
-                        continuation.resume(
-                            Result.Fail(
-                                BarUrSideApplication.instance.getString(
-                                    R.string.fail_nothing
-                                )
-                            )
-                        )
-                    }
-                }
-        }
 
     override suspend fun getActivityByUser(userId: String): Result<List<Activity>> =
         suspendCoroutine { continuation ->
@@ -1114,8 +1109,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     if (activityTask.isSuccessful) {
                         for (document in activityTask.result!!) {
                             val activity = document.toObject(Activity::class.java)
-                            activity.bookers?.let{ bookers->
-                                if(bookers.any { it.id == userId }){
+                            activity.bookers?.let { bookers ->
+                                if (bookers.any { it.id == userId }) {
                                     list.add(activity)
                                 }
                             }
@@ -1137,9 +1132,211 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
+    override suspend fun getRatingByRecommend(): Result<List<RatingInfo>> =
+        suspendCoroutine { continuation ->
+            val list = mutableListOf<RatingInfo>()
+            val firestore = FirebaseFirestore.getInstance()
+            var check = 0
+
+            // get recommend user data
+            firestore.collection(PATH_USER)
+                .orderBy("shareCount", Query.Direction.DESCENDING)
+                .limit(10)
+                .get()
+                .addOnCompleteListener { userTask ->
+
+                    if (userTask.isSuccessful) {
+                        for (docUser in userTask.result!!) {
+                            val user = docUser.toObject(User::class.java)
+
+                            // get rating data
+                            firestore.collection(PATH_RATING)
+                                .whereEqualTo("userId", user.id)
+                                .whereEqualTo("isVenue", true)
+                                .orderBy("postDate", Query.Direction.DESCENDING)
+                                .limit(1)
+                                .get()
+                                .addOnCompleteListener { rtgTask ->
+                                    if (rtgTask.result.size() == 0) {
+                                        check += 1
+                                    }
+                                    for (docRtg in rtgTask.result!!) {
+                                        var rtg = docRtg.toObject(RatingInfo::class.java)
+                                        rtg.postTimestamp = rtg.postDate?.let { Timestamp(it.time) }
+
+                                        // get user info
+                                        firestore.collection(PATH_USER)
+                                            .whereEqualTo("id", rtg.userId)
+                                            .get()
+                                            .addOnCompleteListener { task ->
+                                                for (document in task.result!!) {
+                                                    val user = document.toObject(User::class.java)
+                                                    rtg.userInfo = user
+
+                                                    // get venue Info
+                                                    firestore.collection(PATH_VENUE)
+                                                        .whereEqualTo("id", rtg.objectId)
+                                                        .limit(1)
+                                                        .get()
+                                                        .addOnCompleteListener { venueTask ->
+                                                            check += 1
+                                                            for (docVenue in venueTask.result!!) {
+                                                                val venue = docVenue.toObject(Venue::class.java)
+                                                                rtg.objectName = venue.name
+                                                                rtg.objectImg = venue.images?.get(0) ?: ""
+                                                                list.add(rtg)
+                                                            }
+
+                                                            if (check == userTask.result.size()) {
+                                                                continuation.resume(Result.Success(list)
+                                                                )
+                                                            }
+                                                        }
+                                                }
+                                            }
+                                    }
+                                }
+                        }
+                    } else {
+                        userTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun getRatingByFriends(userId: String): Result<List<RatingInfo>> =
+        suspendCoroutine { continuation ->
+            val list = mutableListOf<RatingInfo>()
+            val firestore = FirebaseFirestore.getInstance()
+            var check = 0
+
+            // get friend list
+            firestore.collection(PATH_USER)
+                .whereEqualTo("id", userId)
+                .limit(10)
+                .get()
+                .addOnCompleteListener { userTask ->
+                    if (userTask.isSuccessful) {
+
+                        for (document in userTask.result!!) {
+                            val friends = document.toObject(User::class.java).friends?.map { it.id }
+                            friends?.let {
+
+                                // get friend's rating
+                                firestore.collection(PATH_RATING)
+                                    .whereIn("userId", it)
+                                    .orderBy("postDate", Query.Direction.DESCENDING)
+                                    .limit(10)
+                                    .get()
+                                    .addOnCompleteListener { rtgTask ->
+
+                                        if (rtgTask.isSuccessful) {
+                                            if (rtgTask.result.size() == 0) {
+                                                check += 1
+                                            }
+
+                                            for (document in rtgTask.result!!) {
+
+                                                val rtg =
+                                                    document.toObject(RatingInfo::class.java)
+                                                rtg.postTimestamp = rtg.postDate?.let { Timestamp(it.time) }
+
+                                                // get user info
+                                                firestore.collection(PATH_USER)
+                                                    .whereEqualTo("id", rtg.userId)
+                                                    .get()
+                                                    .addOnCompleteListener { task ->
+                                                        for (document in task.result!!) {
+                                                            val user = document.toObject(User::class.java)
+                                                            rtg.userInfo = user
+
+                                                            // get object info : venue
+                                                            when (rtg.isVenue) {
+                                                                true -> {
+                                                                    firestore.collection(PATH_VENUE)
+                                                                        .whereEqualTo("id", rtg.objectId)
+                                                                        .get()
+                                                                        .addOnCompleteListener { task ->
+                                                                            check += 1
+
+                                                                            for (document in task.result!!) {
+                                                                                val venue = document.toObject(Venue::class.java)
+                                                                                rtg.objectName = venue.name
+                                                                                rtg.objectImg = venue.images?.get(0) ?: ""
+                                                                            }
+
+                                                                            list.add(rtg)
+
+                                                                            if (check == rtgTask.result.size()) {
+                                                                                continuation.resume(Result.Success(list)
+                                                                                )
+                                                                            }
+                                                                        }
+                                                                }
+
+                                                                // get object info : drink
+                                                                false -> {
+                                                                    firestore.collection(PATH_DRINK)
+                                                                        .whereEqualTo(
+                                                                            "id",
+                                                                            rtg.objectId
+                                                                        )
+                                                                        .get()
+                                                                        .addOnCompleteListener { task ->
+                                                                            check += 1
+                                                                            for (document in task.result!!) {
+                                                                                val drink = document.toObject(Drink::class.java)
+                                                                                rtg.objectName = drink.name
+                                                                                rtg.objectImg = drink.images?.get(0) ?: ""
+                                                                            }
+                                                                            list.add(rtg)
+                                                                            if (check == rtgTask.result.size()) {
+                                                                                continuation.resume(Result.Success(list)
+                                                                                )
+                                                                            }
+                                                                        }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+                    } else {
+                        userTask.exception?.let {
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
     override suspend fun postCollect(collect: Collect): Result<Boolean> =
         suspendCoroutine { continuation ->
-            val postCollect = FirebaseFirestore.getInstance().collection(PATH_COLLECT)
+            val postCollect =
+                FirebaseFirestore.getInstance().collection(PATH_COLLECT)
             val document = postCollect.document()
 
             collect.id = document.id
@@ -1160,7 +1357,129 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             continuation.resume(Result.Error(it))
                             return@addOnCompleteListener
                         }
-                        continuation.resume(Result.Fail(BarUrSideApplication.instance.getString(R.string.fail_nothing)))
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun postActivity(activity: Activity): Result<Boolean> =
+        suspendCoroutine { continuation ->
+            val postCollect =
+                FirebaseFirestore.getInstance().collection(PATH_ACTIVITY)
+            val document = postCollect.document()
+            activity.id = document.id
+
+            document
+                .set(Activity.toHashMap(activity))
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "postCollect: isSuccessful")
+                        continuation.resume(Result.Success(true))
+                    } else {
+                        task.exception?.let {
+                            Log.d(TAG, "postCollect: $it")
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> =
+        suspendCoroutine { continuation ->
+            Log.d("Ming", "activityId: $activityId, userId: $userId")
+            FirebaseFirestore.getInstance()
+                .collection(PATH_ACTIVITY)
+                .whereEqualTo("id", activityId)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            val activity = document.toObject(Activity::class.java)
+
+                            if(activity.sponsor==userId){
+                                document.reference.delete()
+                            }else{
+                                document.reference
+                                    .update("bookers", activity.bookers?.filter { it.id!=userId })
+                                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+                                    .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+                            }
+                        }
+                        continuation.resume(Result.Success(true))
+                    } else {
+                        task.exception?.let {
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+    override suspend fun bookActivity(activityId: String, userId: String): Result<Boolean> =
+        suspendCoroutine { continuation ->
+            Log.d("Ming", "activityId: $activityId, userId: $userId")
+            FirebaseFirestore.getInstance()
+                .collection(PATH_ACTIVITY)
+                .whereEqualTo("id", activityId)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            val activity = document.toObject(Activity::class.java)
+
+                            document.reference
+                                .update("bookers", activity.bookers?.plus(
+                                    Relationship(userId,Timestamp(System.currentTimeMillis())))
+                                )
+                                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+                                .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+                        }
+                        continuation.resume(Result.Success(true))
+                    } else {
+                        task.exception?.let {
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
                     }
                 }
         }

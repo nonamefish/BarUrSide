@@ -26,7 +26,7 @@ class DiscoverDetailViewModel(
 ) :
     ViewModel() {
 
-    private val _detailData = MutableLiveData<List<Any>>()
+    private var _detailData = MutableLiveData<List<Any>>()
     val detailData: MutableLiveData<List<Any>> // why cannot use LiveData<List<Any>>
         get() = _detailData
 
@@ -49,6 +49,11 @@ class DiscoverDetailViewModel(
 
     init {
 
+        // snapshot listener
+        if( theme == Theme.RECENT_ACTIVITY){
+            _detailData = repository.getActivityResult() as MutableLiveData<List<Any>>
+        }
+
         coroutineScope.launch {
 
             when (theme) {
@@ -70,9 +75,6 @@ class DiscoverDetailViewModel(
                     id?.let{
                         result = repository.getFriend(id)
                     }
-                }
-                Theme.RECENT_ACTIVITY -> {
-                    result = repository.getActivityResult()
                 }
                 Theme.USER_ACTIVITY -> {
                     id?.get(0)?.let{
