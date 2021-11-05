@@ -153,4 +153,8 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     override suspend fun bookActivity(activityId: String, userId: String): Result<Boolean> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun addUser(user: User): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
 }

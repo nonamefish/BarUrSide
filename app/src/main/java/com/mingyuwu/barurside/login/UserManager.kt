@@ -1,24 +1,55 @@
 package com.mingyuwu.barurside.login
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.data.Relationship
 import com.mingyuwu.barurside.data.User
 import java.sql.Timestamp
 
 object UserManager {
-    private val _user = MutableLiveData<User>(User(
-        "6BhbnIMi1Ai91Ky4w9rI",
-        "Ming",
-        "user/MingYuWu.jpg",
-        listOf(
-            Relationship("O6kHLHzc3Ollfe7rkfkR", Timestamp(System.currentTimeMillis())),
-            Relationship("deXVITKTFc1qsEoeWnr0", Timestamp(System.currentTimeMillis()))
-        ),
-        6,
-        7
-    ))
 
-    val user: LiveData<User>
-        get() = _user
+    private const val USER_DATA = "user_data"
+    private const val USER_TOKEN = "user_token"
+
+
+    val userId =  MutableLiveData<String?>()
+
+    var userToken: String? = null
+        get() = BarUrSideApplication.instance
+            .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE)
+            .getString(USER_TOKEN, null)
+        set(value) {
+            field = when (value) {
+                null -> {
+                    BarUrSideApplication.instance
+                        .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE).edit()
+                        .remove(USER_TOKEN)
+                        .apply()
+                    null
+                }
+                else -> {
+                    BarUrSideApplication.instance
+                        .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE).edit()
+                        .putString(USER_TOKEN, value)
+                        .apply()
+                    value
+                }
+            }
+        }
+
+    /**
+     * It can be use to check login status directly
+     */
+    val isLoggedIn: Boolean
+        get() = userToken != null
+
+    /**
+     * Clear the [userToken] and the [user]/[_user] data
+     */
+    fun clear() {
+        userToken = null
+        userId.value = null
+    }
 }

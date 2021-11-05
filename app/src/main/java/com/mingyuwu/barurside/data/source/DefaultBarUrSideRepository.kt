@@ -155,4 +155,8 @@ class DefaultBarUrSideRepository(
     override suspend fun bookActivity(activityId: String, userId: String): Result<Boolean> {
         return remoteDataSource.bookActivity(activityId, userId)
     }
+
+    override suspend fun addUser(user: User): Result<Boolean> {
+        return remoteDataSource.addUser(user)
+    }
 }

@@ -22,7 +22,7 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
     // set source data
     var userInfo = MutableLiveData<User>()
     var rtgInfo = MutableLiveData<List<RatingInfo>>()
-    var isMyself = userId == UserManager.user.value!!.id
+    var isMyself = userId == UserManager.userId.value!!
     val userId_test = "6BhbnIMi1Ai91Ky4w9rI"
 
     // error: The internal MutableLiveData that stores the error of the most recent request
@@ -40,7 +40,7 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
     init {
         getUserInfo(userId)
         getRatingInfo(userId)
-        Log.d("Ming","userId: $userId , myself: ${UserManager.user.value!!.id}")
+        Log.d("Ming","userId: $userId , myself: ${UserManager.userId.value!!}")
         Log.d("Ming","isMyself: $isMyself")
     }
 

@@ -10,6 +10,7 @@ import com.mingyuwu.barurside.discover.DiscoverViewModel
 import com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel
 import com.mingyuwu.barurside.editrating.EditRatingViewModel
 import com.mingyuwu.barurside.filter.FilterViewModel
+import com.mingyuwu.barurside.login.LoginViewModel
 import com.mingyuwu.barurside.map.MapViewModel
 
 
@@ -31,6 +32,8 @@ class ViewModelFactory constructor(
                     MapViewModel(repository)
                 isAssignableFrom(DiscoverViewModel::class.java) ->
                     DiscoverViewModel(repository)
+                isAssignableFrom(LoginViewModel::class.java) ->
+                    LoginViewModel(repository)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

@@ -29,7 +29,7 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private val viewModel by viewModels<ProfileViewModel> {
         getVmFactory(
-            ProfileFragmentArgs.fromBundle(requireArguments()).id ?: UserManager.user.value!!.id
+            ProfileFragmentArgs.fromBundle(requireArguments()).id ?: UserManager.userId.value!!
         )
     }
 
@@ -38,7 +38,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // user profile will get id from UserManager
-        val id = ProfileFragmentArgs.fromBundle(requireArguments()).id ?: UserManager.user.value!!.id
+        val id = ProfileFragmentArgs.fromBundle(requireArguments()).id ?: UserManager.userId.value!!
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(

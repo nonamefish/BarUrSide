@@ -1094,7 +1094,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         }
 
 
-
     override suspend fun getActivityByUser(userId: String): Result<List<Activity>> =
         suspendCoroutine { continuation ->
             val list = mutableListOf<Activity>()
@@ -1181,14 +1180,17 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                         .addOnCompleteListener { venueTask ->
                                                             check += 1
                                                             for (docVenue in venueTask.result!!) {
-                                                                val venue = docVenue.toObject(Venue::class.java)
+                                                                val venue =
+                                                                    docVenue.toObject(Venue::class.java)
                                                                 rtg.objectName = venue.name
-                                                                rtg.objectImg = venue.images?.get(0) ?: ""
+                                                                rtg.objectImg =
+                                                                    venue.images?.get(0) ?: ""
                                                                 list.add(rtg)
                                                             }
 
                                                             if (check == userTask.result.size()) {
-                                                                continuation.resume(Result.Success(list)
+                                                                continuation.resume(
+                                                                    Result.Success(list)
                                                                 )
                                                             }
                                                         }
@@ -1248,7 +1250,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                                                 val rtg =
                                                     document.toObject(RatingInfo::class.java)
-                                                rtg.postTimestamp = rtg.postDate?.let { Timestamp(it.time) }
+                                                rtg.postTimestamp =
+                                                    rtg.postDate?.let { Timestamp(it.time) }
 
                                                 // get user info
                                                 firestore.collection(PATH_USER)
@@ -1256,28 +1259,42 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                     .get()
                                                     .addOnCompleteListener { task ->
                                                         for (document in task.result!!) {
-                                                            val user = document.toObject(User::class.java)
+                                                            val user =
+                                                                document.toObject(User::class.java)
                                                             rtg.userInfo = user
 
                                                             // get object info : venue
                                                             when (rtg.isVenue) {
                                                                 true -> {
                                                                     firestore.collection(PATH_VENUE)
-                                                                        .whereEqualTo("id", rtg.objectId)
+                                                                        .whereEqualTo(
+                                                                            "id",
+                                                                            rtg.objectId
+                                                                        )
                                                                         .get()
                                                                         .addOnCompleteListener { task ->
                                                                             check += 1
 
                                                                             for (document in task.result!!) {
-                                                                                val venue = document.toObject(Venue::class.java)
-                                                                                rtg.objectName = venue.name
-                                                                                rtg.objectImg = venue.images?.get(0) ?: ""
+                                                                                val venue =
+                                                                                    document.toObject(
+                                                                                        Venue::class.java
+                                                                                    )
+                                                                                rtg.objectName =
+                                                                                    venue.name
+                                                                                rtg.objectImg =
+                                                                                    venue.images?.get(
+                                                                                        0
+                                                                                    ) ?: ""
                                                                             }
 
                                                                             list.add(rtg)
 
                                                                             if (check == rtgTask.result.size()) {
-                                                                                continuation.resume(Result.Success(list)
+                                                                                continuation.resume(
+                                                                                    Result.Success(
+                                                                                        list
+                                                                                    )
                                                                                 )
                                                                             }
                                                                         }
@@ -1294,13 +1311,23 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                                         .addOnCompleteListener { task ->
                                                                             check += 1
                                                                             for (document in task.result!!) {
-                                                                                val drink = document.toObject(Drink::class.java)
-                                                                                rtg.objectName = drink.name
-                                                                                rtg.objectImg = drink.images?.get(0) ?: ""
+                                                                                val drink =
+                                                                                    document.toObject(
+                                                                                        Drink::class.java
+                                                                                    )
+                                                                                rtg.objectName =
+                                                                                    drink.name
+                                                                                rtg.objectImg =
+                                                                                    drink.images?.get(
+                                                                                        0
+                                                                                    ) ?: ""
                                                                             }
                                                                             list.add(rtg)
                                                                             if (check == rtgTask.result.size()) {
-                                                                                continuation.resume(Result.Success(list)
+                                                                                continuation.resume(
+                                                                                    Result.Success(
+                                                                                        list
+                                                                                    )
                                                                                 )
                                                                             }
                                                                         }
@@ -1414,13 +1441,24 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         for (document in task.result!!) {
                             val activity = document.toObject(Activity::class.java)
 
-                            if(activity.sponsor==userId){
+                            if (activity.sponsor == userId) {
                                 document.reference.delete()
-                            }else{
+                            } else {
                                 document.reference
-                                    .update("bookers", activity.bookers?.filter { it.id!=userId })
-                                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
-                                    .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+                                    .update("bookers", activity.bookers?.filter { it.id != userId })
+                                    .addOnSuccessListener {
+                                        Log.d(
+                                            TAG,
+                                            "DocumentSnapshot successfully updated!"
+                                        )
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(
+                                            TAG,
+                                            "Error updating document",
+                                            e
+                                        )
+                                    }
                             }
                         }
                         continuation.resume(Result.Success(true))
@@ -1457,11 +1495,24 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             val activity = document.toObject(Activity::class.java)
 
                             document.reference
-                                .update("bookers", activity.bookers?.plus(
-                                    Relationship(userId,Timestamp(System.currentTimeMillis())))
+                                .update(
+                                    "bookers", activity.bookers?.plus(
+                                        Relationship(userId, Timestamp(System.currentTimeMillis()))
+                                    )
                                 )
-                                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
-                                .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+                                .addOnSuccessListener {
+                                    Log.d(
+                                        TAG,
+                                        "DocumentSnapshot successfully updated!"
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(
+                                        TAG,
+                                        "Error updating document",
+                                        e
+                                    )
+                                }
                         }
                         continuation.resume(Result.Success(true))
                     } else {
@@ -1480,6 +1531,43 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 )
                             )
                         )
+                    }
+                }
+        }
+
+    override suspend fun addUser(user: User): Result<Boolean> =
+        suspendCoroutine { continuation ->
+            val firestore = FirebaseFirestore.getInstance()
+
+            firestore.collection(PATH_USER)
+                .whereEqualTo("id", user.id)
+                .get()
+                .addOnCompleteListener { userTask ->
+                    if (userTask.isSuccessful && userTask.result.isEmpty) {
+                        val postUser = firestore.collection(PATH_USER).document(user.id)
+
+                        postUser.set(User.toHashMap(user))
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+
+                                    continuation.resume(Result.Success(true))
+                                } else {
+                                    task.exception?.let {
+                                        Log.w(TAG,
+                                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                                        )
+                                        continuation.resume(Result.Error(it))
+                                        return@addOnCompleteListener
+                                    }
+                                    continuation.resume(
+                                        Result.Fail(
+                                            BarUrSideApplication.instance.getString(
+                                                R.string.fail_nothing
+                                            )
+                                        )
+                                    )
+                                }
+                            }
                     }
                 }
         }

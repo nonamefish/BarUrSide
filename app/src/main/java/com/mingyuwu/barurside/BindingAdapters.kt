@@ -87,7 +87,6 @@ fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean?) {
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     if (!imgUrl.isNullOrEmpty()) {
-        Log.d("Ming", "bindImage: $imgUrl")
         Glide.with(imgView.context)
             .load(imgUrl)
             .placeholder(R.drawable.image_placeholder)

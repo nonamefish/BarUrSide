@@ -8,6 +8,7 @@ import com.mingyuwu.barurside.data.Collect
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import com.mingyuwu.barurside.login.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,7 +22,7 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
     var objectInfo = MutableLiveData<List<Any>>()
     var isCollect = MutableLiveData<Boolean?>(true)
     val navigateToObject = MutableLiveData<String?>()
-    val userId = "6BhbnIMi1Ai91Ky4w9rI"
+    val userId = UserManager.userId.value!!
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()

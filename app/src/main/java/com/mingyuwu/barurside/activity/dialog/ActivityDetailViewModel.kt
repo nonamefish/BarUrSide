@@ -20,7 +20,7 @@ class ActivityDetailViewModel(
     val activity: Activity
 ) : ViewModel() {
 
-    private val userId = UserManager.user.value!!.id
+    private val userId = UserManager.userId.value!!
     val isBook = activity.bookers!!.any { it.id == userId }
 
     // navigate to activity detail

@@ -62,4 +62,5 @@ interface BarUrSideRepository {
     suspend fun postActivity(activity: Activity): Result<Boolean>
     suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean>
     suspend fun bookActivity(activityId: String, userId: String): Result<Boolean>
+    suspend fun addUser(user: User): Result<Boolean>
 }

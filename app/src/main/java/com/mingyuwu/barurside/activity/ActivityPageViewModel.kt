@@ -22,7 +22,7 @@ class ActivityPageViewModel(
 ) : ViewModel() {
 
 
-    private val userId = UserManager.user.value!!.id
+    private val userId = UserManager.userId.value
 
     private var _rtgData = MutableLiveData<List<Any>>()
     val rtgData : LiveData<List<Any>>
@@ -53,7 +53,7 @@ class ActivityPageViewModel(
                 getRecentActivity()
             }
             ActivityTypeFilter.FOLLOW -> {
-                getRatingByFriend(userId)
+                getRatingByFriend(userId?:"0")
             }
         }
     }
