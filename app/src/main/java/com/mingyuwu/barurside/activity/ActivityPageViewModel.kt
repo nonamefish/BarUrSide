@@ -1,9 +1,8 @@
 package com.mingyuwu.barurside.activity
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.data.Result
@@ -22,7 +21,7 @@ class ActivityPageViewModel(
 ) : ViewModel() {
 
 
-    private val userId = UserManager.userId.value
+    val user = UserManager.user
 
     private var _rtgData = MutableLiveData<List<Any>>()
     val rtgData : LiveData<List<Any>>
@@ -53,7 +52,9 @@ class ActivityPageViewModel(
                 getRecentActivity()
             }
             ActivityTypeFilter.FOLLOW -> {
-                getRatingByFriend(userId?:"0")
+                user.value?.let{
+                    getRatingByFriend(it.id)
+                }
             }
         }
     }
@@ -85,7 +86,7 @@ class ActivityPageViewModel(
         }
     }
 
-    private fun getRatingByFriend(userId: String) {
+    fun getRatingByFriend(userId: String) {
         coroutineScope.launch {
             val result = repository.getRatingByFriends(userId)
             _rtgData.value = when (result) {

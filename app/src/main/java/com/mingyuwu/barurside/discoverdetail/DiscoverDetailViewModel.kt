@@ -78,6 +78,7 @@ class DiscoverDetailViewModel(
                 }
                 Theme.USER_ACTIVITY -> {
                     id?.get(0)?.let{
+                        Log.d("Ming","id: $id")
                         result = repository.getActivityByUser(id[0])
                     }
                 }

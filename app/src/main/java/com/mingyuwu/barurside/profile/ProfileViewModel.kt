@@ -4,16 +4,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mingyuwu.barurside.data.Collect
-import com.mingyuwu.barurside.data.RatingInfo
-import com.mingyuwu.barurside.data.Result
-import com.mingyuwu.barurside.data.User
+import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.sql.Timestamp
 
 
 class ProfileViewModel(private val repository: BarUrSideRepository, val userId: String) :
@@ -21,9 +19,12 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
 
     // set source data
     var userInfo = MutableLiveData<User>()
-    var rtgInfo = MutableLiveData<List<RatingInfo>>()
-    var isMyself = userId == UserManager.userId.value!!
-    val userId_test = "6BhbnIMi1Ai91Ky4w9rI"
+    private var _rtgInfo = MutableLiveData<List<RatingInfo>>()
+    val rtgInfo: LiveData<List<RatingInfo>>
+        get() = _rtgInfo
+
+    var isMyself = userId == UserManager.user.value?.id
+    var isFriend = UserManager.user.value?.friends?.any { it.id == userId }
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
@@ -40,8 +41,7 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
     init {
         getUserInfo(userId)
         getRatingInfo(userId)
-        Log.d("Ming","userId: $userId , myself: ${UserManager.userId.value!!}")
-        Log.d("Ming","isMyself: $isMyself")
+
     }
 
     private fun getUserInfo(userId: String) {
@@ -50,21 +50,17 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
 
     private fun getRatingInfo(userId: String) {
         coroutineScope.launch {
-            Log.d("Ming","getRatingInfo: $userId")
             val result = repository.getRatingByUser(userId)
-            rtgInfo.value = when (result) {
+            _rtgInfo.value = when (result) {
                 is Result.Success -> {
-                    Log.d("Ming","user rating: ${result.data}")
                     _error.value = null
                     result.data
                 }
                 is Result.Fail -> {
-                    Log.d("Ming","user rating: ${result.error}")
                     _error.value = result.error
                     null
                 }
                 is Result.Error -> {
-                    Log.d("Ming","user rating: ${result.exception}")
                     _error.value = result.exception.toString()
                     null
                 }
@@ -84,4 +80,38 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
         return list
     }
 
+    fun addOnFriend() {
+        val notification = Notification(
+            "",
+            "profile",
+            UserManager.user.value?.image ?: "",
+            "friend",
+            Timestamp(System.currentTimeMillis()),
+            UserManager.user.value?.id ?: "",
+            userId,
+            "<b>${UserManager.user.value?.name}</b>想要加你好友",
+            false
+        )
+
+        coroutineScope.launch {
+            val result = repository.addFriend(notification)
+            when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    result.data
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+        }
+    }
 }

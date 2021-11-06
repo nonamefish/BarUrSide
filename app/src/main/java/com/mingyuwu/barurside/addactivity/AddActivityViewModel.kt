@@ -26,7 +26,7 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
     val mainDrink = MutableLiveData<String>()
     val startTime = MutableLiveData<String>()
     val endTime = MutableLiveData<String>()
-    val userId = UserManager.userId.value!!
+    val userId = UserManager.user.value?.id!!
 
     // navigate to home
     val navigateToDetail = MutableLiveData<Boolean?>()

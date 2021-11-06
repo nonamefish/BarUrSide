@@ -13,8 +13,7 @@ object UserManager {
     private const val USER_DATA = "user_data"
     private const val USER_TOKEN = "user_token"
 
-
-    val userId =  MutableLiveData<String?>()
+    var user = MutableLiveData<User>()
 
     var userToken: String? = null
         get() = BarUrSideApplication.instance
@@ -50,6 +49,6 @@ object UserManager {
      */
     fun clear() {
         userToken = null
-        userId.value = null
+        user.value = null
     }
 }

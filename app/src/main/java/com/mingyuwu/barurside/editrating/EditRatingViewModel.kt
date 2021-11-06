@@ -1,6 +1,7 @@
 package com.mingyuwu.barurside.editrating
 
 import android.graphics.Bitmap
+import com.mingyuwu.barurside.login.UserManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,7 +20,7 @@ import java.sql.Timestamp
 class EditRatingViewModel(val repository: BarUrSideRepository, private val venue: Venue) :
     ViewModel() {
 
-    private val userId = "6BhbnIMi1Ai91Ky4w9rI"
+    private val userId = UserManager.user.value?.id
 
     private val _star = MutableLiveData<MutableList<Int?>>()
     val star: LiveData<MutableList<Int?>>
@@ -94,7 +95,7 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
 
 
     init {
-        getUser(userId)
+        getUser()
         getMenu(venue.id)
         _objectId.value = mutableListOf(venue.id)
         _objectName.value = mutableListOf(venue.name)
@@ -125,7 +126,6 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
 
     fun addUploadImg(position: Int, bitmap: Bitmap?, url: String) {
 
-
         if (_uploadImg.value!![position][0] == null) {
             _uploadImg.value!![position] = mutableListOf(bitmap)
             _uploadImgUrl.value!![position] = mutableListOf(url)
@@ -135,7 +135,8 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         }
         _uploadImg.value = _uploadImg.value
         _uploadImgUrl.value = _uploadImgUrl.value
-        Log.d("Ming", "url: ${_uploadImg.value}")
+        Log.d("Ming", "_uploadImg: ${_uploadImg.value}")
+        Log.d("Ming", "_uploadImgUrl: ${_uploadImgUrl.value}")
     }
 
     fun removeUploadImg(rtgOrder: Int, position: Int) {
@@ -170,7 +171,7 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
                         "",
                         objectId.value!![index],
                         index == 0,
-                        userId,
+                        userId ?: "",
                         star.value!![index]!!.toLong(),
                         comment.value!![index] ?: "",
                         _firebaseImgUrl?.value?.get(index) ?: null,
@@ -207,7 +208,7 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
                         Log.d("Ming", "_uploadImgUrl: $url")
                         url?.let {
                             when (val result =
-                                repository.uploadPhoto(storageRef, userId, type, url)) {
+                                repository.uploadPhoto(storageRef, userId ?: "", type, url)) {
                                 is Result.Success -> {
                                     _error.value = null
                                     imgs.add(listIndex, result.data)
@@ -238,13 +239,13 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         }
     }
 
-    private fun getUser(id: String) {
-        _user = repository.getUser(id)
+    private fun getUser() {
+        _user = UserManager.user
     }
 
     fun getFriendList(user: User) {
         coroutineScope.launch {
-            user.friends?.let{
+            user.friends?.let {
                 val result = repository.getFriend(user.friends.map { it.id })
                 _frdList.value = when (result) {
                     is Result.Success -> {
@@ -319,7 +320,9 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         addShareImgCnt: Int
     ) {
         coroutineScope.launch {
-            repository.updateUserShare(userId, addShareCnt, addShareImgCnt)
+            userId?.let {
+                repository.updateUserShare(userId, addShareCnt, addShareImgCnt)
+            }
         }
     }
 

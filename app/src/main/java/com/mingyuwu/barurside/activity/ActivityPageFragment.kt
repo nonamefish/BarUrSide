@@ -19,6 +19,7 @@ import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.databinding.FragmentActivityPageBinding
+import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.discoverdetail.*
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
@@ -68,17 +69,29 @@ class ActivityPageFragment() : Fragment() {
 
         // assign value to recyclerView
         viewModel.rtgData.observe(viewLifecycleOwner, Observer {
-            it?.let{
+            it?.let {
                 adapter.submitList(it)
             }
         })
 
         // navigate to detail fragment
-        viewModel.navigateToDetail.observe(viewLifecycleOwner,Observer{
+        viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is Activity->{
-                    findNavController().navigate(MainNavigationDirections.navigateToActivityDetailDialog(it))
+                is Activity -> {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToActivityDetailDialog(
+                            it,
+                            Theme.NONE
+                        )
+                    )
                 }
+            }
+        })
+
+        // set user data
+        viewModel.user.observe(viewLifecycleOwner, Observer {
+            if (type == ActivityTypeFilter.FOLLOW) {
+                viewModel.getRatingByFriend(it.id)
             }
         })
 

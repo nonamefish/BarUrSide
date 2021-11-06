@@ -1,6 +1,7 @@
 package com.mingyuwu.barurside.profile
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +30,7 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private val viewModel by viewModels<ProfileViewModel> {
         getVmFactory(
-            ProfileFragmentArgs.fromBundle(requireArguments()).id ?: UserManager.userId.value!!
+            ProfileFragmentArgs.fromBundle(requireArguments()).id ?: (UserManager.user.value?.id?:"")
         )
     }
 
@@ -38,7 +39,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // user profile will get id from UserManager
-        val id = ProfileFragmentArgs.fromBundle(requireArguments()).id ?: UserManager.userId.value!!
+        val id = ProfileFragmentArgs.fromBundle(requireArguments()).id ?: (UserManager.user.value?.id?:"")
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -63,15 +64,23 @@ class ProfileFragment : Fragment() {
         viewModel.rtgInfo.observe(viewLifecycleOwner, Observer { rtgInfo ->
             rtgInfo?.let { rtgs ->
                 val sortRtgs = rtgs.sortedByDescending { it.postTimestamp }
-                rtgVnAdapter.submitList(sortRtgs.filter { it.isVenue == true }
-                    .take(3))
-                rtgDkAdapter.submitList(sortRtgs.filter { it.isVenue == false }
-                    .take(3))
+
+                // filter data
+                val rtgVenue = sortRtgs.filter { it.isVenue == true }.take(3)
+                val rtgDrink = sortRtgs.filter { it.isVenue == false }.take(3)
+
+                // recyclerView submit list
+                rtgVnAdapter.submitList(rtgVenue)
+                rtgDkAdapter.submitList(rtgDrink)
                 imgAdapter.submitList(viewModel.setImgs(sortRtgs))
+
+                // set binding variable
+                binding.rtgVenueCnt = rtgVenue.size
+                binding.rtgDrinkCnt = rtgDrink.size
             }
         })
 
-        // test friend adapter
+        // navigate to friend list page
         binding.myFriend.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
@@ -82,7 +91,7 @@ class ProfileFragment : Fragment() {
             )
         }
 
-        // test activity adapter
+        // navigate to activity page
         binding.myActivity.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
@@ -92,6 +101,14 @@ class ProfileFragment : Fragment() {
                 )
             )
         }
+
+        // set add friend listener
+        binding.btnAddFrd.setOnClickListener {
+            if (viewModel.isFriend != true) {
+                viewModel.addOnFriend()
+            }
+        }
+
 
         return binding.root
     }

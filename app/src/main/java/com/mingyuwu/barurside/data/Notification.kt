@@ -6,7 +6,7 @@ import java.sql.Timestamp
 
 @Parcelize
 data class Notification(
-    val id: String,
+    var id: String,
     val objectId: String,
     val image: String,
     val type: String,

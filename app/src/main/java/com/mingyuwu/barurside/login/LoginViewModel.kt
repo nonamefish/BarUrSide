@@ -1,5 +1,6 @@
 package com.mingyuwu.barurside.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,14 +33,14 @@ class LoginViewModel(private val repository: BarUrSideRepository) : ViewModel() 
         navigateToDetail.value = null
     }
 
-    fun postUser(user: User) {
+    fun addUser(user: User) {
         coroutineScope.launch {
+            Log.d(TAG,"addUser: $user")
             val result = repository.addUser(user)
-            repository.addUser(user)
             when (result) {
                 is Result.Success -> {
                     _error.value = null
-                    navigateToDetail.value = true
+
                 }
                 is Result.Fail -> {
                     _error.value = result.error
@@ -53,6 +54,13 @@ class LoginViewModel(private val repository: BarUrSideRepository) : ViewModel() 
                     null
                 }
             }
+
+            navigateToDetail.value = true
+            Log.d(TAG,"navigateToDetail: ${navigateToDetail.value}")
         }
+    }
+
+    fun getUserData(userId: String) {
+        UserManager.user = repository.getUser(userId)
     }
 }

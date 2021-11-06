@@ -8,22 +8,22 @@
     <fragment
         android:id="@+id/collectFragment"
         android:name="com.mingyuwu.barurside.collect.CollectFragment"
-        android:label="fragment_collect"
+        android:label="CollectFragment"
         tools:layout="@layout/fragment_collect" />
     <fragment
         android:id="@+id/discoverFragment"
         android:name="com.mingyuwu.barurside.discover.DiscoverFragment"
-        android:label="fragment_discover"
+        android:label="DiscoverFragment"
         tools:layout="@layout/fragment_discover" />
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.mingyuwu.barurside.map.MapFragment"
-        android:label="fragment_map"
+        android:label="MapFragment"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/editRatingFragment"
         android:name="com.mingyuwu.barurside.editrating.EditRatingFragment"
-        android:label="fragment_edit_rating"
+        android:label="EditRatingFragment"
         tools:layout="@layout/fragment_edit_rating" >
         <argument
             android:name="venue"
@@ -42,7 +42,7 @@
     <fragment
         android:id="@+id/activityFragment"
         android:name="com.mingyuwu.barurside.activity.ActivityFragment"
-        android:label="fragment_activity"
+        android:label="ActivityFragment"
         tools:layout="@layout/fragment_activity" />
     <fragment
         android:id="@+id/drinkFragment"
@@ -71,7 +71,7 @@
     <fragment
         android:id="@+id/randomFragment"
         android:name="com.mingyuwu.barurside.filter.random.RandomFragment"
-        android:label="fragment_random"
+        android:label="RandomFragment"
         tools:layout="@layout/fragment_random">
         <argument
             android:name="venue"
@@ -118,6 +118,9 @@
         <argument
             android:name="activity"
             app:argType="com.mingyuwu.barurside.data.Activity" />
+        <argument
+            android:name="theme"
+            app:argType="com.mingyuwu.barurside.discover.Theme" />
     </dialog>
 
     <action

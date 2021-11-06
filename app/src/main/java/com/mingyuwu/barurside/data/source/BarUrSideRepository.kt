@@ -63,4 +63,6 @@ interface BarUrSideRepository {
     suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean>
     suspend fun bookActivity(activityId: String, userId: String): Result<Boolean>
     suspend fun addUser(user: User): Result<Boolean>
+    suspend fun addFriend(notification: Notification): Result<Boolean>
+    fun getNotification(userId: String): MutableLiveData<List<Notification>>
 }

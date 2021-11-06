@@ -48,6 +48,7 @@ class LoginFragment : Fragment() {
         // after login navigate to start destination
         viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
             it?.let {
+                Log.d(TAG,"navigateToDetail: $it")
                 findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
                 viewModel.onLeft()
             }
@@ -75,18 +76,19 @@ class LoginFragment : Fragment() {
                 val account = task.getResult(ApiException::class.java)
 
                 account.email?.let {
-                    UserManager.userToken = account?.idToken
-                    UserManager.userId.value = account?.email
+                    UserManager.userToken = account.idToken
+
                     firebaseAuthWithGoogle(UserManager.userToken!!)
                     val user = User(
                         account.email,
                         account.displayName,
-                        account?.photoUrl.toString(),
+                        account.photoUrl.toString(),
                         null,
                         0,
                         0
                     )
-                    viewModel.postUser(user)
+                    viewModel.addUser(user)
+                    viewModel.getUserData(account.email!!)
                     Log.d(TAG, "user:$user")
                 }
 

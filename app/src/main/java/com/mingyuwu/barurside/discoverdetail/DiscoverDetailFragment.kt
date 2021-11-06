@@ -132,7 +132,7 @@ class DiscoverDetailFragment() : Fragment() {
                 }
                 is Activity -> {
                     findNavController().navigate(
-                        MainNavigationDirections.navigateToActivityDetailDialog(it)
+                        MainNavigationDirections.navigateToActivityDetailDialog(it,theme)
                     )
                 }
             }

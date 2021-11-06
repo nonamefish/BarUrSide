@@ -30,6 +30,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
     private const val PATH_RATING = "rating"
     private const val PATH_ACTIVITY = "activity"
     private const val PATH_COLLECT = "collect"
+    private const val PATH_NOTIFICATION = "notification"
 
     override fun getVenue(id: String): MutableLiveData<Venue> {
         val liveData = MutableLiveData<Venue>()
@@ -811,6 +812,44 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
+    override fun getNotification(userId: String): MutableLiveData<List<Notification>>{
+        val liveData = MutableLiveData<List<Notification>>()
+
+        // notification from user
+        FirebaseFirestore.getInstance()
+        .collection(PATH_NOTIFICATION)
+        .whereEqualTo("toId", userId)
+        .addSnapshotListener { snapshot, exception ->
+
+            exception?.let {
+                Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
+            }
+            val list = mutableListOf<Notification>()
+            for (document in snapshot!!) {
+                val notification = document.toObject(Notification::class.java)
+                list.add(notification)
+            }
+
+            // notification send user
+            FirebaseFirestore.getInstance()
+                .collection(PATH_NOTIFICATION)
+                .whereEqualTo("fromId", userId)
+                .addSnapshotListener { snapshot, exception ->
+                    exception?.let {
+                        Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                    }
+                    val list = mutableListOf<Notification>()
+                    for (document in snapshot!!) {
+                        val notification = document.toObject(Notification::class.java)
+                        list.add(notification)
+                    }
+                    liveData.value = list
+                }
+        }
+        return liveData
+    }
+
+
     override suspend fun getVenueByIds(ids: List<String>): Result<List<Venue>> =
         suspendCoroutine { continuation ->
 
@@ -1429,6 +1468,37 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
+    override suspend fun addFriend(notification: Notification): Result<Boolean> =
+        suspendCoroutine { continuation ->
+            val notifications = FirebaseFirestore.getInstance().collection(PATH_NOTIFICATION)
+            val document = notifications.document()
+
+            notification.id = document.id
+
+            document
+                .set(Notification.toHashMap(notification))
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        continuation.resume(Result.Success(true))
+                    } else {
+                        task.exception?.let {
+
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(R.string.fail_nothing)
+                            )
+                        )
+                    }
+                }
+        }
+
     override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> =
         suspendCoroutine { continuation ->
             Log.d("Ming", "activityId: $activityId, userId: $userId")
@@ -1544,16 +1614,17 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .get()
                 .addOnCompleteListener { userTask ->
                     if (userTask.isSuccessful && userTask.result.isEmpty) {
+
                         val postUser = firestore.collection(PATH_USER).document(user.id)
 
                         postUser.set(User.toHashMap(user))
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
-
                                     continuation.resume(Result.Success(true))
                                 } else {
                                     task.exception?.let {
-                                        Log.w(TAG,
+                                        Log.w(
+                                            TAG,
                                             "[${this::class.simpleName}] Error getting documents. ${it.message}"
                                         )
                                         continuation.resume(Result.Error(it))
@@ -1568,6 +1639,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     )
                                 }
                             }
+                    }else{
+                        continuation.resume(Result.Success(true))
                     }
                 }
         }

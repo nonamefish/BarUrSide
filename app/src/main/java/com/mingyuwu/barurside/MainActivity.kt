@@ -37,12 +37,6 @@ class MainActivity : AppCompatActivity() {
         // setting binding
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        // get navController and setting connection between bottom navigation item and navigation fragment
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController // container for navigation destination
-        binding.bottomNav.setupWithNavController(navController)
-
         // set notification onclick listener
         binding.imgNotification.setOnClickListener {
             navController.navigate(
@@ -68,11 +62,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        setContentView(binding.root)
-    }
-
-    override fun onStart() {
-        super.onStart()
 
         // Check if user is signed in (non-null) and update UI accordingly.
         var currentUser = auth.currentUser
@@ -84,9 +73,22 @@ class MainActivity : AppCompatActivity() {
                 firebaseAuthWithGoogle(userToken!!)
             }
         } else {
-            UserManager.userId.value = currentUser.email
+            viewModel.getUserData(currentUser.email!!)
             viewModel.navigateToStart.value = true
         }
+
+        // get navController and setting connection between bottom navigation item and navigation fragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController // container for navigation destination
+        binding.bottomNav.setupWithNavController(navController)
+
+        setContentView(binding.root)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
     }
 
 

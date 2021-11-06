@@ -23,7 +23,7 @@ class ViewModelFactory constructor(
         with(modelClass) {
             when {
                 isAssignableFrom(MainViewModel::class.java) ->
-                    MainViewModel()
+                    MainViewModel(repository)
                 isAssignableFrom(AddActivityViewModel::class.java) ->
                     AddActivityViewModel(repository)
                 isAssignableFrom(FilterViewModel::class.java) ->

@@ -8,6 +8,15 @@
         <variable
             name="viewModel"
             type="com.mingyuwu.barurside.profile.ProfileViewModel" />
+
+        <variable
+            name="rtgVenueCnt"
+            type="int" />
+
+        <variable
+            name="rtgDrinkCnt"
+            type="int" />
+
         <variable
             name="view"
             type="android.view.View" />
@@ -124,8 +133,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/green_0ead69"
-                android:text="加為好友"
+                android:backgroundTint="@{viewModel.isFriend ? @color/gray_888888 : @color/theme_700}"
+                android:text="@{viewModel.isFriend ? `已是好友` : `加為朋友`}"
                 android:textColor="@color/white_f5f5f5"
                 android:visibility="@{viewModel.isMyself ? view.GONE : view.visibility}"
                 app:layout_constraintBottom_toTopOf="@+id/view"
@@ -258,9 +267,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:text="共3則評價"
+                android:text="@{@string/profile_rtgs_cnt(rtgVenueCnt)}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_venue_rating" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_venue_rating"
+                tools:text="共5則評價"/>
 
             <TextView
                 android:id="@+id/drink_rtg_cnt"
@@ -268,7 +278,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:text="共3則評價"
+                android:text="@{@string/profile_rtgs_cnt(rtgDrinkCnt)}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_drink_rating" />
 

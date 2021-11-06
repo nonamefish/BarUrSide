@@ -159,4 +159,12 @@ class DefaultBarUrSideRepository(
     override suspend fun addUser(user: User): Result<Boolean> {
         return remoteDataSource.addUser(user)
     }
+
+    override suspend fun addFriend(notification: Notification): Result<Boolean> {
+        return remoteDataSource.addFriend(notification)
+    }
+
+    override fun getNotification(userId: String): MutableLiveData<List<Notification>> {
+        return remoteDataSource.getNotification(userId)
+    }
 }
