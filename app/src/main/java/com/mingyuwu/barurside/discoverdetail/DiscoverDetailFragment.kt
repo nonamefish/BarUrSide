@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ListAdapter
@@ -28,11 +29,13 @@ import com.mingyuwu.barurside.MainViewModel
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Drink
+import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.mockdata.VenueData
 import com.mingyuwu.barurside.databinding.FragmentDiscoverDetailBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
 import com.mingyuwu.barurside.profile.FriendAdapter
 import com.permissionx.guolindev.PermissionX
@@ -132,7 +135,7 @@ class DiscoverDetailFragment() : Fragment() {
                 }
                 is Activity -> {
                     findNavController().navigate(
-                        MainNavigationDirections.navigateToActivityDetailDialog(it,theme)
+                        MainNavigationDirections.navigateToActivityDetailDialog(it, theme)
                     )
                 }
             }
@@ -140,17 +143,25 @@ class DiscoverDetailFragment() : Fragment() {
         )
 
         // assign value to recyclerView
-        viewModel.detailData.observe(viewLifecycleOwner, Observer {
+        viewModel.detailData.observe(viewLifecycleOwner, Observer { it ->
             Log.d("Ming", "detailData: $it")
-            adapter.submitList(it)
-        }
-        )
+            if (theme == Theme.NOTIFICATION) {
+                val list = (it as List<Notification>).filter { notifications ->
+                    notifications.toId == "annie82920@gmail.com"
+                }
+                Log.d("Ming", "list: $list")
+                adapter.submitList(list)
+            } else {
+                adapter.submitList(it)
+            }
+        })
 
         // set random button click listener
         binding.btnRandom.setOnClickListener {
             viewModel.detailData.value?.let {
                 findNavController().navigate(
-                    MainNavigationDirections.navigateToRandomFragment((it as List<Venue>).toTypedArray()))
+                    MainNavigationDirections.navigateToRandomFragment((it as List<Venue>).toTypedArray())
+                )
             }
         }
 

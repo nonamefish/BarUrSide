@@ -812,40 +812,44 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-    override fun getNotification(userId: String): MutableLiveData<List<Notification>>{
+    override fun getNotification(userId: String): MutableLiveData<List<Notification>> {
         val liveData = MutableLiveData<List<Notification>>()
 
         // notification from user
         FirebaseFirestore.getInstance()
-        .collection(PATH_NOTIFICATION)
-        .whereEqualTo("toId", userId)
-        .addSnapshotListener { snapshot, exception ->
+            .collection(PATH_NOTIFICATION)
+            .whereEqualTo("toId", userId)
+            .addSnapshotListener { snapshot, exception ->
 
-            exception?.let {
-                Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
-            }
-            val list = mutableListOf<Notification>()
-            for (document in snapshot!!) {
-                val notification = document.toObject(Notification::class.java)
-                list.add(notification)
-            }
-
-            // notification send user
-            FirebaseFirestore.getInstance()
-                .collection(PATH_NOTIFICATION)
-                .whereEqualTo("fromId", userId)
-                .addSnapshotListener { snapshot, exception ->
-                    exception?.let {
-                        Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
-                    }
-                    val list = mutableListOf<Notification>()
-                    for (document in snapshot!!) {
-                        val notification = document.toObject(Notification::class.java)
-                        list.add(notification)
-                    }
-                    liveData.value = list
+                exception?.let {
+                    Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
-        }
+                val list = mutableListOf<Notification>()
+                for (document in snapshot!!) {
+                    val notification = document.toObject(Notification::class.java)
+                    notification.timestamp = notification.date?.let { Timestamp(it.time) }
+                    list.add(notification)
+                }
+
+                // notification send user
+                FirebaseFirestore.getInstance()
+                    .collection(PATH_NOTIFICATION)
+                    .whereEqualTo("fromId", userId)
+                    .addSnapshotListener { snapshot, exception ->
+                        exception?.let {
+                            Log.d(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                        }
+                        for (document in snapshot!!) {
+                            val notification = document.toObject(Notification::class.java)
+                            notification.timestamp = notification.date?.let { Timestamp(it.time) }
+                            list.add(notification)
+                        }
+                        liveData.value = list
+                    }
+            }
         return liveData
     }
 
@@ -1639,8 +1643,99 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     )
                                 }
                             }
-                    }else{
+                    } else {
                         continuation.resume(Result.Success(true))
+                    }
+                }
+        }
+
+    override suspend fun replyAddFriend(notify: Notification, reply: Boolean): Result<Boolean> =
+        suspendCoroutine { continuation ->
+
+            // delete frd request in notification
+            FirebaseFirestore.getInstance()
+                .collection(PATH_NOTIFICATION)
+                .whereEqualTo("id", notify.id)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            document.reference.delete()
+                        }
+
+                        // add to user's friend list
+                        if (reply) {
+                            FirebaseFirestore.getInstance()
+                                .collection(PATH_USER)
+                                .whereEqualTo("id",notify.fromId)
+                                .get()
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        for (document in task.result!!) {
+                                            val user = document.toObject(User::class.java)
+                                            val frd = Relationship(
+                                                notify.toId,
+                                                Timestamp(System.currentTimeMillis())
+                                            )
+                                            document.reference
+                                                .update(
+                                                    "friends",
+                                                    user.friends?.plus(frd) ?: listOf(frd)
+                                                )
+                                                .addOnSuccessListener {
+                                                    Log.d(TAG, "add successfully updated!")
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Log.w(TAG, "error updated!")
+                                                }
+                                        }
+                                    }
+                                }
+
+                            FirebaseFirestore.getInstance()
+                                .collection(PATH_USER)
+                                .whereEqualTo("id",notify.toId)
+                                .get()
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        for (document in task.result!!) {
+                                            val user = document.toObject(User::class.java)
+                                            val frd = Relationship(
+                                                notify.fromId,
+                                                Timestamp(System.currentTimeMillis())
+                                            )
+                                            document.reference
+                                                .update(
+                                                    "friends",
+                                                    user.friends?.plus(frd) ?: listOf(frd)
+                                                )
+                                                .addOnSuccessListener {
+                                                    Log.d(TAG, "add successfully updated!")
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Log.w(TAG, "error updated!")
+                                                }
+                                        }
+                                    }
+                                    continuation.resume(Result.Success(true))
+                                }
+                        } else {
+                            task.exception?.let {
+                                Log.w(
+                                    TAG,
+                                    "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                                )
+                                continuation.resume(Result.Error(it))
+                                return@addOnCompleteListener
+                            }
+                            continuation.resume(
+                                Result.Fail(
+                                    BarUrSideApplication.instance.getString(
+                                        R.string.fail_nothing
+                                    )
+                                )
+                            )
+                        }
                     }
                 }
         }

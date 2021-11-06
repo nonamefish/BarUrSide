@@ -13,8 +13,9 @@ import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.databinding.ItemDiscoverObjectBinding
 import com.mingyuwu.barurside.databinding.ItemNotificationBinding
+import com.mingyuwu.barurside.login.UserManager
 
-class NotificationAdapter(val viewModel: ViewModel) :
+class NotificationAdapter(val viewModel: DiscoverDetailViewModel) :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
 
     class NotificationViewHolder(private var binding: ItemNotificationBinding) :
@@ -29,8 +30,9 @@ class NotificationAdapter(val viewModel: ViewModel) :
             }
         }
 
-        fun bind(notification: Notification, viewModel: ViewModel) {
+        fun bind(notification: Notification, viewModel: DiscoverDetailViewModel) {
             binding.notification = notification
+            binding.viewModel = viewModel
         }
     }
 

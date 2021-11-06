@@ -165,4 +165,8 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     override fun getNotification(userId: String): MutableLiveData<List<Notification>> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun replyAddFriend(notify: Notification, reply: Boolean): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
 }

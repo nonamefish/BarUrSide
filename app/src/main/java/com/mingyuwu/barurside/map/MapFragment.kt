@@ -194,10 +194,15 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                         override fun onLocationResult(locationResult: LocationResult?) {
                             locationResult ?: return
                             mainViewModel.location.value =
-                                LatLng(
-                                    locationResult.lastLocation.latitude,
-                                    locationResult.lastLocation.longitude
-                                )
+                                LatLng(25.04265289103591, 121.565102094742)
+//
+//                                LatLng(
+//                                    locationResult.lastLocation.latitude,
+//                                    locationResult.lastLocation.longitude
+//                                )
+
+
+
 
                             // get near bar
                             viewModel.getVenueByLocation(mainViewModel.location.value!!)

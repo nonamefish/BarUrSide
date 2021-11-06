@@ -8,6 +8,10 @@
         <variable
             name="notification"
             type="com.mingyuwu.barurside.data.Notification" />
+
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,9 +47,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            app:notifyContent="@{notification.content}"
             app:layout_constraintStart_toEndOf="@+id/profile_base_img"
             app:layout_constraintTop_toTopOf="@+id/profile_base_img"
+            app:notifyContent="@{notification.content}"
             tools:text="通知" />
 
         <TextView
@@ -59,7 +63,7 @@
             android:textStyle="normal"
             app:layout_constraintStart_toEndOf="@+id/profile_base_img"
             app:layout_constraintTop_toBottomOf="@+id/notify_title"
-            app:notifyPeriod="@{notification.date}"
+            app:notifyPeriod="@{notification.timestamp}"
             tools:text="一週前" />
 
         <Button
@@ -70,6 +74,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:onClick="@{() -> viewModel.replyAddFriend(notification,true)}"
             android:text="確認"
             android:textSize="13sp"
             app:backgroundTint="@color/green_0ead69"
@@ -85,6 +90,7 @@
             android:layout_height="35dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:onClick="@{() -> viewModel.replyAddFriend(notification,false)}"
             android:text="取消"
             android:textSize="13sp"
             app:backgroundTint="@color/gray_999999"

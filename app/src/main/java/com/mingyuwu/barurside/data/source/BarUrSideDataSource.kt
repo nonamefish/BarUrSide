@@ -65,4 +65,5 @@ interface BarUrSideDataSource {
     suspend fun addUser(user: User): Result<Boolean>
     suspend fun addFriend(notification: Notification): Result<Boolean>
     fun getNotification(userId: String): MutableLiveData<List<Notification>>
+    suspend fun replyAddFriend(notify: Notification, reply: Boolean): Result<Boolean>
 }

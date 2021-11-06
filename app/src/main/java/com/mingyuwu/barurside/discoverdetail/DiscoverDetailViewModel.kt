@@ -6,12 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.mockdata.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.filter.FilterParameter
+import com.mingyuwu.barurside.login.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -50,16 +52,19 @@ class DiscoverDetailViewModel(
     init {
 
         // snapshot listener
-        if( theme == Theme.RECENT_ACTIVITY){
-            _detailData = repository.getActivityResult() as MutableLiveData<List<Any>>
+        _detailData = when (theme) {
+            Theme.RECENT_ACTIVITY -> repository.getActivityResult() as MutableLiveData<List<Any>>
+            Theme.NOTIFICATION -> {
+                repository.getNotification(
+                    UserManager.user.value?.id ?: ""
+                ) as MutableLiveData<List<Any>>
+            }
+            else -> _detailData
         }
 
         coroutineScope.launch {
 
             when (theme) {
-                Theme.NOTIFICATION -> {
-                    _detailData.value = NotificationData.notification.notification
-                }
                 // Map Fragment
                 Theme.MAP_FILTER -> {
                     if (filterParameter != null) {
@@ -72,13 +77,13 @@ class DiscoverDetailViewModel(
                 }
                 // Profile Page
                 Theme.USER_FRIEND -> {
-                    id?.let{
+                    id?.let {
                         result = repository.getFriend(id)
                     }
                 }
                 Theme.USER_ACTIVITY -> {
-                    id?.get(0)?.let{
-                        Log.d("Ming","id: $id")
+                    id?.get(0)?.let {
+                        Log.d("Ming", "id: $id")
                         result = repository.getActivityByUser(id[0])
                     }
                 }
@@ -162,6 +167,29 @@ class DiscoverDetailViewModel(
                 }
             }
 
+        }
+    }
+
+    fun replyAddFriend(notify: Notification, reply: Boolean) {
+        coroutineScope.launch {
+            result = repository.replyAddFriend(notify,reply)
+            when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    Log.d("Ming", "result: $(result as Result.Success<Any>).data}")
+                }
+                is Result.Fail -> {
+                    _error.value = (result as Result.Fail).error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = (result as Result.Error).exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
         }
     }
 
