@@ -19,6 +19,8 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
 
     // set source data
     var userInfo = MutableLiveData<User>()
+    var notification = MutableLiveData<List<Notification>>()
+
     private var _rtgInfo = MutableLiveData<List<RatingInfo>>()
     val rtgInfo: LiveData<List<RatingInfo>>
         get() = _rtgInfo
@@ -41,8 +43,15 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
     init {
         getUserInfo(userId)
         getRatingInfo(userId)
-
+        getNotification(UserManager.user.value?.id)
     }
+
+    private fun getNotification(userId: String?) {
+        userId?.let{
+            notification = repository.getNotification(it)
+        }
+    }
+
 
     private fun getUserInfo(userId: String) {
         userInfo = repository.getUser(userId)

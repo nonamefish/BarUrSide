@@ -75,7 +75,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     activity.startTimestamp = activity.startTime?.let { Timestamp(it.time) }
                     activity.endTimestamp = activity.endTime?.let { Timestamp(it.time) }
                     list.add(activity)
-                    Log.d("Ming", "getActivityResult list $list")
                 }
 
                 liveData.value = list
@@ -374,7 +373,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             list.add(rating)
 
                                             if (document == rtgTask.result!!.last()) {
-                                                Log.d("Ming", "getRatingByUser list: $list")
+
                                                 continuation.resume(Result.Success(list))
                                             }
                                         }
@@ -394,7 +393,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             list.add(rating)
 
                                             if (document == rtgTask.result!!.last()) {
-                                                Log.d("Ming", "getRatingByUser list: $list")
+
                                                 continuation.resume(Result.Success(list))
                                             }
 
@@ -462,9 +461,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     if (task.isSuccessful) {
 
                         for (document in task.result!!) {
-                            Log.d("Ming", "document: $document")
+
                             val collect = document.toObject(Collect::class.java)
-                            Log.d("Ming", "collect: $collect")
                             list.add(collect)
                         }
                         continuation.resume(Result.Success(list))
@@ -490,7 +488,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun removeCollect(id: String, userId: String): Result<Boolean> =
         suspendCoroutine { continuation ->
-            Log.d("Ming", "id: $id, userId: $userId")
+
             FirebaseFirestore.getInstance()
                 .collection(PATH_COLLECT)
                 .whereEqualTo("objectId", id)
@@ -498,9 +496,9 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d("Ming", task.result.documents.toString())
+
                         for (document in task.result!!) {
-                            Log.d("Ming", "document: $document")
+                            Log.d(TAG, "document: $document")
                             document.reference.delete()
                         }
                         continuation.resume(Result.Success(true))
@@ -676,7 +674,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     "shareImageCount" to user?.shareImageCount?.plus(addShareImgCnt)
                                 ) as Map<String, Any>
                             )
-                        Log.d("Ming", "updateUserShare!!!!!!")
+
                         continuation.resume(Result.Success(true))
 
                     } else {
@@ -1147,7 +1145,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 //                .whereArrayContains("bookers", mapOf("id" to userId, "date" to null))
                 .get()
                 .addOnCompleteListener { activityTask ->
-                    Log.d("Ming", "activityTask: ${activityTask.result.documents}")
                     if (activityTask.isSuccessful) {
                         for (document in activityTask.result!!) {
                             val activity = document.toObject(Activity::class.java)
@@ -1505,7 +1502,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> =
         suspendCoroutine { continuation ->
-            Log.d("Ming", "activityId: $activityId, userId: $userId")
+//            Log.d("Ming", "activityId: $activityId, userId: $userId")
             FirebaseFirestore.getInstance()
                 .collection(PATH_ACTIVITY)
                 .whereEqualTo("id", activityId)
@@ -1558,7 +1555,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun bookActivity(activityId: String, userId: String): Result<Boolean> =
         suspendCoroutine { continuation ->
-            Log.d("Ming", "activityId: $activityId, userId: $userId")
+//            Log.d("Ming", "activityId: $activityId, userId: $userId")
             FirebaseFirestore.getInstance()
                 .collection(PATH_ACTIVITY)
                 .whereEqualTo("id", activityId)

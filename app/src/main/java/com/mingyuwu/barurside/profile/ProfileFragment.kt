@@ -30,7 +30,8 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private val viewModel by viewModels<ProfileViewModel> {
         getVmFactory(
-            ProfileFragmentArgs.fromBundle(requireArguments()).id ?: (UserManager.user.value?.id?:"")
+            ProfileFragmentArgs.fromBundle(requireArguments()).id ?: (UserManager.user.value?.id
+                ?: "")
         )
     }
 
@@ -39,7 +40,9 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // user profile will get id from UserManager
-        val id = ProfileFragmentArgs.fromBundle(requireArguments()).id ?: (UserManager.user.value?.id?:"")
+        val id =
+            ProfileFragmentArgs.fromBundle(requireArguments()).id ?: (UserManager.user.value?.id
+                ?: "")
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -51,7 +54,6 @@ class ProfileFragment : Fragment() {
         // test image adapter
         val imgAdapter = ImageAdapter(80, 100)
         binding.venueImgList.adapter = imgAdapter
-
 
         // set rating adapter of drink and venue
         val rtgVnAdapter = UserRatingAdapter()
@@ -77,6 +79,20 @@ class ProfileFragment : Fragment() {
                 // set binding variable
                 binding.rtgVenueCnt = rtgVenue.size
                 binding.rtgDrinkCnt = rtgDrink.size
+            }
+        })
+
+        // notification: if user send or get add friend request, then can't click add button
+        viewModel.notification.observe(viewLifecycleOwner, Observer {
+            it?.let { notifications ->
+                val list = notifications.filter { notification -> notification.reply == null }
+                if (list.any { it.fromId == UserManager.user.value?.id }) {
+                    binding.btnAddFrd.text = "好友邀請寄送中"
+                    binding.btnAddFrd.isEnabled = false
+                } else if (list.any { it.toId == UserManager.user.value?.id }) {
+                    binding.btnAddFrd.text = "好友邀請確認中"
+                    binding.btnAddFrd.isEnabled = false
+                }
             }
         })
 

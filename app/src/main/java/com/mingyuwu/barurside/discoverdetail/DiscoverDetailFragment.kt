@@ -148,8 +148,7 @@ class DiscoverDetailFragment() : Fragment() {
             if (theme == Theme.NOTIFICATION) {
                 val list = (it as List<Notification>).filter { notifications ->
                     notifications.toId == "annie82920@gmail.com"
-                }
-                Log.d("Ming", "list: $list")
+                }.take(20)
                 adapter.submitList(list)
             } else {
                 adapter.submitList(it)
