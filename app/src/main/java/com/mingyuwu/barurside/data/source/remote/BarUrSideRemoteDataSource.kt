@@ -817,6 +817,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         FirebaseFirestore.getInstance()
             .collection(PATH_NOTIFICATION)
             .whereEqualTo("toId", userId)
+            .orderBy("date",Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, exception ->
 
                 exception?.let {
@@ -833,6 +834,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 FirebaseFirestore.getInstance()
                     .collection(PATH_NOTIFICATION)
                     .whereEqualTo("fromId", userId)
+                    .orderBy("date",Query.Direction.DESCENDING)
                     .addSnapshotListener { snapshot, exception ->
                         exception?.let {
                             Log.d(
@@ -1230,7 +1232,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                                                             if (check == userTask.result.size()) {
                                                                 continuation.resume(
-                                                                    Result.Success(list)
+                                                                    Result.Success(list.sortedByDescending { it.postDate })
                                                                 )
                                                             }
                                                         }

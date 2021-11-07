@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/background_dialog_corner.xml" value="0.4121552604698672" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/background_spinner_dropdown.xml" value="0.2453125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_activity_detail.xml" value="0.2453125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_filter_level.xml" value="0.33425925925925926" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_map_search.xml" value="0.33425925925925926" />
@@ -29,6 +30,7 @@
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/sl_bar_search.xml" value="0.3907407407407407" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/sl_chip_state_list.xml" value="0.4203125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/sl_nav_color.xml" value="0.3907407407407407" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/spinner_drawdwon_icon.xml" value="0.2453125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/thumb_drink.xml" value="0.4203125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/thumb_is_venue.xml" value="0.4203125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/thumb_venue.xml" value="0.4203125" />
@@ -42,10 +44,10 @@
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/dialog_venue_menu.xml" value="0.14673913043478262" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_activity.xml" value="0.31596638655462184" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_activity_page.xml" value="0.3278985507246377" />
-        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_add_activity.xml" value="0.2" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_add_activity.xml" value="0.536" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_collect.xml" value="0.34601449275362317" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_collect_page.xml" value="0.34601449275362317" />
-        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_discover.xml" value="0.49445676274944567" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_discover.xml" value="0.4" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_discover_detail.xml" value="0.2971014492753623" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_drink.xml" value="0.3850574712643678" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_edit_rating.xml" value="0.1" />
@@ -73,7 +75,7 @@
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/list_item_rating_object.xml" value="0.4" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/rating_object_list_item.xml" value="0.264" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/sl_chip_state_list.xml" value="0.28940217391304346" />
-        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/spinner_friend_list.xml" value="0.14175724637681159" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/spinner_friend_list.xml" value="0.4" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/user_rating_list_item.xml" value="0.34601449275362317" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/menu/menu_bottom_main.xml" value="0.4" />
       </map>

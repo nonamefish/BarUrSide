@@ -28,8 +28,8 @@ class DiscoverDrinkAdapter(val viewModel: DiscoverDetailViewModel) :
             binding.name = drink.name
             binding.img = drink.images?.get(0) ?: ""
             binding.category = drink.category
-            binding.info = drink.price.toString()
-            binding.info2 = drink.venueId
+            binding.info = "$ ${drink.price}"
+            binding.info2 = "${String.format("%.1f", drink.avgRating)} 顆星 | ${drink.rtgCount} 則評價"
 
             binding.btnObjectInfo.setOnClickListener {
                 viewModel.navigateToInfo.value = drink

@@ -37,6 +37,11 @@
     <string name="login_content1">Explore Your favourite and</string>
     <string name="login_content2">what to drink</string>
 
+    <string-array name="search_type">
+        <item>Venue</item>
+        <item>Drink</item>
+    </string-array>
+
     <string name="fail_nothing">Nothing</string>
 
 </resources>

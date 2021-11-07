@@ -23,9 +23,9 @@ class ActivityPageViewModel(
 
     val user = UserManager.user
 
-    private var _rtgData = MutableLiveData<List<Any>>()
-    val rtgData : LiveData<List<Any>>
-        get() = _rtgData
+    private var _listDate = MutableLiveData<List<Any>>()
+    val listDate : LiveData<List<Any>>
+        get() = _listDate
 
     // navigate to activity detail
     val navigateToDetail = MutableLiveData<Any?>()
@@ -60,13 +60,13 @@ class ActivityPageViewModel(
     }
 
     private fun getRecentActivity() {
-        _rtgData = repository.getActivityResult() as MutableLiveData<List<Any>>
+        _listDate = repository.getActivityResult() as MutableLiveData<List<Any>>
     }
 
     private fun getRatingByRecommend() {
         coroutineScope.launch {
             val result = repository.getRatingByRecommend()
-            _rtgData.value = when (result) {
+            _listDate.value = when (result) {
                 is Result.Success -> {
                     _error.value = null
                     result.data
@@ -89,7 +89,7 @@ class ActivityPageViewModel(
     fun getRatingByFriend(userId: String) {
         coroutineScope.launch {
             val result = repository.getRatingByFriends(userId)
-            _rtgData.value = when (result) {
+            _listDate.value = when (result) {
                 is Result.Success -> {
                     _error.value = null
                     result.data

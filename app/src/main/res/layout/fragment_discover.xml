@@ -28,49 +28,80 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <AutoCompleteTextView
-            android:id="@+id/auto_discover_filter"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cnst_search"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="60dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/border_map_search"
-            android:ems="10"
-            android:hint="@{viewModel.searchType ? `Search for drink` : `Search for venue`}"
-            android:inputType="textPersonName"
-            android:maxLines="1"
-            android:paddingStart="48dp"
-            android:singleLine="true"
-            android:text="@={viewModel.searchText}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/view1"
+            app:layout_constraintEnd_toEndOf="@+id/view1"
+            app:layout_constraintStart_toStartOf="@+id/view1"
+            app:layout_constraintTop_toTopOf="@+id/view1">
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:checked="@={viewModel.searchType}"
-            app:track="@drawable/track_is_venue"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:thumb="@drawable/thumb_is_venue"
-            app:layout_constraintBottom_toBottomOf="@+id/auto_discover_filter"
-            app:layout_constraintEnd_toEndOf="@+id/auto_discover_filter"
-            app:layout_constraintTop_toTopOf="@+id/auto_discover_filter"></androidx.appcompat.widget.SwitchCompat>
+            <AutoCompleteTextView
+                android:id="@+id/auto_discover_filter"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:background="@null"
+                android:ems="10"
+                android:hint="@{viewModel.searchType ? `Search drink` : `Search venue`}"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:paddingStart="48dp"
+                android:singleLine="true"
+                android:text="@={viewModel.searchText}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/spinner_search_type"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/btn_search"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="16dp"
-            android:backgroundTint="@color/gray_cccccc"
-            android:src="@drawable/icons_32px_discover"
-            app:layout_constraintBottom_toBottomOf="@+id/auto_discover_filter"
-            app:layout_constraintStart_toStartOf="@+id/auto_discover_filter"
-            app:layout_constraintTop_toTopOf="@+id/auto_discover_filter" />
+            <Spinner
+                android:id="@+id/spinner_search_type"
+                android:layout_width="100dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/background_spinner_dropdown"
+                android:overlapAnchor="false"
+                android:paddingLeft="10dp"
+                android:spinnerMode="dropdown"
+                android:src="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"></Spinner>
+
+            <ImageView
+                android:id="@+id/img_dropdown"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/icons_32px_dropdown"
+                android:backgroundTint="@color/black_3f3a3a"
+                app:layout_constraintBottom_toBottomOf="@+id/spinner_search_type"
+                app:layout_constraintEnd_toEndOf="@+id/spinner_search_type"
+                app:layout_constraintTop_toTopOf="@+id/spinner_search_type"></ImageView>
+
+            <ImageView
+                android:id="@+id/btn_search"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/icons_32px_discover"
+                app:layout_constraintBottom_toBottomOf="@+id/auto_discover_filter"
+                app:layout_constraintStart_toStartOf="@+id/auto_discover_filter"
+                app:layout_constraintTop_toTopOf="@+id/auto_discover_filter"
+                app:tint="@color/gray_999999" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cnstrt_recent_activity"

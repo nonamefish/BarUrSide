@@ -68,7 +68,7 @@ class ActivityPageFragment() : Fragment() {
 
 
         // assign value to recyclerView
-        viewModel.rtgData.observe(viewLifecycleOwner, Observer {
+        viewModel.listDate.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
             }

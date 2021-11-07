@@ -1,12 +1,13 @@
 package com.mingyuwu.barurside.discover
 
-import android.R
+import com.mingyuwu.barurside.R
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -31,15 +32,37 @@ class DiscoverFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
+        //set spinner type and adapter
+        val adapter = ArrayAdapter.createFromResource(
+            binding.root.context,
+            R.array.search_type,
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        binding.spinnerSearchType.adapter = adapter
+        binding.spinnerSearchType.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                ) {
+                    viewModel.searchType.value = when (position) {
+                        0 -> false
+                        1 -> true
+                        else -> null
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
         // observe search type
         viewModel.searchType.observe(viewLifecycleOwner, Observer {
             binding.autoDiscoverFilter.setText("")
             viewModel.searchInfo.value = null
         })
 
-
         // search venue after autocompleted text
-        viewModel.searchText.observe(viewLifecycleOwner, Observer {
+        viewModel.searchText.observe(viewLifecycleOwner, Observer
+        {
             it?.let {
                 if (it.isNotEmpty()) {
                     if (viewModel.searchInfo.value == null) {
@@ -55,7 +78,8 @@ class DiscoverFragment : Fragment() {
         })
 
         // search info: set auto completed text adapter
-        viewModel.searchInfo.observe(viewLifecycleOwner, Observer {
+        viewModel.searchInfo.observe(viewLifecycleOwner, Observer
+        {
             it?.let {
 
                 val list = when (viewModel.searchType.value) {
@@ -73,7 +97,7 @@ class DiscoverFragment : Fragment() {
                 // set adapter
                 val adapter = ArrayAdapter(
                     binding.root.context,
-                    R.layout.simple_spinner_dropdown_item,
+                    android.R.layout.simple_spinner_dropdown_item,
                     list!!
                 )
                 binding.autoDiscoverFilter.setAdapter(adapter)
@@ -91,7 +115,8 @@ class DiscoverFragment : Fragment() {
         })
 
         // navigate to object info
-        viewModel.navigateToObject.observe(viewLifecycleOwner, Observer {
+        viewModel.navigateToObject.observe(viewLifecycleOwner, Observer
+        {
             it?.let {
                 when (viewModel.searchType.value) {
                     true -> {
@@ -110,7 +135,8 @@ class DiscoverFragment : Fragment() {
         })
 
         // navigate to theme
-        viewModel.navigateToTheme.observe(viewLifecycleOwner, Observer {
+        viewModel.navigateToTheme.observe(viewLifecycleOwner, Observer
+        {
             it?.let {
                 findNavController().navigate(
                     MainNavigationDirections.navigateToDiscoverDetailFragment(

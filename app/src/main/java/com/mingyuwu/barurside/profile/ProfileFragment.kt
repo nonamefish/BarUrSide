@@ -86,10 +86,10 @@ class ProfileFragment : Fragment() {
         viewModel.notification.observe(viewLifecycleOwner, Observer {
             it?.let { notifications ->
                 val list = notifications.filter { notification -> notification.reply == null }
-                if (list.any { it.fromId == UserManager.user.value?.id }) {
+                if (list.any { it.toId == id }) {
                     binding.btnAddFrd.text = "好友邀請寄送中"
                     binding.btnAddFrd.isEnabled = false
-                } else if (list.any { it.toId == UserManager.user.value?.id }) {
+                } else if (list.any { it.fromId == id }) {
                     binding.btnAddFrd.text = "好友邀請確認中"
                     binding.btnAddFrd.isEnabled = false
                 }
