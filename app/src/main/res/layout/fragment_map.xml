@@ -48,7 +48,7 @@
             android:layout_height="16dp"
             android:layout_marginStart="16dp"
             android:backgroundTint="@color/gray_cccccc"
-            android:src="@drawable/icons_24px_discover"
+            android:src="@drawable/icons_32px_discover"
             app:layout_constraintBottom_toBottomOf="@+id/auto_map_filter"
             app:layout_constraintStart_toStartOf="@+id/auto_map_filter"
             app:layout_constraintTop_toTopOf="@+id/auto_map_filter" />
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/icons_24px_filter"
+            android:src="@drawable/icons_32px_filter"
             app:layout_constraintBottom_toBottomOf="@+id/auto_map_filter"
             app:layout_constraintEnd_toEndOf="@+id/auto_map_filter"
             app:layout_constraintTop_toTopOf="@+id/auto_map_filter" />

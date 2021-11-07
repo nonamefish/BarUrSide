@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="8dp"
             android:textColor="@color/primaryDarkColor"
             android:textSize="12sp"
             android:textStyle="normal"
@@ -109,10 +109,11 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@{notification.reply==true ? `已接受邀請` : `已拒絕邀請`}"
             android:visibility="@{notification.reply == null ? view.GONE : view.VISIBLE}"
             app:layout_constraintStart_toStartOf="@+id/notify_date"
-            app:layout_constraintTop_toTopOf="@+id/btn_cancel"
+            app:layout_constraintTop_toBottomOf="@+id/notify_date"
             tools:text="已婉拒邀請" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

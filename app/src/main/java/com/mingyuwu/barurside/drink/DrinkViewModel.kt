@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import com.mingyuwu.barurside.login.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -17,7 +18,7 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
     var venueInfo = MutableLiveData<Venue>()
     var rtgInfo = MutableLiveData<List<RatingInfo>>()
     var isCollect = MutableLiveData<Boolean?>()
-    val userId = "6BhbnIMi1Ai91Ky4w9rI"
+    val userId = UserManager.user.value?.id ?: ""
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()

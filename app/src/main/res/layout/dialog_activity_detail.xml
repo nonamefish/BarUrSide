@@ -153,7 +153,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/icons_24px_profile"
+                android:background="@drawable/icons_32px_profile"
                 android:backgroundTint="@color/black_3f3a3a"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_add_activity_address" />

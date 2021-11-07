@@ -65,14 +65,15 @@
 
         <ImageView
             android:id="@+id/img_add_activity_limit"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="32dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="24dp"
-            android:background="@drawable/icons_24px_profile"
+            android:background="@drawable/ic_outline_person_outline_24"
             android:backgroundTint="@color/black_3f3a3a"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_activity_address" />
+            app:layout_constraintTop_toBottomOf="@+id/add_activity_address"
+            app:tint="@color/black_3f3a3a" />
 
         <ImageView
             android:id="@+id/img_add_activity_main"
@@ -129,6 +130,7 @@
             android:hint="輸入地點"
             android:text="@={viewModel.address}"
             android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_address"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/img_add_activity_address"
             app:layout_constraintTop_toTopOf="@+id/img_add_activity_address"

@@ -67,7 +67,7 @@
             android:layout_height="16dp"
             android:layout_marginStart="16dp"
             android:backgroundTint="@color/gray_cccccc"
-            android:src="@drawable/icons_24px_discover"
+            android:src="@drawable/icons_32px_discover"
             app:layout_constraintBottom_toBottomOf="@+id/auto_discover_filter"
             app:layout_constraintStart_toStartOf="@+id/auto_discover_filter"
             app:layout_constraintTop_toTopOf="@+id/auto_discover_filter" />

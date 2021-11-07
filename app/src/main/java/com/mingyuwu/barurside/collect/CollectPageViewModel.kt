@@ -22,7 +22,7 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
     var objectInfo = MutableLiveData<List<Any>>()
     var isCollect = MutableLiveData<Boolean?>(true)
     val navigateToObject = MutableLiveData<String?>()
-    val userId = UserManager.user.value?.id!!
+    val userId = UserManager.user.value?.id ?: ""
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
