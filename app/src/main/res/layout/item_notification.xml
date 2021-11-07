@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="2dp"
-            android:textColor="@color/theme_500"
+            android:textColor="@color/primaryDarkColor"
             android:textSize="12sp"
             android:textStyle="normal"
             app:layout_constraintStart_toEndOf="@+id/profile_base_img"

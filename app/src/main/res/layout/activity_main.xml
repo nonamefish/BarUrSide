@@ -19,7 +19,7 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarMain"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:background="@color/primaryDarkColor"
                 android:elevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
                         android:layout_marginBottom="12dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:backgroundTint="@color/quantum_orange600"
+                        android:backgroundTint="@color/primaryLightColor"
                         android:background="@drawable/ic_baseline_notifications_24" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.appcompat.widget.Toolbar>
@@ -67,6 +67,7 @@
                 android:layout_weight="1"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
+                android:background="@color/white_ffffff"
                 app:itemIconSize="24dp"
                 app:itemIconTint="@color/sl_nav_color"
                 app:itemRippleColor="@color/white"

@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryColor">#81d4fa</color>
-    <color name="primaryLightColor">#b6ffff</color>
-    <color name="primaryDarkColor">#4ba3c7</color>
+    <color name="primaryColor">#78909c</color>
+    <color name="primaryLightColor">#a7c0cd</color>
+    <color name="primaryDarkColor">#4b636e</color>
+    <color name="secondaryColor">#ffcc80</color>
+    <color name="secondaryLightColor">#ffffb0</color>
+    <color name="secondaryDarkColor">#ca9b52</color>
     <color name="primaryTextColor">#000000</color>
+    <color name="secondaryTextColor">#000000</color>
     <color name="translucent_40">#66000000</color>
 
     <color name="shrine_pink_100">#FEDBD0</color>
     <color name="shrine_pink_900">#442C2E</color>
 
-
-    <color name="theme_200">#C1E7EE</color>
-    <color name="theme_500">#4BA3C7</color>
-    <color name="theme_600">#1B75BC</color>
-    <color name="theme_700">#27AAE1</color>
-    <color name="theme_900">#273A92</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>

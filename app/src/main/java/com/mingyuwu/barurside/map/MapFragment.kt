@@ -172,7 +172,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                             "${venue.rtgCount}," +
                             "${venue.images?.get(0)}"
                 )
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_64px_beer))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_mark_wine))
         )
     }
 
