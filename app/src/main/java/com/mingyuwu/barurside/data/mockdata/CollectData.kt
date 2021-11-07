@@ -6,15 +6,15 @@ class CollectData {
     object collect {
         val collect = listOf(
             Collect(
-                "1", "1", "1", true
+                "1", true, "1", "1"
             ),
             Collect(
-                "2", "1", "1", true
+                "2", true, "1", "1"
             ),
             Collect(
-                "3", "1", "1", false
+                "3", true, "1", "1"
             ), Collect(
-                "4", "1", "1", false
+                "4", true, "1", "1"
             )
         )
     }

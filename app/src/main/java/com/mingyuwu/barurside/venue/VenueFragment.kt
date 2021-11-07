@@ -58,12 +58,7 @@ class VenueFragment : Fragment() {
             }
         }
 
-        // set venue data
-        viewModel.venueInfo.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                binding.venue = it
-            }
-        })
+        binding.viewModel = viewModel
 
         // set rating data
         viewModel.rtgInfo.observe(viewLifecycleOwner, Observer {
@@ -84,7 +79,7 @@ class VenueFragment : Fragment() {
         binding.venueMenu.setOnClickListener {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.VENUE_MENU, id, null
+                    Theme.VENUE_MENU, listOf(id!!).toTypedArray(), null
                 )
             )
         }

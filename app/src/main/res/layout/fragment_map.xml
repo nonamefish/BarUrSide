@@ -32,7 +32,7 @@
             android:layout_marginEnd="24dp"
             android:background="@drawable/border_map_search"
             android:ems="10"
-            android:hint="Beers, Wine, pr venues"
+            android:hint="Search for venue"
             android:inputType="textPersonName"
             android:maxLines="1"
             android:text="@={viewModel.searchText}"

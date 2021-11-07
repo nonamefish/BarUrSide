@@ -8,22 +8,22 @@
     <fragment
         android:id="@+id/collectFragment"
         android:name="com.mingyuwu.barurside.collect.CollectFragment"
-        android:label="fragment_collect"
+        android:label="CollectFragment"
         tools:layout="@layout/fragment_collect" />
     <fragment
         android:id="@+id/discoverFragment"
         android:name="com.mingyuwu.barurside.discover.DiscoverFragment"
-        android:label="fragment_discover"
+        android:label="DiscoverFragment"
         tools:layout="@layout/fragment_discover" />
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.mingyuwu.barurside.map.MapFragment"
-        android:label="fragment_map"
+        android:label="MapFragment"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/editRatingFragment"
         android:name="com.mingyuwu.barurside.editrating.EditRatingFragment"
-        android:label="fragment_edit_rating"
+        android:label="EditRatingFragment"
         tools:layout="@layout/fragment_edit_rating" >
         <argument
             android:name="venue"
@@ -36,12 +36,13 @@
         <argument
             android:name="id"
             app:argType="string"
-            android:defaultValue="com.mingyuwu.barurside.data.mockdata.UserData.user.user[0].id"/>
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
     <fragment
         android:id="@+id/activityFragment"
         android:name="com.mingyuwu.barurside.activity.ActivityFragment"
-        android:label="fragment_activity"
+        android:label="ActivityFragment"
         tools:layout="@layout/fragment_activity" />
     <fragment
         android:id="@+id/drinkFragment"
@@ -70,11 +71,11 @@
     <fragment
         android:id="@+id/randomFragment"
         android:name="com.mingyuwu.barurside.filter.random.RandomFragment"
-        android:label="fragment_random"
+        android:label="RandomFragment"
         tools:layout="@layout/fragment_random">
         <argument
             android:name="venue"
-            app:argType="com.mingyuwu.barurside.data.Venue" />
+            app:argType="com.mingyuwu.barurside.data.Venue[]" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -90,7 +91,7 @@
         <argument
             android:name="id"
             app:nullable="true"
-            app:argType="string" />
+            app:argType="string[]" />
         <argument
             android:name="filterParameter"
             app:nullable="true"
@@ -105,14 +106,21 @@
         android:id="@+id/activityPageFragment"
         android:name="com.mingyuwu.barurside.activity.ActivityPageFragment"
         android:label="ActivityPageFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.mingyuwu.barurside.login.LoginFragment"
+        android:label="LoginFragment" />
 
     <dialog
         android:id="@+id/activityDetailDialog"
-        android:name="com.mingyuwu.barurside.activity.ActivityDetailDialog"
+        android:name="com.mingyuwu.barurside.activity.dialog.ActivityDetailDialog"
         android:label="ActivityDetailDialog">
         <argument
             android:name="activity"
             app:argType="com.mingyuwu.barurside.data.Activity" />
+        <argument
+            android:name="theme"
+            app:argType="com.mingyuwu.barurside.discover.Theme" />
     </dialog>
 
     <action
@@ -156,5 +164,9 @@
     <action
         android:id="@+id/navigate_to_profile_fragment"
         app:destination="@id/profileFragment"></action>
+
+    <action
+        android:id="@+id/navigate_to_login_fragment"
+        app:destination="@id/loginFragment"></action>
 
 </navigation>

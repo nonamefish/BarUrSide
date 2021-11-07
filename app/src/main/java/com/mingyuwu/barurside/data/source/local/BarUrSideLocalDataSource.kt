@@ -12,7 +12,7 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>> {
+    override fun getRatingByObject(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>> {
         TODO("Not yet implemented")
     }
 
@@ -41,11 +41,31 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         userId: String,
         type: String,
         localImage: String
-    ) {
+    ): Result<String>{
         TODO("Not yet implemented")
     }
 
-    override suspend fun getFriend(user: User): Result<List<User>> {
+    override suspend fun getHotVenueResult(): Result<List<Venue>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getActivityResult(): MutableLiveData<List<Activity>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getHotDrinkResult(): Result<List<Drink>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getHighRateVenueResult(): Result<List<Venue>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getHighRateDrinkResult(): Result<List<Drink>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getFriend(frds: List<String>): Result<List<User>> {
         TODO("Not yet implemented")
     }
 
@@ -79,6 +99,74 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         addShareCnt: Int,
         addShareImgCnt: Int
     ): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postCollect(collect: Collect): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getDrinkBySearch(search: String): Result<List<Drink>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getCollect(userId: String): Result<List<Collect>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeCollect(id: String, userId: String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getVenueByIds(ids: List<String>): Result<List<Venue>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getDrinksByIds(ids: List<String>): Result<List<Drink>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getRatingByUser(userId: String): Result<List<RatingInfo>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getActivityByUser(userId: String): Result<List<Activity>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getRatingByRecommend(): Result<List<RatingInfo>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getRatingByFriends(userId: String): Result<List<RatingInfo>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postActivity(activity: Activity): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun bookActivity(activityId: String, userId: String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addUser(user: User): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addFriend(notification: Notification): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getNotification(userId: String): MutableLiveData<List<Notification>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun replyAddFriend(notify: Notification, reply: Boolean): Result<Boolean> {
         TODO("Not yet implemented")
     }
 }

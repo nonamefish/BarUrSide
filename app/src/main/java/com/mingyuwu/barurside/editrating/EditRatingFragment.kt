@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -17,8 +16,6 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import android.util.Log
 import android.widget.ArrayAdapter
@@ -31,8 +28,6 @@ import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
 import com.mingyuwu.barurside.ext.getVmFactory
-import kotlin.collections.ArrayList
-import android.content.DialogInterface
 import android.widget.Button
 import com.permissionx.guolindev.PermissionX
 
@@ -84,7 +79,7 @@ class EditRatingFragment : Fragment() {
         viewModel.isUploadImgBtn.observe(viewLifecycleOwner, Observer {
             if (photoPermissionGranted) {
                 chooseImage(binding.root.context)
-            }else{
+            } else {
                 getPhotoPermission()
             }
         })
@@ -102,11 +97,17 @@ class EditRatingFragment : Fragment() {
         // set post rating button click listener
         binding.btnRtgConfirm.setOnClickListener {
             if (viewModel.checkRating()) {
-                viewModel.postRating()
+                viewModel.uploadPhoto()
             } else {
                 showRatingUncompleted()
             }
         }
+
+        viewModel.firebaseImgUrl.observe(viewLifecycleOwner, Observer {
+            it?.let {
+
+            }
+        })
 
         // leave rating and to previous view
         viewModel.leave.observe(viewLifecycleOwner, Observer {
@@ -143,7 +144,7 @@ class EditRatingFragment : Fragment() {
             }
             .request { allGranted, _, deniedList ->
                 if (allGranted) {
-                    photoPermissionGranted=true
+                    photoPermissionGranted = true
                     chooseImage(binding.root.context)
 //                    Toast.makeText(binding.root.context, "All permissions are granted", Toast.LENGTH_LONG).show()
                 } else {
@@ -197,11 +198,10 @@ class EditRatingFragment : Fragment() {
                         )
                         if (cursor != null) {
 
-                            val columnIndex= cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
+                            val columnIndex =
+                                cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
                             cursor.moveToFirst()
-                            Log.d("Ming","columnIndex: $columnIndex")
                             val picturePath: String = cursor.getString(columnIndex)
-                            Log.d("Ming","picturePath: $picturePath")
                             val img = BitmapFactory.decodeFile(picturePath)
                             addImageToRecyclerView(getResizedBitmap(img, 1000), picturePath)
                             cursor.close()

@@ -6,10 +6,10 @@
 
     <data>
         <variable
-            name="drink"
-            type="com.mingyuwu.barurside.data.Drink" />
+            name="viewModel"
+            type="com.mingyuwu.barurside.drink.DrinkViewModel" />
         <variable
-            name="venue"
+            name="view"
             type="com.mingyuwu.barurside.data.Venue" />
         <variable
             name="ratings"
@@ -33,11 +33,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{drink.images[0]}"
+                app:imageUrl="@{viewModel.drinkInfo.images[0]}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/img_collect_filled_filled"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                app:alpha="@{viewModel.isCollect ?  1.0f : 0.5f }"
+                android:background="@drawable/ic_baseline_favorite_36"
+                android:backgroundTint="@{viewModel.isCollect ? @color/red_e02401 : @color/gray_888888}"
+                android:onClickListener="@{()->viewModel.setCollect()}"
+                app:layout_constraintBottom_toBottomOf="@+id/img_drink"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_collect_border"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_drink"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_baseline_favorite_border_36"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/drink_title"
@@ -45,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:text="@{drink.name}"
+                android:text="@{viewModel.drinkInfo.name}"
                 tools:text="文青不要喝IPA"
                 android:textColor="@color/black_3f3a3a"
                 android:textSize="20sp"
@@ -62,7 +86,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/drink_title"
-                app:stars="@{drink.avgRating}">
+                app:stars="@{viewModel.drinkInfo.avgRating}">
 
             </androidx.recyclerview.widget.RecyclerView>
 
@@ -72,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="7dp"
-                android:text="@{@string/venue_rating_info_view(drink.avgRating, drink.rtgCount)}"
+                android:text="@{@string/venue_rating_info_view(viewModel.drinkInfo.avgRating, viewModel.drinkInfo.rtgCount)}"
                 app:layout_constraintStart_toEndOf="@+id/drink_rtg_score_list"
                 app:layout_constraintTop_toBottomOf="@+id/drink_title"
                 tools:text="(4,1) | 66則評論" />
@@ -188,22 +212,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/drink_rtg_list" />
 
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_baseline_favorite_border_36"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_drink" />
+
 
             <ImageView
                 android:id="@+id/imageView6"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
-                app:imageUrl="@{venue.images[0]}"
+                app:imageUrl="@{viewModel.venueInfo.images[0]}"
                 app:layout_constraintStart_toStartOf="@+id/txt_drink_by_venue"
                 app:layout_constraintTop_toBottomOf="@+id/txt_drink_by_venue"
                 tools:src="@tools:sample/avatars" />
@@ -213,7 +229,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text = "@{venue.name}"
+                android:text = "@{viewModel.venueInfo.name}"
                 tools:text="不醉不歸酒吧"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
                 app:layout_constraintTop_toTopOf="@+id/imageView6" />
@@ -224,7 +240,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:text = "@{venue.address}"
+                android:text = "@{viewModel.venueInfo.address}"
                 tools:text="台北市忠孝東路一段2號"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
                 app:layout_constraintTop_toBottomOf="@+id/drink_by_venue" />
@@ -235,7 +251,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:text = "@{venue.style}"
+                android:text = "@{viewModel.venueInfo.style}"
                 tools:text="Restaurant"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
                 app:layout_constraintTop_toBottomOf="@+id/drink_by_venue_address" />

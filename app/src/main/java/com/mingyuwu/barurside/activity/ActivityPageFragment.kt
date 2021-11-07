@@ -19,6 +19,7 @@ import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.databinding.FragmentActivityPageBinding
+import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.discoverdetail.*
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
@@ -27,7 +28,6 @@ class ActivityPageFragment() : Fragment() {
 
     private lateinit var binding: FragmentActivityPageBinding
     private lateinit var adapter: ListAdapter<Any, RecyclerView.ViewHolder>
-
 
     private val viewModel by viewModels<ActivityPageViewModel> {
         getVmFactory(
@@ -66,25 +66,40 @@ class ActivityPageFragment() : Fragment() {
             }
         }
 
+
+        // assign value to recyclerView
+        viewModel.rtgData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.submitList(it)
+            }
+        })
+
+        // navigate to detail fragment
+        viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Activity -> {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToActivityDetailDialog(
+                            it,
+                            Theme.NONE
+                        )
+                    )
+                }
+            }
+        })
+
+        // set user data
+        viewModel.user.observe(viewLifecycleOwner, Observer {
+            if (type == ActivityTypeFilter.FOLLOW) {
+                viewModel.getRatingByFriend(it.id)
+            }
+        })
+
         // set add activity on click listener
         binding.btnAddActivity.setOnClickListener {
             findNavController().navigate(MainNavigationDirections.navigateToAddActivityFragment())
         }
 
-        // assign value to recyclerView
-        viewModel.activityData.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
-        }
-        )
-
-        // navigate to detail fragment
-        viewModel.navigateToDetail.observe(viewLifecycleOwner,Observer{
-            when (it) {
-                is Activity->{
-                    findNavController().navigate(MainNavigationDirections.navigateToActivityDetailDialog(it))
-                }
-            }
-        })
 
         return binding.root
     }

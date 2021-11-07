@@ -3,7 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.profile.ProfileViewModel" />
+
+        <variable
+            name="rtgVenueCnt"
+            type="int" />
+
+        <variable
+            name="rtgDrinkCnt"
+            type="int" />
+
+        <variable
+            name="view"
+            type="android.view.View" />
+    </data>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,9 +37,9 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/profile_base_img"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="32dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="36dp"
                 app:cardCornerRadius="250dp"
                 app:cardMaxElevation="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -34,6 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
+                    app:imageUrl="@{viewModel.userInfo.image}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -45,9 +63,9 @@
                 android:id="@+id/txt_venue_rtg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
-                android:text="店家評論"
+                android:text="評論總數"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_base_img"
                 app:layout_constraintEnd_toStartOf="@+id/profile_base_img"
                 app:layout_constraintTop_toTopOf="@+id/profile_base_img" />
 
@@ -56,28 +74,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="87"
+                android:text="@{viewModel.userInfo.shareCount.toString()}"
                 app:layout_constraintEnd_toEndOf="@+id/txt_venue_rtg"
                 app:layout_constraintStart_toStartOf="@+id/txt_venue_rtg"
-                app:layout_constraintTop_toBottomOf="@+id/txt_venue_rtg" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_venue_rtg"
+                tools:text="87" />
 
             <TextView
                 android:id="@+id/drink_rtg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="87"
+                android:text="@{viewModel.userInfo.shareImageCount.toString()}"
                 app:layout_constraintEnd_toEndOf="@+id/txt_drink_rtg"
                 app:layout_constraintStart_toStartOf="@+id/txt_drink_rtg"
-                app:layout_constraintTop_toBottomOf="@+id/txt_drink_rtg" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_drink_rtg"
+                tools:text="87" />
 
             <TextView
                 android:id="@+id/txt_drink_rtg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:text="酒類評論"
+                android:text="分享相片"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_base_img"
                 app:layout_constraintStart_toEndOf="@+id/profile_base_img"
                 app:layout_constraintTop_toTopOf="@+id/profile_base_img" />
 
@@ -85,32 +105,39 @@
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="吳偉雄"
+                android:layout_marginTop="12dp"
+                android:text="@{viewModel.userInfo.name}"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_base_img" />
+                app:layout_constraintTop_toBottomOf="@+id/profile_base_img"
+                tools:text="無尾熊" />
 
             <TextView
                 android:id="@+id/user_friend_cnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="87位好友"
+                android:layout_marginBottom="12dp"
+                android:text="@{@string/profile_frds_cnt(viewModel.userInfo.friends.size)}"
+                app:layout_constraintBottom_toTopOf="@+id/btn_add_frd"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/user_name" />
+                app:layout_constraintTop_toBottomOf="@+id/user_name"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="87位好友" />
 
             <Button
                 android:id="@+id/btn_add_frd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="加為好友"
-                android:backgroundTint="@color/green_0ead69"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@{viewModel.isFriend ? @color/gray_888888 : @color/theme_700}"
+                android:text="@{viewModel.isFriend ? `已是好友` : `加為朋友`}"
                 android:textColor="@color/white_f5f5f5"
+                android:visibility="@{viewModel.isMyself ? view.GONE : view.visibility}"
+                app:layout_constraintBottom_toTopOf="@+id/view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/user_friend_cnt" />
@@ -220,8 +247,8 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/venue_img_list"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
@@ -240,9 +267,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:text="共3則評價"
+                android:text="@{@string/profile_rtgs_cnt(rtgVenueCnt)}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_venue_rating" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_venue_rating"
+                tools:text="共5則評價"/>
 
             <TextView
                 android:id="@+id/drink_rtg_cnt"
@@ -250,13 +278,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:text="共3則評價"
+                android:text="@{@string/profile_rtgs_cnt(rtgDrinkCnt)}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_drink_rating" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/user_rtg_venue_list"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:clipToPadding="false"
@@ -272,7 +300,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/user_rtg_drink_list"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:clipToPadding="false"
                 android:orientation="vertical"

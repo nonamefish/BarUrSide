@@ -8,7 +8,7 @@ import com.mingyuwu.barurside.filter.FilterParameter
 interface BarUrSideDataSource {
     fun getVenue(id: String): MutableLiveData<Venue>
 
-    fun getRating(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>>
+    fun getRatingByObject(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>>
 
     fun getDrink(id: String): MutableLiveData<Drink>
 
@@ -21,9 +21,9 @@ interface BarUrSideDataSource {
         userId: String,
         type: String,
         localImage: String
-    )
+    ): Result<String>
 
-    suspend fun getFriend(user: User): Result<List<User>>
+    suspend fun getFriend(frds: List<String>): Result<List<User>>
 
     suspend fun getMenu(venueId: String): Result<List<Drink>>
 
@@ -44,4 +44,26 @@ interface BarUrSideDataSource {
     ): Result<List<Venue>>
     suspend fun getDrinkByRating(id: String): Result<Drink>
     suspend fun getVenueBySearch(search: String): Result<List<Venue>>
+    suspend fun getHotVenueResult(): Result<List<Venue>>
+    suspend fun getHotDrinkResult(): Result<List<Drink>>
+    suspend fun getHighRateVenueResult(): Result<List<Venue>>
+    suspend fun getHighRateDrinkResult(): Result<List<Drink>>
+    fun getActivityResult() : MutableLiveData<List<Activity>>
+    suspend fun getDrinkBySearch(search: String): Result<List<Drink>>
+    suspend fun postCollect(collect: Collect): Result<Boolean>
+    suspend fun getCollect(userId: String): Result<List<Collect>>
+    suspend fun removeCollect(id: String, userId: String): Result<Boolean>
+    suspend fun getVenueByIds(ids: List<String>): Result<List<Venue>>
+    suspend fun getDrinksByIds(ids: List<String>): Result<List<Drink>>
+    suspend fun getRatingByUser(userId: String): Result<List<RatingInfo>>
+    suspend fun getActivityByUser(userId: String): Result<List<Activity>>
+    suspend fun getRatingByRecommend(): Result<List<RatingInfo>>
+    suspend fun getRatingByFriends(userId: String): Result<List<RatingInfo>>
+    suspend fun postActivity(activity: Activity): Result<Boolean>
+    suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean>
+    suspend fun bookActivity(activityId: String, userId: String): Result<Boolean>
+    suspend fun addUser(user: User): Result<Boolean>
+    suspend fun addFriend(notification: Notification): Result<Boolean>
+    fun getNotification(userId: String): MutableLiveData<List<Notification>>
+    suspend fun replyAddFriend(notify: Notification, reply: Boolean): Result<Boolean>
 }

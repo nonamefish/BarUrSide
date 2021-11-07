@@ -37,7 +37,6 @@ class DrinkFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_drink, container, false
         )
-
         binding.lifecycleOwner = this
 
         // get id
@@ -46,16 +45,11 @@ class DrinkFragment : Fragment() {
         // set drink data
         viewModel.drinkInfo.observe(viewLifecycleOwner, Observer {
             it?.let {
-                binding.drink = it
                 viewModel.getVenueResult(it.venueId)
                 viewModel.getRatingResult(it.id, false)
 
-                // set venue data
-                viewModel.venueInfo.observe(viewLifecycleOwner, Observer {
-                    it?.let {
-                        binding.venue = it
-                    }
-                })
+                // after link viewModel venueInfo to datasource livedata,  then set binding viewModel
+                binding.viewModel = viewModel
 
                 // set rating data
                 viewModel.rtgInfo.observe(viewLifecycleOwner, Observer {

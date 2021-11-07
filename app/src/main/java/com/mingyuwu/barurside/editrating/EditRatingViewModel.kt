@@ -1,6 +1,7 @@
 package com.mingyuwu.barurside.editrating
 
 import android.graphics.Bitmap
+import com.mingyuwu.barurside.login.UserManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,7 +20,7 @@ import java.sql.Timestamp
 class EditRatingViewModel(val repository: BarUrSideRepository, private val venue: Venue) :
     ViewModel() {
 
-    private val userId = "6BhbnIMi1Ai91Ky4w9rI"
+    private val userId = UserManager.user.value?.id
 
     private val _star = MutableLiveData<MutableList<Int?>>()
     val star: LiveData<MutableList<Int?>>
@@ -36,6 +37,10 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     private val _uploadImgUrl = MutableLiveData<MutableList<MutableList<String?>>>()
     val uploadImgUrl: LiveData<MutableList<MutableList<String?>>>
         get() = _uploadImgUrl
+
+    private val _firebaseImgUrl = MutableLiveData<MutableList<MutableList<String>>>()
+    val firebaseImgUrl: LiveData<MutableList<MutableList<String>>>
+        get() = _firebaseImgUrl
 
     private val _tagFrd = MutableLiveData<MutableList<String>?>(null)
     val tagFrd: LiveData<MutableList<String>?>
@@ -90,7 +95,7 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
 
 
     init {
-        getUser(userId)
+        getUser()
         getMenu(venue.id)
         _objectId.value = mutableListOf(venue.id)
         _objectName.value = mutableListOf(venue.name)
@@ -121,7 +126,6 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
 
     fun addUploadImg(position: Int, bitmap: Bitmap?, url: String) {
 
-
         if (_uploadImg.value!![position][0] == null) {
             _uploadImg.value!![position] = mutableListOf(bitmap)
             _uploadImgUrl.value!![position] = mutableListOf(url)
@@ -131,7 +135,8 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         }
         _uploadImg.value = _uploadImg.value
         _uploadImgUrl.value = _uploadImgUrl.value
-        Log.d("Ming", "url: ${_uploadImg.value}")
+        Log.d("Ming", "_uploadImg: ${_uploadImg.value}")
+        Log.d("Ming", "_uploadImgUrl: ${_uploadImgUrl.value}")
     }
 
     fun removeUploadImg(rtgOrder: Int, position: Int) {
@@ -154,7 +159,7 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         _tagFrd.value = _tagFrd.value
     }
 
-    fun postRating() {
+    private fun postRating() {
         coroutineScope.launch {
             objectId.value?.let {
                 var addShare = 0
@@ -162,76 +167,102 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
 
                 for (index in 0 until objectId.value!!.size) {
 
-                    val type = when (index) {
-                        0 -> "venue"
-                        else -> "drink"
-                    }
-
-                    val imgs = mutableListOf<String>()
-
-                    _uploadImgUrl.value?.get(index)?.forEach { it ->
-                        it?.let {
-                            uploadPhoto(type, it)
-                            imgs.add("$type/$userId/${it.substring(it.lastIndexOf('/') + 1)}")
-                            addShareImg += 1
-                        }
-                    }
-
                     val rtg = Rating(
                         "",
                         objectId.value!![index],
                         index == 0,
-                        userId,
+                        userId ?: "",
                         star.value!![index]!!.toLong(),
                         comment.value!![index] ?: "",
-                        imgs,
+                        _firebaseImgUrl?.value?.get(index) ?: null,
                         Timestamp(System.currentTimeMillis()),
                         tagFrd.value
                     )
                     addShare += 1
+                    addShareImg += _firebaseImgUrl?.value?.get(index)?.size ?: 0
                     repository.postRating(rtg)
                     updateObjectRating(objectId.value!![index], index == 0, rtg)
                 }
-
                 updateUserShare(addShare, addShareImg)
-
             }
             leave()
         }
     }
 
-    private fun uploadPhoto(type: String, url: String) {
+    fun uploadPhoto() {
         val storage = Firebase.storage
         val storageRef = storage.reference
 
         coroutineScope.launch {
-            repository.uploadPhoto(storageRef, userId, type, url)
+            val imgs = mutableListOf<String>()
+            for (index in 0 until objectId.value!!.size) {
+
+                val type = when (index) {
+                    0 -> "venue"
+                    else -> "drink"
+                }
+
+                _uploadImgUrl.value?.get(index).let {
+
+                    it?.forEachIndexed { listIndex, url ->
+                        Log.d("Ming", "_uploadImgUrl: $url")
+                        url?.let {
+                            when (val result =
+                                repository.uploadPhoto(storageRef, userId ?: "", type, url)) {
+                                is Result.Success -> {
+                                    _error.value = null
+                                    imgs.add(listIndex, result.data)
+                                }
+                                is Result.Fail -> {
+                                    _error.value = result.error
+                                    null
+                                }
+                                is Result.Error -> {
+                                    _error.value = result.exception.toString()
+                                    null
+                                }
+                                else -> {
+                                    null
+                                }
+                            }
+                        }
+                    }
+                    if (_firebaseImgUrl.value == null) {
+                        _firebaseImgUrl.value = mutableListOf(imgs)
+                    } else {
+                        _firebaseImgUrl.value!!.add(imgs)
+                    }
+
+                }
+            }
+            postRating()
         }
     }
 
-    private fun getUser(id: String) {
-        _user = repository.getUser(id)
+    private fun getUser() {
+        _user = UserManager.user
     }
 
     fun getFriendList(user: User) {
         coroutineScope.launch {
-
-            val result = repository.getFriend(user)
-            _frdList.value = when (result) {
-                is Result.Success -> {
-                    _error.value = null
-                    result.data
-                }
-                is Result.Fail -> {
-                    _error.value = result.error
-                    null
-                }
-                is Result.Error -> {
-                    _error.value = result.exception.toString()
-                    null
-                }
-                else -> {
-                    null
+            user.friends?.let {
+                val result = repository.getFriend(user.friends.map { it.id })
+                _frdList.value = when (result) {
+                    is Result.Success -> {
+                        _error.value = null
+                        result.data
+                    }
+                    is Result.Fail -> {
+                        _error.value = result.error
+                        null
+                    }
+                    is Result.Error -> {
+                        _error.value = result.exception.toString()
+                        null
+                    }
+                    else -> {
+                        null
+                    }
                 }
             }
         }
@@ -289,7 +320,9 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         addShareImgCnt: Int
     ) {
         coroutineScope.launch {
-            repository.updateUserShare(userId, addShareCnt, addShareImgCnt)
+            userId?.let {
+                repository.updateUserShare(userId, addShareCnt, addShareImgCnt)
+            }
         }
     }
 

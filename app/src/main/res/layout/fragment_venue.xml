@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="venue"
-            type="com.mingyuwu.barurside.data.Venue" />
+            name="viewModel"
+            type="com.mingyuwu.barurside.venue.VenueViewModel" />
 
         <variable
             name="ratings"
@@ -16,6 +16,7 @@
         <variable
             name="imgs"
             type="java.util.List&lt;String&gt;" />
+
     </data>
 
     <ScrollView
@@ -29,13 +30,37 @@
             <ImageView
                 android:id="@+id/img_venue"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="250dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{venue.images[0]}"
+                app:imageUrl="@{viewModel.venueInfo.images[0]}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/img_collect_filled_filled"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                app:alpha="@{viewModel.isCollect ?  1.0f : 0.5f }"
+                android:background="@drawable/ic_baseline_favorite_36"
+                android:backgroundTint="@{viewModel.isCollect ? @color/red_e02401 : @color/gray_888888}"
+                android:onClickListener="@{()->viewModel.setCollect()}"
+                app:layout_constraintBottom_toBottomOf="@+id/img_venue"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_collect_border"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_venue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_baseline_favorite_border_36"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/venue_title"
@@ -43,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@{venue.name}"
+                android:text="@{viewModel.venueInfo.name}"
                 android:textColor="@color/black_3f3a3a"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +85,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/venue_title"
                 app:layout_constraintStart_toEndOf="@+id/venue_title"
                 app:layout_constraintTop_toTopOf="@+id/venue_title"
-                app:stars="@{venue.avgRating}">
+                app:stars="@{viewModel.venueInfo.avgRating}">
 
             </androidx.recyclerview.widget.RecyclerView>
 
@@ -69,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{@string/venue_rating_info_view(venue.avgRating, venue.rtgCount)}"
+                android:text="@{@string/venue_rating_info_view(viewModel.venueInfo.avgRating, viewModel.venueInfo.rtgCount)}"
                 app:layout_constraintBottom_toBottomOf="@+id/venue_title"
                 app:layout_constraintStart_toEndOf="@+id/venue_rtg_score_list"
                 app:layout_constraintTop_toTopOf="@+id/venue_title"
@@ -81,10 +106,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
-                app:isOpen="@{venue.serviceTime}"
-                tools:text="營業中 直至夜間2:00"
+                app:isOpen="@{viewModel.venueInfo.serviceTime}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/venue_title" />
+                app:layout_constraintTop_toBottomOf="@+id/venue_title"
+                tools:text="營業中 直至夜間2:00" />
 
             <ImageView
                 android:id="@+id/img_venue_address"
@@ -135,7 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="@{venue.address}"
+                android:text="@{viewModel.venueInfo.address}"
                 android:textColor="@color/black_3f3a3a"
                 app:layout_constraintStart_toEndOf="@+id/img_venue_address"
                 app:layout_constraintTop_toTopOf="@+id/img_venue_address"
@@ -157,7 +182,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="@{venue.phone}"
+                android:text="@{viewModel.venueInfo.phone}"
                 android:textColor="@color/black_3f3a3a"
                 app:layout_constraintStart_toEndOf="@+id/img_venue_phone"
                 app:layout_constraintTop_toTopOf="@+id/img_venue_phone"
@@ -356,6 +381,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/venue_rtg_list" />
+
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

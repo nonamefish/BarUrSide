@@ -87,22 +87,13 @@ fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean?) {
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     if (!imgUrl.isNullOrEmpty()) {
-        val gsReference = imgUrl.let { Firebase.storage.reference.child(it) }
-        gsReference.downloadUrl.addOnSuccessListener { uri ->
-            Glide.with(imgView.context)
-                .load(uri)
-                .placeholder(R.drawable.image_placeholder)
-                .error(R.drawable.image_placeholder)
-                .into(imgView)
-        }
-            .addOnFailureListener { exception ->
-                Log.d("Ming", exception.toString())
-                Glide.with(imgView.context)
-                    .load("")
-                    .placeholder(R.drawable.image_placeholder)
-                    .error(R.drawable.image_placeholder)
-                    .into(imgView)
-            }
+        Glide.with(imgView.context)
+            .load(imgUrl)
+            .placeholder(R.drawable.image_placeholder)
+            .error(R.drawable.image_placeholder)
+            .into(imgView)
+    }else{
+        imgView.setBackgroundResource(R.drawable.image_placeholder)
     }
 }
 
@@ -172,7 +163,7 @@ fun bindRecyclerViewWithImageBitmaps(recyclerView: RecyclerView, imageBitmaps: L
 }
 
 @BindingAdapter("notifyPeriod")
-fun bindNotificationPeriod(textView: TextView, date: Timestamp) {
+fun bindNotificationPeriod(textView: TextView, date: Timestamp?) {
     date?.let {
         val current = Timestamp(System.currentTimeMillis())
         val diff = current.time - date.time
@@ -189,7 +180,7 @@ fun bindNotificationPeriod(textView: TextView, date: Timestamp) {
                 textView.text = "${diffDay}天前"
             }
             diffDay < 30 -> {
-                textView.text = "${round(diffDay / 7 as Double) + 1}週前"
+                textView.text = "${(diffDay.toDouble() / 7).toString().substringBefore(".") }週前"
             }
             else -> {
                 textView.text = "幾個月前"
@@ -199,7 +190,7 @@ fun bindNotificationPeriod(textView: TextView, date: Timestamp) {
 }
 
 @BindingAdapter("notifyContent")
-fun bindNotificationContent(textView: TextView, content: String) {
+fun bindNotificationContent(textView: TextView, content: String?) {
     content?.let {
         textView.text = fromHtml(content, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
@@ -239,4 +230,11 @@ fun checkTime(open: String, close: String): Boolean {
     val current = LocalTime.now()
 
     return current.isAfter(open) && current.isBefore(close)
+}
+
+@BindingAdapter("activityTime")
+fun bindTimeActivityTime(textView: TextView, activityTime: Timestamp?) {
+    activityTime?.let {
+        textView.text = DateFormat.format("yyyy/MM/dd a hh:mm", activityTime).toString()
+    }
 }

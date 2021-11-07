@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.FragmentRandomBinding
 
 
@@ -19,9 +20,13 @@ class RandomFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val venue = RandomFragmentArgs.fromBundle(requireArguments()).venue
+        val venues = RandomFragmentArgs.fromBundle(requireArguments()).venue.toList()
         binding = FragmentRandomBinding.inflate(inflater, container, false)
 
+        val selectedItem = getRandomVenue(venues)
+
+        // set selected Item name
+        binding.chooseObject.text = selectedItem.name
 
         // set button back click listener
         binding.btnBack.setOnClickListener {
@@ -30,10 +35,14 @@ class RandomFragment : Fragment() {
 
         // set button to venue
         binding.btnToVenue.setOnClickListener {
-            findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(venue.id))
+            findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(selectedItem.id))
         }
 
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+    private fun getRandomVenue(venueList: List<Venue>) : Venue{
+        return venueList[(venueList.indices).random()]
     }
 }

@@ -6,8 +6,16 @@
     <data>
 
         <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
             name="notification"
             type="com.mingyuwu.barurside.data.Notification" />
+
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,10 +51,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            app:notifyContent="@{notification.content}"
+            android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/profile_base_img"
             app:layout_constraintTop_toTopOf="@+id/profile_base_img"
-            tools:text="@string/test" />
+            app:notifyContent="@{notification.content}"
+            tools:text="通知" />
 
         <TextView
             android:id="@+id/notify_date"
@@ -59,8 +68,9 @@
             android:textStyle="normal"
             app:layout_constraintStart_toEndOf="@+id/profile_base_img"
             app:layout_constraintTop_toBottomOf="@+id/notify_title"
-            app:notifyPeriod="@{notification.date}"
+            app:notifyPeriod="@{notification.timestamp}"
             tools:text="一週前" />
+
 
         <Button
             android:id="@+id/btn_cancel"
@@ -70,6 +80,8 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:visibility="@{notification.reply == null ? view.VISIBLE : view.GONE}"
+            android:onClick="@{() -> viewModel.replyAddFriend(notification,true)}"
             android:text="確認"
             android:textSize="13sp"
             app:backgroundTint="@color/green_0ead69"
@@ -85,10 +97,22 @@
             android:layout_height="35dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:visibility="@{notification.reply == null ? view.VISIBLE : view.GONE}"
+            android:onClick="@{() -> viewModel.replyAddFriend(notification,false)}"
             android:text="取消"
             android:textSize="13sp"
             app:backgroundTint="@color/gray_999999"
             app:layout_constraintStart_toEndOf="@+id/btn_cancel"
             app:layout_constraintTop_toBottomOf="@+id/notify_date" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{notification.reply==true ? `已接受邀請` : `已拒絕邀請`}"
+            android:visibility="@{notification.reply == null ? view.GONE : view.VISIBLE}"
+            app:layout_constraintStart_toStartOf="@+id/notify_date"
+            app:layout_constraintTop_toTopOf="@+id/btn_cancel"
+            tools:text="已婉拒邀請" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

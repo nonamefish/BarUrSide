@@ -5,15 +5,15 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Collect (
-    val id: String,
-    val useId: String,
-    val objectId: String,
-    val isVenue: Boolean,
+    var id: String= "",
+    @JvmField val isVenue: Boolean? = null,
+    val userId: String= "",
+    val objectId: String= ""
 ): Parcelable{
     companion object{
         fun toHashMap(dt : Collect) = hashMapOf(
             "id" to dt.id,
-            "useId" to dt.useId,
+            "userId" to dt.userId,
             "objectId" to dt.objectId,
             "isVenue" to dt.isVenue
         )
