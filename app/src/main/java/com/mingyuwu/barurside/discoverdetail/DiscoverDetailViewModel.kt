@@ -172,7 +172,8 @@ class DiscoverDetailViewModel(
 
     fun replyAddFriend(notify: Notification, reply: Boolean) {
         coroutineScope.launch {
-            result = repository.replyAddFriend(notify,reply)
+            notify.reply = reply
+            result = repository.replyAddFriend(notify, reply)
             when (result) {
                 is Result.Success -> {
                     _error.value = null

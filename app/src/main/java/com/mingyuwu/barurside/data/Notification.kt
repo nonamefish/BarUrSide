@@ -15,7 +15,7 @@ data class Notification(
     val fromId: String= "",
     val toId: String= "",
     val content: String= "",
-    val isReply: Boolean? = null,
+    var reply: Boolean? = null,
     val isCheck: Boolean? = null
 ) : Parcelable{
 
@@ -31,7 +31,8 @@ data class Notification(
             "fromId" to dt.fromId,
             "toId" to dt.toId,
             "content" to dt.content,
-            "isReply" to dt.isReply
+            "reply" to dt.reply,
+            "isCheck" to dt.isCheck
         )
     }
 }

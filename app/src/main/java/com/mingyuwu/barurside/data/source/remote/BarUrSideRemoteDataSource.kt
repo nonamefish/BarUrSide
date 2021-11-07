@@ -1660,14 +1660,21 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
-                            document.reference.delete()
+                            document.reference
+                                .set(Notification.toHashMap(notify))
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "add successfully updated!")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(TAG, "error updated!")
+                                }
                         }
 
                         // add to user's friend list
                         if (reply) {
                             FirebaseFirestore.getInstance()
                                 .collection(PATH_USER)
-                                .whereEqualTo("id",notify.fromId)
+                                .whereEqualTo("id", notify.fromId)
                                 .get()
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
@@ -1690,34 +1697,34 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                 }
                                         }
                                     }
-                                }
 
-                            FirebaseFirestore.getInstance()
-                                .collection(PATH_USER)
-                                .whereEqualTo("id",notify.toId)
-                                .get()
-                                .addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        for (document in task.result!!) {
-                                            val user = document.toObject(User::class.java)
-                                            val frd = Relationship(
-                                                notify.fromId,
-                                                Timestamp(System.currentTimeMillis())
-                                            )
-                                            document.reference
-                                                .update(
-                                                    "friends",
-                                                    user.friends?.plus(frd) ?: listOf(frd)
-                                                )
-                                                .addOnSuccessListener {
-                                                    Log.d(TAG, "add successfully updated!")
+                                    FirebaseFirestore.getInstance()
+                                        .collection(PATH_USER)
+                                        .whereEqualTo("id", notify.toId)
+                                        .get()
+                                        .addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                for (document in task.result!!) {
+                                                    val user = document.toObject(User::class.java)
+                                                    val frd = Relationship(
+                                                        notify.fromId,
+                                                        Timestamp(System.currentTimeMillis())
+                                                    )
+                                                    document.reference
+                                                        .update(
+                                                            "friends",
+                                                            user.friends?.plus(frd) ?: listOf(frd)
+                                                        )
+                                                        .addOnSuccessListener {
+                                                            Log.d(TAG, "add successfully updated!")
+                                                        }
+                                                        .addOnFailureListener { e ->
+                                                            Log.w(TAG, "error updated!")
+                                                        }
                                                 }
-                                                .addOnFailureListener { e ->
-                                                    Log.w(TAG, "error updated!")
-                                                }
+                                            }
+                                            continuation.resume(Result.Success(true))
                                         }
-                                    }
-                                    continuation.resume(Result.Success(true))
                                 }
                         } else {
                             task.exception?.let {
