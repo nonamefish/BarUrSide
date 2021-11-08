@@ -227,11 +227,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
-                android:text="店家評價 >"
+                android:clickable="@{rtgVenueCnt > 3}"
+                android:onClick="@{() -> viewModel.navigateToAllRating(true)}"
+                android:text="@{rtgVenueCnt > 3 ? `店家評價 >`: `店家評價`}"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
+                app:layout_constraintTop_toBottomOf="@+id/view2"
+                tools:text="店家評價 >" />
 
             <TextView
                 android:id="@+id/txt_drink_rating"
@@ -239,11 +242,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
-                android:text="酒類評價 >"
+                android:clickable="@{rtgDrinkCnt > 3}"
+                android:onClick="@{() -> viewModel.navigateToAllRating(false)}"
+                android:text="@{rtgDrinkCnt > 3 ? `酒類評價 >`: `酒類評價`}"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view3" />
+                app:layout_constraintTop_toBottomOf="@+id/view3"
+                tools:text="酒類評價 >" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/venue_img_list"
@@ -270,7 +276,7 @@
                 android:text="@{@string/profile_rtgs_cnt(rtgVenueCnt)}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_venue_rating"
-                tools:text="共5則評價"/>
+                tools:text="共5則評價" />
 
             <TextView
                 android:id="@+id/drink_rtg_cnt"
@@ -280,7 +286,8 @@
                 android:layout_marginTop="4dp"
                 android:text="@{@string/profile_rtgs_cnt(rtgDrinkCnt)}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_drink_rating" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_drink_rating"
+                tools:text="共33則評價" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/user_rtg_venue_list"

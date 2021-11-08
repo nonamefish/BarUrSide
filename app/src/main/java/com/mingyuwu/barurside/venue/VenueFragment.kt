@@ -44,6 +44,14 @@ class VenueFragment : Fragment() {
 
         val id = VenueFragmentArgs.fromBundle(requireArguments()).id
 
+        // navigate to all rating fragment
+        viewModel.navigateToAll.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                findNavController().navigate(MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray()))
+                viewModel.onLeft()
+            }
+        })
+
         // set recyclerView Adapter
         binding.venueRtgList.adapter = InfoRatingAdapter()
         binding.venueImgList.adapter = ImageAdapter(80, 100)

@@ -39,7 +39,7 @@ class UserImageAdapter(private val size: Int) :
     ): TagFrdViewHolder {
 
         return TagFrdViewHolder(
-            ItemUserImageBinding.inflate(LayoutInflater.from(parent.context))
+            ItemUserImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 

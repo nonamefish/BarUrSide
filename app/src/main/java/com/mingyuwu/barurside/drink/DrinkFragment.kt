@@ -42,6 +42,14 @@ class DrinkFragment : Fragment() {
         // get id
         val id = DrinkFragmentArgs.fromBundle(requireArguments()).id
 
+        // navigate to all rating fragment
+        viewModel.navigateToAll.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                findNavController().navigate(MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray()))
+                viewModel.onLeft()
+            }
+        })
+
         // set drink data
         viewModel.drinkInfo.observe(viewLifecycleOwner, Observer {
             it?.let {

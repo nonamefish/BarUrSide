@@ -1,5 +1,6 @@
 package com.mingyuwu.barurside.drink
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +20,9 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
     var rtgInfo = MutableLiveData<List<RatingInfo>>()
     var isCollect = MutableLiveData<Boolean?>()
     val userId = UserManager.user.value?.id ?: ""
+
+    // navigate to all rating
+    var navigateToAll = MutableLiveData<List<RatingInfo>?>()
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
@@ -86,7 +90,7 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
         when (isCollect.value) {
             true -> {
                 isCollect.value = false
-                removeCollect(id,userId)
+                removeCollect(id, userId)
             }
             false -> {
                 val postItem = Collect("", false, userId, id)
@@ -121,7 +125,7 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
 
     private fun removeCollect(id: String, userId: String) {
         coroutineScope.launch {
-            val result = repository.removeCollect(id,userId)
+            val result = repository.removeCollect(id, userId)
             when (result) {
                 is Result.Success -> {
                     _error.value = null
@@ -141,4 +145,14 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
             }
         }
     }
+
+    fun navigateToAllRating() {
+        navigateToAll.value = rtgInfo.value
+    }
+
+    fun onLeft() {
+        navigateToAll.value = null
+    }
+
+
 }

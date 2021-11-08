@@ -10,6 +10,10 @@
             type="com.mingyuwu.barurside.venue.VenueViewModel" />
 
         <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
             name="ratings"
             type="java.util.List&lt;com.mingyuwu.barurside.data.RatingInfo&gt;" />
 
@@ -377,6 +381,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp"
                 android:text="查看全部 >"
+                android:onClick="@{() -> viewModel.navigateToAllRating()}"
+                android:visibility="@{viewModel.rtgInfo.size > 3 ? view.VISIBLE: view.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

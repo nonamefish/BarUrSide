@@ -71,9 +71,6 @@ class ActivityDetailDialog : DialogFragment() {
             it?.let {
                 val id = findNavController().previousBackStackEntry?.destination?.label
 
-                Log.d("Ming", "previous destination: $id")
-
-
                 if (id == "ActivityFragment") {
                     findNavController().popBackStack()
                 } else {

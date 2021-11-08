@@ -77,9 +77,7 @@ class InfoRatingAdapter() :
         parent: ViewGroup,
         viewType: Int
     ): InfoRatingViewHolder {
-        return InfoRatingViewHolder(
-            ItemInfoRatingBinding.inflate(LayoutInflater.from(parent.context))
-        )
+        return InfoRatingViewHolder.from(parent)
     }
 
     // Replaces the contents of a view (invoked by the layout manager)

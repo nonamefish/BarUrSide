@@ -4,28 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="rating"
             type="com.mingyuwu.barurside.data.RatingInfo" />
+
         <variable
-            name="User"
-            type="com.mingyuwu.barurside.data.User"/>
+            name="user"
+            type="com.mingyuwu.barurside.data.User" />
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
         <variable
             name="objectName"
-            type="String"/>
+            type="String" />
+
         <variable
             name="objectImg"
-            type="String"/>
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_user_info"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="@{user == null? view.GONE : view.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +45,7 @@
                 android:id="@+id/profile_base_img"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="250dp"
                 app:cardMaxElevation="5dp"
@@ -47,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    app:imageUrl="@{User.image}"
+                    app:imageUrl="@{user.image}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -60,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:text="@{User.name}"
+                android:text="@{user.name}"
                 app:layout_constraintStart_toEndOf="@+id/profile_base_img"
                 app:layout_constraintTop_toTopOf="@+id/profile_base_img"
                 tools:text="無尾熊" />
@@ -80,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{User.shareCount.toString()}"
+                android:text="@{user.shareCount.toString()}"
                 app:layout_constraintStart_toEndOf="@+id/img_user_post_cnt"
                 app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt"
                 tools:text="569" />
@@ -100,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{User.shareImageCount.toString()}"
+                android:text="@{user.shareImageCount.toString()}"
                 app:layout_constraintStart_toEndOf="@+id/img_user_postimg_cnt"
                 app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt"
                 tools:text="569" />
@@ -123,10 +133,14 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/border_map_search"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraint_user_info">
+            app:layout_constraintTop_toBottomOf="@+id/constraint_user_info"
+            app:layout_constraintVertical_bias="0.0">
 
             <ImageView
                 android:id="@+id/img_info_rtg"
@@ -188,6 +202,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/discover_object_category" />
 
+            <TextView
+                android:id="@+id/rating_post_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="right"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/img_info_rtg"
+                app:rtgDate="@{rating.postTimestamp}"
+                tools:text="2021.10.15" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rating_tag_frd_list"
                 android:layout_width="0dp"
@@ -195,38 +221,18 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="12dp"
                 android:orientation="horizontal"
                 app:imageUrls="@{rating.tagFriends}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_rating_tag_frds" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_rating_tag_frds">
+
+            </androidx.recyclerview.widget.RecyclerView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/rating_post_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="4dp"
-            app:rtgDate="@{rating.postTimestamp}"
-            tools:text="2021.10.15"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@+id/constraint_rtg_info"
-            app:layout_constraintTop_toBottomOf="@+id/constraint_rtg_info" />
-
-        <View
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/gray_f0f0f0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rating_post_date" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

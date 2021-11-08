@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
@@ -68,12 +67,12 @@ class ProfileFragment : Fragment() {
                 val sortRtgs = rtgs.sortedByDescending { it.postTimestamp }
 
                 // filter data
-                val rtgVenue = sortRtgs.filter { it.isVenue == true }.take(3)
-                val rtgDrink = sortRtgs.filter { it.isVenue == false }.take(3)
+                val rtgVenue = sortRtgs.filter { it.isVenue == true }
+                val rtgDrink = sortRtgs.filter { it.isVenue == false }
 
                 // recyclerView submit list
-                rtgVnAdapter.submitList(rtgVenue)
-                rtgDkAdapter.submitList(rtgDrink)
+                rtgVnAdapter.submitList(rtgVenue.take(3))
+                rtgDkAdapter.submitList(rtgDrink.take(3))
                 imgAdapter.submitList(viewModel.setImgs(sortRtgs))
 
                 // set binding variable
@@ -93,6 +92,14 @@ class ProfileFragment : Fragment() {
                     binding.btnAddFrd.text = "好友邀請確認中"
                     binding.btnAddFrd.isEnabled = false
                 }
+            }
+        })
+
+        // navigate to all rating fragment
+        viewModel.navigateToAll.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                findNavController().navigate(MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray()))
+                viewModel.onLeft()
             }
         })
 

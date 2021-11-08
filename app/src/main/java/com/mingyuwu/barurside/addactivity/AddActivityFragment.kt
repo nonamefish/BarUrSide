@@ -35,7 +35,7 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 
 
-const val AUTOCOMPLETE_REQUEST_CODE = 101
+const val AUTOCOMPLETE_REQUEST_CODE = 201
 
 class AddActivityFragment : Fragment() {
 
@@ -129,7 +129,7 @@ class AddActivityFragment : Fragment() {
         val timeListener = TimePickerDialog.OnTimeSetListener { _, hour, min ->
             calender.set(Calendar.HOUR_OF_DAY, hour)
             calender.set(Calendar.MINUTE, min)
-            format(" a HH:mm", datetime)
+            format(" a hh:mm", datetime)
         }
 
         val timePicker = TimePickerDialog(
@@ -162,7 +162,6 @@ class AddActivityFragment : Fragment() {
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 val status: Status = Autocomplete.getStatusFromIntent(data)
                 Log.d("Ming", status.statusMessage!!);
-                Log.d("Ming","RESULT_ERROR")
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
                 Log.d("Ming","RESULT_CANCELED")

@@ -18,10 +18,10 @@ class UserRatingAdapter() :
 
         fun bind(rating: RatingInfo?) {
             binding.rating = rating
-            binding.img=""
-            binding.title="還沒串起來"
+            binding.img = ""
+            binding.title = "還沒串起來"
 
-            binding.ratingScoreList.adapter = RatingScoreAdapter(15,15)
+            binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
         }
     }
 
@@ -43,7 +43,7 @@ class UserRatingAdapter() :
     ): UserRatingViewHolder {
 
         return UserRatingViewHolder(
-            ItemUserRatingBinding.inflate(LayoutInflater.from(parent.context))
+            ItemUserRatingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 

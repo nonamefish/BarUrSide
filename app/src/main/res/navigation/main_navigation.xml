@@ -24,7 +24,7 @@
         android:id="@+id/editRatingFragment"
         android:name="com.mingyuwu.barurside.editrating.EditRatingFragment"
         android:label="EditRatingFragment"
-        tools:layout="@layout/fragment_edit_rating" >
+        tools:layout="@layout/fragment_edit_rating">
         <argument
             android:name="venue"
             app:argType="com.mingyuwu.barurside.data.Venue" />
@@ -35,9 +35,9 @@
         android:label="ProfileFragment">
         <argument
             android:name="id"
+            android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"/>
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/activityFragment"
@@ -47,7 +47,7 @@
     <fragment
         android:id="@+id/drinkFragment"
         android:name="com.mingyuwu.barurside.drink.DrinkFragment"
-        android:label="DrinkFragment" >
+        android:label="DrinkFragment">
         <argument
             android:name="id"
             app:argType="string" />
@@ -59,7 +59,7 @@
     <fragment
         android:id="@+id/venueFragment"
         android:name="com.mingyuwu.barurside.venue.VenueFragment"
-        android:label="VenueFragment" >
+        android:label="VenueFragment">
         <argument
             android:name="id"
             app:argType="string" />
@@ -90,26 +90,37 @@
             app:argType="com.mingyuwu.barurside.discover.Theme" />
         <argument
             android:name="id"
-            app:nullable="true"
-            app:argType="string[]" />
+            app:argType="string[]"
+            app:nullable="true" />
         <argument
             android:name="filterParameter"
-            app:nullable="true"
-            app:argType="com.mingyuwu.barurside.filter.FilterParameter" />
+            app:argType="com.mingyuwu.barurside.filter.FilterParameter"
+            app:nullable="true" />
     </fragment>
 
     <fragment
         android:id="@+id/addActivityFragment"
         android:name="com.mingyuwu.barurside.addactivity.AddActivityFragment"
         android:label="AddActivityFragment" />
+
     <fragment
         android:id="@+id/activityPageFragment"
         android:name="com.mingyuwu.barurside.activity.ActivityPageFragment"
         android:label="ActivityPageFragment" />
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.mingyuwu.barurside.login.LoginFragment"
         android:label="LoginFragment" />
+
+    <fragment
+        android:id="@+id/allRatingFragment"
+        android:name="com.mingyuwu.barurside.rating.all.AllRatingFragment"
+        android:label="AllRatingFragment">
+        <argument
+            android:name="ratings"
+            app:argType="com.mingyuwu.barurside.data.RatingInfo[]" />
+    </fragment>
 
     <dialog
         android:id="@+id/activityDetailDialog"
@@ -168,5 +179,9 @@
     <action
         android:id="@+id/navigate_to_login_fragment"
         app:destination="@id/loginFragment"></action>
+
+    <action
+        android:id="@+id/navigate_to_all_rating_fragment"
+        app:destination="@id/allRatingFragment"></action>
 
 </navigation>

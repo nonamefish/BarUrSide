@@ -28,6 +28,9 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
     var isMyself = userId == UserManager.user.value?.id
     var isFriend = UserManager.user.value?.friends?.any { it.id == userId }
 
+    // navigate to all rating
+    var navigateToAll = MutableLiveData<List<RatingInfo>?>()
+
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
 
@@ -47,7 +50,7 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
     }
 
     private fun getNotification(userId: String?) {
-        userId?.let{
+        userId?.let {
             notification = repository.getNotification(it)
         }
     }
@@ -123,4 +126,18 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
             }
         }
     }
+
+    fun navigateToAllRating(isVenue: Boolean) {
+        if (isVenue) {
+            navigateToAll.value = rtgInfo.value?.filter { it.isVenue == true }
+        } else {
+            navigateToAll.value = rtgInfo.value?.filter { it.isVenue == false }
+        }
+
+    }
+
+    fun onLeft() {
+        navigateToAll.value = null
+    }
+
 }

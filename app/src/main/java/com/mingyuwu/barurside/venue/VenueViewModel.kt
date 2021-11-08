@@ -22,6 +22,9 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
     var isCollect = MutableLiveData<Boolean?>()
     val userId = UserManager.user.value?.id ?: ""
 
+    // navigate to all rating
+    var navigateToAll = MutableLiveData<List<RatingInfo>?>()
+
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
 
@@ -141,5 +144,13 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
                 }
             }
         }
+    }
+
+    fun navigateToAllRating() {
+        navigateToAll.value = rtgInfo.value
+    }
+
+    fun onLeft() {
+        navigateToAll.value = null
     }
 }

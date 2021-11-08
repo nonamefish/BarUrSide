@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/background_dialog_corner.xml" value="0.4121552604698672" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/background_rating_all.xml" value="0.4203125" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/background_rating_all_select.xml" value="0.4203125" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/background_rating_detail.xml" value="0.4203125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/background_spinner_dropdown.xml" value="0.2453125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_activity_detail.xml" value="0.2453125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_filter_level.xml" value="0.33425925925925926" />
@@ -45,11 +48,12 @@
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_activity.xml" value="0.31596638655462184" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_activity_page.xml" value="0.3278985507246377" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_add_activity.xml" value="0.536" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_all_rating.xml" value="0.2703804347826087" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_collect.xml" value="0.34601449275362317" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_collect_page.xml" value="0.34601449275362317" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_discover.xml" value="0.4" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_discover_detail.xml" value="0.2971014492753623" />
-        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_drink.xml" value="0.3850574712643678" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_drink.xml" value="0.536" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_edit_rating.xml" value="0.1" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_filter.xml" value="0.4" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_login.xml" value="0.264" />
@@ -57,14 +61,14 @@
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_profile.xml" value="0.34074823053589487" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_random.xml" value="0.264" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_rating.xml" value="0.3292572463768116" />
-        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_venue.xml" value="0.1960252935862692" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_venue.xml" value="0.536" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/info_rating_list_item.xml" value="0.3491847826086957" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/info_window.xml" value="0.264" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_collect_grid.xml" value="0.4" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_discover_object.xml" value="0.3500697350069735" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_edit_rating_object.xml" value="0.4" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_friend.xml" value="0.4" />
-        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_info_rating.xml" value="0.4" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_info_rating.xml" value="0.536" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_notification.xml" value="0.6" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_rating_bitmap.xml" value="0.6" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/item_rating_count.xml" value="0.34601449275362317" />
