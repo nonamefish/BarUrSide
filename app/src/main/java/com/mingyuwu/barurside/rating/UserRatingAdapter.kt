@@ -17,11 +17,8 @@ class UserRatingAdapter() :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(rating: RatingInfo?) {
-            binding.rating = rating
-            binding.img = ""
-            binding.title = "還沒串起來"
-
             binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
+            binding.rating = rating
         }
     }
 

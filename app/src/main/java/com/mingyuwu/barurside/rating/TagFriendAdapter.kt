@@ -7,28 +7,29 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.collect.TAG
-import com.mingyuwu.barurside.databinding.ItemUserImageBinding
+import com.mingyuwu.barurside.data.TagFriend
+import com.mingyuwu.barurside.databinding.ItemTagFrdBinding
 
-class UserImageAdapter(private val size: Int) :
-    ListAdapter<String, UserImageAdapter.TagFrdViewHolder>(DiffCallback) {
+class TagFriendAdapter() :
+    ListAdapter<TagFriend, TagFriendAdapter.TagFrdViewHolder>(DiffCallback) {
 
-    class TagFrdViewHolder(private var binding: ItemUserImageBinding) :
+    class TagFrdViewHolder(private var binding: ItemTagFrdBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(img: String, size: Int) {
-            binding.img = img
-            binding.size = size
+        fun bind(tagFriend: TagFriend) {
+            binding.name = tagFriend.name
+
         }
     }
 
     // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
-    companion object DiffCallback : DiffUtil.ItemCallback<String>() {
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<TagFriend>() {
+        override fun areItemsTheSame(oldItem: TagFriend, newItem: TagFriend): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem == newItem
+        override fun areContentsTheSame(oldItem: TagFriend, newItem: TagFriend): Boolean {
+            return oldItem.id == newItem.id
         }
     }
 
@@ -39,14 +40,14 @@ class UserImageAdapter(private val size: Int) :
     ): TagFrdViewHolder {
 
         return TagFrdViewHolder(
-            ItemUserImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemTagFrdBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
     // Replaces the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: TagFrdViewHolder, position: Int) {
-        val img = getItem(position)
-        holder.bind(img, size)
+        val tagFriend = getItem(position)
+        holder.bind(tagFriend)
     }
 
     override fun getItemCount(): Int {

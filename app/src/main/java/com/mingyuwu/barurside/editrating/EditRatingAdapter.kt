@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.editrating
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -9,10 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.databinding.ItemEditRatingObjectBinding
 import com.mingyuwu.barurside.rating.BitmapAdapter
-import com.mingyuwu.barurside.rating.UserImageAdapter
-import java.util.*
+import com.mingyuwu.barurside.rating.TagFriendAdapter
 
 
 class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
@@ -38,7 +37,7 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
 
             // set recyclerView adapter
             val imgAdapter = BitmapAdapter(60, 70, rtgOrder, viewModel)
-            val tagFrdAdapter = UserImageAdapter(60)
+            val tagFrdAdapter = TagFriendAdapter()
             binding.ratingAddImgList.adapter = imgAdapter
             binding.ratingTagFrdsList.adapter = tagFrdAdapter
 
@@ -66,7 +65,7 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
                     val selected = parent.getItemAtPosition(position)
                     val pos = friendList.indexOf(selected)
                     binding.btnTagFrd.setText("")
-                    viewModel.addTagFrd(rtgOrder, it[pos].id)
+                    viewModel.addTagFrd(rtgOrder, TagFriend(it[pos].id, it[pos].name))
                 }
             })
         }

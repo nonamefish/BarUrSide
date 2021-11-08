@@ -8,14 +8,6 @@
         <variable
             name="rating"
             type="com.mingyuwu.barurside.data.RatingInfo" />
-
-        <variable
-            name="img"
-            type="String" />
-
-        <variable
-            name="title"
-            type="String" />
     </data>
 
 

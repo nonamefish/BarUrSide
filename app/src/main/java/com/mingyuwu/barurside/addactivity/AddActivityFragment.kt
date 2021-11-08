@@ -56,15 +56,16 @@ class AddActivityFragment : Fragment() {
         binding.lifecycleOwner = this
 
         // Initialize place api
-        Places.initialize(binding.root.context, getString(R.string.google_maps_key))
+        Places.initialize(requireContext(), getString(R.string.google_maps_key))
 
         // return after the user has made a selection.
         val field = listOf(Place.Field.ID, Place.Field.ADDRESS)
 
         // Start the autocomplete intent.
-        val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, field)
+        val intent = Autocomplete
+            .IntentBuilder(AutocompleteActivityMode.FULLSCREEN, field)
             .setCountries(listOf("TW"))
-            .build(binding.root.context)
+            .build(requireContext())
 
         // activity start time
         binding.addActivityStart.setOnClickListener {

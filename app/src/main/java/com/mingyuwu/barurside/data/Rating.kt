@@ -15,7 +15,7 @@ data class Rating(
     val comment: String = "",
     val images: List<String>? = null,
     var postDate: Date? = null,
-    val tagFriends: List<String>? = null
+    val tagFriends: List<TagFriend>? = null
 ) : Parcelable {
 
     val postTimestamp = postDate?.let { Timestamp(it.time) }
@@ -46,7 +46,7 @@ data class RatingInfo(
     val comment: String = "",
     val images: List<String>? = null,
     var postDate: Date? = null,
-    val tagFriends: List<String>? = null,
+    val tagFriends: List<TagFriend>? = null,
     // add column
     var objectName: String? = null,
     var objectImg: String? = null,

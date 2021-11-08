@@ -42,8 +42,8 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     val firebaseImgUrl: LiveData<MutableList<MutableList<String>>>
         get() = _firebaseImgUrl
 
-    private val _tagFrd = MutableLiveData<MutableList<String>?>(null)
-    val tagFrd: LiveData<MutableList<String>?>
+    private val _tagFrd = MutableLiveData<MutableList<TagFriend>?>(null)
+    val tagFrd: LiveData<MutableList<TagFriend>?>
         get() = _tagFrd
 
     // control upload image
@@ -150,7 +150,7 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     }
 
 
-    fun addTagFrd(position: Int, frdId: String) {
+    fun addTagFrd(position: Int, frdId: TagFriend) {
         if (_tagFrd.value == null) {
             _tagFrd.value = mutableListOf(frdId)
         } else {

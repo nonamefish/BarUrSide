@@ -982,18 +982,20 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         val hotVenueList = venueRtgs.groupingBy { it.objectId }.eachCount().toList()
                             .sortedByDescending { it.second }.take(10)
 
-                        // filter venue
-                        FirebaseFirestore.getInstance()
-                            .collection(PATH_VENUE)
-                            .whereIn("id", hotVenueList.map { it.first })
-                            .get()
-                            .addOnCompleteListener { task ->
-                                for (document in task.result!!) {
-                                    val venue = document.toObject(Venue::class.java)
-                                    list.add(venue)
+                        if (!hotVenueList.isNullOrEmpty()){
+                            // filter venue
+                            FirebaseFirestore.getInstance()
+                                .collection(PATH_VENUE)
+                                .whereIn("id", hotVenueList.map { it.first })
+                                .get()
+                                .addOnCompleteListener { task ->
+                                    for (document in task.result!!) {
+                                        val venue = document.toObject(Venue::class.java)
+                                        list.add(venue)
+                                    }
+                                    continuation.resume(Result.Success(list))
                                 }
-                                continuation.resume(Result.Success(list))
-                            }
+                        }
                     } else {
                         venueTask.exception?.let {
                             continuation.resume(Result.Error(it))
@@ -1033,18 +1035,21 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         val hotDrinkList = drinkRtgs.groupingBy { it.objectId }.eachCount().toList()
                             .sortedByDescending { it.second }.take(10)
 
-                        // filter drink
-                        FirebaseFirestore.getInstance()
-                            .collection(PATH_DRINK)
-                            .whereIn("id", hotDrinkList.map { it.first })
-                            .get()
-                            .addOnCompleteListener { task ->
-                                for (document in task.result!!) {
-                                    val drink = document.toObject(Drink::class.java)
-                                    list.add(drink)
+                        if (!hotDrinkList.isNullOrEmpty()){
+                            // filter drink
+                            FirebaseFirestore.getInstance()
+                                .collection(PATH_DRINK)
+                                .whereIn("id", hotDrinkList.map { it.first })
+                                .get()
+                                .addOnCompleteListener { task ->
+                                    for (document in task.result!!) {
+                                        val drink = document.toObject(Drink::class.java)
+                                        list.add(drink)
+                                    }
+                                    continuation.resume(Result.Success(list))
                                 }
-                                continuation.resume(Result.Success(list))
-                            }
+                        }
+
                     } else {
                         drinkTask.exception?.let {
                             continuation.resume(Result.Error(it))

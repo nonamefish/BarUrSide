@@ -1,6 +1,7 @@
 package com.mingyuwu.barurside.data.mockdata
 
 import com.mingyuwu.barurside.data.Rating
+import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.data.RatingInfo
 import java.sql.Timestamp
 
@@ -19,7 +20,7 @@ class RatingData {
                     "https://upload.wikimedia.org/wikipedia/commons/4/43/Bar-P1030319.jpg"
                 ),
                 Timestamp(System.currentTimeMillis()),
-                listOf("2", "3")
+                listOf(TagFriend("2","AA"), TagFriend("3","BBB"))
             ),
             Rating(
                 "2",
@@ -33,7 +34,7 @@ class RatingData {
                     "https://upload.wikimedia.org/wikipedia/commons/3/30/Swallow_flying_drinking_2.jpg"
                 ),
                 Timestamp(System.currentTimeMillis()),
-                listOf("2", "3")
+                listOf(TagFriend("2","AA"), TagFriend("3","BBB"))
             ),
         )
     }
@@ -54,7 +55,7 @@ class RatingInfoData {
                     "https://upload.wikimedia.org/wikipedia/commons/4/43/Bar-P1030319.jpg"
                 ),
                 Timestamp(System.currentTimeMillis()),
-                listOf("2", "3")
+                listOf(TagFriend("2","AA"), TagFriend("3","BBB"))
             ),
             RatingInfo(
                 "2",
@@ -68,7 +69,7 @@ class RatingInfoData {
                     "https://upload.wikimedia.org/wikipedia/commons/3/30/Swallow_flying_drinking_2.jpg"
                 ),
                 Timestamp(System.currentTimeMillis()),
-                listOf("2", "3")
+                listOf(TagFriend("2","AA"), TagFriend("3","BBB"))
             ),
         )
     }

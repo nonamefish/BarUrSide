@@ -1,39 +1,25 @@
 package com.mingyuwu.barurside
 
 import android.graphics.Bitmap
-import android.icu.text.DateFormat.DAY
 import android.os.Build
-import android.text.Html
 import android.text.format.DateFormat
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
-import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.fromHtml
-import androidx.core.util.rangeTo
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.Resource
 import kotlin.math.roundToInt
-import com.bumptech.glide.request.RequestOptions
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.data.RatingInfo
+import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.rating.*
 import java.sql.Timestamp
-import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatter.ofPattern
-import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.math.round
 
 @BindingAdapter("stars")
 fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
@@ -52,18 +38,17 @@ fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
     }
 }
 
-@BindingAdapter("imageUrls")
-fun bindRecyclerViewWithImageUrls(recyclerView: RecyclerView, imageUrls: List<String>?) {
-    imageUrls?.let {
-        if (imageUrls != listOf(null)) {
+@BindingAdapter("listData")
+fun bindRecyclerViewWithListData(recyclerView: RecyclerView, listData: List<Any>?) {
+    listData?.let {
+        if (listData != listOf(null)) {
             recyclerView.adapter?.apply {
                 when (this) {
                     is ImageAdapter -> {
-                        submitList(imageUrls)
+                        submitList((listData as List<String>).toMutableList())
                     }
-                    is UserImageAdapter -> {
-                        submitList(imageUrls)
-                        notifyDataSetChanged()
+                    is TagFriendAdapter -> {
+                        submitList((listData as List<TagFriend>).toMutableList())
                     }
                 }
             }

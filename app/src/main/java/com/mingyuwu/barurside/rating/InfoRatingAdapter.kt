@@ -5,23 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.data.*
-import com.mingyuwu.barurside.data.mockdata.UserData
-import com.mingyuwu.barurside.databinding.ItemEditRatingObjectBinding
 import com.mingyuwu.barurside.databinding.ItemInfoRatingBinding
-import com.mingyuwu.barurside.discoverdetail.DiscoverActivityAdapter
-import com.mingyuwu.barurside.editrating.EditRatingAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class InfoRatingAdapter() :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
@@ -52,7 +42,7 @@ class InfoRatingAdapter() :
 
             // set adapter
             binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
-            binding.ratingTagFrdList.adapter = UserImageAdapter(60)
+            binding.ratingTagFrdList.adapter = TagFriendAdapter()
             binding.rating = rating
 
             // set user Info

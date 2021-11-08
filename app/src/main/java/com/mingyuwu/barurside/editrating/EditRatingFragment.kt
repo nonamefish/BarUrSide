@@ -86,7 +86,6 @@ class EditRatingFragment : Fragment() {
 
         // get friend list
         viewModel.user.observe(viewLifecycleOwner, Observer { user ->
-            Log.d("Ming", "EditFragment user: $user")
             user.friends?.let {
                 viewModel.getFriendList(user)
                 Log.d("Ming", "EditFragment frdList: ${viewModel.frdList.value}")
