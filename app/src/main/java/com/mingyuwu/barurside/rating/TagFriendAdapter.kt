@@ -2,13 +2,20 @@ package com.mingyuwu.barurside.rating
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.collect.TAG
 import com.mingyuwu.barurside.data.TagFriend
+import com.mingyuwu.barurside.databinding.ItemDiscoverObjectBinding
+import com.mingyuwu.barurside.databinding.ItemInfoRatingBinding
 import com.mingyuwu.barurside.databinding.ItemTagFrdBinding
+import com.mingyuwu.barurside.discoverdetail.DiscoverDrinkAdapter
 
 class TagFriendAdapter() :
     ListAdapter<TagFriend, TagFriendAdapter.TagFrdViewHolder>(DiffCallback) {
@@ -16,9 +23,22 @@ class TagFriendAdapter() :
     class TagFrdViewHolder(private var binding: ItemTagFrdBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(tagFriend: TagFriend) {
+        companion object {
+            fun from(parent: ViewGroup): TagFrdViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemTagFrdBinding.inflate(layoutInflater, parent, false)
+
+                return TagFrdViewHolder(binding)
+            }
+        }
+
+
+        fun bind(tagFriend: TagFriend, view: View) {
             binding.name = tagFriend.name
 
+            binding.profileBaseImg.setOnClickListener {
+                view.findNavController().navigate(MainNavigationDirections.navigateToProfileFragment(tagFriend.id))
+            }
         }
     }
 
@@ -39,15 +59,13 @@ class TagFriendAdapter() :
         viewType: Int
     ): TagFrdViewHolder {
 
-        return TagFrdViewHolder(
-            ItemTagFrdBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        )
+        return TagFrdViewHolder.from(parent)
     }
 
     // Replaces the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: TagFrdViewHolder, position: Int) {
         val tagFriend = getItem(position)
-        holder.bind(tagFriend)
+        holder.bind(tagFriend, holder.itemView)
     }
 
     override fun getItemCount(): Int {

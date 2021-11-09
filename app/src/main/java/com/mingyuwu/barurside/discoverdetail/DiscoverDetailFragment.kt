@@ -13,12 +13,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridLayout
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
@@ -84,6 +86,8 @@ class DiscoverDetailFragment() : Fragment() {
             }
             Theme.USER_FRIEND -> {
                 adapter = FriendAdapter(viewModel)
+                binding.discoverObjectList.layoutManager =
+                    GridLayoutManager(binding.root.context, 3)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }

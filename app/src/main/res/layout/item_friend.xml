@@ -24,9 +24,9 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/profile_base_img"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="250dp"
                 app:cardMaxElevation="5dp"
@@ -50,72 +50,14 @@
                 android:id="@+id/rtg_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
                 android:text="@{friend.name}"
-                app:layout_constraintStart_toEndOf="@+id/profile_base_img"
-                app:layout_constraintTop_toTopOf="@+id/profile_base_img"
+                app:layout_constraintEnd_toEndOf="@+id/profile_base_img"
+                app:layout_constraintStart_toStartOf="@+id/profile_base_img"
+                app:layout_constraintTop_toBottomOf="@+id/profile_base_img"
                 tools:text="無尾熊" />
 
-            <ImageView
-                android:id="@+id/img_user_post_cnt"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_baseline_menu_24"
-                app:layout_constraintStart_toEndOf="@+id/profile_base_img"
-                app:layout_constraintTop_toBottomOf="@+id/rtg_user_name" />
-
-            <TextView
-                android:id="@+id/user_post_cnt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@{friend.shareCount.toString()}"
-                app:layout_constraintStart_toEndOf="@+id/img_user_post_cnt"
-                app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt"
-                tools:text="569" />
-
-            <ImageView
-                android:id="@+id/img_user_postimg_cnt"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/ic_baseline_image_24"
-                android:backgroundTint="@color/black_3f3a3a"
-                app:layout_constraintStart_toEndOf="@+id/user_post_cnt"
-                app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt" />
-
-            <TextView
-                android:id="@+id/user_postimg_cnt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@{friend.shareImageCount.toString()}"
-                app:layout_constraintStart_toEndOf="@+id/img_user_postimg_cnt"
-                app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt"
-                tools:text="569" />
-
-            <TextView
-                android:id="@+id/see_user_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text=">"
-                app:layout_constraintStart_toEndOf="@+id/user_postimg_cnt"
-                app:layout_constraintTop_toTopOf="@+id/user_postimg_cnt" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <View
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/gray_f0f0f0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraint_user_info" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

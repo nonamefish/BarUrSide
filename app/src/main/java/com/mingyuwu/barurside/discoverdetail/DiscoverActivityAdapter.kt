@@ -10,18 +10,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.activity.ActivityPageViewModel
 import com.mingyuwu.barurside.data.Activity
+import com.mingyuwu.barurside.databinding.ItemDiscoverActivityBinding
 import com.mingyuwu.barurside.databinding.ItemDiscoverObjectBinding
 
 class DiscoverActivityAdapter(val viewModel: ViewModel) :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
 
-    class DiscoverActivityViewHolder(private var binding: ItemDiscoverObjectBinding) :
+    class DiscoverActivityViewHolder(private var binding: ItemDiscoverActivityBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         companion object {
             fun from(parent: ViewGroup): DiscoverActivityViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemDiscoverObjectBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemDiscoverActivityBinding.inflate(layoutInflater, parent, false)
 
                 return DiscoverActivityViewHolder(binding)
             }

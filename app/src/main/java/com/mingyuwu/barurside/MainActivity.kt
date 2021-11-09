@@ -67,12 +67,16 @@ class MainActivity : AppCompatActivity() {
         var currentUser = auth.currentUser
 
         if (currentUser == null) {
+            Log.d(TAG, "currentUser == null")
             if (userToken == null) {
+                Log.d(TAG, "userToken == null")
                 viewModel.navigateToLogin.value = true
             } else {
+                Log.d(TAG, "userToken not null")
                 firebaseAuthWithGoogle(userToken!!)
             }
         } else {
+            Log.d(TAG, "currentUser not null")
             viewModel.getUserData(currentUser.email!!)
             viewModel.navigateToStart.value = true
         }

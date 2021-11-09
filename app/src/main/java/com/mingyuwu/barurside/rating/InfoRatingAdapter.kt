@@ -30,7 +30,6 @@ class InfoRatingAdapter() :
         }
 
         fun bind(rating: RatingInfo?, view: View) {
-            Log.d("Ming","rating: $rating")
 
             // setting navigate to profile page
             binding.constraintUserInfo.setOnClickListener {
@@ -74,7 +73,6 @@ class InfoRatingAdapter() :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is InfoRatingViewHolder -> {
-                Log.d("Ming", getItem(position).toString())
                 holder.bind((getItem(position) as RatingInfo), holder.itemView)
             }
         }

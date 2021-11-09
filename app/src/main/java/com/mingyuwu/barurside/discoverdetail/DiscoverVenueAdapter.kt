@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.ItemDiscoverObjectBinding
 
-class DiscoverVenueAdapter(val viewModel : DiscoverDetailViewModel) :
+class DiscoverVenueAdapter(val viewModel: DiscoverDetailViewModel) :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
 
     class DiscoverVenueViewHolder(private var binding: ItemDiscoverObjectBinding) :
@@ -24,12 +25,14 @@ class DiscoverVenueAdapter(val viewModel : DiscoverDetailViewModel) :
             }
         }
 
-        fun bind(venue: Venue, viewModel:DiscoverDetailViewModel) {
+        fun bind(venue: Venue, viewModel: DiscoverDetailViewModel) {
             binding.name = venue.name
             binding.img = venue.images!![0]
             binding.category = venue.style
             binding.info = venue.address
-            binding.info2 = venue.phone
+            binding.info2 = binding.root.context.getString(
+                R.string.venue_rating_info_list, venue.avgRating, venue.rtgCount
+            )
 
             binding.btnObjectInfo.setOnClickListener {
                 viewModel.navigateToInfo.value = venue
@@ -61,7 +64,7 @@ class DiscoverVenueAdapter(val viewModel : DiscoverDetailViewModel) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is DiscoverVenueViewHolder -> {
-                holder.bind((getItem(position) as Venue),viewModel)
+                holder.bind((getItem(position) as Venue), viewModel)
             }
         }
     }

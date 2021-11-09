@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.ItemDiscoverObjectBinding
@@ -29,7 +30,9 @@ class DiscoverDrinkAdapter(val viewModel: DiscoverDetailViewModel) :
             binding.img = drink.images?.get(0) ?: ""
             binding.category = drink.category
             binding.info = "$ ${drink.price}"
-            binding.info2 = "${String.format("%.1f", drink.avgRating)} 顆星 | ${drink.rtgCount} 則評價"
+            binding.info2 = binding.root.context.getString(
+                R.string.venue_rating_info_list, drink.avgRating, drink.rtgCount
+            )
 
             binding.btnObjectInfo.setOnClickListener {
                 viewModel.navigateToInfo.value = drink

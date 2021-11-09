@@ -38,7 +38,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintVertical_bias="1.0">
 
             <TextView
                 android:id="@+id/rtg_venue"
@@ -135,6 +135,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
+                android:paddingStart="16dp"
                 android:background="@drawable/border_map_search"
                 android:backgroundTint="@color/white"
                 android:ems="10"
@@ -149,7 +150,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraint_upload_photo"
                 android:layout_width="0dp"
-                android:layout_height="80dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
@@ -161,19 +162,62 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rtg_score_list">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_add_image"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/rating_add_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:background="@null"
-                    android:backgroundTint="@color/white"
-                    android:drawableTop="@drawable/ic_baseline_image_24"
-                    android:text="選取圖片"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="250dp"
+                    app:cardMaxElevation="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="@color/primaryDarkColor"
+                    app:strokeWidth="0.6dp">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="6dp"
+                        android:background="@drawable/ic_baseline_image_24"
+                        android:backgroundTint="@color/primaryDarkColor"
+                        app:layout_constraintBottom_toBottomOf="@+id/rating_tag_frd"
+                        app:layout_constraintStart_toStartOf="@+id/rating_tag_frd"
+                        app:layout_constraintTop_toTopOf="@+id/rating_tag_frd" />
+
+                    <TextView
+                        android:id="@+id/txt_rating_add_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="34dp"
+                        android:layout_marginTop="7.2dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="6dp"
+                        android:text="上傳圖片"
+                        android:textColor="@color/primaryDarkColor"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/discover_object_category" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <Button
+                    android:id="@+id/btn_add_image"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/ic_baseline_add_24"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="@+id/rating_add_img"
+                    app:layout_constraintTop_toBottomOf="@+id/rating_add_img" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rating_add_img_list"
@@ -183,10 +227,10 @@
                     android:orientation="horizontal"
                     app:imageBitmaps="@{viewModel.uploadImg[rtgOrder]}"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_add_image"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn_add_image"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/btn_add_image" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -205,35 +249,83 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraint_upload_photo">
 
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/rating_tag_frd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="250dp"
+                    app:cardMaxElevation="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="@color/primaryDarkColor"
+                    app:strokeWidth="0.6dp">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="6dp"
+                        android:background="@drawable/icons_32px_profile_select"
+                        android:backgroundTint="@color/primaryDarkColor"
+                        app:layout_constraintBottom_toBottomOf="@+id/rating_tag_frd"
+                        app:layout_constraintStart_toStartOf="@+id/rating_tag_frd"
+                        app:layout_constraintTop_toTopOf="@+id/rating_tag_frd" />
+
+                    <TextView
+                        android:id="@+id/txt_rating_tag_frds"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="34dp"
+                        android:layout_marginTop="7.2dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="6dp"
+                        android:text="標註好友"
+                        android:textColor="@color/primaryDarkColor"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/discover_object_category" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+
                 <AutoCompleteTextView
                     android:id="@+id/btn_tag_frd"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
                     android:completionThreshold="1"
-                    android:hint="標註朋友"
+                    android:paddingStart="8dp"
+                    android:hint="Enter friend"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
+                    app:layout_constraintTop_toBottomOf="@+id/rating_tag_frd" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rating_tag_frds_list"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="12dp"
                     android:orientation="horizontal"
-                    app:listData="@{viewModel.tagFrd}"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_tag_frd" />
+                    app:layout_constraintTop_toBottomOf="@+id/btn_tag_frd"
+                    app:listData="@{viewModel.tagFrd}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
