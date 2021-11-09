@@ -297,9 +297,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
                 android:text="@{@string/profile_rtgs_cnt(rtgDrinkCnt)}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_drink_rating"
+                app:layout_constraintVertical_bias="0.0"
                 tools:text="共33則評價" />
 
             <androidx.recyclerview.widget.RecyclerView

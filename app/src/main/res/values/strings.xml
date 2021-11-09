@@ -3,22 +3,68 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!--    Collect Tab-->
-    <string name="collect_tab_venue">店家</string>
-    <string name="collect_tab_drink">酒項</string>
 
     <!--    Activity Tab-->
+    <string name="activity_title">動態牆</string>
     <string name="activity_tab_recommend">為你推薦</string>
     <string name="activity_tab_activity">近期活動</string>
     <string name="activity_tab_follow">追蹤中</string>
 
+    <!--    Activity Detail Page-->
+    <string name="activity_time_range">%s至%s</string>
+    <string name="activity_detail_limit">%d/%d</string>
+
+    <!--    ADD_ACTIVITY-->
+
+
+    <!--    Collect Tab-->
+    <string name="collect_title">我的收藏</string>
+    <string name="collect_tab_venue">店家</string>
+    <string name="collect_tab_drink">酒項</string>
+
+
+    <!--    Discover Fragment-->
+    <string name="discover_title">探索</string>
+    <string-array name="search_type">
+        <item>Venue</item>
+        <item>Drink</item>
+    </string-array>
+
+    <!--    DISCOVER DETAIL Fragment-->
+
+
+    <!--    DRINK Info -->
+    <string name="drink_title">酒項</string>
+
     <!--    Venue Info -->
+    <string name="venue_title">店家</string>
     <string name="venue_rating_info_view">(%,.1f)&#160;|&#160;%d則評論</string>
     <string name="venue_rating_info_list">%,.1f&#160;|&#160;%d則評論</string>
 
-    <!--    Activity detail -->
-    <string name="activity_detail_limit">%d/%d</string>
+
+
+    <!--    Edit Rating Tab-->
     <string name="tag_friend">標註朋友</string>
+
+
+    <!--    Map Tab-->
+
+
+    <!--    Profile Page-->
+    <string name="profile_title">個人頁面</string>
+    <string name="profile_frds_cnt">%d位好友</string>
+    <string name="profile_rtgs_cnt">共%d則評價</string>
+
+
+    <!--    All Rating-->
+    <string name="all_rating_title">評價</string>
+    <string name="rating_star_count">(%d)</string>
+
+
+    <!--    Login Page-->
+    <string name="login_content1">Explore Your favourite and</string>
+    <string name="login_content2">what to drink</string>
+
 
     <!--    Bottom Navigation Title-->
     <string name="btm_nvgt_activity">Activity</string>
@@ -27,25 +73,6 @@
     <string name="btm_nvgt_collect">Collect</string>
     <string name="btm_nvgt_profile">Profile</string>
 
-    <!--    Profile Page-->
-    <string name="profile_frds_cnt">%d位好友</string>
-    <string name="profile_rtgs_cnt">共%d則評價</string>
-
-    <!--    Activity Detail Page-->
-    <string name="activity_time_range">%s至%s</string>
-
-    <!--    Login Page-->
-    <string name="login_content1">Explore Your favourite and</string>
-    <string name="login_content2">what to drink</string>
-
-    <!--    All Rating-->
-    <string name="rating_star_count">(%d)</string>
-
-    <!--    Discover Fragment-->
-    <string-array name="search_type">
-        <item>Venue</item>
-        <item>Drink</item>
-    </string-array>
 
     <string name="fail_nothing">Nothing</string>
 

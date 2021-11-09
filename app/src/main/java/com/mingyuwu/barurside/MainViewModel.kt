@@ -8,6 +8,7 @@ import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.CurrentFragmentType
 
 class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
 
@@ -16,6 +17,8 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
     val navigateToStart = MutableLiveData<Boolean?>()
     val navigateToLogin = MutableLiveData<Boolean?>()
 
+    // Record current fragment to support data binding
+    val currentFragmentType = MutableLiveData<CurrentFragmentType>()
 
     fun onLeft() {
         navigateToStart.value = null
@@ -23,7 +26,6 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
     }
 
     fun getUserData(userId: String) {
-        Log.d("Ming", "userId: $userId")
         UserManager.user = repository.getUser(userId)
     }
 

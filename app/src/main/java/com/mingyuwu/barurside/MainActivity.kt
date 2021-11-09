@@ -1,14 +1,20 @@
 package com.mingyuwu.barurside
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mingyuwu.barurside.login.UserManager
 import android.util.Log
+import android.view.Gravity
+import android.widget.Toolbar
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -21,6 +27,7 @@ import com.mingyuwu.barurside.databinding.ActivityMainBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.login.TAG
+import com.mingyuwu.barurside.util.CurrentFragmentType
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,18 +37,21 @@ class MainActivity : AppCompatActivity() {
     private var userToken = UserManager.userToken
     val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
 
         // setting binding
         binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         // set notification onclick listener
         binding.imgNotification.setOnClickListener {
             navController.navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.NOTIFICATION, null, null // TODO: set User ID
+                    Theme.NOTIFICATION, null, null
                 )
             )
         }
@@ -67,16 +77,12 @@ class MainActivity : AppCompatActivity() {
         var currentUser = auth.currentUser
 
         if (currentUser == null) {
-            Log.d(TAG, "currentUser == null")
             if (userToken == null) {
-                Log.d(TAG, "userToken == null")
                 viewModel.navigateToLogin.value = true
             } else {
-                Log.d(TAG, "userToken not null")
                 firebaseAuthWithGoogle(userToken!!)
             }
         } else {
-            Log.d(TAG, "currentUser not null")
             viewModel.getUserData(currentUser.email!!)
             viewModel.navigateToStart.value = true
         }
@@ -87,19 +93,11 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController // container for navigation destination
         binding.bottomNav.setupWithNavController(navController)
 
-        setContentView(binding.root)
-    }
 
-//    fun addData() {
-//        val articles = FirebaseFirestore.getInstance()
-//            .collection("rating")
-//
-//        for( dt in  RatingData.rating.rating){
-//            val document = articles.document()
-//            val data = Rating.toHashMap(dt)
-//            document.set(data)
-//        }
-//    }
+        setContentView(binding.root)
+
+        setupNavController()
+    }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
@@ -117,4 +115,25 @@ class MainActivity : AppCompatActivity() {
                 }
             }
     }
+
+    private fun setupNavController() {
+        findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener { navController: NavController, _: NavDestination, _: Bundle? ->
+            viewModel.currentFragmentType.value = when (navController.currentDestination?.id) {
+                R.id.activityFragment -> CurrentFragmentType.ACTIVITY
+                R.id.addActivityFragment -> CurrentFragmentType.ADD_ACTIVITY
+                R.id.collectFragment -> CurrentFragmentType.COLLECT
+                R.id.profileFragment -> CurrentFragmentType.PROFILE
+                R.id.discoverFragment -> CurrentFragmentType.DISCOVER
+                R.id.discoverDetailFragment -> CurrentFragmentType.DISCOVER_DETAIL
+                R.id.drinkFragment -> CurrentFragmentType.DRINK
+                R.id.venueFragment -> CurrentFragmentType.VENUE
+                R.id.editRatingFragment -> CurrentFragmentType.EDIT_RATING
+                R.id.mapFragment -> CurrentFragmentType.MAP
+                R.id.allRatingFragment -> CurrentFragmentType.ALL_RATING
+                R.id.loginFragment -> CurrentFragmentType.LOGIN
+                else -> viewModel.currentFragmentType.value
+            }
+        }
+    }
+
 }
