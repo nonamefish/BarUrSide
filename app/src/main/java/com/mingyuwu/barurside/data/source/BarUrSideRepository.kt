@@ -66,4 +66,5 @@ interface BarUrSideRepository {
     suspend fun addFriend(notification: Notification): Result<Boolean>
     fun getNotification(userId: String): MutableLiveData<List<Notification>>
     suspend fun replyAddFriend(notify: Notification, reply: Boolean): Result<Boolean>
+    suspend fun unfriend(ids: List<String>): Result<Boolean>
 }

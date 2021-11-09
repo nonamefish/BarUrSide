@@ -1,10 +1,16 @@
 package com.mingyuwu.barurside.profile
 
+import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -42,8 +48,8 @@ class ProfileFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_profile, container, false
         )
-        binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         // test image adapter
         val imgAdapter = ImageAdapter(80, 100)
@@ -122,13 +128,54 @@ class ProfileFragment : Fragment() {
 
         // set add friend listener
         binding.btnAddFrd.setOnClickListener {
-            if (viewModel.isFriend != true) {
+            if (viewModel.isFriend.value != true) {
                 viewModel.addOnFriend()
+            }else{
+                showConfirmRemoveFriend()
             }
         }
 
+        // check user friend status: when unfriend then change isFriend status
+        UserManager.user.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                viewModel.isFriend.value = UserManager.user.value?.friends?.any { it.id == id }
+            }
+        })
 
         return binding.root
+    }
+
+
+    private fun showConfirmRemoveFriend() {
+        // set alert dialog view
+        val alertDialog = AlertDialog.Builder(binding.root.context)
+        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null,false)
+        alertDialog.setView(mView)
+        val dialog = alertDialog.create()
+
+        // set dialog content
+        val titleDialog = mView!!.findViewById<TextView>(R.id.dialog_tiltle)
+        titleDialog.text = "與 ${viewModel.userInfo.value?.name} 解除朋友關係?"
+        val txtDialog = mView!!.findViewById<TextView>(R.id.dialog_content)
+        txtDialog.text = """取消朋友關係的人將無法：
+            |1. 標註你
+            |2. 在動態牆即時看到評論消息""".trimMargin()
+
+
+
+        // set button click listener
+        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm) //連結關閉視窗的Button
+        btDialog.setOnClickListener {
+            viewModel.unfriendUser()
+            dialog.dismiss()
+        }
+
+        dialog.show()
+
+        // set border as transparent
+        val layoutParameter = dialog.window?.attributes
+        layoutParameter?.width = 800
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
 }

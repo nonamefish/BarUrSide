@@ -26,7 +26,8 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
         get() = _rtgInfo
 
     var isMyself = userId == UserManager.user.value?.id
-    var isFriend = UserManager.user.value?.friends?.any { it.id == userId }
+    var isFriend =
+        MutableLiveData<Boolean>(UserManager.user.value?.friends?.any { it.id == userId })
 
     // navigate to all rating
     var navigateToAll = MutableLiveData<List<RatingInfo>?>()
@@ -122,6 +123,31 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
                 }
                 else -> {
                     null
+                }
+            }
+        }
+    }
+
+    fun unfriendUser() {
+        userId?.let {
+            coroutineScope.launch {
+                val result = repository.unfriend(listOf(UserManager.user.value!!.id, userId))
+                when (result) {
+                    is Result.Success -> {
+                        _error.value = null
+                        result.data
+                    }
+                    is Result.Fail -> {
+                        _error.value = result.error
+                        null
+                    }
+                    is Result.Error -> {
+                        _error.value = result.exception.toString()
+                        null
+                    }
+                    else -> {
+                        null
+                    }
                 }
             }
         }

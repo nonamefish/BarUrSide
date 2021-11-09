@@ -1,11 +1,14 @@
 package com.mingyuwu.barurside.profile
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.databinding.ItemFriendBinding
 
@@ -15,8 +18,13 @@ class FriendAdapter(val viewModel: ViewModel) :
     class FriendViewHolder(private var binding: ItemFriendBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(friend: User?, viewModel: ViewModel) {
+        fun bind(friend: User?, view: View) {
             binding.friend = friend
+            binding.profileBaseImg.setOnClickListener {
+                friend?.let{
+                    view.findNavController().navigate(MainNavigationDirections.navigateToProfileFragment(friend.id))
+                }
+            }
         }
     }
 
@@ -37,7 +45,7 @@ class FriendAdapter(val viewModel: ViewModel) :
         viewType: Int
     ): FriendViewHolder {
         return FriendViewHolder(
-            ItemFriendBinding.inflate(LayoutInflater.from(parent.context))
+            ItemFriendBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -45,7 +53,7 @@ class FriendAdapter(val viewModel: ViewModel) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is FriendViewHolder -> {
-                holder.bind((getItem(position) as User), viewModel)
+                holder.bind((getItem(position) as User), holder.itemView)
             }
         }
     }

@@ -266,7 +266,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-
     override fun getRatingByObject(
         id: String,
         isVenue: Boolean
@@ -817,7 +816,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         FirebaseFirestore.getInstance()
             .collection(PATH_NOTIFICATION)
             .whereEqualTo("toId", userId)
-            .orderBy("date",Query.Direction.DESCENDING)
+            .orderBy("date", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, exception ->
 
                 exception?.let {
@@ -834,7 +833,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 FirebaseFirestore.getInstance()
                     .collection(PATH_NOTIFICATION)
                     .whereEqualTo("fromId", userId)
-                    .orderBy("date",Query.Direction.DESCENDING)
+                    .orderBy("date", Query.Direction.DESCENDING)
                     .addSnapshotListener { snapshot, exception ->
                         exception?.let {
                             Log.d(
@@ -982,7 +981,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         val hotVenueList = venueRtgs.groupingBy { it.objectId }.eachCount().toList()
                             .sortedByDescending { it.second }.take(10)
 
-                        if (!hotVenueList.isNullOrEmpty()){
+                        if (!hotVenueList.isNullOrEmpty()) {
                             // filter venue
                             FirebaseFirestore.getInstance()
                                 .collection(PATH_VENUE)
@@ -1035,7 +1034,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         val hotDrinkList = drinkRtgs.groupingBy { it.objectId }.eachCount().toList()
                             .sortedByDescending { it.second }.take(10)
 
-                        if (!hotDrinkList.isNullOrEmpty()){
+                        if (!hotDrinkList.isNullOrEmpty()) {
                             // filter drink
                             FirebaseFirestore.getInstance()
                                 .collection(PATH_DRINK)
@@ -1278,11 +1277,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                         for (document in userTask.result!!) {
                             val friends = document.toObject(User::class.java).friends?.map { it.id }
-                            friends?.let {
 
-                                // get friend's rating
+                            if(!friends.isNullOrEmpty()){
                                 firestore.collection(PATH_RATING)
-                                    .whereIn("userId", it)
+                                    .whereIn("userId", friends)
                                     .orderBy("postDate", Query.Direction.DESCENDING)
                                     .limit(10)
                                     .get()
@@ -1748,6 +1746,60 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             )
                         }
                     }
+                }
+        }
+
+    override suspend fun unfriend(ids: List<String>): Result<Boolean> =
+        suspendCoroutine { continuation ->
+
+            // add to user's friend list
+            FirebaseFirestore.getInstance()
+                .collection(PATH_USER)
+                .whereEqualTo("id", ids[0])
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            val user = document.toObject(User::class.java)
+
+                            document.reference
+                                .update(
+                                    "friends",
+                                    user.friends?.filter { it.id != ids[1] } ?: user.friends
+                                )
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "add successfully updated!")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(TAG, "error updated!")
+                                }
+                        }
+                    }
+
+                    FirebaseFirestore.getInstance()
+                        .collection(PATH_USER)
+                        .whereEqualTo("id", ids[1])
+                        .get()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                for (document in task.result!!) {
+                                    val user = document.toObject(User::class.java)
+
+                                    document.reference
+                                        .update(
+                                            "friends",
+                                            user.friends?.filter { it.id != ids[0] } ?: user.friends
+                                        )
+                                        .addOnSuccessListener {
+                                            Log.d(TAG, "add successfully updated!")
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.w(TAG, "error updated!")
+                                        }
+                                }
+                            }
+                            continuation.resume(Result.Success(true))
+                        }
                 }
         }
 }

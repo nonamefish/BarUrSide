@@ -171,4 +171,8 @@ class DefaultBarUrSideRepository(
     override suspend fun replyAddFriend(notify: Notification, reply: Boolean): Result<Boolean> {
         return remoteDataSource.replyAddFriend(notify,reply)
     }
+
+    override suspend fun unfriend(ids: List<String>): Result<Boolean> {
+        return remoteDataSource.unfriend(ids)
+    }
 }
