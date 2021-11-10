@@ -101,4 +101,8 @@ class MapViewModel(private val repository: BarUrSideRepository) : ViewModel() {
         val maxLng = location.longitude + (distance / 111.11 / cos(location.latitude))
         return listOf(minLat, maxLat, minLng, maxLng)
     }
+
+    fun onLeft(){
+        navigateToVenue.value = null
+    }
 }

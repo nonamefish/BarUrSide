@@ -353,7 +353,7 @@
             android:layout_height="30dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/red_e02401"
+            android:backgroundTint="@color/red_ff4436"
             android:onClick="@{()-> viewModel.removeRating(rtgOrder)}"
             android:scaleType="center"
             android:visibility="@{rtgOrder!=0 ? view.VISIBLE : view.GONE}"

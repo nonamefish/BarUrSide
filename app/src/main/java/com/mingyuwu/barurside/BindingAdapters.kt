@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.text.format.DateFormat
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -17,6 +18,7 @@ import kotlin.math.roundToInt
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.rating.*
+import com.mingyuwu.barurside.util.CurrentFragmentType
 import java.sql.Timestamp
 import java.time.LocalTime
 import java.util.concurrent.TimeUnit
@@ -77,7 +79,7 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
             .placeholder(R.drawable.image_placeholder)
             .error(R.drawable.image_placeholder)
             .into(imgView)
-    }else{
+    } else {
         imgView.setBackgroundResource(R.drawable.image_placeholder)
     }
 }
@@ -165,7 +167,7 @@ fun bindNotificationPeriod(textView: TextView, date: Timestamp?) {
                 textView.text = "${diffDay}天前"
             }
             diffDay < 30 -> {
-                textView.text = "${(diffDay.toDouble() / 7).toString().substringBefore(".") }週前"
+                textView.text = "${(diffDay.toDouble() / 7).toString().substringBefore(".")}週前"
             }
             else -> {
                 textView.text = "幾個月前"
@@ -221,5 +223,40 @@ fun checkTime(open: String, close: String): Boolean {
 fun bindTimeActivityTime(textView: TextView, activityTime: Timestamp?) {
     activityTime?.let {
         textView.text = DateFormat.format("yyyy/MM/dd a hh:mm", activityTime).toString()
+    }
+}
+
+@BindingAdapter("iconNotify")
+fun bindIconNotify(imageView: ImageView, currentFragmentType: CurrentFragmentType?) {
+    currentFragmentType?.let {
+        if (currentFragmentType in listOf(
+                CurrentFragmentType.DISCOVER_DETAIL,
+                CurrentFragmentType.EDIT_RATING,
+                CurrentFragmentType.ADD_ACTIVITY,
+                CurrentFragmentType.DRINK,
+                CurrentFragmentType.VENUE
+            )
+        ){
+            imageView.visibility = View.GONE
+        }else{
+            imageView.visibility = View.VISIBLE
+        }
+    }
+}
+
+@BindingAdapter("iconBack")
+fun bindIconBack(imageView: ImageView, currentFragmentType: CurrentFragmentType?) {
+    currentFragmentType?.let {
+        if (currentFragmentType !in listOf(
+                CurrentFragmentType.DISCOVER_DETAIL,
+                CurrentFragmentType.EDIT_RATING,
+                CurrentFragmentType.DRINK,
+                CurrentFragmentType.VENUE
+            )
+        ){
+            imageView.visibility = View.GONE
+        }else{
+            imageView.visibility = View.VISIBLE
+        }
     }
 }

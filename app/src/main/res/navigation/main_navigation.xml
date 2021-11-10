@@ -10,16 +10,19 @@
         android:name="com.mingyuwu.barurside.collect.CollectFragment"
         android:label="CollectFragment"
         tools:layout="@layout/fragment_collect" />
+
     <fragment
         android:id="@+id/discoverFragment"
         android:name="com.mingyuwu.barurside.discover.DiscoverFragment"
         android:label="DiscoverFragment"
         tools:layout="@layout/fragment_discover" />
+
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.mingyuwu.barurside.map.MapFragment"
         android:label="MapFragment"
         tools:layout="@layout/fragment_map" />
+
     <fragment
         android:id="@+id/editRatingFragment"
         android:name="com.mingyuwu.barurside.editrating.EditRatingFragment"
@@ -29,6 +32,7 @@
             android:name="venue"
             app:argType="com.mingyuwu.barurside.data.Venue" />
     </fragment>
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.mingyuwu.barurside.profile.ProfileFragment"
@@ -39,11 +43,13 @@
             app:argType="string"
             app:nullable="true" />
     </fragment>
+
     <fragment
         android:id="@+id/activityFragment"
         android:name="com.mingyuwu.barurside.activity.ActivityFragment"
         android:label="ActivityFragment"
         tools:layout="@layout/fragment_activity" />
+
     <fragment
         android:id="@+id/drinkFragment"
         android:name="com.mingyuwu.barurside.drink.DrinkFragment"
@@ -52,10 +58,12 @@
             android:name="id"
             app:argType="string" />
     </fragment>
+
     <dialog
         android:id="@+id/filterFragment"
         android:name="com.mingyuwu.barurside.filter.FilterFragment"
         android:label="FilterFragment" />
+
     <fragment
         android:id="@+id/venueFragment"
         android:name="com.mingyuwu.barurside.venue.VenueFragment"
@@ -64,10 +72,12 @@
             android:name="id"
             app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/collectPageFragment"
         android:name="com.mingyuwu.barurside.collect.CollectPageFragment"
         android:label="CollectPageFragment" />
+
     <fragment
         android:id="@+id/randomFragment"
         android:name="com.mingyuwu.barurside.filter.random.RandomFragment"
@@ -77,10 +87,12 @@
             android:name="venue"
             app:argType="com.mingyuwu.barurside.data.Venue[]" />
     </fragment>
+
     <activity
         android:id="@+id/mainActivity"
         android:name="com.mingyuwu.barurside.MainActivity"
         android:label="MainActivity" />
+
     <fragment
         android:id="@+id/discoverDetailFragment"
         android:name="com.mingyuwu.barurside.discoverdetail.DiscoverDetailFragment"
@@ -136,41 +148,58 @@
 
     <action
         android:id="@+id/navigate_to_discover_detail_fragment"
-        app:destination="@id/discoverDetailFragment"></action>
+        app:destination="@id/discoverDetailFragment">
+
+    </action>
 
     <action
         android:id="@+id/navigate_to_filter_fragment"
-        app:destination="@id/filterFragment"></action>
+        app:destination="@id/filterFragment">
+
+    </action>
 
     <action
         android:id="@+id/navigate_to_random_fragment"
-        app:destination="@id/randomFragment"></action>
+        app:destination="@id/randomFragment">
+
+    </action>
 
     <action
         android:id="@+id/navigate_to_venue_fragment"
-        app:destination="@id/venueFragment"></action>
+        app:destination="@id/venueFragment">
+
+    </action>
 
     <action
         android:id="@+id/navigate_to_drink_fragment"
-        app:destination="@id/drinkFragment"></action>
+        app:destination="@id/drinkFragment">
+
+    </action>
 
     <action
         android:id="@+id/navigate_to_rating_fragment"
-        app:destination="@id/editRatingFragment"></action>
+        app:destination="@id/editRatingFragment">
 
-    <action
-        android:id="@+id/navigate_to_add_activity_fragment"
-        app:destination="@id/addActivityFragment"></action>
+    </action>
 
     <action
         android:id="@+id/navigate_to_activity_fragment"
         app:destination="@id/activityFragment"
-        app:popUpToInclusive="@id/activityFragment"></action>
+        app:popUpTo="@id/activityFragment"
+        app:popUpToInclusive="true">
+    </action>
+
+    <action
+        android:id="@+id/navigate_to_add_activity_fragment"
+        app:destination="@id/addActivityFragment"
+        app:popUpTo="@id/activityFragment"
+        app:popUpToInclusive="true">
+    </action>
 
     <action
         android:id="@+id/navigate_to_activity_detail_dialog"
-        app:destination="@id/activityDetailDialog"
-        app:popUpToInclusive="@id/activityFragment"></action>
+        app:destination="@id/activityDetailDialog">
+    </action>
 
     <action
         android:id="@+id/navigate_to_profile_fragment"

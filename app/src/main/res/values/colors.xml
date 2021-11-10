@@ -12,8 +12,6 @@
     <color name="secondaryTextColor">#000000</color>
     <color name="translucent_40">#66000000</color>
 
-    <color name="shrine_pink_100">#FEDBD0</color>
-    <color name="shrine_pink_900">#442C2E</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
@@ -44,4 +42,5 @@
     <color name="red_e02401">#e02401</color>
     <color name="red_ff5151">#ff5151</color>
     <color name="red_ffadad">#ffadad</color>
+    <color name="red_ff4436">#ff4436</color>
 </resources>

@@ -56,6 +56,11 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        // set toolbar back button on click listener
+        binding.imgBack.setOnClickListener {
+            navController.popBackStack()
+        }
+
         // navigate to Start
         viewModel.navigateToStart.observe(this, Observer {
             it?.let {
@@ -64,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        // navigate to Start
+        // navigate to Login
         viewModel.navigateToLogin.observe(this, Observer {
             it?.let {
                 navController.navigate(MainNavigationDirections.navigateToLoginFragment())

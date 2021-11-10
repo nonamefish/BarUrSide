@@ -88,7 +88,7 @@ class AddActivityFragment : Fragment() {
 
         // cancel button
         binding.btnCancel.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
         }
 
         // address edit text click listener

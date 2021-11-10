@@ -32,8 +32,8 @@ class DiscoverDetailViewModel(
     val detailData: MutableLiveData<List<Any>> // why cannot use LiveData<List<Any>>
         get() = _detailData
 
-    val navigateToInfo = MutableLiveData<Any>()
-    private lateinit var result: Result<Any>
+    val navigateToInfo = MutableLiveData<Any?>()
+    private lateinit var result: Result<Any?>
 
     var mLocation = MutableLiveData<LatLng>()
 
@@ -192,6 +192,10 @@ class DiscoverDetailViewModel(
                 }
             }
         }
+    }
+
+    fun onLeft(){
+        navigateToInfo.value = null
     }
 
 }

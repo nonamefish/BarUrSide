@@ -123,6 +123,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
         viewModel.navigateToVenue.observe(viewLifecycleOwner, Observer {
             it?.let {
                 findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(it))
+                viewModel.onLeft()
             }
         })
 
@@ -141,12 +142,16 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
         // get location btn layout parameter
         val mapView = binding.googleMap
         val locationButton = mapView.findViewById<View>("2".toInt())
-        val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
 
-        // set location btn margin
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
-        rlp.setMargins(0, 0, 30, 280)
+        locationButton?.let{
+            val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
+
+            // set location btn margin
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+            rlp.setMargins(0, 0, 30, 280)
+        }
+
 
         getLocationPermission()
     }

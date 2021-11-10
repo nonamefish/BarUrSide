@@ -126,32 +126,34 @@ class DiscoverDetailFragment() : Fragment() {
 
         // click info button and navigate to info fragment
         viewModel.navigateToInfo.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Venue -> {
-                    findNavController().navigate(
-                        MainNavigationDirections.navigateToVenueFragment(it.id)
-                    )
+            it?.let {
+                when (it) {
+                    is Venue -> {
+                        findNavController().navigate(
+                            MainNavigationDirections.navigateToVenueFragment(it.id)
+                        )
+                    }
+                    is Drink -> {
+                        findNavController().navigate(
+                            MainNavigationDirections.navigateToDrinkFragment(it.id)
+                        )
+                    }
+                    is Activity -> {
+                        findNavController().navigate(
+                            MainNavigationDirections.navigateToActivityDetailDialog(it, theme)
+                        )
+                    }
                 }
-                is Drink -> {
-                    findNavController().navigate(
-                        MainNavigationDirections.navigateToDrinkFragment(it.id)
-                    )
-                }
-                is Activity -> {
-                    findNavController().navigate(
-                        MainNavigationDirections.navigateToActivityDetailDialog(it, theme)
-                    )
-                }
+                viewModel.onLeft()
             }
-        }
-        )
+        })
 
         // assign value to recyclerView
         viewModel.detailData.observe(viewLifecycleOwner, Observer { it ->
             Log.d("Ming", "detailData: $it")
             if (theme == Theme.NOTIFICATION) {
                 val list = (it as List<Notification>).filter { notifications ->
-                    notifications.toId == "annie82920@gmail.com"
+                    notifications.toId == UserManager.user.value?.id ?: ""
                 }.take(20)
                 adapter.submitList(list)
             } else {
@@ -168,7 +170,6 @@ class DiscoverDetailFragment() : Fragment() {
             }
         }
 
-        // Inflate the layout for this fragment
         return binding.root
     }
 
@@ -198,7 +199,6 @@ class DiscoverDetailFragment() : Fragment() {
                 if (allGranted) {
                     locationPermissionGranted = true
                     checkGPSState()
-//                    Toast.makeText(mContext, "All permissions are granted", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(
                         mContext,
