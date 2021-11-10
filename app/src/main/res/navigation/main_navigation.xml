@@ -213,4 +213,16 @@
         android:id="@+id/navigate_to_all_rating_fragment"
         app:destination="@id/allRatingFragment"></action>
 
+    <action
+        android:id="@+id/navigate_to_map_fragment"
+        app:destination="@id/mapFragment"></action>
+
+    <action
+        android:id="@+id/navigate_to_discover_fragment"
+        app:destination="@id/discoverFragment"></action>
+
+    <action
+        android:id="@+id/navigate_to_collect_fragment"
+        app:destination="@id/collectFragment"></action>
+
 </navigation>

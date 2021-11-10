@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
     private var userToken = UserManager.userToken
     val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
@@ -96,12 +95,42 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController // container for navigation destination
-        binding.bottomNav.setupWithNavController(navController)
 
 
         setContentView(binding.root)
-
+        setupBottomNav()
         setupNavController()
+    }
+
+    private fun setupBottomNav() {
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            Log.d("Ming","item: $item")
+            when (item.itemId) {
+                R.id.navigate_activity -> {
+                    navController.navigate(MainNavigationDirections.navigateToActivityFragment())
+                    return@setOnItemSelectedListener true
+                }
+                R.id.navigate_map -> {
+                    navController.navigate(MainNavigationDirections.navigateToMapFragment())
+                    return@setOnItemSelectedListener true
+                }
+                R.id.navigate_discover -> {
+                    navController.navigate(MainNavigationDirections.navigateToDiscoverFragment())
+                    return@setOnItemSelectedListener true
+                }
+                R.id.navigate_collect -> {
+                    navController.navigate(MainNavigationDirections.navigateToCollectFragment())
+                    return@setOnItemSelectedListener true
+                }
+                R.id.navigate_profile -> {
+                        navController.navigate(
+                            MainNavigationDirections.navigateToProfileFragment(UserManager.user.value?.id)
+                        )
+                    return@setOnItemSelectedListener true
+                }
+            }
+            false
+        }
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {

@@ -43,6 +43,7 @@ class ProfileFragment : Fragment() {
         val id =
             ProfileFragmentArgs.fromBundle(requireArguments()).id ?: (UserManager.user.value?.id
                 ?: "")
+        val toolbarTitle = requireActivity().findViewById<TextView>(R.id.text_toolbar_title)
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -61,6 +62,14 @@ class ProfileFragment : Fragment() {
 
         val rtgDkAdapter = UserRatingAdapter()
         binding.userRtgDrinkList.adapter = rtgDkAdapter
+
+        // set tool bar title by user display name
+        viewModel.userInfo.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                toolbarTitle.text = viewModel.userInfo.value?.name
+            }
+        })
+
 
         // data
         viewModel.rtgInfo.observe(viewLifecycleOwner, Observer { rtgInfo ->
@@ -98,7 +107,7 @@ class ProfileFragment : Fragment() {
 
         // navigate to all rating fragment
         viewModel.navigateToAll.observe(viewLifecycleOwner, Observer {
-            it?.let{
+            it?.let {
                 findNavController().navigate(MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray()))
                 viewModel.onLeft()
             }
@@ -130,14 +139,14 @@ class ProfileFragment : Fragment() {
         binding.btnAddFrd.setOnClickListener {
             if (viewModel.isFriend.value != true) {
                 viewModel.addOnFriend()
-            }else{
+            } else {
                 showConfirmRemoveFriend()
             }
         }
 
         // check user friend status: when unfriend then change isFriend status
         UserManager.user.observe(viewLifecycleOwner, Observer {
-            it?.let{
+            it?.let {
                 viewModel.isFriend.value = UserManager.user.value?.friends?.any { it.id == id }
             }
         })
@@ -149,7 +158,8 @@ class ProfileFragment : Fragment() {
     private fun showConfirmRemoveFriend() {
         // set alert dialog view
         val alertDialog = AlertDialog.Builder(binding.root.context)
-        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null,false)
+        val mView =
+            LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null, false)
         alertDialog.setView(mView)
         val dialog = alertDialog.create()
 
@@ -160,8 +170,6 @@ class ProfileFragment : Fragment() {
         txtDialog.text = """取消朋友關係的人將無法：
             |1. 標註你
             |2. 在動態牆即時看到評論消息""".trimMargin()
-
-
 
         // set button click listener
         val btDialog = mView!!.findViewById<Button>(R.id.button_confirm) //連結關閉視窗的Button

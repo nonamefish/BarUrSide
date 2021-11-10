@@ -17,6 +17,7 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
     val navigateToStart = MutableLiveData<Boolean?>()
     val navigateToLogin = MutableLiveData<Boolean?>()
 
+
     // Record current fragment to support data binding
     val currentFragmentType = MutableLiveData<CurrentFragmentType>()
 

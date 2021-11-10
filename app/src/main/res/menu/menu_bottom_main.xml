@@ -2,23 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <!--    id name is the same as the navigation fragment, and bottom navigation can map-->
     <item
-        android:id="@+id/activityFragment"
+        android:id="@+id/navigate_activity"
         android:icon="@drawable/sl_bar_activity"
         android:title="@string/btm_nvgt_activity" />
     <item
-        android:id="@+id/mapFragment"
+        android:id="@+id/navigate_map"
         android:icon="@drawable/sl_bar_map"
         android:title="@string/btm_nvgt_map" />
     <item
-        android:id="@+id/discoverFragment"
+        android:id="@+id/navigate_discover"
         android:icon="@drawable/sl_bar_discover"
         android:title="@string/btm_nvgt_discovery" />
     <item
-        android:id="@+id/collectFragment"
+        android:id="@+id/navigate_collect"
         android:icon="@drawable/sl_bar_collect"
         android:title="@string/btm_nvgt_collect" />
     <item
-        android:id="@+id/profileFragment"
+        android:id="@+id/navigate_profile"
         android:icon="@drawable/sl_bar_profile"
         android:title="@string/btm_nvgt_profile" />
 </menu>

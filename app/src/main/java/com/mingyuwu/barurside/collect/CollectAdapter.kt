@@ -41,12 +41,14 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
                 is Venue -> {
                     binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
                     binding.venue = collect
-                    binding.isVanue = true
+                    binding.isVenue = true
+                    binding.position = adapterPosition
                 }
                 is Drink -> {
                     binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
                     binding.drink = collect
-                    binding.isVanue = false
+                    binding.isVenue = false
+                    binding.position = adapterPosition
                 }
             }
         }

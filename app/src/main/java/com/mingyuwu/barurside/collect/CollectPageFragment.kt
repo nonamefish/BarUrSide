@@ -45,6 +45,7 @@ class CollectPageFragment() : Fragment() {
                 viewModel.setNavigateToObject(it)
             }
         )
+
         binding.collectList.adapter = adapter
         viewModel.collectInfo.observe(viewLifecycleOwner, Observer {
             Log.d("Ming","$isVenue collect: $it")

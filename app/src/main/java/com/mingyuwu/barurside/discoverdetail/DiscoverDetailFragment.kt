@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -64,6 +65,7 @@ class DiscoverDetailFragment() : Fragment() {
     ): View? {
 
         val theme = DiscoverDetailFragmentArgs.fromBundle(requireArguments()).theme
+        val toolbarTitle = requireActivity().findViewById<TextView>(R.id.text_toolbar_title)
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -76,6 +78,7 @@ class DiscoverDetailFragment() : Fragment() {
         // set recyclerView adapter
         when (theme) {
             in arrayOf(Theme.RECENT_ACTIVITY, Theme.USER_ACTIVITY) -> {
+                toolbarTitle.text = "活動列表"
                 adapter = DiscoverActivityAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
@@ -85,6 +88,7 @@ class DiscoverDetailFragment() : Fragment() {
                 binding.discoverObjectList.adapter = adapter
             }
             Theme.USER_FRIEND -> {
+                toolbarTitle.text = "朋友列表"
                 adapter = FriendAdapter(viewModel)
                 binding.discoverObjectList.layoutManager =
                     GridLayoutManager(binding.root.context, 3)
@@ -92,6 +96,7 @@ class DiscoverDetailFragment() : Fragment() {
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
             Theme.NOTIFICATION -> {
+                toolbarTitle.text = "通知"
                 adapter = NotificationAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
@@ -110,7 +115,6 @@ class DiscoverDetailFragment() : Fragment() {
                 viewModel.mLocation.observe(viewLifecycleOwner, Observer {
                     viewModel.getAroundVenue(it)
                 })
-
             }
             in arrayOf(Theme.HOT_VENUE, Theme.HIGH_RATE_VENUE) -> {
                 adapter = DiscoverVenueAdapter(viewModel)

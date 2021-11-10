@@ -85,7 +85,7 @@
                         android:layout_marginBottom="17dp"
                         android:letterSpacing="0.15"
                         android:text="@{viewModel.currentFragmentType.value}"
-                        android:textColor="@color/white_ffffff"
+                        android:textColor="@color/primaryLightColor"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.ACTIVITY ? View.GONE : View.VISIBLE}"

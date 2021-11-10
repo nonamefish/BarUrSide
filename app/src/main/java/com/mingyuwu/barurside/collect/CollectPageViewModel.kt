@@ -20,7 +20,7 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
     // set source data
     var collectInfo = MutableLiveData<List<Collect>>()
     var objectInfo = MutableLiveData<List<Any>>()
-    var isCollect = MutableLiveData<Boolean?>(true)
+    var isCollect = MutableLiveData<MutableList<Boolean>?>()
     val navigateToObject = MutableLiveData<String?>()
     val userId = UserManager.user.value?.id ?: ""
 
@@ -70,6 +70,7 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
                 true -> repository.getVenueByIds(collectInfo.map { it.objectId })
                 false -> repository.getDrinksByIds(collectInfo.map { it.objectId })
             }
+            isCollect.value = collectInfo.map{ true }.toMutableList()
 
             objectInfo.value = when (result) {
                 is Result.Success -> {
@@ -92,17 +93,20 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
         }
     }
 
-    fun setCollect(id: String) {
-        when (isCollect.value) {
-            true -> {
-                isCollect.value = false
-                removeCollect(id, userId)
+    fun setCollect(id: String, position: Int, isVenue: Boolean) {
+        isCollect.value?.let{
+            when (it[position]) {
+                true -> {
+                    it[position] = false
+                    removeCollect(id, userId)
+                }
+                false -> {
+                    val postItem = Collect("", isVenue, userId, id)
+                    postCollect(postItem)
+                    it[position] = true
+                }
             }
-            false -> {
-                val postItem = Collect("", false, userId, id)
-                postCollect(postItem)
-                isCollect.value = true
-            }
+            isCollect.value = isCollect.value
         }
     }
 
