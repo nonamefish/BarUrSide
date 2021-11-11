@@ -47,7 +47,7 @@ fun bindRecyclerViewWithListData(recyclerView: RecyclerView, listData: List<Any>
             recyclerView.adapter?.apply {
                 when (this) {
                     is ImageAdapter -> {
-                        submitList((listData as List<String>).toMutableList())
+                        submitList((listData).toMutableList())
                     }
                     is TagFriendAdapter -> {
                         submitList((listData as List<TagFriend>).toMutableList())

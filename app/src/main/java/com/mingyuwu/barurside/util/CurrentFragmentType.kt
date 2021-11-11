@@ -4,12 +4,12 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.util.Util.getString
 
 
-enum class CurrentFragmentType(val value: String) {
+enum class CurrentFragmentType(val value: String?) {
     ACTIVITY(getString(R.string.activity_title)),
     ADD_ACTIVITY("新增活動"),
     COLLECT(getString(R.string.collect_title)),
     DISCOVER(getString(R.string.discover_title)),
-    DISCOVER_DETAIL("搜尋結果"),
+    DISCOVER_DETAIL(null),
     DRINK(getString(R.string.drink_title)),
     VENUE(getString(R.string.venue_title)),
     EDIT_RATING("編輯評論"),

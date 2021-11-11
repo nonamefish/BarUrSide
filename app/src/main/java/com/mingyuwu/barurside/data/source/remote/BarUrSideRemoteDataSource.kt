@@ -3,12 +3,9 @@ package com.mingyuwu.barurside.data.source.remote
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.*
@@ -140,6 +137,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             val friend = document.toObject(User::class.java)
                             list.add(friend)
                         }
+                        Log.d("Ming","it: ${task.result.documents}")
                         continuation.resume(Result.Success(list))
 
                     } else {
@@ -229,20 +227,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     .addOnCompleteListener { drinkTask ->
                                         if (drinkTask.isSuccessful && drinkTask.result.size() > 0) {
                                             list.add(venue)
-
-                                        } else {
-                                            drinkTask.exception?.let {
-                                                continuation.resume(Result.Error(it))
-                                                return@addOnCompleteListener
-                                            }
-                                            continuation.resume(
-                                                Result.Fail(
-                                                    BarUrSideApplication.instance.getString(
-                                                        R.string.fail_nothing
-                                                    )
-                                                )
-                                            )
                                         }
+
                                         venueCnt += 1
                                         if (venueCnt == venueTask.result.size()) {
                                             continuation.resume(Result.Success(list))
@@ -823,6 +809,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
                 val list = mutableListOf<Notification>()
+
                 for (document in snapshot!!) {
                     val notification = document.toObject(Notification::class.java)
                     notification.timestamp = notification.date?.let { Timestamp(it.time) }
@@ -847,6 +834,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             list.add(notification)
                         }
                         liveData.value = list
+                        liveData.value = liveData.value
                     }
             }
         return liveData
@@ -1278,7 +1266,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         for (document in userTask.result!!) {
                             val friends = document.toObject(User::class.java).friends?.map { it.id }
 
-                            if(!friends.isNullOrEmpty()){
+                            if (!friends.isNullOrEmpty()) {
                                 firestore.collection(PATH_RATING)
                                     .whereIn("userId", friends)
                                     .orderBy("postDate", Query.Direction.DESCENDING)
@@ -1383,6 +1371,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             }
                                         }
                                     }
+                            } else {
+                                continuation.resume(Result.Success(list))
                             }
                         }
                     } else {

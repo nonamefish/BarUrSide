@@ -84,7 +84,7 @@
                         android:layout_gravity="center"
                         android:layout_marginBottom="17dp"
                         android:letterSpacing="0.15"
-                        android:text="@{viewModel.currentFragmentType.value}"
+                        android:text="@{viewModel.currentFragmentType==CurrentFragmentType.ACTIVITY.DISCOVER_DETAIL ? viewModel.discoverType : viewModel.currentFragmentType.value}"
                         android:textColor="@color/primaryLightColor"
                         android:textSize="20sp"
                         android:textStyle="bold"

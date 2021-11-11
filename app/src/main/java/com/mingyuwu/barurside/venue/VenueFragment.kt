@@ -71,8 +71,9 @@ class VenueFragment : Fragment() {
         // set rating data
         viewModel.rtgInfo.observe(viewLifecycleOwner, Observer {
             it?.let {
+                viewModel.setImages(it)
                 binding.ratings = it.sortedByDescending { it.postDate }.take(3)
-                binding.imgs = viewModel.setImgs(it)
+                binding.imgs = viewModel.images.value?.take(10)
             }
         })
 
@@ -90,6 +91,17 @@ class VenueFragment : Fragment() {
                     Theme.VENUE_MENU, listOf(id!!).toTypedArray(), null
                 )
             )
+        }
+
+        // set view all image's on click listener
+        binding.txtVenueImg.setOnClickListener {
+            viewModel.images.value?.let{
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToDiscoverDetailFragment(
+                        Theme.IMAGES, it.toTypedArray(), null
+                    )
+                )
+            }
         }
 
         return binding.root

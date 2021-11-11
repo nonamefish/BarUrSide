@@ -8,6 +8,7 @@ import com.mingyuwu.barurside.data.Collect
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,12 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
     val error: LiveData<String?>
         get() = _error
 
+    // status: The firebase MutableLiveData that stores the status of the most recent request
+    private val _status = MutableLiveData<LoadStatus>()
+
+    val status: LiveData<LoadStatus>
+        get() = _status
+
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
@@ -46,15 +53,16 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
             collectInfo.value = when (result) {
                 is Result.Success -> {
                     _error.value = null
-                    Log.d("Ming", "result.data: ${result.data}")
                     result.data.filter { it.isVenue == isVenue }
                 }
                 is Result.Fail -> {
                     _error.value = result.error
+                    _status.value = LoadStatus.ERROR
                     null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
+                    _status.value = LoadStatus.ERROR
                     null
                 }
                 else -> {
@@ -75,15 +83,17 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
             objectInfo.value = when (result) {
                 is Result.Success -> {
                     _error.value = null
-                    Log.d("Ming", "result.data: ${result.data}")
+                    _status.value = LoadStatus.DONE
                     result.data
                 }
                 is Result.Fail -> {
                     _error.value = result.error
+                    _status.value = LoadStatus.ERROR
                     null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
+                    _status.value = LoadStatus.ERROR
                     null
                 }
                 else -> {

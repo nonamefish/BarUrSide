@@ -29,10 +29,12 @@ import androidx.lifecycle.Observer
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.mingyuwu.barurside.BarUrSideApplication
 
 
 const val AUTOCOMPLETE_REQUEST_CODE = 201
@@ -162,9 +164,13 @@ class AddActivityFragment : Fragment() {
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 val status: Status = Autocomplete.getStatusFromIntent(data)
-                Log.d("Ming", status.statusMessage!!);
+                Toast.makeText(
+                    BarUrSideApplication.appContext,"message: ${status.statusMessage!!}", Toast.LENGTH_SHORT).show()
+                Log.d("Ming", status.statusMessage!!)
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
+                Toast.makeText(
+                    BarUrSideApplication.appContext,"message: RESULT_CANCELED", Toast.LENGTH_SHORT).show()
                 Log.d("Ming","RESULT_CANCELED")
             }
         }

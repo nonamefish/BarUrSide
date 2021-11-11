@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
+import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.MainViewModel
 import com.mingyuwu.barurside.R
@@ -35,12 +36,14 @@ import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.mockdata.VenueData
+import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.databinding.FragmentDiscoverDetailBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
 import com.mingyuwu.barurside.profile.FriendAdapter
+import com.mingyuwu.barurside.rating.ImageAdapter
 import com.permissionx.guolindev.PermissionX
 
 class DiscoverDetailFragment() : Fragment() {
@@ -59,13 +62,23 @@ class DiscoverDetailFragment() : Fragment() {
     private val mainViewModel by viewModels<MainViewModel> { getVmFactory() }
     private lateinit var adapter: ListAdapter<Any, RecyclerView.ViewHolder>
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        val ids = DiscoverDetailFragmentArgs.fromBundle(requireArguments()).id?.toList()
         val theme = DiscoverDetailFragmentArgs.fromBundle(requireArguments()).theme
-        val toolbarTitle = requireActivity().findViewById<TextView>(R.id.text_toolbar_title)
+
+        val toolbarTitle = (requireActivity() as MainActivity).viewModel.discoverType
+        toolbarTitle.value = when(theme){
+            in arrayOf(Theme.RECENT_ACTIVITY, Theme.USER_ACTIVITY) -> "活動列表"
+            Theme.USER_FRIEND -> "朋友列表"
+            Theme.NOTIFICATION -> "通知"
+            else -> "搜尋結果"
+        }
+
+
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -78,7 +91,7 @@ class DiscoverDetailFragment() : Fragment() {
         // set recyclerView adapter
         when (theme) {
             in arrayOf(Theme.RECENT_ACTIVITY, Theme.USER_ACTIVITY) -> {
-                toolbarTitle.text = "活動列表"
+
                 adapter = DiscoverActivityAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
@@ -88,7 +101,6 @@ class DiscoverDetailFragment() : Fragment() {
                 binding.discoverObjectList.adapter = adapter
             }
             Theme.USER_FRIEND -> {
-                toolbarTitle.text = "朋友列表"
                 adapter = FriendAdapter(viewModel)
                 binding.discoverObjectList.layoutManager =
                     GridLayoutManager(binding.root.context, 3)
@@ -96,7 +108,6 @@ class DiscoverDetailFragment() : Fragment() {
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
             Theme.NOTIFICATION -> {
-                toolbarTitle.text = "通知"
                 adapter = NotificationAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
@@ -107,7 +118,6 @@ class DiscoverDetailFragment() : Fragment() {
                 if (mainViewModel.location.value == null) {
                     getLocationPermission()
                 }
-
                 adapter = DiscoverVenueAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
@@ -115,6 +125,14 @@ class DiscoverDetailFragment() : Fragment() {
                 viewModel.mLocation.observe(viewLifecycleOwner, Observer {
                     viewModel.getAroundVenue(it)
                 })
+            }
+            Theme.IMAGES -> {
+                adapter = ImageAdapter(240, 220)
+                binding.discoverObjectList.layoutManager =
+                    GridLayoutManager(binding.root.context, 2)
+                binding.discoverObjectList.adapter = adapter
+                binding.btnRandom.visibility = View.GONE // set random button invisibility
+                adapter.submitList(ids)
             }
             in arrayOf(Theme.HOT_VENUE, Theme.HIGH_RATE_VENUE) -> {
                 adapter = DiscoverVenueAdapter(viewModel)
@@ -154,14 +172,26 @@ class DiscoverDetailFragment() : Fragment() {
 
         // assign value to recyclerView
         viewModel.detailData.observe(viewLifecycleOwner, Observer { it ->
-            Log.d("Ming", "detailData: $it")
-            if (theme == Theme.NOTIFICATION) {
-                val list = (it as List<Notification>).filter { notifications ->
-                    notifications.toId == UserManager.user.value?.id ?: ""
-                }.take(20)
-                adapter.submitList(list)
+            Log.d("Ming","it: $it")
+            if (it.isNullOrEmpty()) {
+                binding.animationEmpty.visibility = View.VISIBLE
+                binding.animationLoading.visibility = View.GONE
             } else {
-                adapter.submitList(it)
+                var list : List<Any>?
+                if (theme == Theme.NOTIFICATION) {
+                    list = (it as List<Notification>).filter { notifications ->
+                        notifications.toId == UserManager.user.value?.id ?: ""
+                    }.take(20)
+                } else {
+                    list = it
+                }
+
+                if(list.size==0){
+                    binding.animationEmpty.visibility = View.VISIBLE
+                }else{
+                    adapter.submitList(list)
+                }
+                binding.animationLoading.visibility = View.GONE
             }
         })
 

@@ -15,7 +15,7 @@
             android:id="@+id/txt_choose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="48dp"
             android:text="就決定是你了"
             android:textColor="@color/black_3f3a3a"
             android:textSize="30sp"
@@ -29,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:letterSpacing="0.2"
             android:text="就決定是你了"
             android:textColor="@color/black_3f3a3a"
             android:textSize="48sp"
@@ -47,7 +48,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/choose_object"
             app:lottie_autoPlay="true"
-            app:lottie_fileName="draw-lots.json"
+            app:lottie_fileName="random.json"
             app:lottie_loop="true" />
 
         <Button
@@ -56,29 +57,29 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
             android:text="回上頁"
             android:textSize="16sp"
             app:backgroundTint="@color/gray_999999"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_to_venue"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/btn_to_venue"
             style="@style/RatingButton"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
             android:text="前往店家"
             android:textSize="16sp"
             app:backgroundTint="@color/primaryColor"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btn_back"
-            app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView" />
+            app:layout_constraintStart_toEndOf="@+id/btn_back" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

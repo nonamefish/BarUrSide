@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Activity
+import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.databinding.FragmentActivityPageBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.discoverdetail.*
@@ -70,7 +71,11 @@ class ActivityPageFragment() : Fragment() {
         // assign value to recyclerView
         viewModel.listDate.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitList(it)
+                if (it.isEmpty()) {
+                    binding.animationEmpty.visibility = View.VISIBLE
+                } else {
+                    adapter.submitList(it)
+                }
             }
         })
 
@@ -91,7 +96,7 @@ class ActivityPageFragment() : Fragment() {
         // set user data
         viewModel.user.observe(viewLifecycleOwner, Observer {
             if (type == ActivityTypeFilter.FOLLOW) {
-                viewModel.getRatingByFriend(it.id)
+                viewModel.getRatingByFriend(true, it.id)
             }
         })
 
@@ -99,6 +104,13 @@ class ActivityPageFragment() : Fragment() {
         binding.btnAddActivity.setOnClickListener {
             findNavController().navigate(MainNavigationDirections.navigateToAddActivityFragment())
         }
+
+        // check loading done and close loading animation
+        viewModel.status.observe(viewLifecycleOwner, Observer {
+            if (it == LoadStatus.DONE) {
+                binding.animationLoading.visibility = View.GONE
+            }
+        })
 
 
         return binding.root

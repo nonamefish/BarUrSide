@@ -1,5 +1,6 @@
 package com.mingyuwu.barurside.venue
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,6 +25,12 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
 
     // navigate to all rating
     var navigateToAll = MutableLiveData<List<RatingInfo>?>()
+
+    // error: The internal MutableLiveData that stores the error of the most recent request
+    private val _images = MutableLiveData<List<String>?>()
+
+    val images: LiveData<List<String>?>
+        get() = _images
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
@@ -75,15 +82,14 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
     }
 
 
-    fun setImgs(rtgs: List<RatingInfo>?): List<String> {
+    fun setImages(rtgs: List<RatingInfo>){
         var list = listOf<String>()
         rtgs?.forEach { ratingInfo ->
             ratingInfo.images?.let { imgs ->
-                if (list.size > 10) return@forEach
                 list += imgs
             }
         }
-        return list
+        _images.value = list
     }
 
     fun setCollect() {

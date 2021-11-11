@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.databinding.FragmentCollectPageBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 
@@ -46,28 +47,51 @@ class CollectPageFragment() : Fragment() {
             }
         )
 
+        // set recyclerView adapter and get collect id list
         binding.collectList.adapter = adapter
         viewModel.collectInfo.observe(viewLifecycleOwner, Observer {
-            Log.d("Ming","$isVenue collect: $it")
-            if(!it.isNullOrEmpty()){
+            if (!it.isNullOrEmpty()) {
                 viewModel.getObjectInfo(isVenue, it)
+            } else {
+                binding.animationEmpty.visibility = View.VISIBLE
+                binding.animationLoading.visibility = View.GONE
             }
         })
 
+        // get collect object information
         viewModel.objectInfo.observe(viewLifecycleOwner, Observer {
-            it?.let{
+
+            if (it.isEmpty()) {
+                binding.animationEmpty.visibility = View.VISIBLE
+            } else {
+                binding.animationLoading.visibility = View.GONE
                 adapter.submitList(it)
             }
         })
 
         // set navigation to object info page
         viewModel.navigateToObject.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                when(isVenue){
-                    true->findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(it))
-                    false->findNavController().navigate(MainNavigationDirections.navigateToDrinkFragment(it))
+            it?.let {
+                when (isVenue) {
+                    true -> findNavController().navigate(
+                        MainNavigationDirections.navigateToVenueFragment(
+                            it
+                        )
+                    )
+                    false -> findNavController().navigate(
+                        MainNavigationDirections.navigateToDrinkFragment(
+                            it
+                        )
+                    )
                 }
                 viewModel.onLeft()
+            }
+        })
+
+        // check loading done and close loading animation
+        viewModel.status.observe(viewLifecycleOwner, Observer {
+            if (it == LoadStatus.DONE) {
+                binding.animationLoading.visibility = View.GONE
             }
         })
 

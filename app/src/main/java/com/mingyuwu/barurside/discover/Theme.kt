@@ -12,6 +12,7 @@ enum class Theme (val order: Int?) {
     USER_ACTIVITY(8),
     NOTIFICATION(9),
     VENUE_MENU(10),
+    IMAGES(11),
     NONE(null)
 }
 

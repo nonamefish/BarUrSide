@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.collect.TAG
+import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.databinding.ItemRatingImageBinding
+import com.mingyuwu.barurside.discoverdetail.DiscoverActivityAdapter
 
 class ImageAdapter (val width: Int, val height: Int) :
-    ListAdapter<String, ImageAdapter.ImageViewHolder>(DiffCallback) {
+    ListAdapter<Any, RecyclerView.ViewHolder>(ImageAdapter) {
 
     class ImageViewHolder(private var binding: ItemRatingImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -23,13 +25,13 @@ class ImageAdapter (val width: Int, val height: Int) :
     }
 
     // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
-    companion object DiffCallback : DiffUtil.ItemCallback<String>() {
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<Any>() {
+        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem == newItem
+        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+            return true
         }
     }
 
@@ -45,9 +47,12 @@ class ImageAdapter (val width: Int, val height: Int) :
     }
 
     // Replaces the contents of a view (invoked by the layout manager)
-    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val img = getItem(position)
-        holder.bind(img,width,height)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is ImageViewHolder -> {
+                holder.bind((getItem(position) as String), width,height)
+            }
+        }
     }
 
     override fun getItemCount(): Int {

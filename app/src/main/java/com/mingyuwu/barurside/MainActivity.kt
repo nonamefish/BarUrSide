@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNav() {
         binding.bottomNav.setOnItemSelectedListener { item ->
-            Log.d("Ming","item: $item")
+            Log.d("Ming", "item: $item")
             when (item.itemId) {
                 R.id.navigate_activity -> {
                     navController.navigate(MainNavigationDirections.navigateToActivityFragment())
@@ -123,9 +123,9 @@ class MainActivity : AppCompatActivity() {
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigate_profile -> {
-                        navController.navigate(
-                            MainNavigationDirections.navigateToProfileFragment(UserManager.user.value?.id)
-                        )
+                    navController.navigate(
+                        MainNavigationDirections.navigateToProfileFragment(UserManager.user.value?.id)
+                    )
                     return@setOnItemSelectedListener true
                 }
             }
@@ -168,6 +168,11 @@ class MainActivity : AppCompatActivity() {
                 else -> viewModel.currentFragmentType.value
             }
         }
+    }
+
+    fun changeToolbarTitle(text: String) {
+        binding.textBarursideTitle.text = text
+        Log.d("Ming","text: $text")
     }
 
 }

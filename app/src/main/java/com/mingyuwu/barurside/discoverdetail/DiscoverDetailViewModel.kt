@@ -5,12 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
-import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Result
-import com.mingyuwu.barurside.data.Venue
-import com.mingyuwu.barurside.data.mockdata.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.filter.FilterParameter
 import com.mingyuwu.barurside.login.UserManager
@@ -43,6 +41,12 @@ class DiscoverDetailViewModel(
     val error: LiveData<String?>
         get() = _error
 
+    // status: The firebase MutableLiveData that stores the status of the most recent request
+    private val _status = MutableLiveData<LoadStatus>()
+
+    val status: LiveData<LoadStatus>
+        get() = _status
+
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
@@ -53,7 +57,9 @@ class DiscoverDetailViewModel(
 
         // snapshot listener
         _detailData = when (theme) {
-            Theme.RECENT_ACTIVITY -> repository.getActivityResult() as MutableLiveData<List<Any>>
+            Theme.RECENT_ACTIVITY -> {
+                repository.getActivityResult() as MutableLiveData<List<Any>>
+            }
             Theme.NOTIFICATION -> {
                 repository.getNotification(
                     UserManager.user.value?.id ?: ""
@@ -73,29 +79,24 @@ class DiscoverDetailViewModel(
                 }
                 // Venue Info
                 Theme.VENUE_MENU -> {
-                    _detailData.value = DrinkData.drink.drink
+                    id?.get(0)?.let {
+                        result = repository.getMenu(id[0])
+                    }
                 }
                 // Profile Page
                 Theme.USER_FRIEND -> {
-                    id?.let {
+                    if (id != null) {
                         result = repository.getFriend(id)
+                    } else {
+                        result = Result.Success(null)
                     }
                 }
                 Theme.USER_ACTIVITY -> {
                     id?.get(0)?.let {
-                        Log.d("Ming", "id: $id")
                         result = repository.getActivityByUser(id[0])
                     }
                 }
                 // Discover Page
-                Theme.AROUND_VENUE -> {
-                    result = if (mLocation.value != null) {
-                        val range = getRectangleRange(mLocation.value!!, 1.0)
-                        repository.getVenueByLocation(range[0], range[1], range[2], range[3])
-                    } else {
-                        Result.Fail("hasn't get location information")
-                    }
-                }
                 Theme.HOT_VENUE -> {
                     result = repository.getHotVenueResult()
                 }
@@ -115,14 +116,17 @@ class DiscoverDetailViewModel(
                     is Result.Success -> {
                         Log.d("Ming", "result:  ${(result as Result.Success<Any>).data}")
                         _error.value = null
+                        _status.value = LoadStatus.DONE
                         (result as Result.Success<Any>).data as List<Any>
                     }
                     is Result.Fail -> {
                         _error.value = (result as Result.Fail).error
+                        _status.value = LoadStatus.ERROR
                         null
                     }
                     is Result.Error -> {
                         _error.value = (result as Result.Error).exception.toString()
+                        _status.value = LoadStatus.ERROR
                         null
                     }
                     else -> {
@@ -134,12 +138,12 @@ class DiscoverDetailViewModel(
     }
 
     private fun getRectangleRange(location: LatLng, distance: Double): List<Double> {
-        //1緯度的距離大約為 69 英里 (111.11公里)
-        //1經度的距離大約為 111.11 * cos(theta) km
+
         val minLat = location.latitude - (distance / 111.11)
         val maxLat = location.latitude + (distance / 111.11)
         val minLng = location.longitude - (distance / 111.11 / cos(location.latitude))
         val maxLng = location.longitude + (distance / 111.11 / cos(location.latitude))
+
         return listOf(minLat, maxLat, minLng, maxLng)
     }
 
@@ -152,14 +156,17 @@ class DiscoverDetailViewModel(
                 is Result.Success -> {
                     Log.d("Ming", "result:  ${(result as Result.Success<Any>).data.toString()}")
                     _error.value = null
+                    _status.value = LoadStatus.DONE
                     (result as Result.Success<Any>).data as List<Any>
                 }
                 is Result.Fail -> {
                     _error.value = (result as Result.Fail).error
+                    _status.value = LoadStatus.ERROR
                     null
                 }
                 is Result.Error -> {
                     _error.value = (result as Result.Error).exception.toString()
+                    _status.value = LoadStatus.ERROR
                     null
                 }
                 else -> {
@@ -194,7 +201,7 @@ class DiscoverDetailViewModel(
         }
     }
 
-    fun onLeft(){
+    fun onLeft() {
         navigateToInfo.value = null
     }
 

@@ -187,8 +187,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             ) {
                 val locationRequest = LocationRequest()
                 locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-//                //更新頻率
-//                locationRequest.interval = 1000
+
                 //更新次數，若沒設定，會持續更新
                 locationRequest.numUpdates = 1
 
@@ -199,12 +198,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                         override fun onLocationResult(locationResult: LocationResult?) {
                             locationResult ?: return
                             mainViewModel.location.value =
-                                LatLng(25.04265289103591, 121.565102094742)
-//
-//                                LatLng(
-//                                    locationResult.lastLocation.latitude,
-//                                    locationResult.lastLocation.longitude
-//                                )
+
+                                LatLng(
+                                    locationResult.lastLocation.latitude,
+                                    locationResult.lastLocation.longitude
+                                )
 
 
 
