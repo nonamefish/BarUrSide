@@ -71,13 +71,13 @@ class DiscoverDetailFragment() : Fragment() {
         val theme = DiscoverDetailFragmentArgs.fromBundle(requireArguments()).theme
 
         val toolbarTitle = (requireActivity() as MainActivity).viewModel.discoverType
-        toolbarTitle.value = when(theme){
+        toolbarTitle.value = when (theme) {
             in arrayOf(Theme.RECENT_ACTIVITY, Theme.USER_ACTIVITY) -> "活動列表"
             Theme.USER_FRIEND -> "朋友列表"
             Theme.NOTIFICATION -> "通知"
+            Theme.VENUE_MENU -> "菜單"
             else -> "搜尋結果"
         }
-
 
 
         // Inflate the layout for this fragment
@@ -132,6 +132,7 @@ class DiscoverDetailFragment() : Fragment() {
                     GridLayoutManager(binding.root.context, 2)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
+                binding.animationLoading.visibility = View.GONE
                 adapter.submitList(ids)
             }
             in arrayOf(Theme.HOT_VENUE, Theme.HIGH_RATE_VENUE) -> {
@@ -172,12 +173,12 @@ class DiscoverDetailFragment() : Fragment() {
 
         // assign value to recyclerView
         viewModel.detailData.observe(viewLifecycleOwner, Observer { it ->
-            Log.d("Ming","it: $it")
+            Log.d("Ming", "it: $it")
             if (it.isNullOrEmpty()) {
                 binding.animationEmpty.visibility = View.VISIBLE
                 binding.animationLoading.visibility = View.GONE
             } else {
-                var list : List<Any>?
+                var list: List<Any>?
                 if (theme == Theme.NOTIFICATION) {
                     list = (it as List<Notification>).filter { notifications ->
                         notifications.toId == UserManager.user.value?.id ?: ""
@@ -186,9 +187,9 @@ class DiscoverDetailFragment() : Fragment() {
                     list = it
                 }
 
-                if(list.size==0){
+                if (list.isEmpty()) {
                     binding.animationEmpty.visibility = View.VISIBLE
-                }else{
+                } else {
                     adapter.submitList(list)
                 }
                 binding.animationLoading.visibility = View.GONE

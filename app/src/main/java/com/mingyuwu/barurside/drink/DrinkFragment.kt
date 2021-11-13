@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentDrinkBinding
+import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
@@ -62,8 +63,9 @@ class DrinkFragment : Fragment() {
                 // set rating data
                 viewModel.rtgInfo.observe(viewLifecycleOwner, Observer {
                     it?.let {
+                        viewModel.setImages(it)
                         binding.ratings = it.sortedByDescending { it.postDate }.take(3)
-                        binding.imgs = viewModel.setImgs(it)
+                        binding.imgs = viewModel.images.value?.take(10)
                     }
                 })
             }
@@ -79,6 +81,17 @@ class DrinkFragment : Fragment() {
             viewModel.venueInfo.value?.id.let{
                 findNavController().navigate(
                     MainNavigationDirections.navigateToVenueFragment(it!!) // set venue id
+                )
+            }
+        }
+
+        // set view all image's on click listener
+        binding.txtDrinkImg.setOnClickListener {
+            viewModel.images.value?.let{
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToDiscoverDetailFragment(
+                        Theme.IMAGES, it.toTypedArray(), null
+                    )
                 )
             }
         }

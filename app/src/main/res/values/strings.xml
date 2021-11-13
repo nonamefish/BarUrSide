@@ -35,6 +35,7 @@
 
     <!--    DRINK Info -->
     <string name="drink_title">酒項</string>
+    <string name="drink_info_price">$ %d</string>
 
     <!--    Venue Info -->
     <string name="venue_title">店家</string>

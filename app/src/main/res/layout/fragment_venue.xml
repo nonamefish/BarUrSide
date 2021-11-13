@@ -48,10 +48,10 @@
                 android:layout_height="42dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                app:alpha="@{viewModel.isCollect ?  1.0f : 0.5f }"
                 android:background="@drawable/ic_baseline_favorite_36"
                 android:backgroundTint="@{viewModel.isCollect ? @color/red_e02401 : @color/gray_888888}"
                 android:onClickListener="@{()->viewModel.setCollect()}"
+                app:alpha="@{viewModel.isCollect ?  1.0f : 0.5f }"
                 app:layout_constraintBottom_toBottomOf="@+id/img_venue"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -68,13 +68,18 @@
 
             <TextView
                 android:id="@+id/venue_title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="4dp"
                 android:text="@{viewModel.venueInfo.name}"
                 android:textColor="@color/black_3f3a3a"
                 android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/venue_rtg_score_list"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_venue"
                 tools:text="不醉不歸酒吧" />
@@ -83,12 +88,14 @@
                 android:id="@+id/venue_rtg_score_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="@+id/venue_title"
-                app:layout_constraintStart_toEndOf="@+id/venue_title"
-                app:layout_constraintTop_toTopOf="@+id/venue_title"
+                app:layout_constraintEnd_toStartOf="@+id/venue_rtg_avg_score"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/venue_title"
                 app:stars="@{viewModel.venueInfo.avgRating}">
 
             </androidx.recyclerview.widget.RecyclerView>
@@ -97,22 +104,22 @@
                 android:id="@+id/venue_rtg_avg_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@{@string/venue_rating_info_view(viewModel.venueInfo.avgRating, viewModel.venueInfo.rtgCount)}"
-                app:layout_constraintBottom_toBottomOf="@+id/venue_title"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="4dp"
+                android:text="@{viewModel.venueInfo.rtgCount == 0 ? `無評論` : @string/venue_rating_info_view(viewModel.venueInfo.avgRating, viewModel.venueInfo.rtgCount)}"
                 app:layout_constraintStart_toEndOf="@+id/venue_rtg_score_list"
-                app:layout_constraintTop_toTopOf="@+id/venue_title"
+                app:layout_constraintTop_toBottomOf="@+id/venue_title"
                 tools:text="TextView" />
 
             <TextView
                 android:id="@+id/venue_service_flag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
                 app:isOpen="@{viewModel.venueInfo.serviceTime}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/venue_title"
+                app:layout_constraintTop_toBottomOf="@+id/venue_rtg_avg_score"
                 tools:text="營業中 直至夜間2:00" />
 
             <ImageView
@@ -311,6 +318,7 @@
                 android:id="@+id/view3"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/gray_f0f0f0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -321,39 +329,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:text="@{imgs.size==0 ? `相片` : `相片 >`}"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="@{imgs.size() > 0}"
+                android:text="@{imgs.size == 0 ? `尚無相片` : `相片 >`}"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/view3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
+                app:layout_constraintTop_toBottomOf="@+id/view2"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/txt_venue_last_rtg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:text="最新評論"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@{imgs.size() == 0 ? `尚無評論` : `最新評論`}"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view3" />
+                app:layout_constraintTop_toBottomOf="@+id/view3"
+                app:layout_constraintVertical_bias="0.0" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/venue_img_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:clipToPadding="false"
+                android:clipToPadding="true"
                 android:orientation="horizontal"
-                app:listData="@{imgs}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_venue_img">
+                app:layout_constraintTop_toBottomOf="@+id/txt_venue_img"
+                app:listData="@{imgs}">
 
             </androidx.recyclerview.widget.RecyclerView>
 
@@ -362,8 +376,7 @@
                 android:id="@+id/venue_rtg_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:clipToPadding="false"
+                android:clipToPadding="true"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -379,15 +392,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp"
-                android:text="查看全部 >"
                 android:onClick="@{() -> viewModel.navigateToAllRating()}"
+                android:text="查看全部 >"
                 android:visibility="@{viewModel.rtgInfo.size > 3 ? view.VISIBLE: view.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/venue_rtg_list" />
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

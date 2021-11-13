@@ -82,7 +82,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="12dp"
                 android:background="@drawable/icons_32px_dropdown"
-                android:backgroundTint="@color/black_3f3a3a"
+                android:backgroundTint="@color/gray_999999"
                 app:layout_constraintBottom_toBottomOf="@+id/spinner_search_type"
                 app:layout_constraintEnd_toEndOf="@+id/spinner_search_type"
                 app:layout_constraintTop_toTopOf="@+id/spinner_search_type"></ImageView>

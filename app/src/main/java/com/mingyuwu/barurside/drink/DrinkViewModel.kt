@@ -26,6 +26,12 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
     var navigateToAll = MutableLiveData<List<RatingInfo>?>()
 
     // error: The internal MutableLiveData that stores the error of the most recent request
+    private val _images = MutableLiveData<List<String>?>()
+
+    val images: LiveData<List<String>?>
+        get() = _images
+
+    // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
 
     val error: LiveData<String?>
@@ -55,13 +61,14 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
         venueInfo.value = venueInfo.value
     }
 
-    fun setImgs(rtgs: List<RatingInfo>?): List<String> {
+    fun setImages(rtgs: List<RatingInfo>){
         var list = listOf<String>()
-        rtgs?.forEach {
-            if (list.size > 10) return@forEach
-            list += it.images as List<String>
+        rtgs?.forEach { ratingInfo ->
+            ratingInfo.images?.let { imgs ->
+                list += imgs
+            }
         }
-        return list
+        _images.value = list
     }
 
     private fun getCollect(userId: String) {
