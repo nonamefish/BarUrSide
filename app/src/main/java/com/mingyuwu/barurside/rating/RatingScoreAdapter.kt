@@ -50,7 +50,6 @@ class RatingScoreAdapter (val width: Int, val height: Int) :
     }
 
     override fun getItemCount(): Int {
-        Log.i(TAG, "getItemCount:" + super.getItemCount())
         return super.getItemCount()
     }
 }

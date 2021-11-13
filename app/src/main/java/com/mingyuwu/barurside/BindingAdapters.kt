@@ -211,7 +211,8 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun checkTime(open: String, close: String): Boolean {
-
+    Log.d("Ming","open: $open")
+    Log.d("Ming","close: $close")
     val open = LocalTime.parse(open)
     val close = LocalTime.parse(close)
     val current = LocalTime.now()

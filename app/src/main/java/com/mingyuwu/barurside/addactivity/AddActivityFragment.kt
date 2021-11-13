@@ -198,4 +198,14 @@ class AddActivityFragment : Fragment() {
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
+
+    override fun onStart() {
+        super.onStart()
+        val navController = findNavController()
+        Log.d("Ming","stack: " + navController.previousBackStackEntry?.destination?.label)
+        if(navController.previousBackStackEntry?.destination?.label == "ActivityDetailDialog"){
+            navController.popBackStack(R.id.activityFragment,true)
+        }
+//        findNavController().backStack.remove(navController.currentBackStackEntry)
+    }
 }

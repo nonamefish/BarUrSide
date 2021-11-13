@@ -73,7 +73,6 @@ class BitmapAdapter(val width: Int, val height: Int, val rtgOrder: Int, val view
     }
 
     override fun getItemCount(): Int {
-        Log.d("Ming", "getItemCount : ${super.getItemCount()}")
         return super.getItemCount()
     }
 

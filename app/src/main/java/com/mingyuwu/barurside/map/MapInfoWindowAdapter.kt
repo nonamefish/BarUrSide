@@ -45,17 +45,19 @@ class MapInfoWindowAdapter(_context: Context, viewModel: MapViewModel, parent: V
         binding.objectName = marker.title
 
         // score: set adapter
-        val scoreAdapter = RatingScoreAdapter(15, 15)
+        val scoreAdapter = RatingScoreAdapter(12, 12)
         binding.venueScoreList.adapter = scoreAdapter
 
         // set average score & rating count
         binding.avgRating = info[1].toDouble()
-        binding.shareCount = info[2].toLong()
+        binding.shareCount = info[2].toInt()
 
 
         binding.imgInfo.setOnClickListener {
             viewModel.navigateToVenue.value = info[0]
         }
+
+
 
         // set venue image
         if (info[3] != null) {

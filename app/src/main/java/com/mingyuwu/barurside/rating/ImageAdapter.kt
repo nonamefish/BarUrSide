@@ -56,7 +56,6 @@ class ImageAdapter (val width: Int, val height: Int) :
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG,"getItemCount : ${super.getItemCount()}")
         return super.getItemCount()
     }
 

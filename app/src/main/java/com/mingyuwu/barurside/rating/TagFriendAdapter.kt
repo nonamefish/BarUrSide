@@ -69,7 +69,6 @@ class TagFriendAdapter() :
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG, "getItemCount : ${super.getItemCount()}")
         return super.getItemCount()
     }
 

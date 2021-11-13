@@ -82,10 +82,15 @@ class ActivityDetailDialog : DialogFragment() {
                         )
                     )
                 }
-
             }
         })
 
         return binding.root
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        this.dismiss()
+    }
+
 }

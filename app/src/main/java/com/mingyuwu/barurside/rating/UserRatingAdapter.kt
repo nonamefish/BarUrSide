@@ -51,7 +51,6 @@ class UserRatingAdapter() :
     }
 
     override fun getItemCount(): Int {
-        Log.d(com.mingyuwu.barurside.collect.TAG, "getItemCount : ${super.getItemCount()}")
         return super.getItemCount()
     }
 

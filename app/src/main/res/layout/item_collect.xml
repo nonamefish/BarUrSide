@@ -52,13 +52,16 @@
 
         <TextView
             android:id="@+id/catalog_product_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:maxLines="3"
             android:text="@{isVenue ? venue.name :drink.name}"
             android:textColor="@color/black_3f3a3a"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/img_collect_filled_filled"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/catalog_product_img"
             app:layout_constraintTop_toTopOf="@+id/catalog_product_img"
             tools:text="文青不要喝IPA" />

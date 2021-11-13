@@ -167,6 +167,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             )
         }
 
+        val image = if(!venue.images.isNullOrEmpty()) {venue.images?.get(0)} else ""
+
         mMap?.addMarker(
             MarkerOptions()
                 .position(LatLng(venue.latitude, venue.longitude))
@@ -175,7 +177,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                     "${venue.id}," +
                             "${venue.avgRating}," +
                             "${venue.rtgCount}," +
-                            "${venue.images?.get(0)}"
+                            "$image"
                 )
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_mark_wine))
         )
@@ -198,11 +200,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                         override fun onLocationResult(locationResult: LocationResult?) {
                             locationResult ?: return
                             mainViewModel.location.value =
-
                                 LatLng(
-                                    locationResult.lastLocation.latitude,
-                                    locationResult.lastLocation.longitude
+                                    25.042788652368802, 121.56507169645725
                                 )
+
+//                                LatLng(
+//                                    locationResult.lastLocation.latitude,
+//                                    locationResult.lastLocation.longitude
+//                                )
 
 
 

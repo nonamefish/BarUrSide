@@ -30,6 +30,10 @@ import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import android.widget.Button
 import com.permissionx.guolindev.PermissionX
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 private const val REQUEST_ID_MULTIPLE_PERMISSIONS = 101
@@ -94,9 +98,12 @@ class EditRatingFragment : Fragment() {
         })
 
         // set post rating button click listener
+        var alertDialog : AlertDialog? = null
+
         binding.btnRtgConfirm.setOnClickListener {
             if (viewModel.checkRating()) {
                 viewModel.uploadPhoto()
+                alertDialog = postRatingDialog(AlertDialog.Builder(binding.root.context))
             } else {
                 showRatingUncompleted()
             }
@@ -111,6 +118,7 @@ class EditRatingFragment : Fragment() {
         // leave rating and to previous view
         viewModel.leave.observe(viewLifecycleOwner, Observer {
             it?.let {
+                alertDialog!!.dismiss()
                 findNavController().navigateUp()
                 viewModel.onLeft()
             }
@@ -202,7 +210,12 @@ class EditRatingFragment : Fragment() {
                             cursor.moveToFirst()
                             val picturePath: String = cursor.getString(columnIndex)
                             val img = BitmapFactory.decodeFile(picturePath)
-                            addImageToRecyclerView(getResizedBitmap(img, 1000), picturePath)
+
+                            // resize image and save into another img
+                            val pathNew =
+                                picturePath.split(".")[0] + "_1." + picturePath.split(".")[1]
+                            saveBitmap(getResizedBitmap(img, 1000)!!, pathNew)
+                            addImageToRecyclerView(getResizedBitmap(img, 1000), pathNew)
                             cursor.close()
                         }
                     }
@@ -272,6 +285,37 @@ class EditRatingFragment : Fragment() {
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+    }
+
+    private fun postRatingDialog(postDialog: AlertDialog.Builder) : AlertDialog {
+//        val alertDialog = postDialog.Builder(binding.root.context)
+        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_post_rating, null)
+
+        postDialog.setView(mView)
+        val dialog = postDialog.create()
+
+        dialog.show()
+        val layoutParameter = dialog.window?.attributes
+        layoutParameter?.width = 800
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        return dialog
+    }
+
+    fun saveBitmap(bitmap: Bitmap, path: String) {
+        val fOut: FileOutputStream
+        try {
+            fOut = FileOutputStream(path)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+            try {
+                fOut.flush()
+                fOut.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        }
     }
 }
 

@@ -137,7 +137,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             val friend = document.toObject(User::class.java)
                             list.add(friend)
                         }
-                        Log.d("Ming","it: ${task.result.documents}")
+                        Log.d("Ming", "it: ${task.result.documents}")
                         continuation.resume(Result.Success(list))
 
                     } else {
@@ -295,7 +295,11 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                 for (document in task.result!!) {
                                                     val venue = document.toObject(Venue::class.java)
                                                     rating.objectName = venue.name
-                                                    rating.objectImg = venue.images?.get(0) ?: ""
+
+                                                    if (!venue.images.isNullOrEmpty()) {
+                                                        rating.objectImg =
+                                                            rating.images!![0]
+                                                    }
                                                 }
                                                 list.add(rating)
                                                 liveData.value = list
@@ -311,7 +315,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                 for (document in task.result!!) {
                                                     val drink = document.toObject(Drink::class.java)
                                                     rating.objectName = drink.name
-                                                    rating.objectImg = drink.images?.get(0) ?: ""
+                                                    if (!drink.images.isNullOrEmpty()) {
+                                                        rating.objectImg =
+                                                            rating.images!![0]
+                                                    }
                                                 }
                                                 list.add(rating)
                                                 liveData.value = list
@@ -353,7 +360,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             for (document in task.result!!) {
                                                 val venue = document.toObject(Venue::class.java)
                                                 rating.objectName = venue.name
-                                                rating.objectImg = venue.images?.get(0) ?: ""
+                                                if (!venue.images.isNullOrEmpty()) {
+                                                    rating.objectImg =
+                                                        venue.images!![0]
+                                                }
                                             }
                                             list.add(rating)
 
@@ -373,7 +383,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             for (document in task.result!!) {
                                                 val drink = document.toObject(Drink::class.java)
                                                 rating.objectName = drink.name
-                                                rating.objectImg = drink.images?.get(0) ?: ""
+                                                if (!drink.images.isNullOrEmpty()) {
+                                                    rating.objectImg =
+                                                        drink.images!![0]
+                                                }
                                             }
                                             list.add(rating)
 
@@ -531,6 +544,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .addOnFailureListener { exception ->
                     Log.i(TAG, exception.toString())
                 }
+            File(localImage).delete()
         }
 
     override suspend fun updateObjectRating(
@@ -1073,6 +1087,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         for (document in venueTask.result!!) {
                             Log.d(TAG, document.id + " => " + document.data)
                             val venue = document.toObject(Venue::class.java)
+                            Log.d("Ming",venue.toString())
                             list.add(venue)
                         }
                         continuation.resume(Result.Success(list))
@@ -1217,8 +1232,11 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                                 val venue =
                                                                     docVenue.toObject(Venue::class.java)
                                                                 rtg.objectName = venue.name
-                                                                rtg.objectImg =
-                                                                    venue.images?.get(0) ?: ""
+
+                                                                if (!venue.images.isNullOrEmpty()) {
+                                                                    rtg.objectImg =
+                                                                        venue.images!![0]
+                                                                }
                                                                 list.add(rtg)
                                                             }
 
@@ -1315,10 +1333,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                                                     )
                                                                                 rtg.objectName =
                                                                                     venue.name
-                                                                                rtg.objectImg =
-                                                                                    venue.images?.get(
-                                                                                        0
-                                                                                    ) ?: ""
+                                                                                if (!venue.images.isNullOrEmpty()) {
+                                                                                    rtg.objectImg =
+                                                                                        venue.images!![0]
+                                                                                }
                                                                             }
 
                                                                             list.add(rtg)
@@ -1350,10 +1368,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                                                     )
                                                                                 rtg.objectName =
                                                                                     drink.name
-                                                                                rtg.objectImg =
-                                                                                    drink.images?.get(
-                                                                                        0
-                                                                                    ) ?: ""
+                                                                                if (!drink.images.isNullOrEmpty()) {
+                                                                                    rtg.objectImg =
+                                                                                        drink.images!![0]
+                                                                                }
                                                                             }
                                                                             list.add(rtg)
                                                                             if (check == rtgTask.result.size()) {

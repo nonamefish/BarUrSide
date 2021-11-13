@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class Venue(
     val id: String = "",
     val menuId: String = "",
-    val name: String = "",
+    @JvmField val name: String = "",
     val style: String = "",
     val level: Long? = -1,
     val serviceTime: String = "",
