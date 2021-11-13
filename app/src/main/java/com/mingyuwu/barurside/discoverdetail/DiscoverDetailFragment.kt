@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
@@ -35,8 +34,6 @@ import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Venue
-import com.mingyuwu.barurside.data.mockdata.VenueData
-import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.databinding.FragmentDiscoverDetailBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
@@ -76,6 +73,7 @@ class DiscoverDetailFragment() : Fragment() {
             Theme.USER_FRIEND -> "朋友列表"
             Theme.NOTIFICATION -> "通知"
             Theme.VENUE_MENU -> "菜單"
+            Theme.IMAGES -> "相片"
             else -> "搜尋結果"
         }
 

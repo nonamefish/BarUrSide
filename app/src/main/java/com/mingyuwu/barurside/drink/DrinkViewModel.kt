@@ -25,7 +25,7 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
     // navigate to all rating
     var navigateToAll = MutableLiveData<List<RatingInfo>?>()
 
-    // error: The internal MutableLiveData that stores the error of the most recent request
+    // image list data
     private val _images = MutableLiveData<List<String>?>()
 
     val images: LiveData<List<String>?>

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,11 +33,23 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
     // navigate to all rating
     var navigateToAll = MutableLiveData<List<RatingInfo>?>()
 
+    // image list data
+    private val _images = MutableLiveData<List<String>?>()
+
+    val images: LiveData<List<String>?>
+        get() = _images
+
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
 
     val error: LiveData<String?>
         get() = _error
+
+    // status: The firebase MutableLiveData that stores the status of the most recent request
+    private val _status = MutableLiveData<LoadStatus>()
+
+    val status: LiveData<LoadStatus>
+        get() = _status
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -67,14 +80,17 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
             _rtgInfo.value = when (result) {
                 is Result.Success -> {
                     _error.value = null
+                    _status.value = LoadStatus.DONE
                     result.data
                 }
                 is Result.Fail -> {
                     _error.value = result.error
+                    _status.value = LoadStatus.ERROR
                     null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
+                    _status.value = LoadStatus.ERROR
                     null
                 }
                 else -> {
@@ -84,13 +100,14 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
         }
     }
 
-    fun setImgs(rtgs: List<RatingInfo>?): List<String> {
+    fun setImages(rtgs: List<RatingInfo>){
         var list = listOf<String>()
-        rtgs?.forEach {
-            if (list.size > 10) return@forEach
-            list += it.images as List<String>
+        rtgs?.forEach { ratingInfo ->
+            ratingInfo.images?.let { imgs ->
+                list += imgs
+            }
         }
-        return list
+        _images.value = list
     }
 
     fun addOnFriend() {

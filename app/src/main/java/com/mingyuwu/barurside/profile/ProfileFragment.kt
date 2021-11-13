@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.databinding.FragmentProfileBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
@@ -54,7 +55,7 @@ class ProfileFragment : Fragment() {
 
         // test image adapter
         val imgAdapter = ImageAdapter(80, 100)
-        binding.venueImgList.adapter = imgAdapter
+        binding.profileImgList.adapter = imgAdapter
 
         // set rating adapter of drink and venue
         val rtgVnAdapter = UserRatingAdapter()
@@ -75,6 +76,7 @@ class ProfileFragment : Fragment() {
         viewModel.rtgInfo.observe(viewLifecycleOwner, Observer { rtgInfo ->
             rtgInfo?.let { rtgs ->
                 val sortRtgs = rtgs.sortedByDescending { it.postTimestamp }
+                viewModel.setImages(rtgs)
 
                 // filter data
                 val rtgVenue = sortRtgs.filter { it.isVenue == true }
@@ -83,7 +85,7 @@ class ProfileFragment : Fragment() {
                 // recyclerView submit list
                 rtgVnAdapter.submitList(rtgVenue.take(3))
                 rtgDkAdapter.submitList(rtgDrink.take(3))
-                imgAdapter.submitList(viewModel.setImgs(sortRtgs))
+                imgAdapter.submitList(viewModel.images.value?.take(10))
 
                 // set binding variable
                 binding.rtgVenueCnt = rtgVenue.size
@@ -110,6 +112,14 @@ class ProfileFragment : Fragment() {
             it?.let {
                 findNavController().navigate(MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray()))
                 viewModel.onLeft()
+            }
+        })
+
+        // check loading done and close loading animation
+        viewModel.status.observe(viewLifecycleOwner, Observer {
+            if (it == LoadStatus.DONE) {
+                binding.animationLoading.visibility = View.GONE
+                binding.constProfile.visibility = View.VISIBLE
             }
         })
 
@@ -141,6 +151,17 @@ class ProfileFragment : Fragment() {
                 viewModel.addOnFriend()
             } else {
                 showConfirmRemoveFriend()
+            }
+        }
+
+        // set view all image's on click listener
+        binding.txtProfileImg.setOnClickListener {
+            viewModel.images.value?.let{
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToDiscoverDetailFragment(
+                        Theme.IMAGES, it.toTypedArray(), null
+                    )
+                )
             }
         }
 
