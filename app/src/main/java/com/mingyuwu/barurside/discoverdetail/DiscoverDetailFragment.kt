@@ -5,6 +5,8 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
@@ -13,6 +15,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.GridLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -56,6 +59,7 @@ class DiscoverDetailFragment() : Fragment() {
             DiscoverDetailFragmentArgs.fromBundle(requireArguments()).filterParameter,
         )
     }
+
     private val mainViewModel by viewModels<MainViewModel> { getVmFactory() }
     private lateinit var adapter: ListAdapter<Any, RecyclerView.ViewHolder>
 
@@ -89,7 +93,6 @@ class DiscoverDetailFragment() : Fragment() {
         // set recyclerView adapter
         when (theme) {
             in arrayOf(Theme.RECENT_ACTIVITY, Theme.USER_ACTIVITY) -> {
-
                 adapter = DiscoverActivityAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
@@ -138,10 +141,15 @@ class DiscoverDetailFragment() : Fragment() {
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
-            in arrayOf(Theme.HOT_DRINK, Theme.HIGH_RATE_DRINK, Theme.VENUE_MENU) -> {
+            in arrayOf(Theme.HOT_DRINK, Theme.HIGH_RATE_DRINK) -> {
                 adapter = DiscoverDrinkAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
+            }
+            Theme.VENUE_MENU -> {
+                adapter = DiscoverDrinkAdapter(viewModel)
+                binding.discoverObjectList.adapter = adapter
+                binding.btnRandom.setImageResource(R.drawable.ic_baseline_add_24)
             }
         }
 
@@ -196,11 +204,19 @@ class DiscoverDetailFragment() : Fragment() {
 
         // set random button click listener
         binding.btnRandom.setOnClickListener {
-            viewModel.detailData.value?.let {
-                findNavController().navigate(
-                    MainNavigationDirections.navigateToRandomFragment((it as List<Venue>).toTypedArray())
-                )
+            when(theme){
+                Theme.MAP_FILTER -> {
+                    viewModel.detailData.value?.let {
+                        findNavController().navigate(
+                            MainNavigationDirections.navigateToRandomFragment((it as List<Venue>).toTypedArray())
+                        )
+                    }
+                }
+                Theme.VENUE_MENU -> {
+
+                }
             }
+
         }
 
         return binding.root

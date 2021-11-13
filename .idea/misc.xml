@@ -10,6 +10,7 @@
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/background_spinner_dropdown.xml" value="0.2453125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/background_tab_unselect.xml" value="0.3962962962962963" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_activity_detail.xml" value="0.2453125" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_edit_text.xml" value="0.25885416666666666" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_filter_level.xml" value="0.33425925925925926" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_map_infowindow.xml" value="0.2453125" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/drawable/border_map_search.xml" value="0.33425925925925926" />
@@ -54,6 +55,7 @@
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_activity.xml" value="0.31596638655462184" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_activity_page.xml" value="0.3278985507246377" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_add_activity.xml" value="0.536" />
+        <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_add_object.xml" value="0.264" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_all_rating.xml" value="0.2703804347826087" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_collect.xml" value="0.48133848133848134" />
         <entry key="..\:/Android/Appworks/personal_project/BarUrSide/app/src/main/res/layout/fragment_collect_page.xml" value="0.34601449275362317" />

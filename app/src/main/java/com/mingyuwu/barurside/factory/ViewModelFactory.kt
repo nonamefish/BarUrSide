@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.mingyuwu.barurside.MainViewModel
 import com.mingyuwu.barurside.activity.dialog.ActivityDetailViewModel
 import com.mingyuwu.barurside.addactivity.AddActivityViewModel
+import com.mingyuwu.barurside.addobject.AddObjectViewModel
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.discover.DiscoverViewModel
 import com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel

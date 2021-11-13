@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Drink(
-    val id: String= "",
+    var id: String= "",
     val menuId: String= "",
     val venueId: String= "",
     val name: String= "",

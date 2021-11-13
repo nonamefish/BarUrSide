@@ -173,4 +173,8 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     override suspend fun unfriend(ids: List<String>): Result<Boolean> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun addDrink(drink: Drink): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
 }

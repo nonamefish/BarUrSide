@@ -42,7 +42,14 @@
     <string name="venue_rating_info_view">(%,.1f)&#160;|&#160;%d則評論</string>
     <string name="venue_rating_info_list">%,.1f&#160;|&#160;%d則評論</string>
 
-
+    <!--    Add Drink Info -->
+    <string-array name="drink_type">
+        <item>請選擇類別</item>
+        <item>啤酒(Beer)</item>
+        <item>雞尾酒(Cocktail)</item>
+        <item>葡萄酒(Wine)</item>
+        <item>烈酒(Spirits)</item>
+    </string-array>
 
     <!--    Edit Rating Tab-->
     <string name="tag_friend">標註朋友</string>

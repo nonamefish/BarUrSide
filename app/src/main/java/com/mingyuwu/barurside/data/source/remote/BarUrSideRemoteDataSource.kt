@@ -1448,6 +1448,41 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
+    override suspend fun addDrink(drink: Drink): Result<Boolean> =
+        suspendCoroutine { continuation ->
+            val postDrink =
+                FirebaseFirestore.getInstance().collection(PATH_DRINK)
+            val document = postDrink.document()
+
+            drink.id = document.id
+
+            document
+                .set(Drink.toHashMap(drink))
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "addDrink: isSuccessful")
+                        continuation.resume(Result.Success(true))
+                    } else {
+                        task.exception?.let {
+                            Log.d(TAG, "addDrink: $it")
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
     override suspend fun postActivity(activity: Activity): Result<Boolean> =
         suspendCoroutine { continuation ->
             val postCollect =

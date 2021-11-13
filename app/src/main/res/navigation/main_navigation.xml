@@ -134,6 +134,15 @@
             app:argType="com.mingyuwu.barurside.data.RatingInfo[]" />
     </fragment>
 
+    <fragment
+        android:id="@+id/addObjectFragment"
+        android:name="com.mingyuwu.barurside.addobject.AddObjectFragment"
+        android:label="AddObjectFragment">
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
+
     <dialog
         android:id="@+id/activityDetailDialog"
         android:name="com.mingyuwu.barurside.activity.dialog.ActivityDetailDialog"
@@ -184,20 +193,17 @@
 
     <action
         android:id="@+id/navigate_to_activity_fragment"
-        app:destination="@id/activityFragment">
-    </action>
+        app:destination="@id/activityFragment"></action>
 
     <action
         android:id="@+id/navigate_to_add_activity_fragment"
-        app:destination="@id/addActivityFragment">
-    </action>
+        app:destination="@id/addActivityFragment"></action>
 
     <action
         android:id="@+id/navigate_to_activity_detail_dialog"
         app:destination="@id/activityDetailDialog"
         app:popUpTo="@id/activityFragment"
-        app:popUpToInclusive="true">
-    </action>
+        app:popUpToInclusive="true"></action>
 
     <action
         android:id="@+id/navigate_to_profile_fragment"
@@ -222,5 +228,6 @@
     <action
         android:id="@+id/navigate_to_collect_fragment"
         app:destination="@id/collectFragment"></action>
+
 
 </navigation>

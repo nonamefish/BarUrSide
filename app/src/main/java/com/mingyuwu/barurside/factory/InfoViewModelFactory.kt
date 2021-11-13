@@ -2,6 +2,7 @@ package com.mingyuwu.barurside.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mingyuwu.barurside.addobject.AddObjectViewModel
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel
@@ -26,6 +27,8 @@ class InfoViewModelFactory(
                     DrinkViewModel(repository, id)
                 isAssignableFrom(ProfileViewModel::class.java) ->
                     ProfileViewModel(repository, id)
+                isAssignableFrom(AddObjectViewModel::class.java) ->
+                    AddObjectViewModel(repository)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
