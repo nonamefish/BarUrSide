@@ -782,8 +782,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             FirebaseFirestore.getInstance()
                 .collection(PATH_VENUE)
                 .orderBy("name")
-                .startAt(search)
-                .endAt("$search\uf8ff")
+                .startAt(search.uppercase())
+                .endAt("${search.lowercase()}\uf8ff")
                 .get()
                 .addOnCompleteListener { venueTask ->
 

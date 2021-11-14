@@ -104,6 +104,7 @@
                         android:layout_marginBottom="16dp"
                         android:background="@drawable/ic_baseline_notifications_24"
                         android:backgroundTint="@color/primaryLightColor"
+                        android:visibility="@{(viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.EDIT_RATING || viewModel.currentFragmentType == CurrentFragmentType.ALL_RATING || viewModel.currentFragmentType == CurrentFragmentType.ADD_OBJECT) ? View.GONE : View.VISIBLE}"
                         app:iconNotify="@{viewModel.currentFragmentType}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
@@ -135,7 +136,7 @@
                 android:background="@color/white_ffffff"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
-                android:visibility="@{(viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.EDIT_RATING || viewModel.currentFragmentType == CurrentFragmentType.ALL_RATING || viewModel.currentFragmentType == CurrentFragmentType.ADD_DRINK) ? View.GONE : View.VISIBLE}"
+                android:visibility="@{(viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.EDIT_RATING || viewModel.currentFragmentType == CurrentFragmentType.ALL_RATING || viewModel.currentFragmentType == CurrentFragmentType.ADD_OBJECT) ? View.GONE : View.VISIBLE}"
                 app:itemIconSize="24dp"
                 app:itemIconTint="@color/sl_nav_color"
                 app:itemRippleColor="@color/white"

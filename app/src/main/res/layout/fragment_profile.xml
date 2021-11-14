@@ -358,7 +358,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
-                    android:text="@{@string/profile_rtgs_cnt(rtgDrinkCnt)}"
+                    android:text="@{@string/profile_rtgs_cnt(rtgVenueCnt)}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txt_profile_rating"
                     tools:text="共5則評價" />
