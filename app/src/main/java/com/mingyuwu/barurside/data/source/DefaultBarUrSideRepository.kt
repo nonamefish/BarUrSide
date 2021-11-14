@@ -179,4 +179,8 @@ class DefaultBarUrSideRepository(
     override suspend fun addDrink(drink: Drink): Result<Boolean> {
         return remoteDataSource.addDrink(drink)
     }
+
+    override suspend fun addVenue(venue: Venue): Result<Boolean> {
+        return remoteDataSource.addVenue(venue)
+    }
 }

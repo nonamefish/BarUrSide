@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.mapFragment -> CurrentFragmentType.MAP
                 R.id.allRatingFragment -> CurrentFragmentType.ALL_RATING
                 R.id.loginFragment -> CurrentFragmentType.LOGIN
-                R.id.addObjectFragment -> CurrentFragmentType.ADD_OBJECT
+                R.id.addDrinkFragment -> CurrentFragmentType.ADD_DRINK
                 else -> viewModel.currentFragmentType.value
             }
         }

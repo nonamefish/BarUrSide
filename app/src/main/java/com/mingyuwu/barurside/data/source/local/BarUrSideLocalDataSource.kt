@@ -177,4 +177,8 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     override suspend fun addDrink(drink: Drink): Result<Boolean> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun addVenue(venue: Venue): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
 }

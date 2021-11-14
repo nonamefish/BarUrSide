@@ -68,4 +68,5 @@ interface BarUrSideDataSource {
     suspend fun replyAddFriend(notify: Notification, reply: Boolean): Result<Boolean>
     suspend fun unfriend(ids: List<String>): Result<Boolean>
     suspend fun addDrink(drink: Drink): Result<Boolean>
+    suspend fun addVenue(venue: Venue): Result<Boolean>
 }

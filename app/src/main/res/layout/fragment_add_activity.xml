@@ -52,40 +52,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
 
-        <ImageView
-            android:id="@+id/img_add_activity_address"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/ic_outline_location_on_24"
-            android:backgroundTint="@color/black_3f3a3a"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_add_activity_end" />
-
-        <ImageView
-            android:id="@+id/img_add_activity_limit"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/ic_outline_person_outline_24"
-            android:backgroundTint="@color/black_3f3a3a"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_activity_address"
-            app:tint="@color/black_3f3a3a" />
-
-        <ImageView
-            android:id="@+id/img_add_activity_main"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/ic_outline_local_drink_24"
-            android:backgroundTint="@color/black_3f3a3a"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_add_activity_limit" />
-
         <TextView
             android:id="@+id/txt_add_activity_time"
             android:layout_width="wrap_content"
@@ -111,6 +77,21 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_add_activity_time" />
 
         <TextView
+            android:id="@+id/add_activity_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:hint="輸入開始時間"
+            android:inputType="textPersonName"
+            android:text="@={viewModel.startTime}"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_add_activity_start"
+            app:layout_constraintStart_toEndOf="@+id/txt_add_activity_start"
+            app:layout_constraintTop_toTopOf="@+id/txt_add_activity_start" />
+
+        <TextView
             android:id="@+id/txt_add_activity_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -120,6 +101,32 @@
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/txt_add_activity_time"
             app:layout_constraintTop_toBottomOf="@+id/txt_add_activity_start" />
+
+        <TextView
+            android:id="@+id/add_activity_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:hint="輸入結束時間"
+            android:inputType="textPersonName"
+            android:text="@={viewModel.endTime}"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_add_activity_end"
+            app:layout_constraintStart_toEndOf="@+id/txt_add_activity_end"
+            app:layout_constraintTop_toTopOf="@+id/txt_add_activity_end" />
+
+        <ImageView
+            android:id="@+id/img_add_activity_address"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/ic_outline_location_on_24"
+            android:backgroundTint="@color/black_3f3a3a"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_add_activity_end" />
 
         <TextView
             android:id="@+id/add_activity_address"
@@ -137,51 +144,44 @@
             app:layout_constraintTop_toTopOf="@+id/img_add_activity_address"
             tools:text="輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點" />
 
-        <TextView
-            android:id="@+id/add_activity_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:ems="10"
-            android:hint="輸入開始時間"
-            android:inputType="textPersonName"
-            android:text="@={viewModel.startTime}"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_add_activity_start"
-            app:layout_constraintStart_toEndOf="@+id/txt_add_activity_start"
-            app:layout_constraintTop_toTopOf="@+id/txt_add_activity_start" />
-
-        <TextView
-            android:id="@+id/add_activity_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:ems="10"
-            android:hint="輸入結束時間"
-            android:inputType="textPersonName"
-            android:text="@={viewModel.endTime}"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_add_activity_end"
-            app:layout_constraintStart_toEndOf="@+id/txt_add_activity_end"
-            app:layout_constraintTop_toTopOf="@+id/txt_add_activity_end" />
+        <ImageView
+            android:id="@+id/img_add_activity_limit"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/ic_outline_person_outline_24"
+            android:backgroundTint="@color/black_3f3a3a"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_activity_address"
+            app:tint="@color/black_3f3a3a" />
 
         <EditText
             android:id="@+id/add_activity_limit"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginStart="16dp"
+            android:background="@null"
             android:ems="10"
             android:hint="輸入人數上限"
             android:inputType="number"
-            android:background="@null"
             android:text="@={viewModel.limit}"
             android:textSize="16sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_limit"
             app:layout_constraintStart_toEndOf="@+id/img_add_activity_limit"
             app:layout_constraintTop_toTopOf="@+id/img_add_activity_limit" />
+
+        <ImageView
+            android:id="@+id/img_add_activity_main"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/ic_outline_local_drink_24"
+            android:backgroundTint="@color/black_3f3a3a"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_add_activity_limit" />
 
         <EditText
             android:id="@+id/add_activity_main"

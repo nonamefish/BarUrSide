@@ -215,7 +215,7 @@ class DiscoverDetailFragment() : Fragment() {
                 Theme.VENUE_MENU -> {
                     ids?.get(0)?.let {
                         findNavController().navigate(
-                            MainNavigationDirections.navigateToAddObjectFragment(it)
+                            MainNavigationDirections.navigateToAddDrinkFragment(it)
                         )
                     }
                 }

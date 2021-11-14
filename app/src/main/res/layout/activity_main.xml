@@ -135,7 +135,7 @@
                 android:background="@color/white_ffffff"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
-                android:visibility="@{(viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.EDIT_RATING || viewModel.currentFragmentType == CurrentFragmentType.ALL_RATING) ? View.GONE : View.VISIBLE}"
+                android:visibility="@{(viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.EDIT_RATING || viewModel.currentFragmentType == CurrentFragmentType.ALL_RATING || viewModel.currentFragmentType == CurrentFragmentType.ADD_DRINK) ? View.GONE : View.VISIBLE}"
                 app:itemIconSize="24dp"
                 app:itemIconTint="@color/sl_nav_color"
                 app:itemRippleColor="@color/white"

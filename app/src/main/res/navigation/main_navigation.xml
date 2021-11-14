@@ -135,12 +135,18 @@
     </fragment>
 
     <fragment
-        android:id="@+id/addObjectFragment"
-        android:name="com.mingyuwu.barurside.addobject.AddObjectFragment"
-        android:label="AddObjectFragment">
+        android:id="@+id/addDrinkFragment"
+        android:name="com.mingyuwu.barurside.adddrink.AddObjectFragment"
+        android:label="AddDrinkFragment">
         <argument
             android:name="id"
             app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addVenueFragment"
+        android:name="com.mingyuwu.barurside.addvenue.AddVenueFragment"
+        android:label="AddVenueFragment">
     </fragment>
 
     <dialog
@@ -230,8 +236,11 @@
         app:destination="@id/collectFragment"></action>
 
     <action
-        android:id="@+id/navigate_to_add_object_fragment"
-        app:destination="@id/addObjectFragment"></action>
+        android:id="@+id/navigate_to_add_drink_fragment"
+        app:destination="@id/addDrinkFragment"></action>
 
+    <action
+        android:id="@+id/navigate_to_add_venue_fragment"
+        app:destination="@id/addVenueFragment"></action>
 
 </navigation>

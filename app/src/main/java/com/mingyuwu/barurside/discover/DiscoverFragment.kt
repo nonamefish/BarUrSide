@@ -54,6 +54,11 @@ class DiscoverFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
+        // add venue onclick listener
+        binding.btnAddVenue.setOnClickListener {
+            findNavController().navigate(MainNavigationDirections.navigateToAddVenueFragment())
+        }
+
         // observe search type
         viewModel.searchType.observe(viewLifecycleOwner, Observer {
             binding.autoDiscoverFilter.setText("")

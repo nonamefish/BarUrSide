@@ -43,7 +43,6 @@
     <string name="venue_rating_info_list">%,.1f&#160;|&#160;%d則評論</string>
 
     <!--    Add Drink Info -->
-    <string name="add_drink_prompt">請選擇類別</string>
     <string-array name="drink_type">
         <item>請選擇類別</item>
         <item>啤酒(Beer)</item>
@@ -51,6 +50,27 @@
         <item>葡萄酒(Wine)</item>
         <item>烈酒(Spirits)</item>
     </string-array>
+
+    <!--    Add Venue Info -->
+    <string-array name="venue_style">
+        <item>請選擇店家風格</item>
+        <item>美式餐廳</item>
+        <item>歐式餐廳</item>
+        <item>日式餐廳</item>
+        <item>台式餐廳</item>
+        <item>韓式餐廳</item>
+        <item>Bar</item>
+        <item>Pub</item>
+    </string-array>
+    <string-array name="venue_level">
+        <item>請選擇平均消費</item>
+        <item>$ (低於300元)</item>
+        <item>$$ (301-900)</item>
+        <item>$$$ (901-1800)</item>
+        <item>$$$$ (1800元以上)</item>
+    </string-array>
+
+
 
     <!--    Edit Rating Tab-->
     <string name="tag_friend">標註朋友</string>
