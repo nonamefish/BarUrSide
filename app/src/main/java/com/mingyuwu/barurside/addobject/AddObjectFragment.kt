@@ -2,11 +2,7 @@ package com.mingyuwu.barurside.addobject
 
 import android.Manifest
 import android.app.Activity
-import android.app.Activity.RESULT_CANCELED
-import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,16 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.databinding.FragmentAddActivityBinding
 import com.mingyuwu.barurside.ext.getVmFactory
-import java.text.SimpleDateFormat
-import java.util.*
-import com.google.android.libraries.places.api.Places
 import com.mingyuwu.barurside.R
-import com.google.android.libraries.places.widget.Autocomplete
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -34,15 +24,8 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.lifecycle.Observer
-import android.util.Log
 import android.widget.*
-import com.google.android.gms.common.api.Status
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.widget.AutocompleteActivity
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.databinding.FragmentAddObjectBinding
-import com.mingyuwu.barurside.discoverdetail.DiscoverDetailFragmentArgs
 import com.permissionx.guolindev.PermissionX
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -55,14 +38,18 @@ private var photoPermissionGranted = false
 class AddObjectFragment : Fragment() {
 
     private lateinit var binding: FragmentAddObjectBinding
-    private val viewModel by viewModels<AddObjectViewModel> { getVmFactory(
-        AddObjectFragmentArgs.fromBundle(requireArguments()).id
-    ) }
+    private val viewModel by viewModels<AddObjectViewModel> {
+        getVmFactory(
+            AddObjectFragmentArgs.fromBundle(requireArguments()).id
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val id = AddObjectFragmentArgs.fromBundle(requireArguments()).id
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -72,11 +59,15 @@ class AddObjectFragment : Fragment() {
         binding.lifecycleOwner = this
 
 
+        // set post rating button click listener
+        var alertDialog: AlertDialog? = null
+
         // confirm button
         binding.btnAddActovityConfirm.setOnClickListener {
-            if(viewModel.checkValue()){
+            if (viewModel.checkValue()) {
                 viewModel.addDrink()
-            }else{
+                alertDialog = postRatingDialog(AlertDialog.Builder(binding.root.context))
+            } else {
                 showAddUncompleted()
             }
         }
@@ -85,7 +76,7 @@ class AddObjectFragment : Fragment() {
         val adapter = ArrayAdapter.createFromResource(
             binding.root.context,
             R.array.drink_type,
-            android.R.layout.simple_spinner_dropdown_item
+            R.layout.spinner_search_type
         )
 
         binding.spinnerObjectType.adapter = adapter
@@ -94,8 +85,10 @@ class AddObjectFragment : Fragment() {
                 override fun onItemSelected(
                     parent: AdapterView<*>?, view: View?, position: Int, id: Long
                 ) {
-                    if(position!=0){
+                    if (position != 0) {
                         viewModel.type.value = parent?.getItemAtPosition(position).toString()
+                    }else{
+                        viewModel.type.value = null
                     }
                 }
 
@@ -105,7 +98,7 @@ class AddObjectFragment : Fragment() {
 
         // cancel button
         binding.btnCancel.setOnClickListener {
-            findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
+            findNavController().popBackStack()
         }
 
         // add photo
@@ -115,16 +108,16 @@ class AddObjectFragment : Fragment() {
 
 
         // after post activity then navigate to activity fragment
-        viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
+        viewModel.leave.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                alertDialog!!.dismiss()
+                findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(id))
                 viewModel.onLeft()
             }
         })
 
         return binding.root
     }
-
 
 
     private fun getPhotoPermission() {
@@ -242,19 +235,23 @@ class AddObjectFragment : Fragment() {
     }
 
     private fun showAddUncompleted() {
+        // set dialog
         val alertDialog = AlertDialog.Builder(binding.root.context)
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
-        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm) //連結關閉視窗的Button
-
+        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm)
+        val txtDialog = mView.findViewById<TextView>(R.id.dialog_content)
         alertDialog.setView(mView)
         val dialog = alertDialog.create()
 
+        // set dialog content text and button click listener
+        txtDialog.text = "酒名、類別及價格為必填項目"
         btDialog.setOnClickListener { dialog.dismiss() }
         dialog.show()
+
+        // set parameter
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
     }
 
     fun saveBitmap(bitmap: Bitmap, path: String) {
@@ -271,6 +268,24 @@ class AddObjectFragment : Fragment() {
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         }
+    }
+
+    private fun postRatingDialog(postDialog: AlertDialog.Builder): AlertDialog {
+        // set dialog
+        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_post_rating, null)
+        val txtDialog = mView.findViewById<TextView>(R.id.dialog_content)
+        postDialog.setView(mView)
+        val dialog = postDialog.create()
+
+        // set dialog content text
+        txtDialog.text = "酒項資訊送出中"
+
+        // set parameter
+        dialog.show()
+        val layoutParameter = dialog.window?.attributes
+        layoutParameter?.width = 800
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        return dialog
     }
 
 }

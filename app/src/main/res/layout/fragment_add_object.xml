@@ -16,14 +16,16 @@
 
         <TextView
             android:id="@+id/txt_venue_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
-            android:text="楊泉酒家"
+            android:layout_marginEnd="24dp"
+            android:text="@{viewModel.venue.name}"
             android:textColor="@color/gray_999999"
             android:textSize="28sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -132,7 +134,7 @@
             app:layout_constraintStart_toEndOf="@+id/img_object_price"
             app:layout_constraintTop_toTopOf="@+id/img_object_price" />
 
-        <TextView
+        <EditText
             android:id="@+id/edittxt_obj_desc"
             android:layout_width="0dp"
             android:layout_height="80dp"
@@ -179,11 +181,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/border_edit_text"
-            android:hint="選擇類別"
             android:overlapAnchor="false"
-            android:paddingLeft="10dp"
+            android:paddingLeft="4dp"
             android:singleLine="true"
-            android:spinnerMode="dropdown"
             app:layout_constraintBottom_toBottomOf="@+id/img_object_type"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/img_object_type"
@@ -222,11 +222,12 @@
 
         <ImageView
             android:id="@+id/img_drink_photo"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
+            android:scaleType="centerCrop"
             android:text="TextView"
             app:imageBitmap="@{viewModel.image}"
             app:layout_constraintBottom_toBottomOf="@+id/txt_object_photo"
@@ -234,6 +235,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/txt_object_photo"
             app:layout_constraintTop_toTopOf="@+id/txt_object_photo"
+            app:layout_constraintVertical_bias="1.0"
             tools:src="@drawable/placeholder" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

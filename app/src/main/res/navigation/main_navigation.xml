@@ -229,5 +229,9 @@
         android:id="@+id/navigate_to_collect_fragment"
         app:destination="@id/collectFragment"></action>
 
+    <action
+        android:id="@+id/navigate_to_add_object_fragment"
+        app:destination="@id/addObjectFragment"></action>
+
 
 </navigation>

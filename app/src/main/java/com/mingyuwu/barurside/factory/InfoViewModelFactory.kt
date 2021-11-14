@@ -28,7 +28,7 @@ class InfoViewModelFactory(
                 isAssignableFrom(ProfileViewModel::class.java) ->
                     ProfileViewModel(repository, id)
                 isAssignableFrom(AddObjectViewModel::class.java) ->
-                    AddObjectViewModel(repository)
+                    AddObjectViewModel(repository, id)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

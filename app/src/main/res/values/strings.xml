@@ -43,6 +43,7 @@
     <string name="venue_rating_info_list">%,.1f&#160;|&#160;%d則評論</string>
 
     <!--    Add Drink Info -->
+    <string name="add_drink_prompt">請選擇類別</string>
     <string-array name="drink_type">
         <item>請選擇類別</item>
         <item>啤酒(Beer)</item>

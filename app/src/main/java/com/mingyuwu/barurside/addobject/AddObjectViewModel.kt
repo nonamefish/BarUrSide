@@ -21,7 +21,7 @@ class AddObjectViewModel(private val repository: BarUrSideRepository, val id: St
     ViewModel() {
 
     // activity information
-    val venue = MutableLiveData<Venue?>()
+    var venue = MutableLiveData<Venue>()
     val name = MutableLiveData<String>()
     val description = MutableLiveData<String>()
     val type = MutableLiveData<String>()
@@ -38,8 +38,11 @@ class AddObjectViewModel(private val repository: BarUrSideRepository, val id: St
     val imageUrl: LiveData<String?>
         get() = _imageUrl
 
-    // navigate to Venue
-    val navigateToDetail = MutableLiveData<Boolean?>()
+    // after send drink info to firebase
+    private var _leave = MutableLiveData<Boolean?>()
+
+    val leave: LiveData<Boolean?>
+        get() = _leave
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
@@ -54,14 +57,8 @@ class AddObjectViewModel(private val repository: BarUrSideRepository, val id: St
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
 
-    private fun convertStringToTimestamp(time: String): Timestamp {
-        val dateFormat = SimpleDateFormat("yyyy/MM/dd  a HH:mm", Locale.TAIWAN)
-        val parsedDate = dateFormat.parse(time)
-        return Timestamp(parsedDate.time)
-    }
-
-    init{
-        venue.value = repository.getVenue(id).value
+    init {
+        venue = repository.getVenue(id)
     }
 
 
@@ -73,18 +70,19 @@ class AddObjectViewModel(private val repository: BarUrSideRepository, val id: St
                 venue.value?.id ?: "",
                 name.value!!,
                 type.value ?: "",
-                price.value?.toLong() ?: 0,
+                price.value?.toLongOrNull() ?: 0,
+                description.value ?: "",
                 listOf(imageUrl.value ?: ""),
                 0.0,
                 0
             )
             repository.addDrink(drink)
-            navigateToDetail.value = true
+            _leave.value = true
         }
     }
 
     fun onLeft() {
-        navigateToDetail.value = null
+        _leave.value = null
     }
 
     fun addUploadImg(bitmap: Bitmap, url: String) {

@@ -15,6 +15,7 @@ class DrinkData {
                 "Old Fashion",
                 "雞尾酒",
                 123,
+                "",
                 listOf(""),
                 3.9,
                 123
@@ -26,6 +27,7 @@ class DrinkData {
                 "Gin tonic",
                 "雞尾酒",
                 123,
+                "",
                 listOf(""),
                 3.9,
                 666

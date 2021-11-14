@@ -61,12 +61,14 @@
 
         <TextView
             android:id="@+id/discover_object_info"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@{info}"
             android:textSize="14sp"
             android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="@+id/discover_object_name"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/discover_object_name"
             app:layout_constraintTop_toBottomOf="@+id/discover_object_name"
             tools:text="$ 1314" />
@@ -77,6 +79,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@{category}"
+            app:layout_constraintEnd_toEndOf="@+id/discover_object_name"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/discover_object_info"
             app:layout_constraintTop_toBottomOf="@+id/discover_object_info"
             tools:text="雞尾酒" />

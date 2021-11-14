@@ -7,6 +7,7 @@ import com.mingyuwu.barurside.util.Util.getString
 enum class CurrentFragmentType(val value: String?) {
     ACTIVITY(getString(R.string.activity_title)),
     ADD_ACTIVITY("新增活動"),
+    ADD_OBJECT("新增項目"),
     COLLECT(getString(R.string.collect_title)),
     DISCOVER(getString(R.string.discover_title)),
     DISCOVER_DETAIL(null),

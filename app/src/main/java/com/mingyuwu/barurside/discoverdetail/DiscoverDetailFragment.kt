@@ -204,7 +204,7 @@ class DiscoverDetailFragment() : Fragment() {
 
         // set random button click listener
         binding.btnRandom.setOnClickListener {
-            when(theme){
+            when (theme) {
                 Theme.MAP_FILTER -> {
                     viewModel.detailData.value?.let {
                         findNavController().navigate(
@@ -213,7 +213,11 @@ class DiscoverDetailFragment() : Fragment() {
                     }
                 }
                 Theme.VENUE_MENU -> {
-
+                    ids?.get(0)?.let {
+                        findNavController().navigate(
+                            MainNavigationDirections.navigateToAddObjectFragment(it)
+                        )
+                    }
                 }
             }
 

@@ -109,11 +109,6 @@ class EditRatingFragment : Fragment() {
             }
         }
 
-        viewModel.firebaseImgUrl.observe(viewLifecycleOwner, Observer {
-            it?.let {
-
-            }
-        })
 
         // leave rating and to previous view
         viewModel.leave.observe(viewLifecycleOwner, Observer {
@@ -153,7 +148,7 @@ class EditRatingFragment : Fragment() {
                 if (allGranted) {
                     photoPermissionGranted = true
                     chooseImage(binding.root.context)
-//                    Toast.makeText(binding.root.context, "All permissions are granted", Toast.LENGTH_LONG).show()
+
                 } else {
                     Toast.makeText(
                         binding.root.context,
@@ -275,7 +270,7 @@ class EditRatingFragment : Fragment() {
     private fun showRatingUncompleted() {
         val alertDialog = AlertDialog.Builder(binding.root.context)
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
-        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm) //連結關閉視窗的Button
+        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm)
 
         alertDialog.setView(mView)
         val dialog = alertDialog.create()
@@ -289,7 +284,6 @@ class EditRatingFragment : Fragment() {
     }
 
     private fun postRatingDialog(postDialog: AlertDialog.Builder) : AlertDialog {
-//        val alertDialog = postDialog.Builder(binding.root.context)
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_post_rating, null)
 
         postDialog.setView(mView)

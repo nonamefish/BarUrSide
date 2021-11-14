@@ -165,14 +165,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.mapFragment -> CurrentFragmentType.MAP
                 R.id.allRatingFragment -> CurrentFragmentType.ALL_RATING
                 R.id.loginFragment -> CurrentFragmentType.LOGIN
+                R.id.addObjectFragment -> CurrentFragmentType.ADD_OBJECT
                 else -> viewModel.currentFragmentType.value
             }
         }
-    }
-
-    fun changeToolbarTitle(text: String) {
-        binding.textBarursideTitle.text = text
-        Log.d("Ming","text: $text")
     }
 
 }
