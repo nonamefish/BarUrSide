@@ -39,6 +39,19 @@ class InfoRatingAdapter() :
                 }
             }
 
+            // setting navigate to venue/drink page
+            binding.infoRtgObject.setOnClickListener {
+                rating?.isVenue?.let {
+                    if (it) {
+                        view.findNavController()
+                            .navigate(MainNavigationDirections.navigateToVenueFragment(rating.objectId))
+                    }else{
+                        view.findNavController()
+                            .navigate(MainNavigationDirections.navigateToDrinkFragment(rating.objectId))
+                    }
+                }
+            }
+
             // set adapter
             binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
             binding.ratingTagFrdList.adapter = TagFriendAdapter()

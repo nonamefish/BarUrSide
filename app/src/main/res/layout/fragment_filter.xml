@@ -130,8 +130,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`usa`,isChecked)}"
-                android:text="歐美式"
+                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`美式餐廳`,isChecked)}"
+                android:text="美式"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -139,15 +139,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_drink_category2" />
 
             <CheckBox
-                android:id="@+id/choice_korea"
+                android:id="@+id/choice_european"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`korea`,isChecked)}"
-                android:text="韓式"
+                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`歐式餐廳`,isChecked)}"
+                android:text="歐式"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -155,14 +154,28 @@
                 app:layout_constraintTop_toBottomOf="@+id/choice_usa" />
 
             <CheckBox
+                android:id="@+id/choice_korea"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layoutDirection="rtl"
+                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`韓式餐廳`,isChecked)}"
+                android:text="韓式"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/choice_european" />
+
+            <CheckBox
                 android:id="@+id/choice_japan"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`japan`,isChecked)}"
+                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`日式餐廳`,isChecked)}"
                 android:text="日式"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -175,10 +188,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`taiwan`,isChecked)}"
+                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`台式餐廳`,isChecked)}"
                 android:text="台式"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -186,11 +198,41 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/choice_japan" />
 
+            <CheckBox
+                android:id="@+id/choice_bar"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layoutDirection="rtl"
+                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`bar`,isChecked)}"
+                android:text="Bar"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/choice_taiwan" />
+
+            <CheckBox
+                android:id="@+id/choice_pub"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layoutDirection="rtl"
+                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`pub`,isChecked)}"
+                android:text="Pub"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/choice_bar" />
+
             <TextView
                 android:id="@+id/txt_drink_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="酒類"
                 android:textColor="@color/black_3f3a3a"
                 android:textSize="20sp"
@@ -198,7 +240,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_taiwan" />
+                app:layout_constraintTop_toBottomOf="@+id/choice_pub" />
 
             <CheckBox
                 android:id="@+id/choice_cocktail"
@@ -220,7 +262,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:layoutDirection="rtl"
                 android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceCategory(`spirit`,isChecked)}"
@@ -235,7 +276,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:layoutDirection="rtl"
                 android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceCategory(`beer`,isChecked)}"
@@ -250,7 +290,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:layoutDirection="rtl"
                 android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceCategory(`sparkling_wine`,isChecked)}"
@@ -265,7 +304,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:layoutDirection="rtl"
                 android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceCategory(`wine`,isChecked)}"
@@ -310,7 +348,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:checked="@{viewModel.choiceDistance==1.0}"
                 android:layoutDirection="rtl"
@@ -326,7 +363,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:checked="@{viewModel.choiceDistance==2.0}"
                 android:layoutDirection="rtl"

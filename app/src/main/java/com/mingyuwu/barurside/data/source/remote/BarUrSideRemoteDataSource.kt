@@ -208,7 +208,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .whereEqualTo("level", filter.level)
                 .get()
                 .addOnCompleteListener { venueTask ->
-
+                    var venueCnt = 0
                     if (venueTask.isSuccessful) {
                         for (document in venueTask.result!!) {
                             val venue = document.toObject(Venue::class.java)
@@ -217,7 +217,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 list.add(venue)
 
                             } else {
-                                var venueCnt = 0
+
+                                Log.d("Ming","venue: ${venue.name}" )
                                 // filter drink category
                                 FirebaseFirestore.getInstance()
                                     .collection(PATH_DRINK)
@@ -226,9 +227,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     .get()
                                     .addOnCompleteListener { drinkTask ->
                                         if (drinkTask.isSuccessful && drinkTask.result.size() > 0) {
+
                                             list.add(venue)
                                         }
-
+                                        Log.d("Ming","venue: ${venue.name}, venueCnt: $venueCnt" )
                                         venueCnt += 1
                                         if (venueCnt == venueTask.result.size()) {
                                             continuation.resume(Result.Success(list))

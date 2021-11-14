@@ -104,7 +104,6 @@
                         android:layout_marginBottom="16dp"
                         android:background="@drawable/ic_baseline_notifications_24"
                         android:backgroundTint="@color/primaryLightColor"
-                        android:visibility="@{(viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.EDIT_RATING || viewModel.currentFragmentType == CurrentFragmentType.ALL_RATING || viewModel.currentFragmentType == CurrentFragmentType.ADD_OBJECT) ? View.GONE : View.VISIBLE}"
                         app:iconNotify="@{viewModel.currentFragmentType}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />

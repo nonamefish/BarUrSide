@@ -2,10 +2,13 @@ package com.mingyuwu.barurside.rating
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.databinding.ItemUserRatingBinding
@@ -16,7 +19,21 @@ class UserRatingAdapter() :
     class UserRatingViewHolder(private var binding: ItemUserRatingBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(rating: RatingInfo?) {
+        fun bind(rating: RatingInfo?, view: View) {
+
+            // setting navigate to venue/drink page
+            binding.discoverObjectName.setOnClickListener {
+                rating?.isVenue?.let {
+                    if (it) {
+                        view.findNavController()
+                            .navigate(MainNavigationDirections.navigateToVenueFragment(rating.objectId))
+                    }else{
+                        view.findNavController()
+                            .navigate(MainNavigationDirections.navigateToDrinkFragment(rating.objectId))
+                    }
+                }
+            }
+
             binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
             binding.rating = rating
         }
@@ -47,7 +64,7 @@ class UserRatingAdapter() :
     // Replaces the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: UserRatingViewHolder, position: Int) {
         val rating = getItem(position)
-        holder.bind(rating)
+        holder.bind(rating, holder.itemView)
     }
 
     override fun getItemCount(): Int {

@@ -231,16 +231,15 @@ fun bindTimeActivityTime(textView: TextView, activityTime: Timestamp?) {
 fun bindIconNotify(imageView: ImageView, currentFragmentType: CurrentFragmentType?) {
     currentFragmentType?.let {
         if (currentFragmentType in listOf(
-                CurrentFragmentType.DISCOVER_DETAIL,
-                CurrentFragmentType.EDIT_RATING,
-                CurrentFragmentType.ADD_ACTIVITY,
-                CurrentFragmentType.DRINK,
-                CurrentFragmentType.VENUE
+                CurrentFragmentType.ACTIVITY,
+                CurrentFragmentType.PROFILE,
+                CurrentFragmentType.DISCOVER,
+                CurrentFragmentType.COLLECT
             )
         ){
-            imageView.visibility = View.GONE
-        }else{
             imageView.visibility = View.VISIBLE
+        }else{
+            imageView.visibility = View.GONE
         }
     }
 }
@@ -251,6 +250,7 @@ fun bindIconBack(imageView: ImageView, currentFragmentType: CurrentFragmentType?
         if (currentFragmentType !in listOf(
                 CurrentFragmentType.DISCOVER_DETAIL,
                 CurrentFragmentType.EDIT_RATING,
+                CurrentFragmentType.ALL_RATING,
                 CurrentFragmentType.DRINK,
                 CurrentFragmentType.VENUE
             )
