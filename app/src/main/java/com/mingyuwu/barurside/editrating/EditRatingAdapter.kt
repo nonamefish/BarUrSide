@@ -1,5 +1,6 @@
 package com.mingyuwu.barurside.editrating
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -53,6 +54,7 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
             viewModel.frdList.observe(binding.lifecycleOwner!!, androidx.lifecycle.Observer {
 
                 val friendList = viewModel.frdList.value?.map { "${it.name} (${it.id}) " }
+                Log.d("Ming","friendlist: $friendList")
                 val adapter = ArrayAdapter(
                     binding.root.context,
                     R.layout.spinner_friend_list,

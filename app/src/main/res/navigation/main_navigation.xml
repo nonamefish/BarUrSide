@@ -164,37 +164,31 @@
     <action
         android:id="@+id/navigate_to_discover_detail_fragment"
         app:destination="@id/discoverDetailFragment">
-
     </action>
 
     <action
         android:id="@+id/navigate_to_filter_fragment"
         app:destination="@id/filterFragment">
-
     </action>
 
     <action
         android:id="@+id/navigate_to_random_fragment"
         app:destination="@id/randomFragment">
-
     </action>
 
     <action
         android:id="@+id/navigate_to_venue_fragment"
         app:destination="@id/venueFragment">
-
     </action>
 
     <action
         android:id="@+id/navigate_to_drink_fragment"
         app:destination="@id/drinkFragment">
-
     </action>
 
     <action
         android:id="@+id/navigate_to_rating_fragment"
         app:destination="@id/editRatingFragment">
-
     </action>
 
     <action
@@ -207,9 +201,8 @@
 
     <action
         android:id="@+id/navigate_to_activity_detail_dialog"
-        app:destination="@id/activityDetailDialog"
-        app:popUpTo="@id/activityFragment"
-        app:popUpToInclusive="true"></action>
+        app:destination="@id/activityDetailDialog">
+    </action>
 
     <action
         android:id="@+id/navigate_to_profile_fragment"
