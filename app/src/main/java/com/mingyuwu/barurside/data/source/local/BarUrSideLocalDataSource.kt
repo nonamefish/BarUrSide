@@ -181,4 +181,8 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     override suspend fun addVenue(venue: Venue): Result<Boolean> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun checkNotification(ids: List<String>): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
 }

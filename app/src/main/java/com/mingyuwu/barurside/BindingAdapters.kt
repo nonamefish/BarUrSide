@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.fromHtml
 import androidx.databinding.BindingAdapter
@@ -228,7 +229,7 @@ fun bindTimeActivityTime(textView: TextView, activityTime: Timestamp?) {
 }
 
 @BindingAdapter("iconNotify")
-fun bindIconNotify(imageView: ImageView, currentFragmentType: CurrentFragmentType?) {
+fun bindIconNotify(constraintLayout: ConstraintLayout, currentFragmentType: CurrentFragmentType?) {
     currentFragmentType?.let {
         if (currentFragmentType in listOf(
                 CurrentFragmentType.ACTIVITY,
@@ -237,9 +238,9 @@ fun bindIconNotify(imageView: ImageView, currentFragmentType: CurrentFragmentTyp
                 CurrentFragmentType.COLLECT
             )
         ){
-            imageView.visibility = View.VISIBLE
+            constraintLayout.visibility = View.VISIBLE
         }else{
-            imageView.visibility = View.GONE
+            constraintLayout.visibility = View.GONE
         }
     }
 }

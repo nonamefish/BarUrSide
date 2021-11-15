@@ -1,7 +1,9 @@
 package com.mingyuwu.barurside
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.data.Notification
@@ -14,9 +16,10 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
 
     var location = MutableLiveData<LatLng>()
     var notification = MutableLiveData<List<Notification>>()
+    lateinit var notificationSize: LiveData<Int>
+
     val navigateToStart = MutableLiveData<Boolean?>()
     val navigateToLogin = MutableLiveData<Boolean?>()
-
     val discoverType = MutableLiveData<String?>()
 
 
@@ -34,6 +37,11 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
 
     fun getNotification(userId: String) {
         notification = repository.getNotification(userId)
+
+        // set notification size
+        notificationSize = Transformations.map(notification) {
+            it.filter { it.toId == UserManager.user.value!!.id && it.isCheck == false }.size
+        }
     }
 
 }

@@ -6,6 +6,8 @@ import android.os.Bundle
 import com.mingyuwu.barurside.login.UserManager
 import android.util.Log
 import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toolbar
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -88,8 +90,13 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             viewModel.getUserData(currentUser.email!!)
+            viewModel.getNotification(currentUser.email!!)
             viewModel.navigateToStart.value = true
         }
+
+        viewModel.notification.observe(this, Observer {
+            Log.d("Ming","MainActivity $it")
+        })
 
         // get navController and setting connection between bottom navigation item and navigation fragment
         val navHostFragment =

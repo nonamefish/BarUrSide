@@ -120,7 +120,8 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
             UserManager.user.value?.id ?: "",
             userId,
             "<b>${UserManager.user.value?.name}</b> 想要加你好友",
-            null
+            null,
+            false
         )
 
         coroutineScope.launch {

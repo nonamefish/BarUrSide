@@ -205,4 +205,27 @@ class DiscoverDetailViewModel(
         navigateToInfo.value = null
     }
 
+    fun checkNotification(ids: List<String>){
+        coroutineScope.launch {
+            result = repository.checkNotification(ids)
+            when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    Log.d("Ming", "result: ${(result as Result.Success<Any>).data}")
+                }
+                is Result.Fail -> {
+                    _error.value = (result as Result.Fail).error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = (result as Result.Error).exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+        }
+    }
+
 }

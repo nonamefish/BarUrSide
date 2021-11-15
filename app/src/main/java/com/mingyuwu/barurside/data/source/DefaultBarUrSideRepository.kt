@@ -183,4 +183,8 @@ class DefaultBarUrSideRepository(
     override suspend fun addVenue(venue: Venue): Result<Boolean> {
         return remoteDataSource.addVenue(venue)
     }
+
+    override suspend fun checkNotification(ids: List<String>): Result<Boolean> {
+        return remoteDataSource.checkNotification(ids)
+    }
 }

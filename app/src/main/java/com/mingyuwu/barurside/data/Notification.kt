@@ -16,7 +16,7 @@ data class Notification(
     val toId: String= "",
     val content: String= "",
     var reply: Boolean? = null,
-    val isCheck: Boolean? = null
+    @JvmField val isCheck: Boolean? = null
 ) : Parcelable{
 
     var timestamp = date?.let { Timestamp(it.time) }

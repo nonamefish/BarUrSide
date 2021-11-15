@@ -95,20 +95,53 @@
                         tools:text="探索"
                         tools:visibility="visible" />
 
-
-                    <ImageView
-                        android:id="@+id/img_notification"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
-                        android:background="@drawable/ic_baseline_notifications_24"
-                        android:backgroundTint="@color/primaryLightColor"
                         app:iconNotify="@{viewModel.currentFragmentType}"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent">
 
+                        <ImageView
+                            android:id="@+id/img_notification"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="4dp"
+                            android:background="@drawable/ic_baseline_notifications_24"
+                            android:backgroundTint="@color/primaryLightColor"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
 
+                        <ImageView
+                            android:id="@+id/img_badge"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="1dp"
+                            android:background="@drawable/ic_baseline_circle_24"
+                            android:backgroundTint="@color/red_ff4436"
+                            android:visibility="@{viewModel.notificationSize==0 ? View.GONE : View.VISIBLE}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/txt_notify"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:gravity="center"
+                            android:text="@{String.valueOf(viewModel.notificationSize)}"
+                            android:textColor="@color/white_ffffff"
+                            android:textSize="10sp"
+                            android:visibility="@{viewModel.notificationSize==0 ? View.GONE : View.VISIBLE}"
+                            app:layout_constraintBottom_toBottomOf="@+id/img_badge"
+                            app:layout_constraintEnd_toEndOf="@+id/img_badge"
+                            app:layout_constraintStart_toStartOf="@+id/img_badge"
+                            app:layout_constraintTop_toTopOf="@+id/img_badge"
+                            tools:text="10"></TextView>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.appcompat.widget.Toolbar>
 

@@ -218,7 +218,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                             } else {
 
-                                Log.d("Ming","venue: ${venue.name}" )
+                                Log.d("Ming", "venue: ${venue.name}")
                                 // filter drink category
                                 FirebaseFirestore.getInstance()
                                     .collection(PATH_DRINK)
@@ -230,7 +230,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                                             list.add(venue)
                                         }
-                                        Log.d("Ming","venue: ${venue.name}, venueCnt: $venueCnt" )
+                                        Log.d("Ming", "venue: ${venue.name}, venueCnt: $venueCnt")
                                         venueCnt += 1
                                         if (venueCnt == venueTask.result.size()) {
                                             continuation.resume(Result.Success(list))
@@ -1089,7 +1089,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         for (document in venueTask.result!!) {
                             Log.d(TAG, document.id + " => " + document.data)
                             val venue = document.toObject(Venue::class.java)
-                            Log.d("Ming",venue.toString())
+                            Log.d("Ming", venue.toString())
                             list.add(venue)
                         }
                         continuation.resume(Result.Success(list))
@@ -1883,4 +1883,44 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         }
                 }
         }
+
+    override suspend fun checkNotification(ids: List<String>): Result<Boolean> =
+        suspendCoroutine { continuation ->
+
+            FirebaseFirestore.getInstance()
+                .collection(PATH_NOTIFICATION)
+                .whereIn("id", ids)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            document.reference.update("isCheck", true)
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "add successfully updated!")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(TAG, "error updated!")
+                                }
+                        }
+                        continuation.resume(Result.Success(true))
+                    } else {
+                        task.exception?.let {
+                            Log.w(
+                                TAG,
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
 }

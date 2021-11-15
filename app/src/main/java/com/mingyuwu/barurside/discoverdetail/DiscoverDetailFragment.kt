@@ -179,20 +179,23 @@ class DiscoverDetailFragment() : Fragment() {
 
         // assign value to recyclerView
         viewModel.detailData.observe(viewLifecycleOwner, Observer { it ->
-            Log.d("Ming", "it: $it")
-            if (it.isNullOrEmpty()) {
+            if (it.isNullOrEmpty()) { // adapter list is empty then finish loading animation
+
                 binding.animationEmpty.visibility = View.VISIBLE
                 binding.animationLoading.visibility = View.GONE
             } else {
                 var list: List<Any>?
+                // set notification value
                 if (theme == Theme.NOTIFICATION) {
                     list = (it as List<Notification>).filter { notifications ->
                         notifications.toId == UserManager.user.value?.id ?: ""
                     }.take(20)
+                    viewModel.checkNotification(list.map { it.id })
                 } else {
                     list = it
                 }
 
+                // submit list and set loading and empty animation
                 if (list.isEmpty()) {
                     binding.animationEmpty.visibility = View.VISIBLE
                 } else {
