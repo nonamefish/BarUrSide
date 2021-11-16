@@ -1,14 +1,14 @@
 package com.mingyuwu.barurside.filter
 
+import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.view.children
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -19,8 +19,6 @@ import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentFilterBinding
 import com.mingyuwu.barurside.discover.Theme
-import com.mingyuwu.barurside.editrating.EditRatingFragmentArgs
-import com.mingyuwu.barurside.editrating.EditRatingViewModel
 import com.mingyuwu.barurside.ext.getVmFactory
 
 
@@ -46,13 +44,18 @@ class FilterFragment : BottomSheetDialogFragment() {
 
         // set confirm button click listener
         binding.btnConfirm.setOnClickListener {
-            viewModel.choiceStyle.value = binding.chipGroupStyle.checkedChipIds.map {
-                binding.chipGroupStyle.resources.getResourceEntryName(it)
+
+            if (viewModel.checkValue()) { // user have set field
+                viewModel.choiceStyle.value = binding.chipGroupStyle.checkedChipIds.map {
+                    binding.chipGroupStyle.resources.getResourceEntryName(it)
+                }
+                viewModel.choiceCategory.value = binding.chipGroupCategory.checkedChipIds.map {
+                    binding.chipGroupStyle.resources.getResourceEntryName(it)
+                }
+                viewModel.navigateToResult()
+            } else {
+                showAddUncompleted()  // remind user some filed haven't set
             }
-            viewModel.choiceCategory.value = binding.chipGroupCategory.checkedChipIds.map {
-                binding.chipGroupStyle.resources.getResourceEntryName(it)
-            }
-            viewModel.navigateToResult()
         }
 
         // set chip group selected item
@@ -85,6 +88,26 @@ class FilterFragment : BottomSheetDialogFragment() {
 
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+    private fun showAddUncompleted() {
+        // set dialog
+        val alertDialog = AlertDialog.Builder(binding.root.context)
+        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
+        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm)
+        val txtDialog = mView.findViewById<TextView>(R.id.dialog_content)
+        alertDialog.setView(mView)
+        val dialog = alertDialog.create()
+
+        // set dialog content text and button click listener
+        txtDialog.text = "價格範圍為必填項目"
+        btDialog.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+
+        // set parameter
+        val layoutParameter = dialog.window?.attributes
+        layoutParameter?.width = 800
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
 }

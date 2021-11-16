@@ -25,4 +25,12 @@ class FilterViewModel() : ViewModel() {
     fun onLeft(){
         navigateToResult.value = null
     }
+
+    fun checkValue(): Boolean {
+        if (choiceLevel.value == null
+        ) {
+            return false
+        }
+        return true
+    }
 }

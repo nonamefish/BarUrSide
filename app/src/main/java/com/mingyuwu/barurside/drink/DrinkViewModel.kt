@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.Category
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -58,7 +59,6 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
 
     fun getVenueResult(id: String) {
         venueInfo = repository.getVenue(id)
-        venueInfo.value = venueInfo.value
     }
 
     fun setImages(rtgs: List<RatingInfo>){

@@ -48,7 +48,7 @@
                 android:layout_height="56dp"
                 android:background="@null"
                 android:ems="10"
-                android:hint="@{viewModel.searchType ? `Search drink` : `Search venue`}"
+                android:hint="@{viewModel.searchType ? `Search drink` : `Search store`}"
                 android:inputType="textPersonName"
                 android:maxLines="1"
                 android:paddingStart="48dp"

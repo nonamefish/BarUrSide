@@ -47,7 +47,6 @@ class DiscoverActivityAdapter(val viewModel: ViewModel) :
             binding.info = activity.address
             binding.info2 = "上限: ${activity.peopleLimit} 人"
 
-
         }
     }
 
@@ -75,7 +74,6 @@ class DiscoverActivityAdapter(val viewModel: ViewModel) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is DiscoverActivityViewHolder -> {
-                Log.d("Ming", getItem(position).toString())
                 holder.bind((getItem(position) as Activity), viewModel)
             }
         }

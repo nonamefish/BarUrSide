@@ -9,7 +9,7 @@ data class Venue(
     var id: String = "",
     var menuId: String = "",
     @JvmField val name: String = "",
-    val style: String = "",
+    var style: String = "",
     val level: Long? = -1,
     val serviceTime: String = "",
     val web: String = "",

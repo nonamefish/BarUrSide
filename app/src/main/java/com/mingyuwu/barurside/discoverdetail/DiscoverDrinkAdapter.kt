@@ -35,7 +35,7 @@ class DiscoverDrinkAdapter(val viewModel: DiscoverDetailViewModel) :
                 R.string.venue_rating_info_list, drink.avgRating, drink.rtgCount
             )
 
-            binding.btnObjectInfo.setOnClickListener {
+            binding.cnstrtListItem.setOnClickListener {
                 viewModel.navigateToInfo.value = drink
             }
         }

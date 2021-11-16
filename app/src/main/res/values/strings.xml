@@ -26,7 +26,7 @@
     <!--    Discover Fragment-->
     <string name="discover_title">探索</string>
     <string-array name="search_type">
-        <item>Venue</item>
+        <item>Store</item>
         <item>Drink</item>
     </string-array>
 

@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.fromHtml
+import androidx.core.text.TextUtilsCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,7 +20,9 @@ import kotlin.math.roundToInt
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.rating.*
+import com.mingyuwu.barurside.util.Category
 import com.mingyuwu.barurside.util.CurrentFragmentType
+import com.mingyuwu.barurside.util.Style
 import java.sql.Timestamp
 import java.time.LocalTime
 import java.util.concurrent.TimeUnit
@@ -260,5 +263,13 @@ fun bindIconBack(imageView: ImageView, currentFragmentType: CurrentFragmentType?
         }else{
             imageView.visibility = View.VISIBLE
         }
+    }
+}
+
+
+@BindingAdapter("venueStyle")
+fun bindVenueStyle(textView: TextView, style: String?) {
+    style?.let {
+        textView.text = Style.valueOf(it.uppercase()).chinese
     }
 }
