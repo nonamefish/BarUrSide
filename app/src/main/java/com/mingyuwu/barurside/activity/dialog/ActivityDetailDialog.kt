@@ -3,7 +3,6 @@ package com.mingyuwu.barurside.activity.dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
-import com.mingyuwu.barurside.addactivity.AddActivityViewModel
-import com.mingyuwu.barurside.data.mockdata.UserData
-import com.mingyuwu.barurside.databinding.ActivityMainBinding
 import com.mingyuwu.barurside.databinding.DialogActivityDetailBinding
-import com.mingyuwu.barurside.databinding.FragmentDrinkBinding
-import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.login.UserManager
 

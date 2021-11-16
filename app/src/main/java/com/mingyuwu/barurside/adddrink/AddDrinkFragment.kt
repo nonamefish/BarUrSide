@@ -23,9 +23,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.lifecycle.Observer
 import android.widget.*
 import com.mingyuwu.barurside.databinding.FragmentAddDrinkBinding
+import com.mingyuwu.barurside.util.Util
+import com.mingyuwu.barurside.util.Util.getResizedBitmap
+import com.mingyuwu.barurside.util.Util.randomName
 import com.permissionx.guolindev.PermissionX
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -184,30 +188,19 @@ class AddObjectFragment : Fragment() {
             when (requestCode) {
                 1 -> if (resultCode == Activity.RESULT_OK && data != null) {
                     val selectedImage: Uri? = data.data
-                    val filePathColumn = arrayOf<String>(MediaStore.Images.Media.DATA)
 
                     if (selectedImage != null) {
-                        val cursor: Cursor? = activity?.contentResolver?.query(
-                            selectedImage,
-                            filePathColumn,
-                            null,
-                            null,
-                            null
-                        )
-                        if (cursor != null) {
-
-                            val columnIndex =
-                                cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
-                            cursor.moveToFirst()
-                            val picturePath: String = cursor.getString(columnIndex)
-                            val img = BitmapFactory.decodeFile(picturePath)
+                        if (selectedImage != null) {
+                            val inputStream = context?.contentResolver?.openInputStream(selectedImage)
+                            val bitMap = BitmapFactory.decodeStream(inputStream)
+                            val fileName = "${randomName(20)}.jpg"
 
                             // resize image and save into another img
-                            val pathNew =
-                                picturePath.split(".")[0] + "_1." + picturePath.split(".")[1]
-                            saveBitmap(getResizedBitmap(img, 1000)!!, pathNew)
-                            addImageToRecyclerView(getResizedBitmap(img, 1000), pathNew)
-                            cursor.close()
+                            bitMap?.let {
+                                val resizeImg = getResizedBitmap(bitMap, 1000)
+                                val pathSave = Util.saveBitmap(resizeImg!!, fileName)
+                                addImageToRecyclerView(resizeImg, pathSave)
+                            }
                         }
                     }
                 }
@@ -217,20 +210,6 @@ class AddObjectFragment : Fragment() {
 
     private fun addImageToRecyclerView(bitmap: Bitmap, url: String) {
         viewModel.addUploadImg(bitmap, url)
-    }
-
-    private fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap {
-        var width = image.width
-        var height = image.height
-        val bitmapRatio = width.toFloat() / height.toFloat()
-        if (bitmapRatio > 1) {
-            width = maxSize
-            height = (width / bitmapRatio).toInt()
-        } else {
-            height = maxSize
-            width = (height * bitmapRatio).toInt()
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true)
     }
 
     private fun showAddUncompleted() {
@@ -253,22 +232,6 @@ class AddObjectFragment : Fragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    fun saveBitmap(bitmap: Bitmap, path: String) {
-        val fOut: FileOutputStream
-        try {
-            fOut = FileOutputStream(path)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
-            try {
-                fOut.flush()
-                fOut.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-    }
-
     private fun postRatingDialog(postDialog: AlertDialog.Builder): AlertDialog {
         // set dialog
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_post_rating, null)
@@ -280,6 +243,7 @@ class AddObjectFragment : Fragment() {
         txtDialog.text = "酒項資訊新增中"
 
         // set parameter
+        dialog.setCanceledOnTouchOutside(false)
         dialog.show()
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800

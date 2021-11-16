@@ -16,7 +16,7 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
 
     var location = MutableLiveData<LatLng>()
     var notification = MutableLiveData<List<Notification>>()
-    lateinit var notificationSize: LiveData<Int>
+    var notificationSize: LiveData<Int>? = null
 
     val navigateToStart = MutableLiveData<Boolean?>()
     val navigateToLogin = MutableLiveData<Boolean?>()
@@ -43,5 +43,4 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
             it.filter { it.toId == UserManager.user.value!!.id && it.isCheck == false }.size
         }
     }
-
 }

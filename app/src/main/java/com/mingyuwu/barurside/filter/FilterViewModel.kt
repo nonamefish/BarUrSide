@@ -28,7 +28,6 @@ class FilterViewModel() : ViewModel() {
         } else {
             choiceCategory.value = mutableListOf(type)
         }
-
         choiceCategory.value = choiceCategory.value
     }
 

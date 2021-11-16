@@ -346,6 +346,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     if (rtgTask.isSuccessful) {
                         val list = mutableListOf<RatingInfo>()
 
+                        if (rtgTask.result.size() == 0) {
+                            continuation.resume(Result.Success(list))
+                        }
+
                         for (document in rtgTask.result!!) {
                             val rating = document.toObject(RatingInfo::class.java)
 
@@ -370,7 +374,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             list.add(rating)
 
                                             if (document == rtgTask.result!!.last()) {
-
                                                 continuation.resume(Result.Success(list))
                                             }
                                         }
@@ -393,7 +396,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             list.add(rating)
 
                                             if (document == rtgTask.result!!.last()) {
-
                                                 continuation.resume(Result.Success(list))
                                             }
 
@@ -530,6 +532,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
     ): Result<String> =
         suspendCoroutine { continuation ->
             val file = Uri.fromFile(File(localImage))
+            Log.d("Ming","file: ${file.path}")
             val eventsRef = storageRef.child("$uploadType/$userId/${file.lastPathSegment}" ?: "")
             val uploadTask = eventsRef.putFile(file)
             uploadTask

@@ -166,11 +166,11 @@
                 android:id="@+id/view2"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/gray_f0f0f0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+                app:layout_constraintTop_toBottomOf="@+id/drink_by_venue_style" />
 
             <View
                 android:id="@+id/view3"
@@ -249,6 +249,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
+                android:scaleType="centerCrop"
                 app:imageUrl="@{viewModel.venueInfo.images[0]}"
                 app:layout_constraintStart_toStartOf="@+id/txt_drink_by_venue"
                 app:layout_constraintTop_toBottomOf="@+id/txt_drink_by_venue"
@@ -256,22 +257,26 @@
 
             <TextView
                 android:id="@+id/drink_by_venue"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
                 android:text="@{viewModel.venueInfo.name}"
+                app:layout_constraintEnd_toStartOf="@+id/btn_venue_info"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
                 app:layout_constraintTop_toTopOf="@+id/imageView6"
                 tools:text="不醉不歸酒吧" />
 
             <TextView
                 android:id="@+id/drink_by_venue_address"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
                 android:text="@{viewModel.venueInfo.address}"
-                app:layout_constraintStart_toEndOf="@+id/imageView6"
+                app:layout_constraintEnd_toEndOf="@+id/drink_by_venue"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/drink_by_venue"
                 app:layout_constraintTop_toBottomOf="@+id/drink_by_venue"
                 tools:text="台北市忠孝東路一段2號" />
 

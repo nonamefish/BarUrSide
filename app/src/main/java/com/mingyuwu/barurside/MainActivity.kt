@@ -20,11 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.mingyuwu.barurside.data.Activity
-import com.mingyuwu.barurside.data.User
-import com.mingyuwu.barurside.data.mockdata.ActivityData
 import com.mingyuwu.barurside.databinding.ActivityMainBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory

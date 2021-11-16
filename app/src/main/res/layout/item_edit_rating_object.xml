@@ -42,9 +42,12 @@
 
             <TextView
                 android:id="@+id/rtg_venue"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
+                android:gravity="center"
                 android:text="@{viewModel.objectName[rtgOrder]}"
                 android:textColor="@color/black_3f3a3a"
                 android:textSize="20sp"
@@ -140,7 +143,7 @@
                 android:backgroundTint="@color/white"
                 android:ems="10"
                 android:hint="輸入評論"
-                android:inputType="textPersonName"
+                android:inputType="textMultiLine"
                 android:padding="8sp"
                 android:text="@={viewModel.comment[rtgOrder]}"
                 app:layout_constraintEnd_toEndOf="parent"

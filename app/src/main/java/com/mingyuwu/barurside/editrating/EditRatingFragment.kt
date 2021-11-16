@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -29,14 +28,10 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import android.widget.Button
+import com.mingyuwu.barurside.util.Util.randomName
 import com.permissionx.guolindev.PermissionX
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
-
-
-private const val REQUEST_ID_MULTIPLE_PERMISSIONS = 101
+import com.mingyuwu.barurside.util.Util.getResizedBitmap
+import com.mingyuwu.barurside.util.Util.saveBitmap
 
 class EditRatingFragment : Fragment() {
 
@@ -92,13 +87,12 @@ class EditRatingFragment : Fragment() {
         viewModel.user.observe(viewLifecycleOwner, Observer { user ->
             user.friends?.let {
                 viewModel.getFriendList(user)
-                Log.d("Ming", "EditFragment frdList: ${viewModel.frdList.value}")
             }
 
         })
 
         // set post rating button click listener
-        var alertDialog : AlertDialog? = null
+        var alertDialog: AlertDialog? = null
 
         binding.btnRtgConfirm.setOnClickListener {
             if (viewModel.checkRating()) {
@@ -188,30 +182,17 @@ class EditRatingFragment : Fragment() {
             when (requestCode) {
                 1 -> if (resultCode == Activity.RESULT_OK && data != null) {
                     val selectedImage: Uri? = data.data
-                    val filePathColumn = arrayOf<String>(MediaStore.Images.Media.DATA)
 
                     if (selectedImage != null) {
-                        val cursor: Cursor? = activity?.contentResolver?.query(
-                            selectedImage,
-                            filePathColumn,
-                            null,
-                            null,
-                            null
-                        )
-                        if (cursor != null) {
+                        val inputStream = context?.contentResolver?.openInputStream(selectedImage)
+                        val bitMap = BitmapFactory.decodeStream(inputStream)
+                        val fileName = "${randomName(20)}.jpg"
 
-                            val columnIndex =
-                                cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
-                            cursor.moveToFirst()
-                            val picturePath: String = cursor.getString(columnIndex)
-                            val img = BitmapFactory.decodeFile(picturePath)
-
-                            // resize image and save into another img
-                            val pathNew =
-                                picturePath.split(".")[0] + "_1." + picturePath.split(".")[1]
-                            saveBitmap(getResizedBitmap(img, 1000)!!, pathNew)
-                            addImageToRecyclerView(getResizedBitmap(img, 1000), pathNew)
-                            cursor.close()
+                        // resize image and save into another img
+                        bitMap?.let {
+                            val resizeImg = getResizedBitmap(bitMap, 1000)
+                            val pathSave = saveBitmap(resizeImg!!, fileName)
+                            addImageToRecyclerView(resizeImg, pathSave)
                         }
                     }
                 }
@@ -223,19 +204,6 @@ class EditRatingFragment : Fragment() {
         viewModel.addUploadImg(viewModel.clickPosition.value!!, bitmap, url)
     }
 
-    private fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {
-        var width = image.width
-        var height = image.height
-        val bitmapRatio = width.toFloat() / height.toFloat()
-        if (bitmapRatio > 1) {
-            width = maxSize
-            height = (width / bitmapRatio).toInt()
-        } else {
-            height = maxSize
-            width = (height * bitmapRatio).toInt()
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true)
-    }
 
     private fun addDrinkRating() {
         // set add drink rating adapter
@@ -283,33 +251,17 @@ class EditRatingFragment : Fragment() {
 
     }
 
-    private fun postRatingDialog(postDialog: AlertDialog.Builder) : AlertDialog {
+    private fun postRatingDialog(postDialog: AlertDialog.Builder): AlertDialog {
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_post_rating, null)
 
         postDialog.setView(mView)
         val dialog = postDialog.create()
-
+        dialog.setCanceledOnTouchOutside(false)
         dialog.show()
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         return dialog
-    }
-
-    fun saveBitmap(bitmap: Bitmap, path: String) {
-        val fOut: FileOutputStream
-        try {
-            fOut = FileOutputStream(path)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
-            try {
-                fOut.flush()
-                fOut.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
     }
 }
 

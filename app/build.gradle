@@ -10,14 +10,14 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 31
 
     defaultConfig {
         applicationId "com.mingyuwu.barurside"
         minSdk 28
-        targetSdk 30
-        versionCode 9
-        versionName "5"
+        targetSdk 31
+        versionCode 11
+        versionName "5.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -38,6 +38,7 @@ import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.addactivity.AUTOCOMPLETE_REQUEST_CODE
 import com.mingyuwu.barurside.adddrink.AddDrinkViewModel
 import com.mingyuwu.barurside.databinding.FragmentAddVenueBinding
+import com.mingyuwu.barurside.util.Util
 import com.permissionx.guolindev.PermissionX
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -269,30 +270,21 @@ class AddVenueFragment : Fragment() {
             when (requestCode) {
                 1 -> if (resultCode == Activity.RESULT_OK && data != null) {
                     val selectedImage: Uri? = data.data
-                    val filePathColumn = arrayOf<String>(MediaStore.Images.Media.DATA)
 
                     if (selectedImage != null) {
-                        val cursor: Cursor? = activity?.contentResolver?.query(
-                            selectedImage,
-                            filePathColumn,
-                            null,
-                            null,
-                            null
-                        )
-                        if (cursor != null) {
+                        if (selectedImage != null) {
+                            if (selectedImage != null) {
+                                val inputStream = context?.contentResolver?.openInputStream(selectedImage)
+                                val bitMap = BitmapFactory.decodeStream(inputStream)
+                                val fileName = "${Util.randomName(20)}.jpg"
 
-                            val columnIndex =
-                                cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
-                            cursor.moveToFirst()
-                            val picturePath: String = cursor.getString(columnIndex)
-                            val img = BitmapFactory.decodeFile(picturePath)
-
-                            // resize image and save into another img
-                            val pathNew =
-                                picturePath.split(".")[0] + "_1." + picturePath.split(".")[1]
-                            saveBitmap(getResizedBitmap(img, 1000)!!, pathNew)
-                            addImageToRecyclerView(getResizedBitmap(img, 1000), pathNew)
-                            cursor.close()
+                                // resize image and save into another img
+                                bitMap?.let {
+                                    val resizeImg = Util.getResizedBitmap(bitMap, 1000)
+                                    val pathSave = Util.saveBitmap(resizeImg!!, fileName)
+                                    addImageToRecyclerView(resizeImg, pathSave)
+                                }
+                            }
                         }
                     }
                 }
@@ -324,20 +316,6 @@ class AddVenueFragment : Fragment() {
         viewModel.addUploadImg(bitmap, url)
     }
 
-    private fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap {
-        var width = image.width
-        var height = image.height
-        val bitmapRatio = width.toFloat() / height.toFloat()
-        if (bitmapRatio > 1) {
-            width = maxSize
-            height = (width / bitmapRatio).toInt()
-        } else {
-            height = maxSize
-            width = (height * bitmapRatio).toInt()
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true)
-    }
-
     private fun showAddUncompleted() {
         // set dialog
         val alertDialog = AlertDialog.Builder(binding.root.context)
@@ -348,7 +326,7 @@ class AddVenueFragment : Fragment() {
         val dialog = alertDialog.create()
 
         // set dialog content text and button click listener
-        txtDialog.text = "酒名、類別及價格為必填項目"
+        txtDialog.text = "店名、地址、營業時間、價格範圍及店家風格為必填項目"
         btDialog.setOnClickListener { dialog.dismiss() }
         dialog.show()
 
@@ -358,21 +336,6 @@ class AddVenueFragment : Fragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    fun saveBitmap(bitmap: Bitmap, path: String) {
-        val fOut: FileOutputStream
-        try {
-            fOut = FileOutputStream(path)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
-            try {
-                fOut.flush()
-                fOut.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-    }
 
     private fun postRatingDialog(postDialog: AlertDialog.Builder): AlertDialog {
         // set dialog
@@ -385,6 +348,7 @@ class AddVenueFragment : Fragment() {
         txtDialog.text = "店家資訊新增中"
 
         // set parameter
+        dialog.setCanceledOnTouchOutside(false)
         dialog.show()
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
