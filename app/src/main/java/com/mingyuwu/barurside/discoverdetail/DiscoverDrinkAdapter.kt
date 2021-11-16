@@ -9,6 +9,7 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.ItemDiscoverObjectBinding
+import com.mingyuwu.barurside.util.Category
 
 class DiscoverDrinkAdapter(val viewModel: DiscoverDetailViewModel) :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
@@ -28,7 +29,7 @@ class DiscoverDrinkAdapter(val viewModel: DiscoverDetailViewModel) :
         fun bind(drink: Drink, viewModel: DiscoverDetailViewModel) {
             binding.name = drink.name
             binding.img = drink.images?.get(0) ?: ""
-            binding.category = drink.category
+            binding.category = Category.valueOf(drink.category.uppercase()).chinese
             binding.info = "$ ${drink.price}"
             binding.info2 = binding.root.context.getString(
                 R.string.venue_rating_info_list, drink.avgRating, drink.rtgCount

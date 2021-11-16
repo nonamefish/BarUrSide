@@ -9,6 +9,7 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.ItemDiscoverObjectBinding
+import com.mingyuwu.barurside.util.Style
 
 class DiscoverVenueAdapter(val viewModel: DiscoverDetailViewModel) :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
@@ -33,7 +34,7 @@ class DiscoverVenueAdapter(val viewModel: DiscoverDetailViewModel) :
             } else {
                 venue.images!![0]
             }
-            binding.category = venue.style
+            binding.category = Style.valueOf(venue.style.uppercase()).chinese
             binding.info = venue.address
             binding.info2 = binding.root.context.getString(
                 R.string.venue_rating_info_list, venue.avgRating, venue.rtgCount

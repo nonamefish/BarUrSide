@@ -27,7 +27,6 @@ import com.mingyuwu.barurside.ext.getVmFactory
 class FilterFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentFilterBinding
-
     private val viewModel by viewModels<FilterViewModel> { getVmFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +46,12 @@ class FilterFragment : BottomSheetDialogFragment() {
 
         // set confirm button click listener
         binding.btnConfirm.setOnClickListener {
+            viewModel.choiceStyle.value = binding.chipGroupStyle.checkedChipIds.map {
+                binding.chipGroupStyle.resources.getResourceEntryName(it)
+            }
+            viewModel.choiceCategory.value = binding.chipGroupCategory.checkedChipIds.map {
+                binding.chipGroupStyle.resources.getResourceEntryName(it)
+            }
             viewModel.navigateToResult()
         }
 
@@ -55,15 +60,27 @@ class FilterFragment : BottomSheetDialogFragment() {
             viewModel.choiceLevel.value = chipGroup.findViewById<Chip>(id).text.length
         }
 
+        // set chip group selected item
+        binding.chipGroupDistance.setOnCheckedChangeListener { chipGroup, id ->
+            viewModel.choiceDistance.value = when (chipGroup.findViewById<Chip>(id).text) {
+                "500公尺" -> 0.5
+                "1公里" -> 1.0
+                else -> 2.0
+            }
+        }
+
         // navigate to filter result
         viewModel.navigateToResult.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(
-                MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.MAP_FILTER,
-                    null,
-                    it
+            it?.let {
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToDiscoverDetailFragment(
+                        Theme.MAP_FILTER,
+                        null,
+                        it
+                    )
                 )
-            )
+                viewModel.onLeft()
+            }
         })
 
         // Inflate the layout for this fragment

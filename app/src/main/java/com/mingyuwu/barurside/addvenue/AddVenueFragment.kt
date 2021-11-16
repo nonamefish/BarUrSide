@@ -17,7 +17,6 @@ import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.R
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -36,13 +35,10 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.addactivity.AUTOCOMPLETE_REQUEST_CODE
-import com.mingyuwu.barurside.adddrink.AddDrinkViewModel
 import com.mingyuwu.barurside.databinding.FragmentAddVenueBinding
 import com.mingyuwu.barurside.util.Util
 import com.permissionx.guolindev.PermissionX
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
+import com.mingyuwu.barurside.util.Category
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -113,7 +109,8 @@ class AddVenueFragment : Fragment() {
                     parent: AdapterView<*>?, view: View?, position: Int, id: Long
                 ) {
                     if (position != 0) {
-                        viewModel.style.value = parent?.getItemAtPosition(position).toString()
+                        val selected = parent?.getItemAtPosition(position).toString()
+                        viewModel.style.value = Category.values().find { it.chinese == selected }?.name
                     } else {
                         viewModel.style.value = null
                     }

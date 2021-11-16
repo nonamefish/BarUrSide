@@ -10,386 +10,446 @@
             type="com.mingyuwu.barurside.filter.FilterViewModel" />
     </data>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:background="@drawable/background_dialog_corner">
+
+                <TextView
+                    android:id="@+id/txt_price_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="32dp"
+                    android:letterSpacing="0.1"
+                    android:text="價格區間"
+                    android:textColor="@color/black_3f3a3a"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view10" />
+
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_level"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="32dp"
+                    android:textAlignment="center"
+                    app:chipSpacingHorizontal="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/desc_price_range"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        android:text="$"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/chip_1"
+                        app:chipBackgroundColor="@color/sl_chip_state_list"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        android:text="$$"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/chip_2"
+                        app:chipBackgroundColor="@color/sl_chip_state_list"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        android:text="$$$"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/chip_3"
+                        app:chipBackgroundColor="@color/sl_chip_state_list"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        android:text="$$$$"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/chip_4"
+                        app:chipBackgroundColor="@color/sl_chip_state_list"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/txt_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginTop="32dp"
+                    android:text="店家風格"
+                    android:textColor="@color/black_3f3a3a"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chipGroup_level" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="32dp"
+                    android:textAlignment="center"
+                    app:chipSpacingVertical="12dp"
+                    app:chipSpacingHorizontal="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_style">
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/american"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="美式"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:checkedChip="@+id/american"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/japanese"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="日式"
+                        android:textAlignment="center"
+                        app:checkedChip="@+id/japanese"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/korean"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="韓式"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/korean"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/taiwanese"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="台式"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/taiwanese"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/european"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="歐式"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/european"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="Bar"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/bar"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/pub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="Pub"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/pub"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+
+                <TextView
+                    android:id="@+id/txt_drink_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginTop="32dp"
+                    android:text="酒類"
+                    android:textColor="@color/black_3f3a3a"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chipGroup_style" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_category"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="32dp"
+                    android:textAlignment="center"
+                    app:chipSpacingVertical="12dp"
+                    app:chipSpacingHorizontal="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_drink_category">
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        contentPadding="4dp"
+                        android:id="@+id/cocktail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="雞尾酒"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/cocktail"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/beer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="啤酒"
+                        android:textAlignment="center"
+                        app:checkedChip="@+id/beer"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/champagne"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="氣泡酒"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/champagne"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/wine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="葡萄酒"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/wine"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/whiskey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="威士忌"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/spirit"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/umeshu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="梅酒"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/umeshu"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/sake"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="清酒"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/sake"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/txt_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginTop="32dp"
+                    android:text="距離"
+                    android:textColor="@color/black_3f3a3a"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chipGroup_category" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_distance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="32dp"
+                    android:textAlignment="center"
+                    app:chipSpacingVertical="12dp"
+                    app:chipSpacingHorizontal="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_distance"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        contentPadding="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="500公尺"
+                        android:textAlignment="center"
+                        app:checkedChip="@+id/chip_1"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1公里"
+                        android:textAlignment="center"
+                        app:checkedChip="@+id/chip_2"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:id="@+id/chip_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2公里"
+                        android:textAlignment="center"
+                        app:checkedChip="@+id/chip_3"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <View
+                    android:id="@+id/view10"
+                    android:layout_width="48dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/gray_cccccc"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/desc_price_range"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/filter_price_range_desc"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/txt_price_level"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_price_level" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_add2cart_bottom"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background_dialog_corner">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <TextView
-                android:id="@+id/close_btm_dialog"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+            <View
+                android:id="@+id/view_add2cart_bottom_separation"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="X"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:layout_marginBottom="16dp"
+                android:background="@color/gray_cccccc"
+                app:layout_constraintBottom_toTopOf="@+id/btn_confirm"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/txt_price_level"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="價格範圍"
-                android:textColor="@color/black_3f3a3a"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup_level"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="8dp"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_price_level"
-                app:singleSelection="true">
-
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    android:text="$"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:checkedChip="@+id/chip_1"
-                    app:chipBackgroundColor="@color/sl_chip_state_list"
-                    app:chipMinTouchTargetSize="0dp" />
-
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    android:text="$$"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:checkedChip="@+id/chip_2"
-                    app:chipBackgroundColor="@color/sl_chip_state_list"
-                    app:chipMinTouchTargetSize="0dp" />
-
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    android:text="$$$"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:checkedChip="@+id/chip_3"
-                    app:chipBackgroundColor="@color/sl_chip_state_list"
-                    app:chipMinTouchTargetSize="0dp" />
-
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    android:text="$$$$"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:checkedChip="@+id/chip_4"
-                    app:chipBackgroundColor="@color/sl_chip_state_list"
-                    app:chipMinTouchTargetSize="0dp" />
-
-            </com.google.android.material.chip.ChipGroup>
-
-            <TextView
-                android:id="@+id/txt_drink_category2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="店家風格"
-                android:textColor="@color/black_3f3a3a"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chipGroup_level" />
-
-
-            <CheckBox
-                android:id="@+id/choice_usa"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`美式餐廳`,isChecked)}"
-                android:text="美式"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_drink_category2" />
-
-            <CheckBox
-                android:id="@+id/choice_european"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`歐式餐廳`,isChecked)}"
-                android:text="歐式"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_usa" />
-
-            <CheckBox
-                android:id="@+id/choice_korea"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`韓式餐廳`,isChecked)}"
-                android:text="韓式"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_european" />
-
-            <CheckBox
-                android:id="@+id/choice_japan"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`日式餐廳`,isChecked)}"
-                android:text="日式"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_korea" />
-
-            <CheckBox
-                android:id="@+id/choice_taiwan"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`台式餐廳`,isChecked)}"
-                android:text="台式"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_japan" />
-
-            <CheckBox
-                android:id="@+id/choice_bar"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`bar`,isChecked)}"
-                android:text="Bar"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_taiwan" />
-
-            <CheckBox
-                android:id="@+id/choice_pub"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceStyle(`pub`,isChecked)}"
-                android:text="Pub"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_bar" />
-
-            <TextView
-                android:id="@+id/txt_drink_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="酒類"
-                android:textColor="@color/black_3f3a3a"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_pub" />
-
-            <CheckBox
-                android:id="@+id/choice_cocktail"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceCategory(`cocktail`,isChecked)}"
-                android:text="雞尾酒"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_drink_category" />
-
-            <CheckBox
-                android:id="@+id/choice_spirit"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceCategory(`spirit`,isChecked)}"
-                android:text="烈酒"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_cocktail" />
-
-            <CheckBox
-                android:id="@+id/choice_beer"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceCategory(`beer`,isChecked)}"
-                android:text="啤酒"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_spirit" />
-
-            <CheckBox
-                android:id="@+id/choice_sparkling_wine"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceCategory(`sparkling_wine`,isChecked)}"
-                android:text="氣泡酒"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_beer" />
-
-            <CheckBox
-                android:id="@+id/choice_wine"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceCategory(`wine`,isChecked)}"
-                android:text="葡萄酒"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_sparkling_wine" />
-
-            <TextView
-                android:id="@+id/txt_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="距離"
-                android:textColor="@color/black_3f3a3a"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.49"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_wine" />
-
-            <CheckBox
-                android:id="@+id/choice_distance_1"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                android:checked="@{viewModel.choiceDistance==0.5}"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceDistance(0.5,isChecked)}"
-                android:text="500 公尺"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_distance" />
-
-            <CheckBox
-                android:id="@+id/choice_distance_2"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:checked="@{viewModel.choiceDistance==1.0}"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceDistance(1.0,isChecked)}"
-                android:text="1 公里"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_distance_1" />
-
-            <CheckBox
-                android:id="@+id/choice_distance_3"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:checked="@{viewModel.choiceDistance==2.0}"
-                android:layoutDirection="rtl"
-                android:onCheckedChanged="@{(buttonView, isChecked) -> viewModel.isCheckChoiceDistance(2.0,isChecked)}"
-                android:text="2 公里"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/choice_distance_2" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/btn_confirm"
                 style="@style/RatingButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
                 android:layout_marginBottom="16dp"
                 android:text="確認"
                 android:textSize="16sp"
                 app:backgroundTint="@color/primaryColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/choice_distance_3" />
-
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+        >
+    </LinearLayout>
 </layout>
