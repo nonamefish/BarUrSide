@@ -822,6 +822,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             .collection(PATH_NOTIFICATION)
             .whereEqualTo("toId", userId)
             .orderBy("date", Query.Direction.DESCENDING)
+            .limit(80)
             .addSnapshotListener { snapshot, exception ->
 
                 exception?.let {
@@ -1541,7 +1542,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     if (task.isSuccessful) {
 
                         // add notification info to firebase
-                        val postNotify = FirebaseFirestore.getInstance().collection(PATH_NOTIFICATION)
+                        val postNotify =
+                            FirebaseFirestore.getInstance().collection(PATH_NOTIFICATION)
                         val docNotify = postNotify.document()
                         notification.id = docNotify.id
                         docNotify.set(Notification.toHashMap(notification))
@@ -1636,8 +1638,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                 document.reference
                                                     .update(
                                                         mapOf(
-                                                            "content" to "<b>${activity.name}</b>發起者已取消該活動",
-                                                            "type" to "activity_cancel"
+                                                            "content" to "活動：<b>${activity.name}</b> 發起者已取消該活動",
+                                                            "type" to "activity_cancel",
+                                                            "isCheck" to false,
+                                                            "date" to Timestamp(System.currentTimeMillis())
                                                         )
                                                     )
                                             }
@@ -1688,7 +1692,11 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-    override suspend fun bookActivity(activityId: String, userId: String, notification: Notification): Result<Boolean> =
+    override suspend fun bookActivity(
+        activityId: String,
+        userId: String,
+        notification: Notification
+    ): Result<Boolean> =
         suspendCoroutine { continuation ->
             // book to activity
             FirebaseFirestore.getInstance()
@@ -1714,7 +1722,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 }
 
                             // add notification info to firebase
-                            val postNotify = FirebaseFirestore.getInstance().collection(PATH_NOTIFICATION)
+                            val postNotify =
+                                FirebaseFirestore.getInstance().collection(PATH_NOTIFICATION)
                             val docNotify = postNotify.document()
                             notification.id = docNotify.id
                             docNotify.set(Notification.toHashMap(notification))
@@ -1957,13 +1966,32 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
-                            document.reference.update("isCheck", true)
-                                .addOnSuccessListener {
-                                    Log.d(TAG, "add successfully updated!")
+                            val notification = document.toObject(Notification::class.java)
+
+                            if(notification.isCheck == false){
+                                if (notification.type == "activity") {
+                                    document.reference.update(
+                                        mapOf(
+                                            "isCheck" to true,
+                                            "date" to Timestamp(System.currentTimeMillis())
+                                        ))
+                                        .addOnSuccessListener {
+                                            Log.d(TAG, "add successfully updated!")
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.w(TAG, "error updated!")
+                                        }
+                                } else {
+                                    document.reference.update("isCheck", true)
+                                        .addOnSuccessListener {
+                                            Log.d(TAG, "add successfully updated!")
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.w(TAG, "error updated!")
+                                        }
                                 }
-                                .addOnFailureListener { e ->
-                                    Log.w(TAG, "error updated!")
-                                }
+                            }
+
                         }
                         continuation.resume(Result.Success(true))
                     } else {

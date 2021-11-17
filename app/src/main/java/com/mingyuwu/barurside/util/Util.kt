@@ -10,7 +10,9 @@ import com.mingyuwu.barurside.BarUrSideApplication
 import android.graphics.BitmapFactory
 import android.util.Log
 import java.io.*
+import java.sql.Timestamp
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 object Util {
@@ -71,6 +73,24 @@ object Util {
         }
 
         return path.path
+    }
+
+    fun getDiffHour(date: Timestamp) : Long {
+        val current = Timestamp(System.currentTimeMillis())
+        val diff = current.time - date.time
+        return TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS)
+    }
+
+    fun getDiffDay(date: Timestamp) : Long {
+        val current = Timestamp(System.currentTimeMillis())
+        val diff = current.time - date.time
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+    }
+
+    fun getDiffMinute(date: Timestamp) : Long {
+        val current = Timestamp(System.currentTimeMillis())
+        val diff = current.time - date.time
+        return TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS)
     }
 
 }

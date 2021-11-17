@@ -73,9 +73,9 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
                 convertStringToTimestamp(startTime.value!!),
                 "",
                 userId,
-                "你有一個即將舉行的活動<b>${name.value!!}</b> ",
+                "提醒：今日你有一個即將舉行的活動 <b>${name.value!!}</b>",
                 null,
-                null
+                false
             )
 
             repository.postActivity(activity, notification)

@@ -23,6 +23,9 @@ import com.mingyuwu.barurside.rating.*
 import com.mingyuwu.barurside.util.Category
 import com.mingyuwu.barurside.util.CurrentFragmentType
 import com.mingyuwu.barurside.util.Style
+import com.mingyuwu.barurside.util.Util.getDiffDay
+import com.mingyuwu.barurside.util.Util.getDiffHour
+import com.mingyuwu.barurside.util.Util.getDiffMinute
 import java.sql.Timestamp
 import java.time.LocalTime
 import java.util.concurrent.TimeUnit
@@ -156,13 +159,11 @@ fun bindRecyclerViewWithImageBitmaps(recyclerView: RecyclerView, imageBitmaps: L
 @BindingAdapter("notifyPeriod")
 fun bindNotificationPeriod(textView: TextView, date: Timestamp?) {
     date?.let {
-        val current = Timestamp(System.currentTimeMillis())
-        val diff = current.time - date.time
-        val diffHour = TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS)
-        val diffDay = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+        val diffHour = getDiffHour(date)
+        val diffDay = getDiffDay(date)
         when {
             diffHour < 0 -> {
-                textView.text = "${TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS)}分鐘前"
+                textView.text = "${getDiffMinute(date)}分鐘前"
             }
             diffHour < 24 -> {
                 textView.text = "${diffHour}小時前"

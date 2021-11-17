@@ -65,9 +65,9 @@ class ActivityDetailViewModel(
                 activity.startTime,
                 activity.id,
                 userId,
-                "你有一個即將舉行的活動<b>${activity.name}</b> ",
+                "提醒：今日你有一個即將舉行的活動 <b>${activity.name}</b> ",
                 null,
-                null
+                false
             )
             repository.bookActivity(activity.id, userId, notification)
             navigateToDetail.value = true

@@ -40,7 +40,7 @@ class InfoRatingAdapter() :
             }
 
             // setting navigate to venue/drink page
-            binding.infoRtgObject.setOnClickListener {
+            binding.constraintRtgInfo.setOnClickListener {
                 rating?.isVenue?.let {
                     if (it) {
                         view.findNavController()

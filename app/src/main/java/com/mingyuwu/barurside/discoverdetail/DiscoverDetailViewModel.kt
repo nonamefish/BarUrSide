@@ -114,7 +114,6 @@ class DiscoverDetailViewModel(
             if (::result.isInitialized) {
                 _detailData.value = when (result) {
                     is Result.Success -> {
-                        Log.d("Ming", "result:  ${(result as Result.Success<Any>).data}")
                         _error.value = null
                         _status.value = LoadStatus.DONE
                         (result as Result.Success<Any>).data as List<Any>
@@ -211,7 +210,6 @@ class DiscoverDetailViewModel(
             when (result) {
                 is Result.Success -> {
                     _error.value = null
-                    Log.d("Ming", "result: ${(result as Result.Success<Any>).data}")
                 }
                 is Result.Fail -> {
                     _error.value = (result as Result.Fail).error

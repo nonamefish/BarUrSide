@@ -44,6 +44,7 @@ import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
 import com.mingyuwu.barurside.profile.FriendAdapter
 import com.mingyuwu.barurside.rating.ImageAdapter
+import com.mingyuwu.barurside.util.Util
 import com.permissionx.guolindev.PermissionX
 
 class DiscoverDetailFragment() : Fragment() {
@@ -187,8 +188,10 @@ class DiscoverDetailFragment() : Fragment() {
                 var list: List<Any>?
                 // set notification value
                 if (theme == Theme.NOTIFICATION) {
-                    list = (it as List<Notification>).filter { notifications ->
-                        notifications.toId == UserManager.user.value?.id ?: ""
+                    list = (it as List<Notification>).filter { ntfys->
+                        ntfys.toId == UserManager.user.value!!.id &&
+                            ((ntfys.type == "friend" && ntfys.isCheck == false) ||
+                                    (ntfys.type == "activity" && Util.getDiffHour(ntfys.timestamp!!) < 24))
                     }.take(20)
                     if (!list.isNullOrEmpty()) {
                         viewModel.checkNotification(list.map { it.id })

@@ -11,6 +11,8 @@ import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.CurrentFragmentType
+import com.mingyuwu.barurside.util.Util.getDiffHour
+import kotlin.math.abs
 
 class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
 
@@ -39,8 +41,12 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
         notification = repository.getNotification(userId)
 
         // set notification size
-        notificationSize = Transformations.map(notification) {
-            it.filter { it.toId == UserManager.user.value!!.id && it.isCheck == false }.size
+        notificationSize = Transformations.map(notification) { it ->
+            it.filter {
+                it.toId == UserManager.user.value!!.id &&
+                        (it.isCheck == false && (it.type == "friend" ||
+                                (it.type == "activity" && abs(getDiffHour(it.timestamp!!)) < 24)))
+            }.size
         }
     }
 }
