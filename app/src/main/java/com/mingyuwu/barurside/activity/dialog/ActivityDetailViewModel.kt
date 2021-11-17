@@ -5,11 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.Activity
-import com.mingyuwu.barurside.data.Result
+import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
-import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,7 +23,7 @@ class ActivityDetailViewModel(
     val isBook = activity.bookers!!.any { it.id == userId }
 
     // navigate to activity detail
-    val navigateToDetail = MutableLiveData<Any?>()
+    var navigateToDetail = MutableLiveData<Any?>()
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private var _sponsor = MutableLiveData<User>()
@@ -45,7 +44,7 @@ class ActivityDetailViewModel(
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
 
-    init{
+    init {
         getSponsorData()
     }
 
@@ -58,12 +57,28 @@ class ActivityDetailViewModel(
 
     fun bookActivity() {
         coroutineScope.launch {
-            repository.bookActivity(activity.id, userId)
+            val notification = Notification(
+                "",
+                "activity",
+                "",
+                "activity",
+                activity.startTime,
+                activity.id,
+                userId,
+                "你有一個即將舉行的活動<b>${activity.name}</b> ",
+                null,
+                null
+            )
+            repository.bookActivity(activity.id, userId, notification)
             navigateToDetail.value = true
         }
     }
 
-    private fun getSponsorData(){
+    private fun getSponsorData() {
         _sponsor = repository.getUser(activity.sponsor)
+    }
+
+    fun onLeft() {
+        navigateToDetail.value = null
     }
 }

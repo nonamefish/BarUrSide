@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.Activity
+import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Relationship
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
@@ -64,7 +65,20 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
                 userId,
                 listOf(Relationship(userId, Timestamp(System.currentTimeMillis())))
             )
-            repository.postActivity(activity)
+            val notification = Notification(
+                "",
+                "activity",
+                "",
+                "activity",
+                convertStringToTimestamp(startTime.value!!),
+                "",
+                userId,
+                "你有一個即將舉行的活動<b>${name.value!!}</b> ",
+                null,
+                null
+            )
+
+            repository.postActivity(activity, notification)
             navigateToDetail.value = true
         }
     }

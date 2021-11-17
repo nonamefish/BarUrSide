@@ -12,7 +12,7 @@ data class Notification(
     val image: String= "",
     val type: String= "",
     val date: Date? = null,
-    val fromId: String= "",
+    var fromId: String= "",
     val toId: String= "",
     val content: String= "",
     var reply: Boolean? = null,

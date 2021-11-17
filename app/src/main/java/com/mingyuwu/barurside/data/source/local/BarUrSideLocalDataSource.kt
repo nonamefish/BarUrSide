@@ -142,7 +142,7 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun postActivity(activity: Activity): Result<Boolean> {
+    override suspend fun postActivity(activity: Activity,notification: Notification): Result<Boolean> {
         TODO("Not yet implemented")
     }
 
@@ -150,7 +150,7 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun bookActivity(activityId: String, userId: String): Result<Boolean> {
+    override suspend fun bookActivity(activityId: String, userId: String, notification: Notification): Result<Boolean> {
         TODO("Not yet implemented")
     }
 

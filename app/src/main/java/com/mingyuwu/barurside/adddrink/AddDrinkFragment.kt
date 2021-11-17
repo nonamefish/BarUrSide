@@ -27,6 +27,7 @@ import android.util.Log
 import androidx.lifecycle.Observer
 import android.widget.*
 import com.mingyuwu.barurside.databinding.FragmentAddDrinkBinding
+import com.mingyuwu.barurside.util.Category
 import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.getResizedBitmap
 import com.mingyuwu.barurside.util.Util.randomName
@@ -90,7 +91,8 @@ class AddObjectFragment : Fragment() {
                     parent: AdapterView<*>?, view: View?, position: Int, id: Long
                 ) {
                     if (position != 0) {
-                        viewModel.type.value = parent?.getItemAtPosition(position).toString()
+                        val selected = parent?.getItemAtPosition(position).toString()
+                        viewModel.type.value = Category.values().find { it.chinese == selected }?.name
                     }else{
                         viewModel.type.value = null
                     }

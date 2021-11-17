@@ -190,7 +190,9 @@ class DiscoverDetailFragment() : Fragment() {
                     list = (it as List<Notification>).filter { notifications ->
                         notifications.toId == UserManager.user.value?.id ?: ""
                     }.take(20)
-                    viewModel.checkNotification(list.map { it.id })
+                    if (!list.isNullOrEmpty()) {
+                        viewModel.checkNotification(list.map { it.id })
+                    }
                 } else {
                     list = it
                 }

@@ -3,6 +3,7 @@ package com.mingyuwu.barurside.activity.dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,6 +63,7 @@ class ActivityDetailDialog : DialogFragment() {
 
         // navigate to activity
         viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
+            Log.d("Ming","navigateToDetail : ${viewModel.navigateToDetail.value}")
             it?.let {
                 val id = findNavController().previousBackStackEntry?.destination?.label
 
@@ -76,6 +78,7 @@ class ActivityDetailDialog : DialogFragment() {
                         )
                     )
                 }
+                viewModel.onLeft()
             }
         })
 

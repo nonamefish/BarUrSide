@@ -144,16 +144,16 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getRatingByFriends(userId)
     }
 
-    override suspend fun postActivity(activity: Activity): Result<Boolean> {
-        return remoteDataSource.postActivity(activity)
+    override suspend fun postActivity(activity: Activity,notification: Notification): Result<Boolean> {
+        return remoteDataSource.postActivity(activity,notification)
     }
 
     override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> {
         return remoteDataSource.modifyActivity(activityId,userId)
     }
 
-    override suspend fun bookActivity(activityId: String, userId: String): Result<Boolean> {
-        return remoteDataSource.bookActivity(activityId, userId)
+    override suspend fun bookActivity(activityId: String, userId: String, notification: Notification): Result<Boolean> {
+        return remoteDataSource.bookActivity(activityId, userId, notification)
     }
 
     override suspend fun addUser(user: User): Result<Boolean> {

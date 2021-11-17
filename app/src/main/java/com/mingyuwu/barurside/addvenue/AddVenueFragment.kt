@@ -39,6 +39,7 @@ import com.mingyuwu.barurside.databinding.FragmentAddVenueBinding
 import com.mingyuwu.barurside.util.Util
 import com.permissionx.guolindev.PermissionX
 import com.mingyuwu.barurside.util.Category
+import com.mingyuwu.barurside.util.Style
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -110,7 +111,7 @@ class AddVenueFragment : Fragment() {
                 ) {
                     if (position != 0) {
                         val selected = parent?.getItemAtPosition(position).toString()
-                        viewModel.style.value = Category.values().find { it.chinese == selected }?.name
+                        viewModel.style.value = Style.values().find { it.chinese == selected }?.name
                     } else {
                         viewModel.style.value = null
                     }

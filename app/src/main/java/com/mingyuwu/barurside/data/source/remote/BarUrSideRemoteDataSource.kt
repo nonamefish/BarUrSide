@@ -532,7 +532,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
     ): Result<String> =
         suspendCoroutine { continuation ->
             val file = Uri.fromFile(File(localImage))
-            Log.d("Ming","file: ${file.path}")
+            Log.d("Ming", "file: ${file.path}")
             val eventsRef = storageRef.child("$uploadType/$userId/${file.lastPathSegment}" ?: "")
             val uploadTask = eventsRef.putFile(file)
             uploadTask
@@ -1524,26 +1524,49 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-    override suspend fun postActivity(activity: Activity): Result<Boolean> =
+    override suspend fun postActivity(
+        activity: Activity,
+        notification: Notification
+    ): Result<Boolean> =
         suspendCoroutine { continuation ->
-            val postCollect =
-                FirebaseFirestore.getInstance().collection(PATH_ACTIVITY)
-            val document = postCollect.document()
-            activity.id = document.id
+            val postActivity = FirebaseFirestore.getInstance().collection(PATH_ACTIVITY)
+            val docActivity = postActivity.document()
+            activity.id = docActivity.id
+            notification.fromId = docActivity.id
 
-            document
+            // add activity info to firebase
+            docActivity
                 .set(Activity.toHashMap(activity))
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "postCollect: isSuccessful")
-                        continuation.resume(Result.Success(true))
+
+                        // add notification info to firebase
+                        val postNotify = FirebaseFirestore.getInstance().collection(PATH_NOTIFICATION)
+                        val docNotify = postNotify.document()
+                        notification.id = docNotify.id
+                        docNotify.set(Notification.toHashMap(notification))
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    continuation.resume(Result.Success(true))
+                                } else {
+                                    task.exception?.let {
+                                        Log.w(TAG, "Error getting documents. ${it.message}")
+                                        continuation.resume(Result.Error(it))
+                                        return@addOnCompleteListener
+                                    }
+                                    continuation.resume(
+                                        Result.Fail(
+                                            BarUrSideApplication.instance
+                                                .getString(
+                                                    R.string.fail_nothing
+                                                )
+                                        )
+                                    )
+                                }
+                            }
                     } else {
                         task.exception?.let {
-                            Log.d(TAG, "postCollect: $it")
-                            Log.w(
-                                TAG,
-                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                            )
+                            Log.w(TAG, "Error getting documents. ${it.message}")
                             continuation.resume(Result.Error(it))
                             return@addOnCompleteListener
                         }
@@ -1591,9 +1614,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> =
         suspendCoroutine { continuation ->
-//            Log.d("Ming", "activityId: $activityId, userId: $userId")
-            FirebaseFirestore.getInstance()
-                .collection(PATH_ACTIVITY)
+            val firestore = FirebaseFirestore.getInstance()
+            firestore.collection(PATH_ACTIVITY)
                 .whereEqualTo("id", activityId)
                 .get()
                 .addOnCompleteListener { task ->
@@ -1603,31 +1625,55 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                             if (activity.sponsor == userId) {
                                 document.reference.delete()
+
+                                // modify notification for booker
+                                firestore.collection(PATH_NOTIFICATION)
+                                    .whereEqualTo("fromId", activityId)
+                                    .get()
+                                    .addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            for (document in task.result!!) {
+                                                document.reference
+                                                    .update(
+                                                        mapOf(
+                                                            "content" to "<b>${activity.name}</b>發起者已取消該活動",
+                                                            "type" to "activity_cancel"
+                                                        )
+                                                    )
+                                            }
+                                            continuation.resume(Result.Success(true))
+                                        }
+                                    }
+
+
                             } else {
                                 document.reference
                                     .update("bookers", activity.bookers?.filter { it.id != userId })
                                     .addOnSuccessListener {
-                                        Log.d(
-                                            TAG,
-                                            "DocumentSnapshot successfully updated!"
-                                        )
+                                        Log.d(TAG, "DocumentSnapshot successfully updated!")
                                     }
                                     .addOnFailureListener { e ->
-                                        Log.w(
-                                            TAG,
-                                            "Error updating document",
-                                            e
-                                        )
+                                        Log.w(TAG, "Error updating document", e)
+                                    }
+
+                                // delete notification for user
+                                firestore.collection(PATH_NOTIFICATION)
+                                    .whereEqualTo("fromId", activityId)
+                                    .whereEqualTo("toId", userId)
+                                    .get()
+                                    .addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            for (document in task.result!!) {
+                                                document.reference.delete()
+                                            }
+                                        }
+                                        continuation.resume(Result.Success(true))
                                     }
                             }
                         }
-                        continuation.resume(Result.Success(true))
                     } else {
                         task.exception?.let {
-                            Log.w(
-                                TAG,
-                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                            )
+                            Log.w(TAG, "Error getting documents. ${it.message}")
                             continuation.resume(Result.Error(it))
                             return@addOnCompleteListener
                         }
@@ -1642,9 +1688,9 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-    override suspend fun bookActivity(activityId: String, userId: String): Result<Boolean> =
+    override suspend fun bookActivity(activityId: String, userId: String, notification: Notification): Result<Boolean> =
         suspendCoroutine { continuation ->
-//            Log.d("Ming", "activityId: $activityId, userId: $userId")
+            // book to activity
             FirebaseFirestore.getInstance()
                 .collection(PATH_ACTIVITY)
                 .whereEqualTo("id", activityId)
@@ -1661,26 +1707,40 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     )
                                 )
                                 .addOnSuccessListener {
-                                    Log.d(
-                                        TAG,
-                                        "DocumentSnapshot successfully updated!"
-                                    )
+                                    Log.d(TAG, "DocumentSnapshot successfully updated!")
                                 }
                                 .addOnFailureListener { e ->
-                                    Log.w(
-                                        TAG,
-                                        "Error updating document",
-                                        e
-                                    )
+                                    Log.w(TAG, "Error updating document", e)
+                                }
+
+                            // add notification info to firebase
+                            val postNotify = FirebaseFirestore.getInstance().collection(PATH_NOTIFICATION)
+                            val docNotify = postNotify.document()
+                            notification.id = docNotify.id
+                            docNotify.set(Notification.toHashMap(notification))
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        continuation.resume(Result.Success(true))
+                                    } else {
+                                        task.exception?.let {
+                                            Log.w(TAG, "Error getting documents. ${it.message}")
+                                            continuation.resume(Result.Error(it))
+                                            return@addOnCompleteListener
+                                        }
+                                        continuation.resume(
+                                            Result.Fail(
+                                                BarUrSideApplication.instance
+                                                    .getString(
+                                                        R.string.fail_nothing
+                                                    )
+                                            )
+                                        )
+                                    }
                                 }
                         }
-                        continuation.resume(Result.Success(true))
                     } else {
                         task.exception?.let {
-                            Log.w(
-                                TAG,
-                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                            )
+                            Log.w(TAG, "Error getting documents. ${it.message}")
                             continuation.resume(Result.Error(it))
                             return@addOnCompleteListener
                         }
