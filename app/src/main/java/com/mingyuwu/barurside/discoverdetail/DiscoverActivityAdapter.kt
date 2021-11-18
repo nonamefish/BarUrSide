@@ -31,12 +31,12 @@ class DiscoverActivityAdapter(val viewModel: ViewModel) :
         fun bind(activity: Activity, viewModel: ViewModel) {
             when(viewModel){
                 is DiscoverDetailViewModel->{
-                    binding.btnObjectInfo.setOnClickListener {
+                    binding.cnstrtListItem.setOnClickListener {
                         viewModel.navigateToInfo.value = activity
                     }
                 }
                 is ActivityPageViewModel ->{
-                    binding.btnObjectInfo.setOnClickListener {
+                    binding.cnstrtListItem.setOnClickListener {
                         viewModel.navigateToDetail.value = activity
                     }
                 }

@@ -5,6 +5,7 @@ import android.os.Build
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -216,8 +217,8 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun checkTime(open: String, close: String): Boolean {
-    Log.d("Ming","open: $open")
-    Log.d("Ming","close: $close")
+    Log.d("Ming", "open: $open")
+    Log.d("Ming", "close: $close")
     val open = LocalTime.parse(open)
     val close = LocalTime.parse(close)
     val current = LocalTime.now()
@@ -241,9 +242,9 @@ fun bindIconNotify(constraintLayout: ConstraintLayout, currentFragmentType: Curr
                 CurrentFragmentType.DISCOVER,
                 CurrentFragmentType.COLLECT
             )
-        ){
+        ) {
             constraintLayout.visibility = View.VISIBLE
-        }else{
+        } else {
             constraintLayout.visibility = View.GONE
         }
     }
@@ -259,9 +260,9 @@ fun bindIconBack(imageView: ImageView, currentFragmentType: CurrentFragmentType?
                 CurrentFragmentType.DRINK,
                 CurrentFragmentType.VENUE
             )
-        ){
+        ) {
             imageView.visibility = View.GONE
-        }else{
+        } else {
             imageView.visibility = View.VISIBLE
         }
     }
@@ -272,5 +273,22 @@ fun bindIconBack(imageView: ImageView, currentFragmentType: CurrentFragmentType?
 fun bindVenueStyle(textView: TextView, style: String?) {
     style?.let {
         textView.text = Style.valueOf(it.uppercase()).chinese
+    }
+}
+
+@BindingAdapter("isFull","isBook")
+fun bindActivityDetailBtn(button: Button, isFull: Boolean, isBook: Boolean) {
+    if (isFull) {
+        button.text = "人數已滿"
+        button.setBackgroundResource(R.color.gray_cccccc)
+        button.isEnabled = false
+    }else if(isBook){
+        button.text = "退出活動"
+        button.setBackgroundResource(R.color.primaryBabyColor)
+        button.isEnabled = true
+    }else{
+        button.text = "加入活動"
+        button.setBackgroundResource(R.color.primaryDarkColor)
+        button.isEnabled = true
     }
 }

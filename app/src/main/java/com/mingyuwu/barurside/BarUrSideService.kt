@@ -2,6 +2,7 @@ package com.mingyuwu.barurside
 
 import android.app.*
 import android.content.Intent
+import android.os.IBinder
 import android.util.Log
 import com.mingyuwu.barurside.login.UserManager
 import androidx.lifecycle.LifecycleService
@@ -22,7 +23,6 @@ class BarUrSideService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-
         val repository = (applicationContext as BarUrSideApplication).repository
         notifications = repository.getNotificationChange(UserManager.user.value!!.id)
 
@@ -32,9 +32,9 @@ class BarUrSideService : LifecycleService() {
             Log.d("Ming", "Service notifications: $it")
             it?.let { notifications ->
                 for (notification in notifications) {
-                    when(notification.type){
+                    when (notification.type) {
                         "activity" -> {
-                            if(getDiffHour(notification.timestamp!!) < 24){
+                            if (getDiffHour(notification.timestamp!!) < 24) {
                                 notify(notification)
                             }
                         }
@@ -46,7 +46,7 @@ class BarUrSideService : LifecycleService() {
             }
         }
 
-        return START_NOT_STICKY
+        return START_STICKY
     }
 
     private fun createNotificationChannel() {
@@ -65,7 +65,7 @@ class BarUrSideService : LifecycleService() {
 
         val notification: Notification = Notification.Builder(this, channel)
             .setContentTitle("BarUrSide")
-            .setContentText(notify.content.replace("<b>","").replace("</b>",""))
+            .setContentText(notify.content.replace("<b>", "").replace("</b>", ""))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentIntent(pendingIntent)
             .build()
@@ -77,6 +77,8 @@ class BarUrSideService : LifecycleService() {
 
     override fun onDestroy() {
         super.onDestroy()
+        stopSelf()
         Log.d("Ming", "Service onDestroy")
     }
+
 }

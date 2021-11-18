@@ -75,7 +75,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:visibility="@{notification.type==`friend` ? view.visibility : view.GONE}"
+            android:visibility="@{notification.type.equals(`friend`) ? view.visibility : view.GONE}"
             app:layout_constraintStart_toStartOf="@+id/notify_date"
             app:layout_constraintTop_toBottomOf="@+id/notify_date">
 

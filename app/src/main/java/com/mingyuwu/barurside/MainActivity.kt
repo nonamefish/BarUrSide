@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
 
+
         // setting binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.viewModel = viewModel
@@ -80,24 +81,9 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             viewModel.getUserData(currentUser.email!!)
+            onGetUserDataFinished()
             viewModel.navigateToStart.value = true
         }
-
-        UserManager.user.observe(this, Observer {
-            it?.let{
-                Log.d("Ming","UserManager ${UserManager.user.value}")
-                viewModel.getNotification(it.id)
-                binding.viewModel = viewModel
-
-                viewModel.notification?.observe(this, Observer {
-                    Log.d("Ming","viewModel.notification : $it")
-                })
-                viewModel.notificationSize?.observe(this, Observer {
-                    Log.d("Ming","viewModel.notificationSize : $it")
-                })
-                startService(Intent(this, BarUrSideService::class.java))
-            }
-        })
 
 
         // get navController and setting connection between bottom navigation item and navigation fragment
@@ -181,4 +167,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun onGetUserDataFinished(){
+        UserManager.user.observe(this, Observer {
+            it?.let{
+                viewModel.getNotification(it.id)
+                binding.viewModel = viewModel
+                startService(Intent(this, BarUrSideService::class.java))
+            }
+        })
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("Ming","MainActivity onDestroy")
+    }
 }

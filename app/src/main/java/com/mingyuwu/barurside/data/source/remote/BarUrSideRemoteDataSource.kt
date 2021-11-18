@@ -2032,16 +2032,18 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
 
-                val list = mutableListOf<Notification>()
+                if ( !snapshot!!.metadata.hasPendingWrites() ){
+                    val list = mutableListOf<Notification>()
 
-                for (document in snapshot!!.documents) {
-                    val notification = document.toObject(Notification::class.java)
-                    if (notification != null) {
-                        notification.timestamp = notification.date?.let { Timestamp(it.time) }
-                        list.add(notification)
+                    for (document in snapshot!!.documents) {
+                        val notification = document.toObject(Notification::class.java)
+                        if (notification != null) {
+                            notification.timestamp = notification.date?.let { Timestamp(it.time) }
+                            list.add(notification)
+                        }
                     }
+                    liveData.value = list
                 }
-                liveData.value = list
             }
 
         return liveData

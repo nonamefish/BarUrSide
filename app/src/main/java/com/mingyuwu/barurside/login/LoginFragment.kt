@@ -20,6 +20,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
@@ -119,5 +120,6 @@ class LoginFragment : Fragment() {
         )
         viewModel.addUser(user)
         viewModel.getUserData(account.email!!)
+        (requireActivity() as MainActivity).onGetUserDataFinished()
     }
 }
