@@ -45,7 +45,7 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
             it.filter {
                 it.toId == UserManager.user.value!!.id &&
                         (it.isCheck == false && (it.type == "friend" ||
-                                (it.type == "activity" && abs(getDiffHour(it.timestamp!!)) < 24)))
+                                (it.type == "activity" && getDiffHour(it.timestamp!!) < 24)))
             }.size
         }
     }

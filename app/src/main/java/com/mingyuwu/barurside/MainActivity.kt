@@ -1,22 +1,16 @@
 package com.mingyuwu.barurside
 
-import android.os.Build
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mingyuwu.barurside.login.UserManager
 import android.util.Log
-import android.view.Gravity
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toolbar
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -86,13 +80,25 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             viewModel.getUserData(currentUser.email!!)
-            viewModel.getNotification(currentUser.email!!)
             viewModel.navigateToStart.value = true
         }
 
-        viewModel.notification.observe(this, Observer {
-            Log.d("Ming","MainActivity $it")
+        UserManager.user.observe(this, Observer {
+            it?.let{
+                Log.d("Ming","UserManager ${UserManager.user.value}")
+                viewModel.getNotification(it.id)
+                binding.viewModel = viewModel
+
+                viewModel.notification?.observe(this, Observer {
+                    Log.d("Ming","viewModel.notification : $it")
+                })
+                viewModel.notificationSize?.observe(this, Observer {
+                    Log.d("Ming","viewModel.notificationSize : $it")
+                })
+                startService(Intent(this, MyService::class.java))
+            }
         })
+
 
         // get navController and setting connection between bottom navigation item and navigation fragment
         val navHostFragment =

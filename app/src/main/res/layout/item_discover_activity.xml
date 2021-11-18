@@ -46,13 +46,15 @@
 
         <TextView
             android:id="@+id/discover_object_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:text="@{name}"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/btn_object_info"
             app:layout_constraintStart_toEndOf="@+id/img_discover_object"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="文青不要喝IPA" />

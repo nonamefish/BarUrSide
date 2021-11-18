@@ -12,6 +12,7 @@ buildscript {
         version_lottie = '4.1.0'
         version_glide = "4.11.0"
         version_permissionX = "1.6.1"
+        version_work_runtime = "2.7.1"
     }
 
     repositories {

@@ -298,9 +298,11 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                     val venue = document.toObject(Venue::class.java)
                                                     rating.objectName = venue.name
 
+                                                    Log.d("Ming","ratings venue: $venue")
+
                                                     if (!venue.images.isNullOrEmpty()) {
                                                         rating.objectImg =
-                                                            rating.images!![0]
+                                                            venue.images!![0]
                                                     }
                                                 }
                                                 list.add(rating)
@@ -319,7 +321,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                     rating.objectName = drink.name
                                                     if (!drink.images.isNullOrEmpty()) {
                                                         rating.objectImg =
-                                                            rating.images!![0]
+                                                            drink.images!![0]
                                                     }
                                                 }
                                                 list.add(rating)
@@ -816,7 +818,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override fun getNotification(userId: String): MutableLiveData<List<Notification>> {
         val liveData = MutableLiveData<List<Notification>>()
-
+        Log.d("Ming","getNotification")
         // notification from user
         FirebaseFirestore.getInstance()
             .collection(PATH_NOTIFICATION)
@@ -848,6 +850,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                         }
+
                         for (document in snapshot!!) {
                             val notification = document.toObject(Notification::class.java)
                             notification.timestamp = notification.date?.let { Timestamp(it.time) }
@@ -855,6 +858,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         }
                         liveData.value = list
                         liveData.value = liveData.value
+                        Log.d("Ming","getNotification: ${liveData.value}")
                     }
             }
         return liveData
@@ -2013,5 +2017,34 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     }
                 }
         }
+
+    override fun getNotificationChange(userId: String): MutableLiveData<List<Notification>> {
+
+        val liveData = MutableLiveData<List<Notification>>()
+
+        // notification from user
+        FirebaseFirestore.getInstance()
+            .collection(PATH_NOTIFICATION)
+            .whereEqualTo("toId", userId)
+            .whereEqualTo("isCheck", false)
+            .addSnapshotListener { snapshot, exception ->
+                exception?.let {
+                    Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<Notification>()
+
+                for (document in snapshot!!.documents) {
+                    val notification = document.toObject(Notification::class.java)
+                    if (notification != null) {
+                        notification.timestamp = notification.date?.let { Timestamp(it.time) }
+                        list.add(notification)
+                    }
+                }
+                liveData.value = list
+            }
+
+        return liveData
+    }
 
 }

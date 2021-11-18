@@ -3,6 +3,5 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/anton</item>
         <item>@font/caveat_bold</item>
-        <item>@font/noto_sans</item>
     </array>
 </resources>

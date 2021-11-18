@@ -45,6 +45,7 @@ import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
 import com.mingyuwu.barurside.profile.FriendAdapter
 import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.util.Util
+import com.mingyuwu.barurside.util.Util.getDiffHour
 import com.permissionx.guolindev.PermissionX
 
 class DiscoverDetailFragment() : Fragment() {
@@ -190,11 +191,12 @@ class DiscoverDetailFragment() : Fragment() {
                 if (theme == Theme.NOTIFICATION) {
                     list = (it as List<Notification>).filter { ntfys->
                         ntfys.toId == UserManager.user.value!!.id &&
-                            ((ntfys.type == "friend" && ntfys.isCheck == false) ||
-                                    (ntfys.type == "activity" && Util.getDiffHour(ntfys.timestamp!!) < 24))
+                            (ntfys.type == "friend"||
+                                    (ntfys.type == "activity" && getDiffHour(ntfys.timestamp!!)>0))
                     }.take(20)
-                    if (!list.isNullOrEmpty()) {
-                        viewModel.checkNotification(list.map { it.id })
+                    if (!it.isNullOrEmpty()) {
+                        Log.d("Miing","notificaiotn id: ${list.map { it.id }}")
+                        viewModel.checkNotification(it.map { it.id })
                     }
                 } else {
                     list = it

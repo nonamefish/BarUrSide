@@ -22,6 +22,7 @@ import com.google.firebase.ktx.Firebase
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.MyService
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentLoginBinding
 import com.mingyuwu.barurside.ext.getVmFactory

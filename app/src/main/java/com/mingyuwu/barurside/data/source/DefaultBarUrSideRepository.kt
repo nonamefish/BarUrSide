@@ -187,4 +187,8 @@ class DefaultBarUrSideRepository(
     override suspend fun checkNotification(ids: List<String>): Result<Boolean> {
         return remoteDataSource.checkNotification(ids)
     }
+
+    override fun getNotificationChange(userId: String): MutableLiveData<List<Notification>> {
+        return remoteDataSource.getNotificationChange(userId)
+    }
 }

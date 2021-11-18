@@ -10,12 +10,14 @@ import com.mingyuwu.barurside.data.Relationship
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.Util.calculateDateByPeriod
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewModel() {
@@ -70,7 +72,7 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
                 "activity",
                 "",
                 "activity",
-                convertStringToTimestamp(startTime.value!!),
+                calculateDateByPeriod(convertStringToTimestamp(startTime.value!!),"DAY",-1),
                 "",
                 userId,
                 "提醒：今日你有一個即將舉行的活動 <b>${name.value!!}</b>",

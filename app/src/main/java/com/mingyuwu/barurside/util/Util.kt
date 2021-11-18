@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import java.io.*
 import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -75,22 +76,43 @@ object Util {
         return path.path
     }
 
-    fun getDiffHour(date: Timestamp) : Long {
+    fun getDiffHour(date: Timestamp): Long {
         val current = Timestamp(System.currentTimeMillis())
         val diff = current.time - date.time
         return TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS)
     }
 
-    fun getDiffDay(date: Timestamp) : Long {
+    fun getDiffDay(date: Timestamp): Long {
         val current = Timestamp(System.currentTimeMillis())
         val diff = current.time - date.time
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
     }
 
-    fun getDiffMinute(date: Timestamp) : Long {
+    fun getDiffMinute(date: Timestamp): Long {
         val current = Timestamp(System.currentTimeMillis())
         val diff = current.time - date.time
         return TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS)
+    }
+
+    fun convertStringToTimestamp(time: String): Timestamp {
+        val dateFormat = SimpleDateFormat("yyyy/MM/dd  a HH:mm", Locale.TAIWAN)
+        val parsedDate = dateFormat.parse(time)
+        return Timestamp(parsedDate.time)
+    }
+
+    fun calculateDateByPeriod(timestamp: Timestamp, unit: String, amount: Int) : Timestamp? {
+        val cdate = Calendar.getInstance()
+        cdate.time = timestamp
+
+        when(unit){
+            "DAY" -> cdate.add(Calendar.DATE, amount)
+            "MONTH" -> cdate.add(Calendar.MONTH, amount)
+            "YEAR" -> cdate.add(Calendar.YEAR, amount)
+            else -> return null
+        }
+
+        return Timestamp(cdate.timeInMillis)
+
     }
 
 }

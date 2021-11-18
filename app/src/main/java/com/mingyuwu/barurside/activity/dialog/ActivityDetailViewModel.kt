@@ -9,6 +9,8 @@ import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.Util
+import com.mingyuwu.barurside.util.Util.calculateDateByPeriod
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -62,7 +64,7 @@ class ActivityDetailViewModel(
                 "activity",
                 "",
                 "activity",
-                activity.startTime,
+                calculateDateByPeriod(activity.startTimestamp!!, "DAY", -1),
                 activity.id,
                 userId,
                 "提醒：今日你有一個即將舉行的活動 <b>${activity.name}</b> ",
