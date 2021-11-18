@@ -1,20 +1,14 @@
 package com.mingyuwu.barurside
 
 import android.app.*
-import android.content.Context
 import android.content.Intent
-import android.os.IBinder
 import android.util.Log
 import com.mingyuwu.barurside.login.UserManager
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import com.mingyuwu.barurside.data.source.remote.BarUrSideRemoteDataSource
-import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.getDiffHour
 
-class MyService : LifecycleService() {
+class BarUrSideService : LifecycleService() {
 
     private var notifications = MutableLiveData<List<com.mingyuwu.barurside.data.Notification>>()
     private val channel = "BarUrSide"

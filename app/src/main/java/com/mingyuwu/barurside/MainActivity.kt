@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel.notificationSize?.observe(this, Observer {
                     Log.d("Ming","viewModel.notificationSize : $it")
                 })
-                startService(Intent(this, MyService::class.java))
+                startService(Intent(this, BarUrSideService::class.java))
             }
         })
 
