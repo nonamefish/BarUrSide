@@ -1998,59 +1998,61 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
     override suspend fun checkNotification(ids: List<String>): Result<Boolean> =
         suspendCoroutine { continuation ->
 
-            FirebaseFirestore.getInstance()
-                .collection(PATH_NOTIFICATION)
-                .whereIn("id", ids)
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        for (document in task.result!!) {
-                            val notification = document.toObject(Notification::class.java)
+            for(limitIds in ids.windowed(10,step = 10,partialWindows = true)){
+                FirebaseFirestore.getInstance()
+                    .collection(PATH_NOTIFICATION)
+                    .whereIn("id", limitIds)
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            for (document in task.result!!) {
+                                val notification = document.toObject(Notification::class.java)
 
-                            if(notification.isCheck == false){
-                                if (notification.type == "activity") {
-                                    document.reference.update(
-                                        mapOf(
-                                            "isCheck" to true,
-                                            "date" to Timestamp(System.currentTimeMillis())
-                                        ))
-                                        .addOnSuccessListener {
-                                            Log.d(TAG, "add successfully updated!")
-                                        }
-                                        .addOnFailureListener { e ->
-                                            Log.w(TAG, "error updated!")
-                                        }
-                                } else {
-                                    document.reference.update("isCheck", true)
-                                        .addOnSuccessListener {
-                                            Log.d(TAG, "add successfully updated!")
-                                        }
-                                        .addOnFailureListener { e ->
-                                            Log.w(TAG, "error updated!")
-                                        }
+                                if(notification.isCheck == false){
+                                    if (notification.type == "activity") {
+                                        document.reference.update(
+                                            mapOf(
+                                                "isCheck" to true,
+                                                "date" to Timestamp(System.currentTimeMillis())
+                                            ))
+                                            .addOnSuccessListener {
+                                                Log.d(TAG, "add successfully updated!")
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Log.w(TAG, "error updated!")
+                                            }
+                                    } else {
+                                        document.reference.update("isCheck", true)
+                                            .addOnSuccessListener {
+                                                Log.d(TAG, "add successfully updated!")
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Log.w(TAG, "error updated!")
+                                            }
+                                    }
                                 }
-                            }
 
-                        }
-                        continuation.resume(Result.Success(true))
-                    } else {
-                        task.exception?.let {
-                            Log.w(
-                                TAG,
-                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                            )
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
-                        }
-                        continuation.resume(
-                            Result.Fail(
-                                BarUrSideApplication.instance.getString(
-                                    R.string.fail_nothing
+                            }
+                            continuation.resume(Result.Success(true))
+                        } else {
+                            task.exception?.let {
+                                Log.w(
+                                    TAG,
+                                    "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                                )
+                                continuation.resume(Result.Error(it))
+                                return@addOnCompleteListener
+                            }
+                            continuation.resume(
+                                Result.Fail(
+                                    BarUrSideApplication.instance.getString(
+                                        R.string.fail_nothing
+                                    )
                                 )
                             )
-                        )
+                        }
                     }
-                }
+            }
         }
 
     override fun getNotificationChange(userId: String): MutableLiveData<List<Notification>> {
