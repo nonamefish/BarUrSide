@@ -86,6 +86,7 @@ class VenueFragment : Fragment() {
             startActivity(dialIntent)
         }
 
+        // check data had downloaded
         viewModel.status.observe(viewLifecycleOwner, Observer {
             if (it == LoadStatus.DONE) {
                 binding.animationLoading.visibility = View.GONE

@@ -9,6 +9,7 @@ import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.calculateDateByPeriod
@@ -42,6 +43,12 @@ class ActivityDetailViewModel(
 
     val error: LiveData<String?>
         get() = _error
+
+    // status: The firebase MutableLiveData that stores the status of the most recent request
+    private val _status = MutableLiveData<LoadStatus>()
+
+    val status: LiveData<LoadStatus>
+        get() = _status
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -93,7 +100,6 @@ class ActivityDetailViewModel(
 
     private fun getSponsorData() {
         dtActivity.value?.let {
-            Log.d("Ming","sponsor: ${it.sponsor}")
             _sponsor = repository.getUser(it.sponsor)
         }
     }
@@ -115,15 +121,18 @@ class ActivityDetailViewModel(
             dtActivity.value = when (result) {
                 is Result.Success -> {
                     _error.value = null
+                    _status.value = LoadStatus.DONE
                     Log.d("Ming","activity: ${result.data}")
                     result.data
                 }
                 is Result.Fail -> {
                     _error.value = result.error
+                    _status.value = LoadStatus.ERROR
                     null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
+                    _status.value = LoadStatus.ERROR
                     null
                 }
                 else -> {

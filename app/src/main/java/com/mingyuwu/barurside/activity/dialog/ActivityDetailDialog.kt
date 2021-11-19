@@ -19,6 +19,7 @@ import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.login.UserManager
 import android.content.Intent
 import android.net.Uri
+import com.mingyuwu.barurside.data.source.LoadStatus
 
 
 class ActivityDetailDialog : DialogFragment() {
@@ -74,22 +75,24 @@ class ActivityDetailDialog : DialogFragment() {
                 if (id == "ActivityFragment") {
                     findNavController().popBackStack()
                 } else {
-                    findNavController().popBackStack()
-//                    findNavController().navigate(
-//                        MainNavigationDirections.navigateToDiscoverDetailFragment(
-//                            theme!!,
-//                            listOf(UserManager.user.value?.id ?: "").toTypedArray(),
-//                            null
-//                        )
-//                    )
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToDiscoverDetailFragment(
+                            theme!!,
+                            listOf(UserManager.user.value?.id ?: "").toTypedArray(),
+                            null
+                        )
+                    )
                 }
                 viewModel.onLeft()
             }
         })
 
+
         // refresh viewModel setting
         viewModel.dtActivity.observe(viewLifecycleOwner, Observer {
             binding.viewModel = viewModel
+            binding.animationLoading.visibility = View.GONE
+            binding.cnstActivityDetail.visibility = View.VISIBLE
         })
 
         // sharing button

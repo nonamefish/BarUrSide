@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -100,7 +101,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController // container for navigation destination
-
+        binding.bottomNav.setupWithNavController(navController)
 
         setContentView(binding.root)
         setupBottomNav()
@@ -109,7 +110,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNav() {
         binding.bottomNav.setOnItemSelectedListener { item ->
-            Log.d("Ming", "item: $item")
             when (item.itemId) {
                 R.id.navigate_activity -> {
                     navController.navigate(MainNavigationDirections.navigateToActivityFragment())

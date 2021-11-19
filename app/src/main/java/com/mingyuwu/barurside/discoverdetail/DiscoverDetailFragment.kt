@@ -195,8 +195,9 @@ class DiscoverDetailFragment() : Fragment() {
                                     (ntfys.type == "activity" && getDiffHour(ntfys.timestamp!!)>0))
                     }.take(20)
                     if (!it.isNullOrEmpty()) {
-                        Log.d("Miing","notificaiotn id: ${list.map { it.id }}")
-                        viewModel.checkNotification(it.filter { it.isCheck == false }.map { it.id })
+                        it.filter { it.isCheck == false }.map { it.id }?.let{
+                            viewModel.checkNotification(it)
+                        }
                     }
                 } else {
                     list = it
