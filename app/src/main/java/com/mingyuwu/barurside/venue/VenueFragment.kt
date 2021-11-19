@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.databinding.FragmentVenueBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
@@ -54,6 +55,7 @@ class VenueFragment : Fragment() {
 
         // set recyclerView Adapter
         binding.venueRtgList.adapter = InfoRatingAdapter()
+        binding.venueMenuList.adapter = MenuAdapter()
         binding.venueImgList.adapter = ImageAdapter(80, 100)
         binding.venueRtgScoreList.adapter = RatingScoreAdapter(15, 15)
 
@@ -84,14 +86,24 @@ class VenueFragment : Fragment() {
             startActivity(dialIntent)
         }
 
+        viewModel.status.observe(viewLifecycleOwner, Observer {
+            if (it == LoadStatus.DONE) {
+                binding.animationLoading.visibility = View.GONE
+                binding.cnstVenue.visibility = View.VISIBLE
+            }
+        })
+
         // set menu on click listener
-        binding.venueMenu.setOnClickListener {
-            findNavController().navigate(
-                MainNavigationDirections.navigateToDiscoverDetailFragment(
-                    Theme.VENUE_MENU, listOf(id!!).toTypedArray(), null
+        viewModel.navigateToMenu.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToDiscoverDetailFragment(
+                        Theme.VENUE_MENU, listOf(id!!).toTypedArray(), null
+                    )
                 )
-            )
-        }
+                viewModel.onLeft()
+            }
+        })
 
         // set view all image's on click listener
         binding.txtVenueImg.setOnClickListener {

@@ -17,6 +17,7 @@ import androidx.core.text.TextUtilsCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.mingyuwu.barurside.data.Drink
 import kotlin.math.roundToInt
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.data.TagFriend
@@ -27,6 +28,7 @@ import com.mingyuwu.barurside.util.Style
 import com.mingyuwu.barurside.util.Util.getDiffDay
 import com.mingyuwu.barurside.util.Util.getDiffHour
 import com.mingyuwu.barurside.util.Util.getDiffMinute
+import com.mingyuwu.barurside.venue.MenuAdapter
 import java.sql.Timestamp
 import java.time.LocalTime
 import java.util.concurrent.TimeUnit
@@ -59,6 +61,9 @@ fun bindRecyclerViewWithListData(recyclerView: RecyclerView, listData: List<Any>
                     }
                     is TagFriendAdapter -> {
                         submitList((listData as List<TagFriend>).toMutableList())
+                    }
+                    is MenuAdapter -> {
+                        submitList((listData as List<Drink>).toMutableList().sortedByDescending { it.avgRating }.take(10))
                     }
                 }
             }
