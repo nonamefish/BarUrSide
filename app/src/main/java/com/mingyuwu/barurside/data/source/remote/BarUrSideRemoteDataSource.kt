@@ -1169,11 +1169,46 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             val activity = document.toObject(Activity::class.java)
                             activity.bookers?.let { bookers ->
                                 if (bookers.any { it.id == userId }) {
+                                    activity.startTimestamp = activity.startTime?.let { Timestamp(it.time) }
+                                    activity.endTimestamp = activity.endTime?.let { Timestamp(it.time) }
                                     list.add(activity)
                                 }
                             }
                         }
                         continuation.resume(Result.Success(list))
+                    } else {
+                        activityTask.exception?.let {
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
+
+    override suspend fun getActivityById(activityId: String): Result<Activity> =
+        suspendCoroutine { continuation ->
+
+            // filter activity
+            FirebaseFirestore.getInstance()
+                .collection(PATH_ACTIVITY)
+                .whereEqualTo("id", activityId)
+                .get()
+                .addOnCompleteListener { activityTask ->
+                    if (activityTask.isSuccessful) {
+                        for (document in activityTask.result!!) {
+                            val activity = document.toObject(Activity::class.java)
+                            activity.startTimestamp = activity.startTime?.let { Timestamp(it.time) }
+                            activity.endTimestamp = activity.endTime?.let { Timestamp(it.time) }
+                            continuation.resume(Result.Success(activity))
+                        }
                     } else {
                         activityTask.exception?.let {
                             continuation.resume(Result.Error(it))

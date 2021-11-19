@@ -41,9 +41,9 @@ fun Fragment.getVmFactory(id: String): InfoViewModelFactory {
     return InfoViewModelFactory(repository, id)
 }
 
-fun Fragment.getVmFactory(activity: Activity): ActivityViewModelFactory {
+fun Fragment.getVmFactory(activity: Activity?, activityId: String?): ActivityViewModelFactory {
     val repository = (requireContext().applicationContext as BarUrSideApplication).repository
-    return ActivityViewModelFactory(repository, activity)
+    return ActivityViewModelFactory(repository, activity, activityId)
 }
 
 fun Fragment.getVmFactory(venue: Venue): EditRatingViewModelFactory {

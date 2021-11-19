@@ -9,14 +9,15 @@ import com.mingyuwu.barurside.data.source.BarUrSideRepository
 @Suppress("UNCHECKED_CAST")
 class ActivityViewModelFactory(
     private val repository: BarUrSideRepository,
-    private val activity: Activity
+    private val activity: Activity?,
+    private val activityId: String?,
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
                 isAssignableFrom(ActivityDetailViewModel::class.java) ->
-                    ActivityDetailViewModel(repository, activity)
+                    ActivityDetailViewModel(repository, activity, activityId)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

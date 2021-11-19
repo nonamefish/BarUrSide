@@ -189,4 +189,8 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     override fun getNotificationChange(userId: String): MutableLiveData<List<Notification>> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getActivityById(activityId: String): Result<Activity> {
+        TODO("Not yet implemented")
+    }
 }

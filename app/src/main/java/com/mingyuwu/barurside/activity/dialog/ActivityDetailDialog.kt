@@ -17,13 +17,17 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.DialogActivityDetailBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.login.UserManager
+import android.content.Intent
+import android.net.Uri
+
 
 class ActivityDetailDialog : DialogFragment() {
 
     private lateinit var binding: DialogActivityDetailBinding
     private val viewModel by viewModels<ActivityDetailViewModel> {
         getVmFactory(
-            ActivityDetailDialogArgs.fromBundle(requireArguments()).activity
+            ActivityDetailDialogArgs.fromBundle(requireArguments()).activity,
+            ActivityDetailDialogArgs.fromBundle(requireArguments()).activityId
         )
     }
 
@@ -42,9 +46,9 @@ class ActivityDetailDialog : DialogFragment() {
 
         // book button on click listener
         binding.btnBookActivity.setOnClickListener {
-            if (viewModel.isBook) {
+            if (viewModel.isBook.value == true) {
                 viewModel.modifyActivity()
-            } else {
+            } else if (viewModel.isBook.value == false) {
                 viewModel.bookActivity()
             }
         }
@@ -63,24 +67,42 @@ class ActivityDetailDialog : DialogFragment() {
 
         // navigate to activity
         viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
-            Log.d("Ming","navigateToDetail : ${viewModel.navigateToDetail.value}")
+            Log.d("Ming", "navigateToDetail : ${viewModel.navigateToDetail.value}")
             it?.let {
                 val id = findNavController().previousBackStackEntry?.destination?.label
 
                 if (id == "ActivityFragment") {
                     findNavController().popBackStack()
                 } else {
-                    findNavController().navigate(
-                        MainNavigationDirections.navigateToDiscoverDetailFragment(
-                            theme!!,
-                            listOf(UserManager.user.value?.id ?: "").toTypedArray(),
-                            null
-                        )
-                    )
+                    findNavController().popBackStack()
+//                    findNavController().navigate(
+//                        MainNavigationDirections.navigateToDiscoverDetailFragment(
+//                            theme!!,
+//                            listOf(UserManager.user.value?.id ?: "").toTypedArray(),
+//                            null
+//                        )
+//                    )
                 }
                 viewModel.onLeft()
             }
         })
+
+        // refresh viewModel setting
+        viewModel.dtActivity.observe(viewLifecycleOwner, Observer {
+            binding.viewModel = viewModel
+        })
+
+        // sharing button
+        binding.imgShare.setOnClickListener {
+            val message =
+                "與您分享品酒活動：${viewModel.dtActivity.value?.name} \n " +
+                        "https://www.barurside.com/activity?id=${viewModel.dtActivity.value?.id}"
+            val share = Intent(Intent.ACTION_SEND)
+            share.type = "text/plain"
+            share.putExtra(Intent.EXTRA_TEXT, message)
+
+            startActivity(Intent.createChooser(share, "Title of the dialog the system will open"))
+        }
 
         return binding.root
     }

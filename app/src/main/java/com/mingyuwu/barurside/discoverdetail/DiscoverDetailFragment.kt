@@ -171,7 +171,7 @@ class DiscoverDetailFragment() : Fragment() {
                     }
                     is Activity -> {
                         findNavController().navigate(
-                            MainNavigationDirections.navigateToActivityDetailDialog(it, theme)
+                            MainNavigationDirections.navigateToActivityDetailDialog(it, null, theme)
                         )
                     }
                 }
@@ -196,7 +196,7 @@ class DiscoverDetailFragment() : Fragment() {
                     }.take(20)
                     if (!it.isNullOrEmpty()) {
                         Log.d("Miing","notificaiotn id: ${list.map { it.id }}")
-                        viewModel.checkNotification(it.map { it.id })
+                        viewModel.checkNotification(it.filter { it.isCheck == false }.map { it.id })
                     }
                 } else {
                     list = it

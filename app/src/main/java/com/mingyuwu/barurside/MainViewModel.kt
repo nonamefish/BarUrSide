@@ -49,4 +49,5 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
             }.size
         }
     }
+
 }

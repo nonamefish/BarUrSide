@@ -276,19 +276,16 @@ fun bindVenueStyle(textView: TextView, style: String?) {
     }
 }
 
-@BindingAdapter("isFull","isBook")
+@BindingAdapter("isFull", "isBook")
 fun bindActivityDetailBtn(button: Button, isFull: Boolean, isBook: Boolean) {
     if (isFull) {
         button.text = "人數已滿"
-        button.setBackgroundResource(R.color.gray_cccccc)
         button.isEnabled = false
-    }else if(isBook){
+    } else if (isBook) {
         button.text = "退出活動"
-        button.setBackgroundResource(R.color.primaryBabyColor)
         button.isEnabled = true
-    }else{
+    } else {
         button.text = "加入活動"
-        button.setBackgroundResource(R.color.primaryDarkColor)
         button.isEnabled = true
     }
 }

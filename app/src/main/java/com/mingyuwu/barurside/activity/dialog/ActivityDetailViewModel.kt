@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Notification
+import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
@@ -18,11 +19,14 @@ import kotlinx.coroutines.launch
 
 class ActivityDetailViewModel(
     private val repository: BarUrSideRepository,
-    val activity: Activity
+    activity: Activity?,
+    val activityId: String?
 ) : ViewModel() {
 
     private val userId = UserManager.user.value?.id!!
-    val isBook = activity.bookers!!.any { it.id == userId }
+
+    var dtActivity = MutableLiveData<Activity>()
+    var isBook = MutableLiveData<Boolean>()
 
     // navigate to activity detail
     var navigateToDetail = MutableLiveData<Any?>()
@@ -47,40 +51,89 @@ class ActivityDetailViewModel(
 
 
     init {
-        getSponsorData()
+        if (activityId != null) {
+            getActivity(activityId)
+        } else {
+            dtActivity.value = activity ?: null
+            checkUserIsBook()
+            getSponsorData()
+        }
+
     }
 
     fun modifyActivity() {
-        coroutineScope.launch {
-            repository.modifyActivity(activity.id, userId)
-            navigateToDetail.value = true
+        dtActivity.value?.let{
+            coroutineScope.launch {
+                repository.modifyActivity(it.id, userId)
+                navigateToDetail.value = true
+            }
         }
     }
 
     fun bookActivity() {
-        coroutineScope.launch {
-            val notification = Notification(
-                "",
-                "activity",
-                "",
-                "activity",
-                calculateDateByPeriod(activity.startTimestamp!!, "DAY", -1),
-                activity.id,
-                userId,
-                "提醒：今日你有一個即將舉行的活動 <b>${activity.name}</b> ",
-                null,
-                false
-            )
-            repository.bookActivity(activity.id, userId, notification)
-            navigateToDetail.value = true
+        dtActivity.value?.let{
+            coroutineScope.launch {
+                val notification = Notification(
+                    "",
+                    "activity",
+                    "",
+                    "activity",
+                    calculateDateByPeriod(it.startTimestamp!!, "DAY", -1),
+                    it.id,
+                    userId,
+                    "提醒：今日你有一個即將舉行的活動 <b>${it.name}</b> ",
+                    null,
+                    false
+                )
+                repository.bookActivity(it.id, userId, notification)
+                navigateToDetail.value = true
+            }
         }
     }
 
     private fun getSponsorData() {
-        _sponsor = repository.getUser(activity.sponsor)
+        dtActivity.value?.let {
+            Log.d("Ming","sponsor: ${it.sponsor}")
+            _sponsor = repository.getUser(it.sponsor)
+        }
+    }
+
+    private fun checkUserIsBook(){
+        dtActivity.value?.let{
+            isBook.value = it.bookers!!.any { it.id == userId }
+        }
     }
 
     fun onLeft() {
         navigateToDetail.value = null
     }
+
+    private fun getActivity(activityId: String){
+        coroutineScope.launch {
+            Log.d("Ming","getActivity: $activityId")
+            val result = repository.getActivityById(activityId)
+            dtActivity.value = when (result) {
+                is Result.Success -> {
+                    _error.value = null
+                    Log.d("Ming","activity: ${result.data}")
+                    result.data
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    null
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    null
+                }
+                else -> {
+                    null
+                }
+            }
+            getSponsorData()
+            checkUserIsBook()
+        }
+    }
+
+
 }

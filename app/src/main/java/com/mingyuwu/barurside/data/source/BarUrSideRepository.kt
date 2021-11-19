@@ -71,4 +71,5 @@ interface BarUrSideRepository {
     suspend fun addVenue(venue: Venue): Result<Boolean>
     suspend fun checkNotification(ids: List<String>): Result<Boolean>
     fun getNotificationChange(userId: String): MutableLiveData<List<Notification>>
+    suspend fun getActivityById(activityId: String): Result<Activity>
 }

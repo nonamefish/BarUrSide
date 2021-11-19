@@ -86,6 +86,7 @@ class ActivityPageFragment() : Fragment() {
                     findNavController().navigate(
                         MainNavigationDirections.navigateToActivityDetailDialog(
                             it,
+                            null,
                             Theme.NONE
                         )
                     )

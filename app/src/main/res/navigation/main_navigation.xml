@@ -155,10 +155,15 @@
         android:label="ActivityDetailDialog">
         <argument
             android:name="activity"
-            app:argType="com.mingyuwu.barurside.data.Activity" />
+            app:argType="com.mingyuwu.barurside.data.Activity"
+            app:nullable="true"/>
+        <argument
+            android:name="activityId"
+            app:argType="string"
+            app:nullable="true"/>
         <argument
             android:name="theme"
-            app:argType="com.mingyuwu.barurside.discover.Theme" />
+            app:argType="com.mingyuwu.barurside.discover.Theme"/>
     </dialog>
 
     <action

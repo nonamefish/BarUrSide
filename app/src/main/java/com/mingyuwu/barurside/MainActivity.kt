@@ -1,11 +1,18 @@
 package com.mingyuwu.barurside
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.verify.domain.DomainVerificationManager
+import android.content.pm.verify.domain.DomainVerificationUserState
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import com.mingyuwu.barurside.login.UserManager
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -29,10 +36,13 @@ class MainActivity : AppCompatActivity() {
     private var userToken = UserManager.userToken
     val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = Firebase.auth
 
+        Log.d("Ming","intent: $intent")
+
+        auth = Firebase.auth
 
         // setting binding
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -167,19 +177,45 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onGetUserDataFinished(){
+    fun onGetUserDataFinished() {
         UserManager.user.observe(this, Observer {
-            it?.let{
+            it?.let {
                 viewModel.getNotification(it.id)
                 binding.viewModel = viewModel
                 startService(Intent(this, BarUrSideService::class.java))
+                Log.d("Ming","intent: $intent")
+                intent.data?.let{
+                    handleIntent(intent)
+                }
             }
         })
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("Ming","MainActivity onDestroy")
+    private fun handleIntent(intent: Intent) {
+        val appLinkAction = intent.action
+        val appLinkData: Uri? = intent.data
+        if (Intent.ACTION_VIEW == appLinkAction) {
+            appLinkData?.lastPathSegment?.let {
+                when (it) {
+                    "activity" -> {
+                        val id = intent.data?.getQueryParameter("id")
+                        navController.navigate(
+                            MainNavigationDirections.navigateToActivityDetailDialog(
+                                null,
+                                id,
+                                Theme.NONE
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val intent = intent
+        onNewIntent(intent)
     }
 }

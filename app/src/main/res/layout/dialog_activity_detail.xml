@@ -35,6 +35,32 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0">
 
+            <TextView
+                android:id="@+id/activity_detail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@{viewModel.dtActivity.name}"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="酒中豪傑 Crazy Friday" />
+
+            <ImageView
+                android:id="@+id/img_share"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="18dp"
+                android:foregroundGravity="right"
+                android:padding="6dp"
+                android:src="@drawable/ic_baseline_share_24"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_detail_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_detail_name" />
+
             <ImageView
                 android:id="@+id/img_add_activity_time"
                 android:layout_width="24dp"
@@ -47,10 +73,22 @@
                 app:layout_constraintTop_toTopOf="@+id/txt_time_from" />
 
             <TextView
+                android:id="@+id/txt_time_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="開始："
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toEndOf="@+id/img_add_activity_time"
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_name" />
+
+            <TextView
                 android:id="@+id/activity_detail_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:activityTime="@{viewModel.activity.startTimestamp}"
+                app:activityTime="@{viewModel.dtActivity.startTimestamp}"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_time_from"
                 app:layout_constraintStart_toEndOf="@+id/txt_time_from"
                 app:layout_constraintTop_toTopOf="@+id/txt_time_from"
@@ -69,41 +107,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/activity_detail_time" />
 
             <TextView
-                android:id="@+id/txt_time_from"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="開始："
-                android:textSize="14sp"
-                android:textStyle="normal"
-                app:layout_constraintStart_toEndOf="@+id/img_add_activity_time"
-                app:layout_constraintTop_toBottomOf="@+id/activity_detail_name" />
-
-            <TextView
                 android:id="@+id/activity_detail_endtime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                app:activityTime="@{viewModel.activity.endTimestamp}"
+                app:activityTime="@{viewModel.dtActivity.endTimestamp}"
                 app:layout_constraintBottom_toBottomOf="@+id/activity_time_dash"
                 app:layout_constraintStart_toEndOf="@+id/activity_time_dash"
                 app:layout_constraintTop_toTopOf="@+id/activity_time_dash"
                 tools:text="2021/10/1 下午 3:00" />
-
-            <TextView
-                android:id="@+id/activity_detail_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@{viewModel.activity.name}"
-                android:textColor="@color/black_3f3a3a"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="酒中豪傑 Crazy Friday" />
 
             <ImageView
                 android:id="@+id/img_add_activity_address"
@@ -121,33 +133,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{viewModel.activity.address}"
+                android:text="@{viewModel.dtActivity.address}"
                 app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_address"
                 app:layout_constraintStart_toEndOf="@+id/img_add_activity_address"
                 app:layout_constraintTop_toTopOf="@+id/img_add_activity_address"
                 tools:text="新北市新莊區中正路1號" />
-
-            <TextView
-                android:id="@+id/activity_detail_limit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@{@string/activity_detail_limit(viewModel.activity.bookers.size(), viewModel.activity.peopleLimit)}"
-                app:layout_constraintBottom_toBottomOf="@+id/img_activity_detail"
-                app:layout_constraintStart_toEndOf="@+id/img_activity_detail"
-                app:layout_constraintTop_toTopOf="@+id/img_activity_detail"
-                tools:text="11 / 20" />
-
-            <TextView
-                android:id="@+id/activity_detail_main"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@{viewModel.activity.mainDrinking}"
-                app:layout_constraintBottom_toBottomOf="@+id/img_activity_detail_main"
-                app:layout_constraintStart_toEndOf="@+id/img_activity_detail_main"
-                app:layout_constraintTop_toTopOf="@+id/img_activity_detail_main"
-                tools:text="雞尾酒" />
 
             <ImageView
                 android:id="@+id/img_activity_detail"
@@ -160,6 +150,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_add_activity_address" />
 
+            <TextView
+                android:id="@+id/activity_detail_limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{@string/activity_detail_limit(viewModel.dtActivity.bookers.size(), viewModel.dtActivity.peopleLimit)}"
+                app:layout_constraintBottom_toBottomOf="@+id/img_activity_detail"
+                app:layout_constraintStart_toEndOf="@+id/img_activity_detail"
+                app:layout_constraintTop_toTopOf="@+id/img_activity_detail"
+                tools:text="11 / 20" />
+
             <ImageView
                 android:id="@+id/img_activity_detail_main"
                 android:layout_width="24dp"
@@ -170,6 +171,17 @@
                 android:backgroundTint="@color/black_3f3a3a"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_activity_detail" />
+
+            <TextView
+                android:id="@+id/activity_detail_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{viewModel.dtActivity.mainDrinking}"
+                app:layout_constraintBottom_toBottomOf="@+id/img_activity_detail_main"
+                app:layout_constraintStart_toEndOf="@+id/img_activity_detail_main"
+                app:layout_constraintTop_toTopOf="@+id/img_activity_detail_main"
+                tools:text="雞尾酒" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraint_sponsor_info"
@@ -194,6 +206,16 @@
                     android:backgroundTint="@color/black_3f3a3a"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txt_activity_detail_sponsor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="發起人"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_activity_detail_sponsor"
+                    app:layout_constraintStart_toEndOf="@+id/img_activity_detail_sponsor"
+                    app:layout_constraintTop_toTopOf="@+id/img_activity_detail_sponsor" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_base_img"
@@ -280,16 +302,6 @@
                     app:layout_constraintStart_toEndOf="@+id/user_postimg_cnt"
                     app:layout_constraintTop_toTopOf="@+id/user_postimg_cnt" />
 
-                <TextView
-                    android:id="@+id/txt_activity_detail_sponsor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="發起人"
-                    app:layout_constraintBottom_toBottomOf="@+id/img_activity_detail_sponsor"
-                    app:layout_constraintStart_toEndOf="@+id/img_activity_detail_sponsor"
-                    app:layout_constraintTop_toTopOf="@+id/img_activity_detail_sponsor" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
@@ -303,10 +315,10 @@
                 android:layout_marginBottom="8dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
-                app:isFull="@{viewModel.activity.bookers.size()==viewModel.activity.peopleLimit}"
-                app:isBook="@{viewModel.isBook}"
                 android:textColor="@color/white_ffffff"
                 android:textSize="14sp"
+                app:isBook="@{viewModel.isBook}"
+                app:isFull="@{viewModel.dtActivity.bookers.size()==viewModel.dtActivity.peopleLimit}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
