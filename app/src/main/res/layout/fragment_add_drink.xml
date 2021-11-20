@@ -12,7 +12,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <TextView
             android:id="@+id/txt_venue_name"
@@ -44,13 +47,14 @@
         <EditText
             android:id="@+id/edittxt_obj_name"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="32dp"
             android:background="@drawable/border_edit_text"
             android:ems="10"
             android:hint="輸入酒項名稱"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine"
             android:paddingStart="8dp"
             android:text="@={viewModel.name}"
             android:textSize="14dp"
@@ -137,7 +141,8 @@
         <EditText
             android:id="@+id/edittxt_obj_desc"
             android:layout_width="0dp"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="32dp"
@@ -180,7 +185,8 @@
         <Spinner
             android:id="@+id/spinner_object_type"
             android:layout_width="0dp"
-            android:layout_height="36dp"
+            android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="32dp"
             android:background="@drawable/border_edit_text"

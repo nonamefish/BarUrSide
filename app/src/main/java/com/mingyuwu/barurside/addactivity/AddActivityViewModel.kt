@@ -48,7 +48,7 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
 
 
     private fun convertStringToTimestamp(time: String): Timestamp {
-        val dateFormat = SimpleDateFormat("yyyy/MM/dd  a HH:mm", Locale.TAIWAN)
+        val dateFormat = SimpleDateFormat("yyyy/MM/dd a hh:mm", Locale.TAIWAN)
         val parsedDate = dateFormat.parse(time)
         return Timestamp(parsedDate.time)
     }
@@ -72,7 +72,7 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
                 "activity",
                 "",
                 "activity",
-                calculateDateByPeriod(convertStringToTimestamp(startTime.value!!),"DAY",-1),
+                calculateDateByPeriod(convertStringToTimestamp(startTime.value!!), "DAY", -1),
                 "",
                 userId,
                 "提醒：今日你有一個即將舉行的活動 <b>${name.value!!}</b>",
@@ -100,5 +100,9 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
             return false
         }
         return true
+    }
+
+    fun checkTimeRange(): Boolean {
+        return convertStringToTimestamp(startTime.value!!).time < convertStringToTimestamp(endTime.value!!).time
     }
 }

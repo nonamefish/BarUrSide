@@ -37,7 +37,7 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
             binding.rtgOrder = rtgOrder
 
             // set recyclerView adapter
-            val imgAdapter = BitmapAdapter(60, 70, rtgOrder, viewModel)
+            val imgAdapter = BitmapAdapter(80, 100, rtgOrder, viewModel)
             val tagFrdAdapter = TagFriendAdapter()
             binding.ratingAddImgList.adapter = imgAdapter
             binding.ratingTagFrdsList.adapter = tagFrdAdapter
@@ -48,13 +48,15 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
                 viewModel.isUploadImgBtn.value = true
                 viewModel.clickPosition.value = rtgOrder
             }
-
+            binding.ratingAddImg.setOnClickListener {
+                viewModel.isUploadImgBtn.value = true
+                viewModel.clickPosition.value = rtgOrder
+            }
 
             // tag friend : set adapter and item click listener
             viewModel.frdList.observe(binding.lifecycleOwner!!, androidx.lifecycle.Observer {
 
-                val friendList = viewModel.frdList.value?.map { "${it.name} (${it.id}) " }
-                Log.d("Ming","friendlist: $friendList")
+                val friendList = viewModel.frdList.value?.map { "${it.name} (${it.id})" }
                 val adapter = ArrayAdapter(
                     binding.root.context,
                     R.layout.spinner_friend_list,
@@ -68,6 +70,7 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
                     val pos = friendList.indexOf(selected)
                     binding.btnTagFrd.setText("")
                     viewModel.addTagFrd(rtgOrder, TagFriend(it[pos].id, it[pos].name))
+                    adapter.remove("${it[pos].name} (${it[pos].id})")
                 }
             })
         }
