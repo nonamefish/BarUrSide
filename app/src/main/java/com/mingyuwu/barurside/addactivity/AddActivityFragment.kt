@@ -228,16 +228,6 @@ class AddActivityFragment : Fragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    override fun onStart() {
-        super.onStart()
-        val navController = findNavController()
-        Log.d("Ming", "stack: " + navController.previousBackStackEntry?.destination?.label)
-        if (navController.previousBackStackEntry?.destination?.label == "ActivityDetailDialog") {
-            navController.popBackStack(R.id.activityFragment, true)
-        }
-//        findNavController().backStack.remove(navController.currentBackStackEntry)
-    }
-
     private fun postRatingDialog(postDialog: AlertDialog.Builder): AlertDialog {
         // set dialog
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_post_rating, null)

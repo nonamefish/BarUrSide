@@ -163,19 +163,21 @@ class DiscoverDetailFragment() : Fragment() {
                         findNavController().navigate(
                             MainNavigationDirections.navigateToVenueFragment(it.id)
                         )
+                        viewModel.onLeft()
                     }
                     is Drink -> {
                         findNavController().navigate(
                             MainNavigationDirections.navigateToDrinkFragment(it.id)
                         )
+                        viewModel.onLeft()
                     }
                     is Activity -> {
                         findNavController().navigate(
                             MainNavigationDirections.navigateToActivityDetailDialog(it, null, theme)
                         )
+                        viewModel.onLeft()
                     }
                 }
-                viewModel.onLeft()
             }
         })
 

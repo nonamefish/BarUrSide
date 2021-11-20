@@ -198,11 +198,13 @@
 
     <action
         android:id="@+id/navigate_to_activity_fragment"
-        app:destination="@id/activityFragment"></action>
+        app:destination="@id/activityFragment">
+    </action>
 
     <action
         android:id="@+id/navigate_to_add_activity_fragment"
-        app:destination="@id/addActivityFragment"></action>
+        app:destination="@id/addActivityFragment">
+    </action>
 
     <action
         android:id="@+id/navigate_to_activity_detail_dialog"
@@ -211,7 +213,8 @@
 
     <action
         android:id="@+id/navigate_to_profile_fragment"
-        app:destination="@id/profileFragment"></action>
+        app:destination="@id/profileFragment">
+    </action>
 
     <action
         android:id="@+id/navigate_to_login_fragment"

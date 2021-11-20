@@ -112,7 +112,5 @@ class ActivityDetailDialog : DialogFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        this.dismiss()
     }
-
 }

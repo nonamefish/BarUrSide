@@ -128,4 +128,8 @@ class ActivityPageViewModel(
         }
     }
 
+    fun onLeft(){
+        navigateToDetail.value = null
+    }
+
 }
