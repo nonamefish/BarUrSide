@@ -101,8 +101,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cnstrt_recent_activity"
             android:layout_width="match_parent"
@@ -164,9 +162,11 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
+                android:padding="1dp"
                 android:src="@drawable/ic_baseline_storefront_24"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/gray_606060" />
 
             <TextView
                 android:id="@+id/txt_around_venue"
@@ -209,9 +209,11 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
+                android:padding="1dp"
                 android:src="@drawable/ic_baseline_local_fire_department_24"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/gray_606060" />
 
             <TextView
                 android:id="@+id/txt_hot_drink"
@@ -255,9 +257,11 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_baseline_local_fire_department_24"
+                android:padding="4dp"
+                android:src="@drawable/ic_baseline_trend_24"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/gray_606060" />
 
             <TextView
                 android:id="@+id/txt_hot_venue"
@@ -301,9 +305,11 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
+                android:padding="1dp"
                 android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/gray_606060" />
 
             <TextView
                 android:id="@+id/txt_high_rate_drink"
@@ -346,9 +352,10 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
+                android:src="@drawable/ic_outline_hotel_class_24"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/gray_606060" />
 
             <TextView
                 android:id="@+id/txt_high_rate_venue"
@@ -386,7 +393,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_baseline_add_24"
-            app:tint="@android:color/white"/>
+            app:tint="@android:color/white" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

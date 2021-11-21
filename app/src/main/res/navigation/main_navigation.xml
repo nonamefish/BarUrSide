@@ -183,7 +183,9 @@
 
     <action
         android:id="@+id/navigate_to_venue_fragment"
-        app:destination="@id/venueFragment">
+        app:destination="@id/venueFragment"
+        app:popUpTo="@id/venueFragment"
+        app:popUpToInclusive="true">
     </action>
 
     <action
@@ -198,7 +200,9 @@
 
     <action
         android:id="@+id/navigate_to_activity_fragment"
-        app:destination="@id/activityFragment">
+        app:destination="@id/activityFragment"
+        app:popUpTo="@id/main_navigation"
+        app:popUpToInclusive="true">
     </action>
 
     <action
@@ -213,7 +217,9 @@
 
     <action
         android:id="@+id/navigate_to_profile_fragment"
-        app:destination="@id/profileFragment">
+        app:destination="@id/profileFragment"
+        app:popUpTo="@id/main_navigation"
+        app:popUpToInclusive="true">
     </action>
 
     <action
@@ -226,22 +232,33 @@
 
     <action
         android:id="@+id/navigate_to_map_fragment"
-        app:destination="@id/mapFragment"></action>
+        app:destination="@id/mapFragment"
+        app:popUpTo="@id/main_navigation"
+        app:popUpToInclusive="true">
+    </action>
 
     <action
         android:id="@+id/navigate_to_discover_fragment"
-        app:destination="@id/discoverFragment"></action>
+        app:destination="@id/discoverFragment"
+        app:popUpTo="@id/main_navigation"
+        app:popUpToInclusive="true">
+    </action>
 
     <action
         android:id="@+id/navigate_to_collect_fragment"
-        app:destination="@id/collectFragment"></action>
+        app:destination="@id/collectFragment"
+        app:popUpTo="@id/main_navigation"
+        app:popUpToInclusive="true">
+    </action>
 
     <action
         android:id="@+id/navigate_to_add_drink_fragment"
-        app:destination="@id/addDrinkFragment"></action>
+        app:destination="@id/addDrinkFragment">
+    </action>
 
     <action
         android:id="@+id/navigate_to_add_venue_fragment"
-        app:destination="@id/addVenueFragment"></action>
+        app:destination="@id/addVenueFragment">
+    </action>
 
 </navigation>
