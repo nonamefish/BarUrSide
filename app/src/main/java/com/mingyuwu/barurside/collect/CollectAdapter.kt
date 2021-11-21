@@ -7,13 +7,19 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mingyuwu.barurside.data.Collect
+import com.google.android.gms.maps.model.LatLng
+import com.google.common.math.DoubleMath.roundToInt
+import com.google.maps.android.SphericalUtil
+import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.ItemCollectBinding
-import com.mingyuwu.barurside.databinding.ItemInfoRatingBinding
-import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
+import com.mingyuwu.barurside.util.Util.getString
+import kotlin.math.round
+import kotlin.math.roundToInt
+
 
 const val TAG = "CollectGridAdapter"
 
@@ -43,12 +49,43 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
                     binding.venue = collect
                     binding.isVenue = true
                     binding.position = adapterPosition
+                    viewModel.location.value?.let{
+                        binding.distance =
+                            SphericalUtil.computeDistanceBetween(
+                                it,
+                                LatLng(collect.latitude, collect.longitude)
+                            ).roundToInt()
+                    }
+                    binding.rtgInfo = when(collect.rtgCount){
+                         0L -> {
+                            "無評論"
+                        }
+                        else -> {
+                            BarUrSideApplication.instance.getString(
+                                R.string.venue_rating_info_view,
+                                collect.avgRating,
+                                collect.rtgCount
+                            )
+                        }
+                    }
                 }
                 is Drink -> {
                     binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
                     binding.drink = collect
                     binding.isVenue = false
                     binding.position = adapterPosition
+                    binding.rtgInfo = when(collect.rtgCount){
+                        0L -> {
+                            "無評論"
+                        }
+                        else -> {
+                            BarUrSideApplication.instance.getString(
+                                R.string.venue_rating_info_view,
+                                collect.avgRating,
+                                collect.rtgCount
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -95,7 +132,7 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
             }
         }
 
-        holder.bind(product,viewModel)
+        holder.bind(product, viewModel)
     }
 
     override fun getItemCount(): Int {

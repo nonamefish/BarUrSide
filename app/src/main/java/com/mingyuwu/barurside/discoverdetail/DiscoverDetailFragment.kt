@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
@@ -62,7 +63,6 @@ class DiscoverDetailFragment() : Fragment() {
         )
     }
 
-    private val mainViewModel by viewModels<MainViewModel> { getVmFactory() }
     private lateinit var adapter: ListAdapter<Any, RecyclerView.ViewHolder>
 
 
@@ -116,9 +116,9 @@ class DiscoverDetailFragment() : Fragment() {
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
             Theme.AROUND_VENUE -> {
-                viewModel.mLocation = mainViewModel.location
+                viewModel.mLocation = (requireActivity() as MainActivity).mlocation
 
-                if (mainViewModel.location.value == null) {
+                if (viewModel.mLocation.value == null) {
                     getLocationPermission()
                 }
                 adapter = DiscoverVenueAdapter(viewModel)
@@ -306,28 +306,33 @@ class DiscoverDetailFragment() : Fragment() {
                 //更新次數，若沒設定，會持續更新
                 locationRequest.numUpdates = 1
 
-                // set request Location Updates
-                mFusedLocationProviderClient.requestLocationUpdates(
-                    locationRequest,
-                    object : LocationCallback() {
-                        override fun onLocationResult(locationResult: LocationResult?) {
-                            locationResult ?: return
-                            mainViewModel.location.value =
-                                LatLng(
-                                    locationResult.lastLocation.latitude,
-                                    locationResult.lastLocation.longitude
-                                )
-                        }
+                Log.d("Ming", "getDeviceLocation")
 
-                    },
-                    null
-                )
+                if ((requireActivity() as MainActivity).mlocation.value == null) {
+                    // set request Location Updates
+                    mFusedLocationProviderClient.requestLocationUpdates(
+                        locationRequest,
+                        object : LocationCallback() {
+                            override fun onLocationResult(locationResult: LocationResult?) {
+                                locationResult ?: return
+                                (requireActivity() as MainActivity).mlocation.value =
+                                    LatLng(
+                                        25.042788652368802, 121.56507169645725
+                                    )
+
+                                Log.d("Ming", "requestLocationUpdates")
+                            }
+                        },
+                        null
+                    )
+                }
             } else {
                 getLocationPermission()
             }
         } catch (e: SecurityException) {
             Log.e("Ming: %s", e.message, e)
         }
+
     }
 }
 
