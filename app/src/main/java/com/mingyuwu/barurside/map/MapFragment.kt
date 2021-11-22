@@ -24,20 +24,16 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentMapBinding
 import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.*
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.MainViewModel
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.permissionx.guolindev.PermissionX
 
-
-const val REQUEST_LOCATION_PERMISSION = 1
 const val REQUEST_ENABLE_GPS = 2
 
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
@@ -67,8 +63,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
         // set variable for get location info
         mContext = binding.root.context
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext)
-        getLocationPermission()
-
 
         val mapFragment =
             childFragmentManager.findFragmentById(binding.googleMap.id) as SupportMapFragment
@@ -157,7 +151,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             rlp.setMargins(0, 0, 30, 280)
         }
 
-        getDeviceLocation()
+        getLocationPermission()
     }
 
 
@@ -192,43 +186,26 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
     private fun getDeviceLocation() {
         try {
             if (locationPermissionGranted) {
-                val locationRequest = LocationRequest()
-                locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
-                //更新次數，若沒設定，會持續更新
-                locationRequest.numUpdates = 1
+                mFusedLocationProviderClient.lastLocation
+                    .addOnCompleteListener {
+                        // google map current location (blue point)
+                        val location = it.result
+                        (requireActivity() as MainActivity).mlocation.value =
+                            LatLng(location.latitude, location.longitude)
 
-                Log.d("Ming", "getDeviceLocation")
+                        // get near bar
+                        viewModel.getVenueByLocation((requireActivity() as MainActivity).mlocation.value!!)
 
-                if ((requireActivity() as MainActivity).mlocation.value == null) {
-                    // set request Location Updates
-                    mFusedLocationProviderClient.requestLocationUpdates(
-                        locationRequest,
-                        object : LocationCallback() {
-                            override fun onLocationResult(locationResult: LocationResult?) {
-                                locationResult ?: return
-                                (requireActivity() as MainActivity).mlocation.value =
-                                    LatLng(
-                                        locationResult.lastLocation.latitude,
-                                        locationResult.lastLocation.longitude,
-                                    )
-
-                                // get near bar
-                                viewModel.getVenueByLocation((requireActivity() as MainActivity).mlocation.value!!)
-
-                                // google map current location (blue point)
-                                mMap.isMyLocationEnabled = true
-                                mMap.uiSettings.isMyLocationButtonEnabled = true
-                                mMap.moveCamera(
-                                    CameraUpdateFactory.newLatLngZoom(
-                                        (requireActivity() as MainActivity).mlocation.value, 15f
-                                    )
-                                )
-                            }
-                        },
-                        null
-                    )
-                }
+                        // set map current location and icon
+                        mMap.isMyLocationEnabled = true
+                        mMap.uiSettings.isMyLocationButtonEnabled = true
+                        mMap.moveCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                (requireActivity() as MainActivity).mlocation.value, 15f
+                            )
+                        )
+                    }
             } else {
                 getLocationPermission()
             }
@@ -291,7 +268,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                 .setNegativeButton("取消", null)
                 .show()
         } else {
-//            getDeviceLocation()
+            getDeviceLocation()
             Log.d("Ming", "已獲取到位置權限且GPS已開啟，可以準備開始獲取經緯度")
         }
     }

@@ -5,8 +5,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
@@ -15,24 +13,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.GridLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.MainViewModel
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Drink
@@ -45,7 +37,6 @@ import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
 import com.mingyuwu.barurside.profile.FriendAdapter
 import com.mingyuwu.barurside.rating.ImageAdapter
-import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.getDiffHour
 import com.permissionx.guolindev.PermissionX
 
@@ -55,6 +46,7 @@ class DiscoverDetailFragment() : Fragment() {
     private lateinit var binding: FragmentDiscoverDetailBinding
     private var locationPermissionGranted = false
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var adapter: ListAdapter<Any, RecyclerView.ViewHolder>
     private val viewModel by viewModels<DiscoverDetailViewModel> {
         getVmFactory(
             DiscoverDetailFragmentArgs.fromBundle(requireArguments()).id?.toList(),
@@ -62,8 +54,6 @@ class DiscoverDetailFragment() : Fragment() {
             DiscoverDetailFragmentArgs.fromBundle(requireArguments()).filterParameter,
         )
     }
-
-    private lateinit var adapter: ListAdapter<Any, RecyclerView.ViewHolder>
 
 
     override fun onCreateView(
@@ -191,13 +181,13 @@ class DiscoverDetailFragment() : Fragment() {
                 var list: List<Any>?
                 // set notification value
                 if (theme == Theme.NOTIFICATION) {
-                    list = (it as List<Notification>).filter { ntfys->
+                    list = (it as List<Notification>).filter { ntfys ->
                         ntfys.toId == UserManager.user.value!!.id &&
-                            (ntfys.type == "friend"||
-                                    (ntfys.type == "activity" && getDiffHour(ntfys.timestamp!!)>0))
+                                (ntfys.type == "friend" ||
+                                        (ntfys.type == "activity" && getDiffHour(ntfys.timestamp!!) > 0))
                     }.take(20)
                     if (!it.isNullOrEmpty()) {
-                        it.filter { it.isCheck == false }.map { it.id }?.let{
+                        it.filter { it.isCheck == false }.map { it.id }?.let {
                             viewModel.checkNotification(it)
                         }
                     }
@@ -300,29 +290,13 @@ class DiscoverDetailFragment() : Fragment() {
         try {
             if (locationPermissionGranted
             ) {
-                val locationRequest = LocationRequest()
-                locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-
-                //更新次數，若沒設定，會持續更新
-                locationRequest.numUpdates = 1
-
-                if ((requireActivity() as MainActivity).mlocation.value == null) {
-                    // set request Location Updates
-                    mFusedLocationProviderClient.requestLocationUpdates(
-                        locationRequest,
-                        object : LocationCallback() {
-                            override fun onLocationResult(locationResult: LocationResult?) {
-                                locationResult ?: return
-                                (requireActivity() as MainActivity).mlocation.value =
-                                    LatLng(
-                                        locationResult.lastLocation.latitude,
-                                        locationResult.lastLocation.longitude,
-                                    )
-                            }
-                        },
-                        null
-                    )
-                }
+                mFusedLocationProviderClient.lastLocation
+                    .addOnCompleteListener {
+                        // google map current location (blue point)
+                        val location = it.result
+                        (requireActivity() as MainActivity).mlocation.value =
+                            LatLng(location.latitude, location.longitude)
+                    }
             } else {
                 getLocationPermission()
             }
