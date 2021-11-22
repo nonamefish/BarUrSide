@@ -3,6 +3,7 @@ package com.mingyuwu.barurside.filter
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mingyuwu.barurside.util.Style
 
 class FilterViewModel() : ViewModel() {
 
@@ -13,16 +14,20 @@ class FilterViewModel() : ViewModel() {
     val choiceDistance = MutableLiveData<Double?>()
 
 
-    fun navigateToResult(){
+    fun navigateToResult() {
         navigateToResult.value = FilterParameter(
             choiceLevel.value ?: null,
             choiceCategory.value ?: null,
-            choiceStyle.value ?: null,
+            if (choiceStyle.value.isNullOrEmpty()) {
+                Style.values().map { it.name }
+            } else {
+                choiceStyle.value
+            },
             choiceDistance.value ?: null
         )
     }
 
-    fun onLeft(){
+    fun onLeft() {
         navigateToResult.value = null
     }
 

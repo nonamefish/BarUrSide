@@ -198,7 +198,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun getVenueByFilter(filter: FilterParameter): Result<List<Venue>> =
         suspendCoroutine { continuation ->
-
+            Log.d("Ming", "venue filter: ${filter}")
             val list = mutableListOf<Venue>()
 
             // filter venue
@@ -208,17 +208,21 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .whereEqualTo("level", filter.level)
                 .get()
                 .addOnCompleteListener { venueTask ->
+                    Log.d("Ming", "venueTask: ${venueTask.result.size()}")
                     var venueCnt = 0
                     if (venueTask.isSuccessful) {
                         for (document in venueTask.result!!) {
                             val venue = document.toObject(Venue::class.java)
-
-                            if (filter.category == null) {
+                            Log.d("Ming", "venue: ${venue.name}")
+                            if (filter.category.isNullOrEmpty()) {
                                 list.add(venue)
-
+                                venueCnt += 1
+                                if (venueCnt == venueTask.result.size()) {
+                                    continuation.resume(Result.Success(list))
+                                }
                             } else {
 
-                                Log.d("Ming", "venue: ${venue.name}")
+
                                 // filter drink category
                                 FirebaseFirestore.getInstance()
                                     .collection(PATH_DRINK)

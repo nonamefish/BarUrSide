@@ -47,10 +47,10 @@ class FilterFragment : BottomSheetDialogFragment() {
 
             if (viewModel.checkValue()) { // user have set field
                 viewModel.choiceStyle.value = binding.chipGroupStyle.checkedChipIds.map {
-                    binding.chipGroupStyle.resources.getResourceEntryName(it)
+                    binding.chipGroupStyle.resources.getResourceEntryName(it).uppercase()
                 }
                 viewModel.choiceCategory.value = binding.chipGroupCategory.checkedChipIds.map {
-                    binding.chipGroupStyle.resources.getResourceEntryName(it)
+                    binding.chipGroupStyle.resources.getResourceEntryName(it).uppercase()
                 }
                 viewModel.navigateToResult()
             } else {

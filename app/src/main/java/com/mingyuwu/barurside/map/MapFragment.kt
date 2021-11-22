@@ -152,7 +152,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             rlp.setMargins(0, 0, 30, 280)
         }
 
-
         getLocationPermission()
     }
 
@@ -201,16 +200,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                             locationResult ?: return
                             mainViewModel.location.value =
                                 LatLng(
-                                    25.042788652368802, 121.56507169645725
+                                    locationResult.lastLocation.latitude,
+                                    locationResult.lastLocation.longitude
                                 )
-
-//                                LatLng(
-//                                    locationResult.lastLocation.latitude,
-//                                    locationResult.lastLocation.longitude
-//                                )
-
-
-
 
                             // get near bar
                             viewModel.getVenueByLocation(mainViewModel.location.value!!)
@@ -218,11 +210,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                             // google map current location (blue point)
                             mMap.isMyLocationEnabled = true
                             mMap.uiSettings.isMyLocationButtonEnabled = true
-                            mMap?.moveCamera(
-                                CameraUpdateFactory.newLatLngZoom(
-                                    mainViewModel.location.value, 15f
-                                )
-                            )
+//                            mMap?.moveCamera(
+//                                CameraUpdateFactory.newLatLngZoom(
+//                                    mainViewModel.location.value, 15f
+//                                )
+//                            )
                         }
 
                     },
