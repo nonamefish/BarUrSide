@@ -13,12 +13,15 @@ import com.mingyuwu.barurside.login.UserManager
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -34,14 +37,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    var mlocation = MutableLiveData<LatLng>()
     private var userToken = UserManager.userToken
     val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.d("Ming","intent: $intent")
 
         auth = Firebase.auth
 
@@ -111,23 +113,23 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNav() {
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.navigate_activity -> {
+                R.id.activityFragment -> {
                     navController.navigate(MainNavigationDirections.navigateToActivityFragment())
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigate_map -> {
+                R.id.mapFragment -> {
                     navController.navigate(MainNavigationDirections.navigateToMapFragment())
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigate_discover -> {
+                R.id.discoverFragment -> {
                     navController.navigate(MainNavigationDirections.navigateToDiscoverFragment())
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigate_collect -> {
+                R.id.collectFragment -> {
                     navController.navigate(MainNavigationDirections.navigateToCollectFragment())
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigate_profile -> {
+                R.id.profileFragment -> {
                     navController.navigate(
                         MainNavigationDirections.navigateToProfileFragment(UserManager.user.value?.id)
                     )
@@ -183,8 +185,8 @@ class MainActivity : AppCompatActivity() {
                 viewModel.getNotification(it.id)
                 binding.viewModel = viewModel
                 startService(Intent(this, BarUrSideService::class.java))
-                Log.d("Ming","intent: $intent")
-                intent.data?.let{
+                Log.d("Ming", "intent: $intent")
+                intent.data?.let {
                     handleIntent(intent)
                 }
             }
@@ -217,5 +219,9 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         val intent = intent
         onNewIntent(intent)
+    }
+
+    fun setLocation(location: LatLng) {
+        mlocation.value = location
     }
 }

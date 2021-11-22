@@ -67,7 +67,7 @@ class ProfileFragment : Fragment() {
         // set tool bar title by user display name
         viewModel.userInfo.observe(viewLifecycleOwner, Observer {
             it?.let {
-                toolbarTitle.text = viewModel.userInfo.value?.name
+                toolbarTitle.text = viewModel.userInfo.value?.name ?: ""
             }
         })
 
@@ -185,7 +185,7 @@ class ProfileFragment : Fragment() {
         val dialog = alertDialog.create()
 
         // set dialog content
-        val titleDialog = mView!!.findViewById<TextView>(R.id.dialog_tiltle)
+        val titleDialog = mView!!.findViewById<TextView>(R.id.dialog_title)
         titleDialog.text = "與 ${viewModel.userInfo.value?.name} 解除朋友關係?"
         val txtDialog = mView!!.findViewById<TextView>(R.id.dialog_content)
         txtDialog.text = """取消朋友關係的人將無法：

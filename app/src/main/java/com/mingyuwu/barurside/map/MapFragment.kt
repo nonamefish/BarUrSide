@@ -29,6 +29,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.*
+import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.MainViewModel
 import com.mingyuwu.barurside.data.Venue
@@ -47,8 +48,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private var locationPermissionGranted = false
     private val viewModel by viewModels<MapViewModel> { getVmFactory() }
-    private val mainViewModel by viewModels<MainViewModel> { getVmFactory() }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,12 +63,17 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
         if (container != null) {
             parent = container
         }
+
+        // set variable for get location info
         mContext = binding.root.context
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext)
+        getLocationPermission()
+
 
         val mapFragment =
             childFragmentManager.findFragmentById(binding.googleMap.id) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
 
         // set filter button on click listener
         binding.btnFilter.setOnClickListener {
@@ -131,6 +135,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        Log.d("Ming", "onMapReady")
         // set google map
         mMap = googleMap
         mMap.uiSettings.isZoomControlsEnabled = true
@@ -143,7 +148,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
         val mapView = binding.googleMap
         val locationButton = mapView.findViewById<View>("2".toInt())
 
-        locationButton?.let{
+        locationButton?.let {
             val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
 
             // set location btn margin
@@ -152,7 +157,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             rlp.setMargins(0, 0, 30, 280)
         }
 
-        getLocationPermission()
+        getDeviceLocation()
     }
 
 
@@ -166,7 +171,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             )
         }
 
-        val image = if(!venue.images.isNullOrEmpty()) {venue.images?.get(0)} else ""
+        val image = if (!venue.images.isNullOrEmpty()) {
+            venue.images?.get(0)
+        } else ""
 
         mMap?.addMarker(
             MarkerOptions()
@@ -184,48 +191,51 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
 
     private fun getDeviceLocation() {
         try {
-            if (locationPermissionGranted
-            ) {
+            if (locationPermissionGranted) {
                 val locationRequest = LocationRequest()
                 locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
                 //更新次數，若沒設定，會持續更新
                 locationRequest.numUpdates = 1
 
-                // set request Location Updates
-                mFusedLocationProviderClient.requestLocationUpdates(
-                    locationRequest,
-                    object : LocationCallback() {
-                        override fun onLocationResult(locationResult: LocationResult?) {
-                            locationResult ?: return
-                            mainViewModel.location.value =
-                                LatLng(
-                                    locationResult.lastLocation.latitude,
-                                    locationResult.lastLocation.longitude
+                Log.d("Ming", "getDeviceLocation")
+
+                if ((requireActivity() as MainActivity).mlocation.value == null) {
+                    // set request Location Updates
+                    mFusedLocationProviderClient.requestLocationUpdates(
+                        locationRequest,
+                        object : LocationCallback() {
+                            override fun onLocationResult(locationResult: LocationResult?) {
+                                locationResult ?: return
+                                (requireActivity() as MainActivity).mlocation.value =
+                                    LatLng(
+                                        locationResult.lastLocation.latitude,
+                                        locationResult.lastLocation.longitude,
+                                    )
+
+                                // get near bar
+                                viewModel.getVenueByLocation((requireActivity() as MainActivity).mlocation.value!!)
+
+                                // google map current location (blue point)
+                                mMap.isMyLocationEnabled = true
+                                mMap.uiSettings.isMyLocationButtonEnabled = true
+                                mMap.moveCamera(
+                                    CameraUpdateFactory.newLatLngZoom(
+                                        (requireActivity() as MainActivity).mlocation.value, 15f
+                                    )
                                 )
-
-                            // get near bar
-                            viewModel.getVenueByLocation(mainViewModel.location.value!!)
-
-                            // google map current location (blue point)
-                            mMap.isMyLocationEnabled = true
-                            mMap.uiSettings.isMyLocationButtonEnabled = true
-//                            mMap?.moveCamera(
-//                                CameraUpdateFactory.newLatLngZoom(
-//                                    mainViewModel.location.value, 15f
-//                                )
-//                            )
-                        }
-
-                    },
-                    null
-                )
+                            }
+                        },
+                        null
+                    )
+                }
             } else {
                 getLocationPermission()
             }
         } catch (e: SecurityException) {
             Log.e("Ming: %s", e.message, e)
         }
+
     }
 
     // get and check location permission
@@ -281,7 +291,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                 .setNegativeButton("取消", null)
                 .show()
         } else {
-            getDeviceLocation()
+//            getDeviceLocation()
             Log.d("Ming", "已獲取到位置權限且GPS已開啟，可以準備開始獲取經緯度")
         }
     }
@@ -292,4 +302,5 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             viewModel.navigateToVenue.value = info[0]
         }
     }
+
 }

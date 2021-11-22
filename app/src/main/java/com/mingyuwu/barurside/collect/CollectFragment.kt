@@ -1,18 +1,17 @@
 package com.mingyuwu.barurside.collect
 
 import android.animation.ObjectAnimator
-import android.graphics.Path
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.marginLeft
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentCollectBinding
+
 
 class CollectFragment : Fragment() {
     private lateinit var binding: FragmentCollectBinding
@@ -65,5 +64,4 @@ class CollectFragment : Fragment() {
 
         return binding.root
     }
-
 }

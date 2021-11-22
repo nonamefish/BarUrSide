@@ -25,6 +25,18 @@
         <variable
             name="position"
             type="int" />
+
+        <variable
+            name="distance"
+            type="int" />
+
+        <variable
+            name="rtgInfo"
+            type="String" />
+
+        <variable
+            name="view"
+            type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -66,17 +78,47 @@
             app:layout_constraintTop_toTopOf="@+id/catalog_product_img"
             tools:text="文青不要喝IPA" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rating_score_list"
-            android:layout_width="150dp"
+        <TextView
+            android:id="@+id/catalog_product_distance"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="14sp"
+            android:visibility="@{isVenue ? view.visibility : view.GONE}"
+            app:distance="@{distance}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/img_collect_filled_filled"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/catalog_product_img"
+            app:layout_constraintTop_toBottomOf="@+id/venue_rtg_avg_score"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="距 300 公尺" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rating_score_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="2dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toStartOf="@+id/venue_rtg_avg_score"
             app:layout_constraintStart_toEndOf="@+id/catalog_product_img"
             app:layout_constraintTop_toBottomOf="@+id/catalog_product_name"
             app:stars="@{isVenue ? venue.avgRating :drink.avgRating}" />
+
+        <TextView
+            android:id="@+id/venue_rtg_avg_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{rtgInfo}"
+            app:layout_constraintStart_toEndOf="@+id/rating_score_list"
+            app:layout_constraintTop_toBottomOf="@+id/catalog_product_name"
+            tools:text="TextView" />
 
         <ImageView
             android:id="@+id/img_collect_filled_filled"

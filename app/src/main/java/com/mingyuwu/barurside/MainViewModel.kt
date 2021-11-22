@@ -16,7 +16,6 @@ import kotlin.math.abs
 
 class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
 
-    var location = MutableLiveData<LatLng>()
     var notification = MutableLiveData<List<Notification>>()
     var notificationSize: LiveData<Int>? = null
 

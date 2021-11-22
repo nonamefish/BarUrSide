@@ -81,15 +81,18 @@ class ActivityPageFragment() : Fragment() {
 
         // navigate to detail fragment
         viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Activity -> {
-                    findNavController().navigate(
-                        MainNavigationDirections.navigateToActivityDetailDialog(
-                            it,
-                            null,
-                            Theme.NONE
+            it?.let{
+                when (it) {
+                    is Activity -> {
+                        findNavController().navigate(
+                            MainNavigationDirections.navigateToActivityDetailDialog(
+                                it,
+                                null,
+                                Theme.NONE
+                            )
                         )
-                    )
+                        viewModel.onLeft()
+                    }
                 }
             }
         })

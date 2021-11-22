@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
@@ -62,7 +63,6 @@ class DiscoverDetailFragment() : Fragment() {
         )
     }
 
-    private val mainViewModel by viewModels<MainViewModel> { getVmFactory() }
     private lateinit var adapter: ListAdapter<Any, RecyclerView.ViewHolder>
 
 
@@ -116,9 +116,9 @@ class DiscoverDetailFragment() : Fragment() {
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
             Theme.AROUND_VENUE -> {
-                viewModel.mLocation = mainViewModel.location
+                viewModel.mLocation = (requireActivity() as MainActivity).mlocation
 
-                if (mainViewModel.location.value == null) {
+                if (viewModel.mLocation.value == null) {
                     getLocationPermission()
                 }
                 adapter = DiscoverVenueAdapter(viewModel)
@@ -163,19 +163,21 @@ class DiscoverDetailFragment() : Fragment() {
                         findNavController().navigate(
                             MainNavigationDirections.navigateToVenueFragment(it.id)
                         )
+                        viewModel.onLeft()
                     }
                     is Drink -> {
                         findNavController().navigate(
                             MainNavigationDirections.navigateToDrinkFragment(it.id)
                         )
+                        viewModel.onLeft()
                     }
                     is Activity -> {
                         findNavController().navigate(
                             MainNavigationDirections.navigateToActivityDetailDialog(it, null, theme)
                         )
+                        viewModel.onLeft()
                     }
                 }
-                viewModel.onLeft()
             }
         })
 
@@ -304,22 +306,23 @@ class DiscoverDetailFragment() : Fragment() {
                 //更新次數，若沒設定，會持續更新
                 locationRequest.numUpdates = 1
 
-                // set request Location Updates
-                mFusedLocationProviderClient.requestLocationUpdates(
-                    locationRequest,
-                    object : LocationCallback() {
-                        override fun onLocationResult(locationResult: LocationResult?) {
-                            locationResult ?: return
-                            mainViewModel.location.value =
-                                LatLng(
-                                    locationResult.lastLocation.latitude,
-                                    locationResult.lastLocation.longitude
-                                )
-                        }
-
-                    },
-                    null
-                )
+                if ((requireActivity() as MainActivity).mlocation.value == null) {
+                    // set request Location Updates
+                    mFusedLocationProviderClient.requestLocationUpdates(
+                        locationRequest,
+                        object : LocationCallback() {
+                            override fun onLocationResult(locationResult: LocationResult?) {
+                                locationResult ?: return
+                                (requireActivity() as MainActivity).mlocation.value =
+                                    LatLng(
+                                        locationResult.lastLocation.latitude,
+                                        locationResult.lastLocation.longitude,
+                                    )
+                            }
+                        },
+                        null
+                    )
+                }
             } else {
                 getLocationPermission()
             }

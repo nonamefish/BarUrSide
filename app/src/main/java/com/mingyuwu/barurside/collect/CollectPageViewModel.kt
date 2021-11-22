@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.data.Collect
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.Venue
@@ -24,6 +25,7 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
     var isCollect = MutableLiveData<MutableList<Boolean>?>()
     val navigateToObject = MutableLiveData<String?>()
     val userId = UserManager.user.value?.id ?: ""
+    var location = MutableLiveData<LatLng>()
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()

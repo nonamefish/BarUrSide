@@ -16,8 +16,8 @@ android {
         applicationId "com.mingyuwu.barurside"
         minSdk 28
         targetSdk 31
-        versionCode 13
-        versionName "5.4"
+        versionCode 14
+        versionName "5.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -75,8 +75,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha09'
 
     // google map & location
+    implementation 'com.google.maps.android:android-maps-utils:2.3.0'
     implementation "com.google.android.gms:play-services-maps:$version_google_map"
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
 
     // google place
     implementation "com.google.android.libraries.places:places:$version_google_place"
@@ -94,7 +96,6 @@ dependencies {
     // google sign in
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
 
-    //
+    // work runtime
     implementation "androidx.work:work-runtime:$version_work_runtime"
-
 }

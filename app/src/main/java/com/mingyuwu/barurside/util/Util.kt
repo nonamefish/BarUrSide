@@ -95,7 +95,7 @@ object Util {
     }
 
     fun convertStringToTimestamp(time: String): Timestamp {
-        val dateFormat = SimpleDateFormat("yyyy/MM/dd  a HH:mm", Locale.TAIWAN)
+        val dateFormat = SimpleDateFormat("yyyy/MM/dd a hh:mm", Locale.TAIWAN)
         val parsedDate = dateFormat.parse(time)
         return Timestamp(parsedDate.time)
     }
