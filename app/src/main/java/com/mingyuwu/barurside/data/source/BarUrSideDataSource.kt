@@ -50,7 +50,7 @@ interface BarUrSideDataSource {
     suspend fun getHighRateDrinkResult(): Result<List<Drink>>
     fun getActivityResult() : MutableLiveData<List<Activity>>
     suspend fun getDrinkBySearch(search: String): Result<List<Drink>>
-    suspend fun postCollect(collect: Collect): Result<Boolean>
+    suspend fun addCollect(collect: Collect): Result<Boolean>
     suspend fun getCollect(userId: String): Result<List<Collect>>
     suspend fun removeCollect(id: String, userId: String): Result<Boolean>
     suspend fun getVenueByIds(ids: List<String>): Result<List<Venue>>

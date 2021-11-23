@@ -3,13 +3,11 @@ package com.mingyuwu.barurside.util
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.net.Uri
 import com.mingyuwu.barurside.BarUrSideApplication
-import android.graphics.BitmapFactory
-import android.util.Log
-import java.io.*
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*

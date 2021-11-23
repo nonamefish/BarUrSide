@@ -1,34 +1,22 @@
 package com.mingyuwu.barurside.map
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.InfoWindowBinding
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
-import com.bumptech.glide.request.target.Target
-import android.graphics.drawable.Drawable
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-
-import com.bumptech.glide.request.RequestListener
-import android.graphics.Bitmap
-import android.text.method.TextKeyListener.clear
-import java.lang.Exception
-import com.bumptech.glide.request.target.SimpleTarget
-
-
-
 
 
 class MapInfoWindowAdapter(_context: Context, viewModel: MapViewModel, parent: ViewGroup) :
@@ -36,7 +24,6 @@ class MapInfoWindowAdapter(_context: Context, viewModel: MapViewModel, parent: V
     private val context = _context
     private val viewModel = viewModel
     private val parent = parent
-    private lateinit var binding: InfoWindowBinding
 
     private fun render(marker: Marker, binding: InfoWindowBinding) {
         val info = marker.snippet.toString().split(",")
@@ -56,8 +43,6 @@ class MapInfoWindowAdapter(_context: Context, viewModel: MapViewModel, parent: V
         binding.imgInfo.setOnClickListener {
             viewModel.navigateToVenue.value = info[0]
         }
-
-
 
         // set venue image
         if (info[3] != null) {

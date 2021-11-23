@@ -69,7 +69,6 @@ class DiscoverViewModel(private val repository: BarUrSideRepository) : ViewModel
             searchInfo.value = when (result) {
                 is Result.Success -> {
                     _error.value = null
-                    Log.d("Ming", "result.data: ${result.data}")
                     result.data
                 }
                 is Result.Fail -> {
@@ -87,11 +86,11 @@ class DiscoverViewModel(private val repository: BarUrSideRepository) : ViewModel
         }
     }
 
-    fun setNavigateToObject(id: String){
+    fun navigateToObject(id: String){
         _navigateToObject.value = id
     }
 
-    fun setNavigateToTheme(theme: Theme){
+    fun navigateToTheme(theme: Theme){
         _navigateToTheme.value = theme
     }
 

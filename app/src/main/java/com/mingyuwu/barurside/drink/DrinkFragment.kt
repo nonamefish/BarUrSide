@@ -19,8 +19,6 @@ import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
 
-const val TAG = "Ming"
-
 class DrinkFragment : Fragment() {
 
     private lateinit var binding: FragmentDrinkBinding
@@ -40,12 +38,9 @@ class DrinkFragment : Fragment() {
         )
         binding.lifecycleOwner = this
 
-        // get id
-        val id = DrinkFragmentArgs.fromBundle(requireArguments()).id
-
         // navigate to all rating fragment
         viewModel.navigateToAll.observe(viewLifecycleOwner, Observer {
-            it?.let{
+            it?.let {
                 findNavController().navigate(MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray()))
                 viewModel.onLeft()
             }
@@ -73,12 +68,12 @@ class DrinkFragment : Fragment() {
 
         // set recyclerView Adapter
         binding.drinkRtgList.adapter = InfoRatingAdapter()
-        binding.drinkImgList.adapter = ImageAdapter(80,100)
-        binding.drinkRtgScoreList.adapter = RatingScoreAdapter(15,15)
+        binding.drinkImgList.adapter = ImageAdapter(80, 100)
+        binding.drinkRtgScoreList.adapter = RatingScoreAdapter(15, 15)
 
         // drink's venue info click listener
         binding.btnVenueInfo.setOnClickListener {
-            viewModel.venueInfo.value?.id.let{
+            viewModel.venueInfo.value?.id.let {
                 findNavController().navigate(
                     MainNavigationDirections.navigateToVenueFragment(it!!) // set venue id
                 )
@@ -87,7 +82,7 @@ class DrinkFragment : Fragment() {
 
         // set view all image's on click listener
         binding.txtDrinkImg.setOnClickListener {
-            viewModel.images.value?.let{
+            viewModel.images.value?.let {
                 findNavController().navigate(
                     MainNavigationDirections.navigateToDiscoverDetailFragment(
                         Theme.IMAGES, it.toTypedArray(), null

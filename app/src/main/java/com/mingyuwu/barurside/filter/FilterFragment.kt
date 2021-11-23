@@ -35,7 +35,7 @@ class FilterFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // set binding and viewModel
         binding = FragmentFilterBinding.inflate(inflater, container, false)

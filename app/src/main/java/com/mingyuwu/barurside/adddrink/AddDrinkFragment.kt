@@ -73,7 +73,7 @@ class AddObjectFragment : Fragment() {
                 viewModel.uploadPhoto()
                 alertDialog = postRatingDialog(AlertDialog.Builder(binding.root.context))
             } else {
-                showAddUncompleted()
+                showUncompleted()
             }
         }
 
@@ -214,7 +214,7 @@ class AddObjectFragment : Fragment() {
         viewModel.addUploadImg(bitmap, url)
     }
 
-    private fun showAddUncompleted() {
+    private fun showUncompleted() {
         // set dialog
         val alertDialog = AlertDialog.Builder(binding.root.context)
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)

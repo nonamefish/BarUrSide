@@ -221,7 +221,4 @@ class MainActivity : AppCompatActivity() {
         onNewIntent(intent)
     }
 
-    fun setLocation(location: LatLng) {
-        mlocation.value = location
-    }
 }

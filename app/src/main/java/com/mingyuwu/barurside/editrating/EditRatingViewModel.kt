@@ -135,8 +135,6 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         }
         _uploadImg.value = _uploadImg.value
         _uploadImgUrl.value = _uploadImgUrl.value
-        Log.d("Ming", "_uploadImg: ${_uploadImg.value}")
-        Log.d("Ming", "_uploadImgUrl: ${_uploadImgUrl.value}")
     }
 
     fun removeUploadImg(rtgOrder: Int, position: Int) {
@@ -146,7 +144,6 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
 
         _uploadImg.value = _uploadImg.value
         _uploadImgUrl.value = _uploadImgUrl.value
-        Log.d("Ming", "url: ${_uploadImg.value}")
     }
 
 
@@ -297,7 +294,7 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         _menu.value = _menu.value
     }
 
-    fun leave() {
+    private fun leave() {
         _leave.value = true
     }
 

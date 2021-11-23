@@ -1,13 +1,11 @@
 package com.mingyuwu.barurside.addactivity
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Relationship
-import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.Util.calculateDateByPeriod
@@ -17,7 +15,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewModel() {

@@ -79,7 +79,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
         // search info: set auto completed text adapter
         viewModel.searchInfo.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Log.d("Ming", "searchInfo: $it")
                 val venueList = it.map { venue -> venue.name }
                 val adapter = ArrayAdapter(
                     binding.root.context,
@@ -92,7 +91,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                     val selected = parent.getItemAtPosition(position)
                     val pos = venueList.indexOf(selected)
                     binding.autoMapFilter.setText("")
-                    Log.d("Ming", "selected venue: ${it[pos]}")
                     addMapMark(it[pos], true)
                 }
             }
@@ -188,23 +186,24 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             if (locationPermissionGranted) {
 
                 mFusedLocationProviderClient.lastLocation
-                    .addOnCompleteListener {
-                        // google map current location (blue point)
-                        val location = it.result
-                        (requireActivity() as MainActivity).mlocation.value =
-                            LatLng(location.latitude, location.longitude)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful && task.result != null) {
+                            // google map current location (blue point)
+                            val location = task.result
+                            (requireActivity() as MainActivity).mlocation.value =
+                                LatLng(location.latitude, location.longitude)
+                            // get near bar
+                            viewModel.getVenueByLocation((requireActivity() as MainActivity).mlocation.value!!)
 
-                        // get near bar
-                        viewModel.getVenueByLocation((requireActivity() as MainActivity).mlocation.value!!)
-
-                        // set map current location and icon
-                        mMap.isMyLocationEnabled = true
-                        mMap.uiSettings.isMyLocationButtonEnabled = true
-                        mMap.moveCamera(
-                            CameraUpdateFactory.newLatLngZoom(
-                                (requireActivity() as MainActivity).mlocation.value, 15f
+                            // set map current location and icon
+                            mMap.isMyLocationEnabled = true
+                            mMap.uiSettings.isMyLocationButtonEnabled = true
+                            mMap.moveCamera(
+                                CameraUpdateFactory.newLatLngZoom(
+                                    (requireActivity() as MainActivity).mlocation.value, 15f
+                                )
                             )
-                        )
+                        }
                     }
             } else {
                 getLocationPermission()

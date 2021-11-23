@@ -2,7 +2,6 @@ package com.mingyuwu.barurside.discover
 
 import com.mingyuwu.barurside.R
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +16,6 @@ import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.FragmentDiscoverBinding
 import com.mingyuwu.barurside.ext.getVmFactory
-import com.mingyuwu.barurside.map.MapViewModel
 
 class DiscoverFragment : Fragment() {
 
@@ -66,8 +64,7 @@ class DiscoverFragment : Fragment() {
         })
 
         // search venue after autocompleted text
-        viewModel.searchText.observe(viewLifecycleOwner, Observer
-        {
+        viewModel.searchText.observe(viewLifecycleOwner, Observer {
             it?.let {
                 if (it.isNotEmpty()) {
                     if (viewModel.searchInfo.value == null) {
@@ -83,8 +80,7 @@ class DiscoverFragment : Fragment() {
         })
 
         // search info: set auto completed text adapter
-        viewModel.searchInfo.observe(viewLifecycleOwner, Observer
-        {
+        viewModel.searchInfo.observe(viewLifecycleOwner, Observer {
             it?.let {
 
                 val list = when (viewModel.searchType.value) {
@@ -114,14 +110,13 @@ class DiscoverFragment : Fragment() {
                     binding.autoDiscoverFilter.setText("")
 
                     // navigate
-                    viewModel.setNavigateToObject(id[pos])
+                    viewModel.navigateToObject(id[pos])
                 }
             }
         })
 
         // navigate to object info
-        viewModel.navigateToObject.observe(viewLifecycleOwner, Observer
-        {
+        viewModel.navigateToObject.observe(viewLifecycleOwner, Observer {
             it?.let {
                 when (viewModel.searchType.value) {
                     true -> {
@@ -140,8 +135,7 @@ class DiscoverFragment : Fragment() {
         })
 
         // navigate to theme
-        viewModel.navigateToTheme.observe(viewLifecycleOwner, Observer
-        {
+        viewModel.navigateToTheme.observe(viewLifecycleOwner, Observer {
             it?.let {
                 findNavController().navigate(
                     MainNavigationDirections.navigateToDiscoverDetailFragment(

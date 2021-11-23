@@ -38,7 +38,6 @@ class RandomFragment : Fragment() {
             findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(selectedItem.id))
         }
 
-        // Inflate the layout for this fragment
         return binding.root
     }
 

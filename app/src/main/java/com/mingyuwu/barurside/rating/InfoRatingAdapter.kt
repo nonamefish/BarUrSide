@@ -63,7 +63,7 @@ class InfoRatingAdapter() :
     }
 
 
-    // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
+    // Allows the RecyclerView to determine which items have changed when the [List] of [RatingInfo] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<Any>() {
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
             return oldItem === newItem

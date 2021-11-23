@@ -13,17 +13,13 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.fromHtml
-import androidx.core.text.TextUtilsCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.common.math.DoubleMath.roundToInt
 import com.mingyuwu.barurside.data.Drink
-import kotlin.math.roundToInt
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.rating.*
-import com.mingyuwu.barurside.util.Category
 import com.mingyuwu.barurside.util.CurrentFragmentType
 import com.mingyuwu.barurside.util.Style
 import com.mingyuwu.barurside.util.Util.getDiffDay
@@ -32,8 +28,8 @@ import com.mingyuwu.barurside.util.Util.getDiffMinute
 import com.mingyuwu.barurside.venue.MenuAdapter
 import java.sql.Timestamp
 import java.time.LocalTime
-import java.util.concurrent.TimeUnit
-import kotlin.math.round
+import kotlin.math.roundToInt
+
 
 @BindingAdapter("stars")
 fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
@@ -124,7 +120,7 @@ fun bindRtgList(recyclerView: RecyclerView, rtgList: List<RatingInfo>?) {
 
 @BindingAdapter("userImgSize")
 fun bindUserImgSize(cardView: CardView, size: Int) {
-    size?.let {
+    size.let {
         val dpToPx = BarUrSideApplication.appContext!!.resources.displayMetrics.density
         cardView.layoutParams.height = size * dpToPx.toInt()
         cardView.layoutParams.width = size * dpToPx.toInt()
@@ -304,7 +300,7 @@ fun bindActivityDetailBtn(button: Button, isFull: Boolean, isBook: Boolean) {
 fun bindDistance(textView: TextView, distance: Int?) {
     distance?.let {
         if (it < 1000) {
-            textView.text = "距 ${it} 公尺"
+            textView.text = "距 $it 公尺"
         } else {
             textView.text = "距 ${String.format("%.1f", (it.toDouble()/1000))} 公里"
         }

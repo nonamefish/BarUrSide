@@ -114,7 +114,7 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
                 }
                 false -> {
                     val postItem = Collect("", isVenue, userId, id)
-                    postCollect(postItem)
+                    addCollect(postItem)
                     it[position] = true
                 }
             }
@@ -122,9 +122,9 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
         }
     }
 
-    private fun postCollect(collect: Collect) {
+    private fun addCollect(collect: Collect) {
         coroutineScope.launch {
-            val result = repository.postCollect(collect)
+            val result = repository.addCollect(collect)
             when (result) {
                 is Result.Success -> {
                     _error.value = null

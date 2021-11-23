@@ -1,10 +1,12 @@
 package com.mingyuwu.barurside.profile
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mingyuwu.barurside.data.*
+import com.mingyuwu.barurside.data.Notification
+import com.mingyuwu.barurside.data.RatingInfo
+import com.mingyuwu.barurside.data.Result
+import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager

@@ -116,13 +116,11 @@ class ActivityDetailViewModel(
 
     private fun getActivity(activityId: String){
         coroutineScope.launch {
-            Log.d("Ming","getActivity: $activityId")
             val result = repository.getActivityById(activityId)
             dtActivity.value = when (result) {
                 is Result.Success -> {
                     _error.value = null
                     _status.value = LoadStatus.DONE
-                    Log.d("Ming","activity: ${result.data}")
                     result.data
                 }
                 is Result.Fail -> {
@@ -143,6 +141,4 @@ class ActivityDetailViewModel(
             checkUserIsBook()
         }
     }
-
-
 }

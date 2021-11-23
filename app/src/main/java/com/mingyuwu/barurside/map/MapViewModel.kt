@@ -93,8 +93,6 @@ class MapViewModel(private val repository: BarUrSideRepository) : ViewModel() {
     }
 
     private fun getRectangleRange(location: LatLng, distance: Double): List<Double> {
-        //1緯度的距離大約為 69 英里 (111.11公里)
-        //1經度的距離大約為 111.11 * cos(theta) km
         val minLat = location.latitude - (distance / 111.11)
         val maxLat = location.latitude + (distance / 111.11)
         val minLng = location.longitude - (distance / 111.11 / cos(location.latitude))

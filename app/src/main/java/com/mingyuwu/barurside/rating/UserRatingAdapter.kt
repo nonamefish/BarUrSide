@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.rating
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.data.Rating
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.databinding.ItemUserRatingBinding
 
@@ -39,7 +37,7 @@ class UserRatingAdapter() :
         }
     }
 
-    // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
+    // Allows the RecyclerView to determine which items have changed when the [List] of [RatingInfo] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<RatingInfo?>() {
         override fun areItemsTheSame(oldItem: RatingInfo, newItem: RatingInfo): Boolean {
             return oldItem === newItem
@@ -67,8 +65,5 @@ class UserRatingAdapter() :
         holder.bind(rating, holder.itemView)
     }
 
-    override fun getItemCount(): Int {
-        return super.getItemCount()
-    }
 
 }

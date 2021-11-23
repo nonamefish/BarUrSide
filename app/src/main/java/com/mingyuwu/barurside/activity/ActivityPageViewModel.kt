@@ -1,7 +1,8 @@
 package com.mingyuwu.barurside.activity
 
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.data.source.LoadStatus
@@ -104,19 +105,16 @@ class ActivityPageViewModel(
             val result = repository.getRatingByFriends(userId)
             _listDate.value = when (result) {
                 is Result.Success -> {
-                    Log.d("Ming","result.data: ${result.data}")
                     _error.value = null
                     _status.value = LoadStatus.DONE
                     result.data
                 }
                 is Result.Fail -> {
-                    Log.d("Ming","result.data: Fail")
                     _error.value = result.error
                     _status.value = LoadStatus.ERROR
                     null
                 }
                 is Result.Error -> {
-                    Log.d("Ming","result.data: Error")
                     _error.value = result.exception.toString()
                     _status.value = LoadStatus.ERROR
                     null

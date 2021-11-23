@@ -3,25 +3,25 @@ package com.mingyuwu.barurside.discoverdetail
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
@@ -272,12 +272,13 @@ class DiscoverDetailFragment() : Fragment() {
             AlertDialog.Builder(mContext)
                 .setTitle("GPS 尚未開啟")
                 .setMessage("使用此功能需要開啟 GPS 定位功能")
-                .setPositiveButton("前往開啟",
-                    DialogInterface.OnClickListener { _, _ ->
-                        startActivityForResult(
-                            Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_ENABLE_GPS
-                        )
-                    })
+                .setPositiveButton(
+                    "前往開啟",
+                ) { _, _ ->
+                    startActivityForResult(
+                        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_ENABLE_GPS,
+                    )
+                }
                 .setNegativeButton("取消", null)
                 .show()
         } else {
@@ -291,11 +292,17 @@ class DiscoverDetailFragment() : Fragment() {
             if (locationPermissionGranted
             ) {
                 mFusedLocationProviderClient.lastLocation
-                    .addOnCompleteListener {
-                        // google map current location (blue point)
-                        val location = it.result
-                        (requireActivity() as MainActivity).mlocation.value =
-                            LatLng(location.latitude, location.longitude)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful && task.result != null) {
+                            // google map current location (blue point)
+                            val location = task.result
+                            (requireActivity() as MainActivity).mlocation.value =
+                                LatLng(location.latitude, location.longitude)
+                        }
+                        else{
+                            Log.d("Ming","exception ${task.exception}")
+                            Log.d("Ming","task.result ${task.result}")
+                        }
                     }
             } else {
                 getLocationPermission()

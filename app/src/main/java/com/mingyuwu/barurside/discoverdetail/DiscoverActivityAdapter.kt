@@ -1,8 +1,6 @@
 package com.mingyuwu.barurside.discoverdetail
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
@@ -11,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.activity.ActivityPageViewModel
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.databinding.ItemDiscoverActivityBinding
-import com.mingyuwu.barurside.databinding.ItemDiscoverObjectBinding
 
 class DiscoverActivityAdapter(val viewModel: ViewModel) :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
@@ -50,7 +47,7 @@ class DiscoverActivityAdapter(val viewModel: ViewModel) :
         }
     }
 
-    // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
+    // Allows the RecyclerView to determine which items have changed when the [List] of [Activity] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<Any>() {
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
             return oldItem === newItem

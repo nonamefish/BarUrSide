@@ -1,12 +1,9 @@
 package com.mingyuwu.barurside.login
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mingyuwu.barurside.BarUrSideApplication
-import com.mingyuwu.barurside.data.Relationship
 import com.mingyuwu.barurside.data.User
-import java.sql.Timestamp
 
 object UserManager {
 
@@ -37,18 +34,4 @@ object UserManager {
                 }
             }
         }
-
-    /**
-     * It can be use to check login status directly
-     */
-    val isLoggedIn: Boolean
-        get() = userToken != null
-
-    /**
-     * Clear the [userToken] and the [user]/[_user] data
-     */
-    fun clear() {
-        userToken = null
-        user.value = null
-    }
 }

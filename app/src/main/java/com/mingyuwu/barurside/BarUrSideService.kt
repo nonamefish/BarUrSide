@@ -18,7 +18,6 @@ class BarUrSideService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("Ming", "Service onCreate")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -29,7 +28,6 @@ class BarUrSideService : LifecycleService() {
         createNotificationChannel()
 
         notifications.observe(this) {
-            Log.d("Ming", "Service notifications: $it")
             it?.let { notifications ->
                 for (notification in notifications) {
                     when (notification.type) {
@@ -78,7 +76,6 @@ class BarUrSideService : LifecycleService() {
     override fun onDestroy() {
         super.onDestroy()
         stopSelf()
-        Log.d("Ming", "Service onDestroy")
     }
 
 }

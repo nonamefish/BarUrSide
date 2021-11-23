@@ -16,12 +16,8 @@ import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.ItemCollectBinding
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
-import com.mingyuwu.barurside.util.Util.getString
-import kotlin.math.round
 import kotlin.math.roundToInt
 
-
-const val TAG = "CollectGridAdapter"
 
 class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: OnClickListener) :
     ListAdapter<Any, CollectAdapter.CollectViewHolder>(DiffCallback) {
@@ -40,7 +36,6 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
         }
 
         fun bind(collect: Any, viewModel: CollectPageViewModel) {
-            Log.d("Ming", "collect.data: $collect")
             binding.viewModel = viewModel
 
             when (collect) {
@@ -91,7 +86,7 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
         }
     }
 
-    // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
+    // Allows the RecyclerView to determine which items have changed when the [List] of [Collect] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<Any>() {
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
             return oldItem === newItem
@@ -133,10 +128,6 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
         }
 
         holder.bind(product, viewModel)
-    }
-
-    override fun getItemCount(): Int {
-        return super.getItemCount()
     }
 
     // Custom listener that handles clicks on RecyclerView items

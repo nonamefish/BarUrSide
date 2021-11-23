@@ -52,6 +52,7 @@
                 android:inputType="textPersonName"
                 android:maxLines="1"
                 android:paddingStart="48dp"
+                android:paddingEnd="8dp"
                 android:singleLine="true"
                 android:text="@={viewModel.searchText}"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -73,7 +74,8 @@
                 android:src="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></Spinner>
+                app:layout_constraintTop_toTopOf="parent">
+            </Spinner>
 
             <ImageView
                 android:id="@+id/img_dropdown"
@@ -85,7 +87,8 @@
                 android:backgroundTint="@color/gray_999999"
                 app:layout_constraintBottom_toBottomOf="@+id/spinner_search_type"
                 app:layout_constraintEnd_toEndOf="@+id/spinner_search_type"
-                app:layout_constraintTop_toTopOf="@+id/spinner_search_type"></ImageView>
+                app:layout_constraintTop_toTopOf="@+id/spinner_search_type">
+            </ImageView>
 
             <ImageView
                 android:id="@+id/btn_search"
@@ -106,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:onClick="@{()->viewModel.setNavigateToTheme(theme.RECENT_ACTIVITY)}"
+            android:onClick="@{()->viewModel.navigateToTheme(theme.RECENT_ACTIVITY)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view1">
@@ -151,7 +154,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:onClick="@{()->viewModel.setNavigateToTheme(theme.AROUND_VENUE)}"
+            android:onClick="@{()->viewModel.navigateToTheme(theme.AROUND_VENUE)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cnstrt_recent_activity">
@@ -198,7 +201,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:onClick="@{()->viewModel.setNavigateToTheme(theme.HOT_DRINK)}"
+            android:onClick="@{()->viewModel.navigateToTheme(theme.HOT_DRINK)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cnstrt_around_venue">
@@ -246,7 +249,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:onClick="@{()->viewModel.setNavigateToTheme(theme.HOT_VENUE)}"
+            android:onClick="@{()->viewModel.navigateToTheme(theme.HOT_VENUE)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_drink">
@@ -294,7 +297,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:onClick="@{()->viewModel.setNavigateToTheme(theme.HIGH_RATE_DRINK)}"
+            android:onClick="@{()->viewModel.navigateToTheme(theme.HIGH_RATE_DRINK)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_venue">
@@ -341,7 +344,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:onClick="@{()->viewModel.setNavigateToTheme(theme.HIGH_RATE_VENUE)}"
+            android:onClick="@{()->viewModel.navigateToTheme(theme.HIGH_RATE_VENUE)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cnstrt_high_rate_drink">

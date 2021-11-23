@@ -153,7 +153,6 @@ class AddActivityFragment : Fragment() {
         val timeListener = TimePickerDialog.OnTimeSetListener { _, hour, min ->
             calender.set(Calendar.HOUR_OF_DAY, hour)
             calender.set(Calendar.MINUTE, min)
-            format(" a hh:mm", datetime)
         }
 
 
@@ -172,7 +171,6 @@ class AddActivityFragment : Fragment() {
     private fun format(format: String, datetime: MutableLiveData<String>) {
         val time = SimpleDateFormat(format, Locale.TAIWAN)
         datetime.value = "${datetime.value}${time.format(calender.time)}"
-        Log.d("Ming", datetime.value.toString())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -198,7 +196,6 @@ class AddActivityFragment : Fragment() {
                 Toast.makeText(
                     BarUrSideApplication.appContext, "message: RESULT_CANCELED", Toast.LENGTH_SHORT
                 ).show()
-                Log.d("Ming", "RESULT_CANCELED")
             }
         }
     }

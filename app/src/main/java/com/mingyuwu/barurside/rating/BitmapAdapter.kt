@@ -1,14 +1,12 @@
 package com.mingyuwu.barurside.rating
 
 import android.graphics.Bitmap
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mingyuwu.barurside.collect.TAG
 import com.mingyuwu.barurside.databinding.ItemRatingBitmapBinding
 import com.mingyuwu.barurside.editrating.EditRatingViewModel
 
@@ -40,7 +38,7 @@ class BitmapAdapter(val width: Int, val height: Int, val rtgOrder: Int, val view
         }
     }
 
-    // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
+    // Allows the RecyclerView to determine which items have changed when the [List] of [Bitmap] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<Bitmap>() {
         override fun areItemsTheSame(oldItem: Bitmap, newItem: Bitmap): Boolean {
             return oldItem === newItem
@@ -70,10 +68,6 @@ class BitmapAdapter(val width: Int, val height: Int, val rtgOrder: Int, val view
                 holder.bind(img, width, height, rtgOrder, viewModel)
             }
         }
-    }
-
-    override fun getItemCount(): Int {
-        return super.getItemCount()
     }
 
 }

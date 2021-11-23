@@ -2,18 +2,12 @@ package com.mingyuwu.barurside.discoverdetail
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mingyuwu.barurside.activity.ActivityPageViewModel
-import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Notification
-import com.mingyuwu.barurside.databinding.ItemDiscoverObjectBinding
 import com.mingyuwu.barurside.databinding.ItemNotificationBinding
-import com.mingyuwu.barurside.login.UserManager
 
 class NotificationAdapter(val viewModel: DiscoverDetailViewModel) :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
@@ -36,7 +30,7 @@ class NotificationAdapter(val viewModel: DiscoverDetailViewModel) :
         }
     }
 
-    // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
+    // Allows the RecyclerView to determine which items have changed when the [List] of [Notification] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<Any>() {
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
             return oldItem === newItem

@@ -302,7 +302,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                     val venue = document.toObject(Venue::class.java)
                                                     rating.objectName = venue.name
 
-                                                    Log.d("Ming","ratings venue: $venue")
+                                                    Log.d("Ming", "ratings venue: $venue")
 
                                                     if (!venue.images.isNullOrEmpty()) {
                                                         rating.objectImg =
@@ -822,7 +822,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override fun getNotification(userId: String): MutableLiveData<List<Notification>> {
         val liveData = MutableLiveData<List<Notification>>()
-        Log.d("Ming","getNotification")
+        Log.d("Ming", "getNotification")
         // notification from user
         FirebaseFirestore.getInstance()
             .collection(PATH_NOTIFICATION)
@@ -862,7 +862,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         }
                         liveData.value = list
                         liveData.value = liveData.value
-                        Log.d("Ming","getNotification: ${liveData.value}")
+                        Log.d("Ming", "getNotification: ${liveData.value}")
                     }
             }
         return liveData
@@ -1173,8 +1173,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             val activity = document.toObject(Activity::class.java)
                             activity.bookers?.let { bookers ->
                                 if (bookers.any { it.id == userId }) {
-                                    activity.startTimestamp = activity.startTime?.let { Timestamp(it.time) }
-                                    activity.endTimestamp = activity.endTime?.let { Timestamp(it.time) }
+                                    activity.startTimestamp =
+                                        activity.startTime?.let { Timestamp(it.time) }
+                                    activity.endTimestamp =
+                                        activity.endTime?.let { Timestamp(it.time) }
                                     list.add(activity)
                                 }
                             }
@@ -1318,7 +1320,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun getRatingByFriends(userId: String): Result<List<RatingInfo>> =
         suspendCoroutine { continuation ->
-            val list = mutableListOf<RatingInfo>()
+            var list = mutableListOf<RatingInfo>()
             val firestore = FirebaseFirestore.getInstance()
             var check = 0
 
@@ -1393,8 +1395,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                                             if (check == rtgTask.result.size()) {
                                                                                 continuation.resume(
                                                                                     Result.Success(
-                                                                                        list
-                                                                                    )
+                                                                                        list.sortedByDescending { it.postDate })
                                                                                 )
                                                                             }
                                                                         }
@@ -1426,8 +1427,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                                             if (check == rtgTask.result.size()) {
                                                                                 continuation.resume(
                                                                                     Result.Success(
-                                                                                        list
-                                                                                    )
+                                                                                        list.sortedByDescending { it.postDate })
                                                                                 )
                                                                             }
                                                                         }
@@ -1439,7 +1439,9 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                         }
                                     }
                             } else {
-                                continuation.resume(Result.Success(list))
+                                continuation.resume(
+                                    Result.Success(list.sortedByDescending { it.postDate })
+                                )
                             }
                         }
                     } else {
@@ -1462,11 +1464,11 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-    override suspend fun postCollect(collect: Collect): Result<Boolean> =
+    override suspend fun addCollect(collect: Collect): Result<Boolean> =
         suspendCoroutine { continuation ->
-            val postCollect =
+            val addCollect =
                 FirebaseFirestore.getInstance().collection(PATH_COLLECT)
-            val document = postCollect.document()
+            val document = addCollect.document()
 
             collect.id = document.id
 
@@ -1474,11 +1476,11 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .set(Collect.toHashMap(collect))
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "postCollect: isSuccessful")
+                        Log.d(TAG, "addCollect: isSuccessful")
                         continuation.resume(Result.Success(true))
                     } else {
                         task.exception?.let {
-                            Log.d(TAG, "postCollect: $it")
+                            Log.d(TAG, "addCollect: $it")
                             Log.w(
                                 TAG,
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
@@ -2002,7 +2004,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
     override suspend fun checkNotification(ids: List<String>): Result<Boolean> =
         suspendCoroutine { continuation ->
 
-            for(limitIds in ids.windowed(10,step = 10,partialWindows = true)){
+            for (limitIds in ids.windowed(10, step = 10, partialWindows = true)) {
                 FirebaseFirestore.getInstance()
                     .collection(PATH_NOTIFICATION)
                     .whereIn("id", limitIds)
@@ -2012,13 +2014,14 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             for (document in task.result!!) {
                                 val notification = document.toObject(Notification::class.java)
 
-                                if(notification.isCheck == false){
+                                if (notification.isCheck == false) {
                                     if (notification.type == "activity") {
                                         document.reference.update(
                                             mapOf(
                                                 "isCheck" to true,
                                                 "date" to Timestamp(System.currentTimeMillis())
-                                            ))
+                                            )
+                                        )
                                             .addOnSuccessListener {
                                                 Log.d(TAG, "add successfully updated!")
                                             }
@@ -2073,7 +2076,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
 
-                if ( !snapshot!!.metadata.hasPendingWrites() ){
+                if (!snapshot!!.metadata.hasPendingWrites()) {
                     val list = mutableListOf<Notification>()
 
                     for (document in snapshot!!.documents) {

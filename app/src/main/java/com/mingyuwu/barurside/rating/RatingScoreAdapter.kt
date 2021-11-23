@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.rating
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,20 +7,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.databinding.ItemRatingScoreBinding
 
-private const val TAG = "RatingStarAdapter"
-
 class RatingScoreAdapter (val width: Int, val height: Int) :
     ListAdapter<ScoreStatus, RatingScoreAdapter.RatingScoreViewHolder>(DiffCallback) {
 
     class RatingScoreViewHolder(private var binding: ItemRatingScoreBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(starStatus: ScoreStatus) {
-            Log.d(TAG,starStatus.toString())
             binding.starStatus = starStatus
         }
     }
 
-    // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
+    // Allows the RecyclerView to determine which items have changed when the [List] of ScoreStatus has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<ScoreStatus>() {
         override fun areItemsTheSame(oldItem: ScoreStatus, newItem: ScoreStatus): Boolean {
             return oldItem === newItem

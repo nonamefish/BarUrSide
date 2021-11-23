@@ -183,7 +183,6 @@ class DiscoverDetailViewModel(
             when (result) {
                 is Result.Success -> {
                     _error.value = null
-                    Log.d("Ming", "result: $(result as Result.Success<Any>).data}")
                 }
                 is Result.Fail -> {
                     _error.value = (result as Result.Fail).error

@@ -102,7 +102,7 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun postCollect(collect: Collect): Result<Boolean> {
+    override suspend fun addCollect(collect: Collect): Result<Boolean> {
         TODO("Not yet implemented")
     }
 

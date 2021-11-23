@@ -22,8 +22,6 @@ import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
 
 
-const val TAG = "VenueFragment"
-
 class VenueFragment : Fragment() {
 
     private lateinit var binding: FragmentVenueBinding

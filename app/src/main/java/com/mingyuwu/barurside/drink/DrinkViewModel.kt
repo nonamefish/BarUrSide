@@ -102,15 +102,15 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
             }
             false -> {
                 val postItem = Collect("", false, userId, id)
-                postCollect(postItem)
+                addCollect(postItem)
                 isCollect.value = true
             }
         }
     }
 
-    private fun postCollect(collect: Collect) {
+    private fun addCollect(collect: Collect) {
         coroutineScope.launch {
-            val result = repository.postCollect(collect)
+            val result = repository.addCollect(collect)
             when (result) {
                 is Result.Success -> {
                     _error.value = null

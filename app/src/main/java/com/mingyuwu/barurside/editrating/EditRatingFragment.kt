@@ -15,23 +15,22 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
 import com.mingyuwu.barurside.ext.getVmFactory
-import android.widget.Button
-import com.mingyuwu.barurside.util.Util.randomName
-import com.permissionx.guolindev.PermissionX
 import com.mingyuwu.barurside.util.Util.getResizedBitmap
+import com.mingyuwu.barurside.util.Util.randomName
 import com.mingyuwu.barurside.util.Util.saveBitmap
+import com.permissionx.guolindev.PermissionX
 
 class EditRatingFragment : Fragment() {
 

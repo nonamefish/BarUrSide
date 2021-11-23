@@ -58,15 +58,15 @@ class CollectPageFragment() : Fragment() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext)
         getLocationPermission()
 
+        // set recyclerView adapter and get collect id list
         val adapter = CollectAdapter(
             viewModel,
             CollectAdapter.OnClickListener {
                 viewModel.setNavigateToObject(it)
             }
         )
-
-        // set recyclerView adapter and get collect id list
         binding.collectList.adapter = adapter
+
         viewModel.collectInfo.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty()) {
                 viewModel.getObjectInfo(isVenue, it)
@@ -78,7 +78,6 @@ class CollectPageFragment() : Fragment() {
 
         // get collect object information
         viewModel.objectInfo.observe(viewLifecycleOwner, Observer {
-
             if (it.isEmpty()) {
                 binding.animationEmpty.visibility = View.VISIBLE
             } else {
@@ -121,14 +120,39 @@ class CollectPageFragment() : Fragment() {
 
     private fun getDeviceLocation() {
         try {
-            if (locationPermissionGranted
-            ) {
+            if (locationPermissionGranted) {
+                val locationRequest = LocationRequest.create().apply{
+                    priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                    numUpdates = 1
+                }
+
+//                mFusedLocationProviderClient.requestLocationUpdates(
+//                    locationRequest,
+//                    object : LocationCallback() {
+//                        override fun onLocationResult(locationResult: LocationResult?) {
+//                            locationResult ?: return
+//
+//                            (requireActivity() as MainActivity).mlocation.value =
+//                                LatLng(
+//                                    locationResult.lastLocation.latitude,
+//                                    locationResult.lastLocation.longitude,
+//                                )
+//                        }
+//                    },
+//                    null
+//                )
                 mFusedLocationProviderClient.lastLocation
-                    .addOnCompleteListener {
-                        // google map current location (blue point)
-                        val location = it.result
-                        (requireActivity() as MainActivity).mlocation.value =
-                            LatLng(location.latitude, location.longitude)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful && task.result != null) {
+                            // google map current location (blue point)
+                            val location = task.result
+                            (requireActivity() as MainActivity).mlocation.value =
+                                LatLng(location.latitude, location.longitude)
+                        }
+                        else{
+                            Log.d("Ming","exception ${task.exception}")
+                            Log.d("Ming","task.result ${task.result}")
+                        }
                     }
             } else {
                 getLocationPermission()

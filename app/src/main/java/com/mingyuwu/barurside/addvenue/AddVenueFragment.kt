@@ -38,13 +38,10 @@ import com.mingyuwu.barurside.addactivity.AUTOCOMPLETE_REQUEST_CODE
 import com.mingyuwu.barurside.databinding.FragmentAddVenueBinding
 import com.mingyuwu.barurside.util.Util
 import com.permissionx.guolindev.PermissionX
-import com.mingyuwu.barurside.util.Category
 import com.mingyuwu.barurside.util.Style
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-const val REQUEST_ID_MULTIPLE_PERMISSIONS = 101
 private var photoPermissionGranted = false
 
 class AddVenueFragment : Fragment() {

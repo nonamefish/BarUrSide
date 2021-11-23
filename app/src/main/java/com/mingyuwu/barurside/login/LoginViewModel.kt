@@ -35,7 +35,6 @@ class LoginViewModel(private val repository: BarUrSideRepository) : ViewModel() 
 
     fun addUser(user: User) {
         coroutineScope.launch {
-            Log.d(TAG,"addUser: $user")
             val result = repository.addUser(user)
             when (result) {
                 is Result.Success -> {
@@ -56,7 +55,6 @@ class LoginViewModel(private val repository: BarUrSideRepository) : ViewModel() 
             }
 
             navigateToDetail.value = true
-            Log.d(TAG,"navigateToDetail: ${navigateToDetail.value}")
         }
     }
 
