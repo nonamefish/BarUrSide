@@ -2,7 +2,6 @@ package com.mingyuwu.barurside.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.sql.Timestamp
 
 @Parcelize
 data class User(

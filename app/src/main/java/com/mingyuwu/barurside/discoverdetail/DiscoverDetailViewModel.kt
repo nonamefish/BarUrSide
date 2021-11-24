@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.discoverdetail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,11 +11,12 @@ import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.filter.FilterParameter
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.Logger
+import com.mingyuwu.barurside.util.Util.getRectangleRange
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlin.math.cos
 
 class DiscoverDetailViewModel(
     val repository: BarUrSideRepository,
@@ -26,14 +26,16 @@ class DiscoverDetailViewModel(
 ) :
     ViewModel() {
 
+    var location = MutableLiveData<LatLng>()
+
+    // detailData: The internal MutableLiveData that stores the discover theme list date
     private var _detailData = MutableLiveData<List<Any>>()
     val detailData: MutableLiveData<List<Any>> // why cannot use LiveData<List<Any>>
         get() = _detailData
 
+    // navigate to object info. including activity, venue and drink
     val navigateToInfo = MutableLiveData<Any?>()
     private lateinit var result: Result<Any?>
-
-    var mLocation = MutableLiveData<LatLng>()
 
     // error: The internal MutableLiveData that stores the error of the most recent request
     private val _error = MutableLiveData<String?>()
@@ -71,32 +73,34 @@ class DiscoverDetailViewModel(
         coroutineScope.launch {
 
             when (theme) {
-                // Map Fragment
+
+                // map Fragment
                 Theme.MAP_FILTER -> {
                     if (filterParameter != null) {
                         result = repository.getVenueByFilter(filterParameter)
                     }
                 }
-                // Venue Info
+                // venue Info
                 Theme.VENUE_MENU -> {
                     id?.get(0)?.let {
                         result = repository.getMenu(id[0])
                     }
                 }
-                // Profile Page
+                // profile Page
                 Theme.USER_FRIEND -> {
-                    if (id != null) {
-                        result = repository.getFriend(id)
+                    result = if (id != null) {
+                        repository.getFriend(id)
                     } else {
-                        result = Result.Success(null)
+                        Result.Success(null)
                     }
                 }
+                // activity user booked
                 Theme.USER_ACTIVITY -> {
                     id?.get(0)?.let {
                         result = repository.getActivityByUser(id[0])
                     }
                 }
-                // Discover Page
+                // discover Page
                 Theme.HOT_VENUE -> {
                     result = repository.getHotVenueResult()
                 }
@@ -108,6 +112,9 @@ class DiscoverDetailViewModel(
                 }
                 Theme.HIGH_RATE_DRINK -> {
                     result = repository.getHighRateDrinkResult()
+                }
+                else -> {
+                    Logger.w("Wrong Theme: $theme")
                 }
             }
 
@@ -136,24 +143,15 @@ class DiscoverDetailViewModel(
         }
     }
 
-    private fun getRectangleRange(location: LatLng, distance: Double): List<Double> {
-
-        val minLat = location.latitude - (distance / 111.11)
-        val maxLat = location.latitude + (distance / 111.11)
-        val minLng = location.longitude - (distance / 111.11 / cos(location.latitude))
-        val maxLng = location.longitude + (distance / 111.11 / cos(location.latitude))
-
-        return listOf(minLat, maxLat, minLng, maxLng)
-    }
-
     fun getAroundVenue(location: LatLng) {
+
         coroutineScope.launch {
+
             val range = getRectangleRange(location, 1.0)
             result = repository.getVenueByLocation(range[0], range[1], range[2], range[3])
 
             _detailData.value = when (result) {
                 is Result.Success -> {
-                    Log.d("Ming", "result:  ${(result as Result.Success<Any>).data.toString()}")
                     _error.value = null
                     _status.value = LoadStatus.DONE
                     (result as Result.Success<Any>).data as List<Any>
@@ -168,17 +166,16 @@ class DiscoverDetailViewModel(
                     _status.value = LoadStatus.ERROR
                     null
                 }
-                else -> {
-                    null
-                }
+                else -> null
             }
-
         }
     }
 
     fun replyAddFriend(notify: Notification, reply: Boolean) {
         coroutineScope.launch {
+
             notify.reply = reply
+
             result = repository.replyAddFriend(notify, reply)
             when (result) {
                 is Result.Success -> {
@@ -186,25 +183,19 @@ class DiscoverDetailViewModel(
                 }
                 is Result.Fail -> {
                     _error.value = (result as Result.Fail).error
-                    null
                 }
                 is Result.Error -> {
                     _error.value = (result as Result.Error).exception.toString()
-                    null
                 }
                 else -> {
-                    null
                 }
             }
         }
     }
 
-    fun onLeft() {
-        navigateToInfo.value = null
-    }
-
-    fun checkNotification(ids: List<String>){
+    fun checkNotification(ids: List<String>) {
         coroutineScope.launch {
+
             result = repository.checkNotification(ids)
             when (result) {
                 is Result.Success -> {
@@ -212,17 +203,18 @@ class DiscoverDetailViewModel(
                 }
                 is Result.Fail -> {
                     _error.value = (result as Result.Fail).error
-                    null
                 }
                 is Result.Error -> {
                     _error.value = (result as Result.Error).exception.toString()
-                    null
                 }
                 else -> {
-                    null
                 }
             }
         }
+    }
+
+    fun onLeft() {
+        navigateToInfo.value = null
     }
 
 }

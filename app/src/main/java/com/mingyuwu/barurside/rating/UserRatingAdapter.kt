@@ -65,5 +65,4 @@ class UserRatingAdapter() :
         holder.bind(rating, holder.itemView)
     }
 
-
 }

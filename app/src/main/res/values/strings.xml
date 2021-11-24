@@ -28,7 +28,6 @@
     <string name="collect_tab_venue">店家</string>
     <string name="collect_tab_drink">酒項</string>
 
-
     <!--    Discover Fragment-->
     <string name="discover_title">探索</string>
     <string-array name="search_type">
@@ -37,6 +36,13 @@
     </string-array>
 
     <!--    DISCOVER DETAIL Fragment-->
+    <string name="user_friend_title">朋友列表</string>
+    <string name="notification_title">通知</string>
+    <string name="menu_title">菜單</string>
+    <string name="image_title">相片</string>
+    <string name="activity_list_title">活動列表</string>
+    <string name="filter_title">搜尋結果</string>
+    <string name="people_limit">上限: %d 人</string>
 
 
     <!--    DRINK Info -->

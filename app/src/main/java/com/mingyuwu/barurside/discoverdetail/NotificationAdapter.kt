@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.discoverdetail
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -28,6 +27,7 @@ class NotificationAdapter(val viewModel: DiscoverDetailViewModel) :
             binding.notification = notification
             binding.viewModel = viewModel
         }
+
     }
 
     // Allows the RecyclerView to determine which items have changed when the [List] of [Notification] has been updated.
@@ -54,7 +54,6 @@ class NotificationAdapter(val viewModel: DiscoverDetailViewModel) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is NotificationViewHolder -> {
-                Log.d("Ming", getItem(position).toString())
                 holder.bind((getItem(position) as Notification), viewModel)
             }
         }

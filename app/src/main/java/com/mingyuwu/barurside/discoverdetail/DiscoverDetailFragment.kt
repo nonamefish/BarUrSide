@@ -7,7 +7,6 @@ import android.content.Intent
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,10 +36,11 @@ import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
 import com.mingyuwu.barurside.profile.FriendAdapter
 import com.mingyuwu.barurside.rating.ImageAdapter
-import com.mingyuwu.barurside.util.Util.getDiffHour
+import com.mingyuwu.barurside.util.Logger
+import com.mingyuwu.barurside.util.Util
 import com.permissionx.guolindev.PermissionX
 
-class DiscoverDetailFragment() : Fragment() {
+class DiscoverDetailFragment : Fragment() {
 
     private lateinit var mContext: Context
     private lateinit var binding: FragmentDiscoverDetailBinding
@@ -63,16 +63,19 @@ class DiscoverDetailFragment() : Fragment() {
         val ids = DiscoverDetailFragmentArgs.fromBundle(requireArguments()).id?.toList()
         val theme = DiscoverDetailFragmentArgs.fromBundle(requireArguments()).theme
 
+        // set tool bar title with different theme
         val toolbarTitle = (requireActivity() as MainActivity).viewModel.discoverType
         toolbarTitle.value = when (theme) {
-            in arrayOf(Theme.RECENT_ACTIVITY, Theme.USER_ACTIVITY) -> "活動列表"
-            Theme.USER_FRIEND -> "朋友列表"
-            Theme.NOTIFICATION -> "通知"
-            Theme.VENUE_MENU -> "菜單"
-            Theme.IMAGES -> "相片"
-            else -> "搜尋結果"
+            in arrayOf(
+                Theme.RECENT_ACTIVITY,
+                Theme.USER_ACTIVITY
+            ) -> Util.getString(R.string.activity_list_title)
+            Theme.USER_FRIEND -> Util.getString(R.string.user_friend_title)
+            Theme.NOTIFICATION -> Util.getString(R.string.notification_title)
+            Theme.VENUE_MENU -> Util.getString(R.string.menu_title)
+            Theme.IMAGES -> Util.getString(R.string.image_title)
+            else -> Util.getString(R.string.filter_title)
         }
-
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -106,16 +109,16 @@ class DiscoverDetailFragment() : Fragment() {
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
             Theme.AROUND_VENUE -> {
-                viewModel.mLocation = (requireActivity() as MainActivity).mlocation
+                viewModel.location = (requireActivity() as MainActivity).location
 
-                if (viewModel.mLocation.value == null) {
+                if (viewModel.location.value == null) {
                     getLocationPermission()
                 }
                 adapter = DiscoverVenueAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
 
-                viewModel.mLocation.observe(viewLifecycleOwner, Observer {
+                viewModel.location.observe(viewLifecycleOwner, Observer {
                     viewModel.getAroundVenue(it)
                 })
             }
@@ -142,6 +145,9 @@ class DiscoverDetailFragment() : Fragment() {
                 adapter = DiscoverDrinkAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.setImageResource(R.drawable.ic_baseline_add_24)
+            }
+            else -> {
+                Logger.w("Wrong Theme: $theme")
             }
         }
 
@@ -173,22 +179,27 @@ class DiscoverDetailFragment() : Fragment() {
 
         // assign value to recyclerView
         viewModel.detailData.observe(viewLifecycleOwner, Observer { it ->
-            if (it.isNullOrEmpty()) { // adapter list is empty then finish loading animation
-
+            if (it.isNullOrEmpty()) {
+                // finish loading and close lottie
                 binding.animationEmpty.visibility = View.VISIBLE
                 binding.animationLoading.visibility = View.GONE
+
             } else {
-                var list: List<Any>?
+                val list: List<Any>?
+
                 // set notification value
                 if (theme == Theme.NOTIFICATION) {
-                    list = (it as List<Notification>).filter { ntfys ->
-                        ntfys.toId == UserManager.user.value!!.id
+
+                    list = (it as List<Notification>).filter {
+                        it.toId == UserManager.user.value!!.id
                     }.take(20)
+
                     if (!it.isNullOrEmpty()) {
-                        it.filter { it.isCheck == false }.map { it.id }?.let {
+                        it.filter { it.isCheck == false }.map { it.id }.let {
                             viewModel.checkNotification(it)
                         }
                     }
+
                 } else {
                     list = it
                 }
@@ -200,6 +211,7 @@ class DiscoverDetailFragment() : Fragment() {
                     adapter.submitList(list)
                 }
                 binding.animationLoading.visibility = View.GONE
+
             }
         })
 
@@ -209,7 +221,9 @@ class DiscoverDetailFragment() : Fragment() {
                 Theme.MAP_FILTER -> {
                     viewModel.detailData.value?.let {
                         findNavController().navigate(
-                            MainNavigationDirections.navigateToRandomFragment((it as List<Venue>).toTypedArray())
+                            MainNavigationDirections.navigateToRandomFragment(
+                                (it as List<Venue>).toTypedArray()
+                            )
                         )
                     }
                 }
@@ -220,69 +234,13 @@ class DiscoverDetailFragment() : Fragment() {
                         )
                     }
                 }
+                else -> {
+                }
             }
 
         }
 
         return binding.root
-    }
-
-    // get and check location permission
-    private fun getLocationPermission() {
-        PermissionX.init(activity)
-            .permissions(
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            .onExplainRequestReason { scope, deniedList ->
-                scope.showRequestReasonDialog(
-                    deniedList,
-                    "請開通位置存取權，以提供您所在位置附近的優質酒館",
-                    "確定",
-                    "忍痛拒絕"
-                )
-            }
-            .onForwardToSettings { scope, deniedList ->
-                scope.showForwardToSettingsDialog(
-                    deniedList,
-                    "請開通位置存取權，以提供您所在位置附近的優質酒館",
-                    "確定",
-                    "忍痛拒絕"
-                )
-            }
-            .request { allGranted, _, deniedList ->
-                if (allGranted) {
-                    locationPermissionGranted = true
-                    checkGPSState()
-                } else {
-                    Toast.makeText(
-                        mContext,
-                        "These permissions are denied: $deniedList",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-    }
-
-    // check GPS state
-    private fun checkGPSState() {
-        val locationManager = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            AlertDialog.Builder(mContext)
-                .setTitle("GPS 尚未開啟")
-                .setMessage("使用此功能需要開啟 GPS 定位功能")
-                .setPositiveButton(
-                    "前往開啟",
-                ) { _, _ ->
-                    startActivityForResult(
-                        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_ENABLE_GPS,
-                    )
-                }
-                .setNegativeButton("取消", null)
-                .show()
-        } else {
-            getDeviceLocation()
-            Log.d("Ming", "已獲取到位置權限且GPS已開啟，可以準備開始獲取經緯度")
-        }
     }
 
     private fun getDeviceLocation() {
@@ -294,20 +252,78 @@ class DiscoverDetailFragment() : Fragment() {
                         if (task.isSuccessful && task.result != null) {
                             // google map current location (blue point)
                             val location = task.result
-                            (requireActivity() as MainActivity).mlocation.value =
+                            (requireActivity() as MainActivity).location.value =
                                 LatLng(location.latitude, location.longitude)
-                        }
-                        else{
-                            Log.d("Ming","exception ${task.exception}")
-                            Log.d("Ming","task.result ${task.result}")
+                        } else {
+                            Logger.d("exception ${task.exception}")
+                            Logger.d("task.result ${task.result}")
                         }
                     }
             } else {
                 getLocationPermission()
             }
         } catch (e: SecurityException) {
-            Log.e("Ming: %s", e.message, e)
+            Logger.d("exception ${e.message}")
         }
     }
+
+    // get and check location permission
+    private fun getLocationPermission() {
+        PermissionX.init(activity)
+            .permissions(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            .onExplainRequestReason { scope, deniedList ->
+                scope.showRequestReasonDialog(
+                    deniedList,
+                    Util.getString(R.string.permission_location_collect),
+                    Util.getString(R.string.permission_confirm),
+                    Util.getString(R.string.permission_reject)
+                )
+            }
+            .onForwardToSettings { scope, deniedList ->
+                scope.showForwardToSettingsDialog(
+                    deniedList,
+                    Util.getString(R.string.permission_location_collect),
+                    Util.getString(R.string.permission_confirm),
+                    Util.getString(R.string.permission_reject)
+                )
+            }
+            .request { allGranted, _, deniedList ->
+                if (allGranted) {
+                    locationPermissionGranted = true
+                    checkGPSState()
+                } else {
+                    Toast.makeText(
+                        mContext,
+                        getString(R.string.permission_reject_toast, deniedList),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+    }
+
+    // check GPS state
+    private fun checkGPSState() {
+        val locationManager = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            AlertDialog.Builder(mContext)
+            AlertDialog.Builder(mContext)
+                .setTitle(Util.getString(R.string.request_gps_title))
+                .setMessage(Util.getString(R.string.request_gps_content))
+                .setPositiveButton(
+                    Util.getString(R.string.request_gps_positive)
+                ) { _, _ ->
+                    startActivityForResult(
+                        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_ENABLE_GPS,
+                    )
+                }
+                .setNegativeButton(Util.getString(R.string.request_gps_cancel), null)
+                .show()
+        } else {
+            getDeviceLocation()
+        }
+    }
+
 }
 

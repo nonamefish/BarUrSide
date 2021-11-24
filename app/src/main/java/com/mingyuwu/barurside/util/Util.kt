@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.R
 import java.io.File
@@ -14,6 +15,7 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.cos
 
 
 object Util {
@@ -112,7 +114,16 @@ object Util {
         }
 
         return Timestamp(cdate.timeInMillis)
+    }
 
+    fun getRectangleRange(location: LatLng, distance: Double): List<Double> {
+
+        val minLat = location.latitude - (distance / 111.11)
+        val maxLat = location.latitude + (distance / 111.11)
+        val minLng = location.longitude - (distance / 111.11 / cos(location.latitude))
+        val maxLng = location.longitude + (distance / 111.11 / cos(location.latitude))
+
+        return listOf(minLat, maxLat, minLng, maxLng)
     }
 
 }

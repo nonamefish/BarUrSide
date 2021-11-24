@@ -10,6 +10,7 @@ data class Collect (
     val userId: String= "",
     val objectId: String= ""
 ): Parcelable{
+
     companion object{
         fun toHashMap(dt : Collect) = hashMapOf(
             "id" to dt.id,
@@ -18,4 +19,5 @@ data class Collect (
             "isVenue" to dt.isVenue
         )
     }
+
 }

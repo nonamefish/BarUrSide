@@ -30,8 +30,8 @@ class DiscoverDrinkAdapter(val viewModel: DiscoverDetailViewModel) :
             binding.name = drink.name
             binding.img = drink.images?.get(0) ?: ""
             binding.category = Category.valueOf(drink.category.uppercase()).chinese
-            binding.info = "$ ${drink.price}"
-            binding.info2 = binding.root.context.getString(
+            binding.info = binding.root.context.getString(R.string.drink_info_price, drink.price)
+            binding.rating = binding.root.context.getString(
                 R.string.venue_rating_info_list, drink.avgRating, drink.rtgCount
             )
 
@@ -69,4 +69,5 @@ class DiscoverDrinkAdapter(val viewModel: DiscoverDetailViewModel) :
             }
         }
     }
+
 }

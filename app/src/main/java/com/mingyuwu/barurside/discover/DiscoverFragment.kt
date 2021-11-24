@@ -81,27 +81,35 @@ class DiscoverFragment : Fragment() {
 
         // search info: set auto completed text adapter
         viewModel.searchInfo.observe(viewLifecycleOwner, Observer {
+
             it?.let {
 
-                val list = when (viewModel.searchType.value) {
-                    true -> (it as List<Drink>).map { drink -> drink.name }
-                    false -> (it as List<Venue>).map { venue -> venue.name }
-                    else -> listOf()
-                }
+                val list: List<String>?
+                val id: List<String>?
 
-                val id = when (viewModel.searchType.value) {
-                    true -> (it as List<Drink>).map { drink -> drink.id }
-                    false -> (it as List<Venue>).map { venue -> venue.id }
-                    else -> listOf()
+                // set autocomplete hint list
+                when (it[0]) {
+                    is Drink -> {
+                        list = (it as List<Drink>).map { drink -> drink.name }
+                        id = it.map { drink -> drink.id }
+                    }
+                    is Venue -> {
+                        list = (it as List<Venue>).map { venue -> venue.name }
+                        id = it.map { venue -> venue.id }
+                    }
+                    else -> {
+                        list = listOf()
+                        id = listOf()
+                    }
                 }
 
                 // set adapter
-                val adapter = ArrayAdapter(
+                val filterAdapter = ArrayAdapter(
                     binding.root.context,
                     android.R.layout.simple_spinner_dropdown_item,
-                    list!!
+                    list,
                 )
-                binding.autoDiscoverFilter.setAdapter(adapter)
+                binding.autoDiscoverFilter.setAdapter(filterAdapter)
 
                 // auto complete text click listener
                 binding.autoDiscoverFilter.setOnItemClickListener { parent, _, position, _ ->
@@ -112,6 +120,7 @@ class DiscoverFragment : Fragment() {
                     // navigate
                     viewModel.navigateToObject(id[pos])
                 }
+
             }
         })
 

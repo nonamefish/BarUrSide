@@ -45,9 +45,6 @@ class RatingScoreAdapter (val width: Int, val height: Int) :
         holder.bind(starStatus)
     }
 
-    override fun getItemCount(): Int {
-        return super.getItemCount()
-    }
 }
 
 

@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.activity.ActivityPageViewModel
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.databinding.ItemDiscoverActivityBinding
@@ -26,23 +28,28 @@ class DiscoverActivityAdapter(val viewModel: ViewModel) :
         }
 
         fun bind(activity: Activity, viewModel: ViewModel) {
-            when(viewModel){
-                is DiscoverDetailViewModel->{
+
+            when (viewModel) {
+                is DiscoverDetailViewModel -> {
                     binding.cnstrtListItem.setOnClickListener {
                         viewModel.navigateToInfo.value = activity
                     }
                 }
-                is ActivityPageViewModel ->{
+                is ActivityPageViewModel -> {
                     binding.cnstrtListItem.setOnClickListener {
                         viewModel.navigateToDetail.value = activity
                     }
                 }
             }
+
             binding.name = activity.name
             binding.img = ""
             binding.category = activity.mainDrinking
             binding.info = activity.address
-            binding.info2 = "上限: ${activity.peopleLimit} 人"
+            binding.limit = BarUrSideApplication.appContext?.resources?.getString(
+                R.string.people_limit,
+                activity.peopleLimit
+            )
 
         }
     }

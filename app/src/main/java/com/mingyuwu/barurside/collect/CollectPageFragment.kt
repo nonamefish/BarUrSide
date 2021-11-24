@@ -115,7 +115,7 @@ class CollectPageFragment : Fragment() {
         })
 
         // set location
-        viewModel.location.value = (requireActivity() as MainActivity).mlocation.value
+        viewModel.location.value = (requireActivity() as MainActivity).location.value
 
         return binding.root
     }
@@ -128,7 +128,7 @@ class CollectPageFragment : Fragment() {
                         if (task.isSuccessful && task.result != null) {
                             // google map current location (blue point)
                             val location = task.result
-                            (requireActivity() as MainActivity).mlocation.value =
+                            (requireActivity() as MainActivity).location.value =
                                 LatLng(location.latitude, location.longitude)
                         }
                         else{

@@ -18,7 +18,7 @@
             type="String" />
 
         <variable
-            name="info2"
+            name="limit"
             type="String" />
 
         <variable
@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@{info2}"
+            android:text="@{limit}"
             app:layout_constraintStart_toStartOf="@+id/discover_object_category"
             app:layout_constraintTop_toBottomOf="@+id/discover_object_category"
             tools:text="雞尾酒" />

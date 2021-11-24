@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    var mlocation = MutableLiveData<LatLng>()
+    var location = MutableLiveData<LatLng>()
     private var userToken = UserManager.userToken
     val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Logger.d("MainActivity onCreate")
         auth = Firebase.auth
 
         // setting binding

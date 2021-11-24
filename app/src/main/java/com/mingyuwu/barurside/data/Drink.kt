@@ -1,7 +1,6 @@
 package com.mingyuwu.barurside.data
 
 import android.os.Parcelable
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -17,6 +16,7 @@ data class Drink(
     val avgRating: Double= -1.0,
     val rtgCount: Long? = -1
 ) : Parcelable{
+
     companion object{
         fun toHashMap(dt : Drink) = hashMapOf(
             "id" to dt.id,
@@ -31,4 +31,5 @@ data class Drink(
             "rtgCount" to dt.rtgCount
         )
     }
+
 }

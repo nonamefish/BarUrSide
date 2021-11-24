@@ -18,7 +18,7 @@
             type="String" />
 
         <variable
-            name="info2"
+            name="rating"
             type="String" />
 
         <variable
@@ -96,11 +96,11 @@
             app:layout_constraintTop_toBottomOf="@+id/discover_object_category" />
 
         <TextView
-            android:id="@+id/discover_object_info_2"
+            android:id="@+id/discover_object_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="@{info2}"
+            android:text="@{rating}"
             app:layout_constraintBottom_toBottomOf="@+id/info_avg_star"
             app:layout_constraintStart_toEndOf="@+id/info_avg_star"
             app:layout_constraintTop_toTopOf="@+id/info_avg_star"
@@ -112,7 +112,7 @@
             android:layout_height="28dp"
             android:layout_marginEnd="16dp"
             android:src="@drawable/ic_outline_info_24"
-            app:layout_constraintBottom_toBottomOf="@+id/discover_object_info_2"
+            app:layout_constraintBottom_toBottomOf="@+id/discover_object_rating"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/discover_object_name"
             app:layout_constraintVertical_bias="0.522" />

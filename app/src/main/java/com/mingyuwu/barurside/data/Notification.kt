@@ -35,4 +35,5 @@ data class Notification(
             "isCheck" to dt.isCheck
         )
     }
+
 }

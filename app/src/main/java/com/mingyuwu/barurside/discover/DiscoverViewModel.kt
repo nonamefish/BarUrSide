@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.Result
-import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,9 +12,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class DiscoverViewModel(private val repository: BarUrSideRepository) : ViewModel() {
-    var searchInfo = MutableLiveData<List<Any>?>()
-    var searchText = MutableLiveData<String?>()
-    var searchType = MutableLiveData<Boolean?>(false)
+
+    var searchType = MutableLiveData<Boolean?>(false) // search type for venue(store) or drink
+    var searchText = MutableLiveData<String?>() // search content user written
+    var searchInfo = MutableLiveData<List<*>?>() // info after user set search on editText
 
     // navigate to object info page
     private var _navigateToObject = MutableLiveData<String?>()
@@ -40,7 +40,9 @@ class DiscoverViewModel(private val repository: BarUrSideRepository) : ViewModel
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     fun getVenueBySearch(search: String) {
+
         coroutineScope.launch {
+
             val result = repository.getVenueBySearch(search)
             searchInfo.value = when (result) {
                 is Result.Success -> {
@@ -64,7 +66,9 @@ class DiscoverViewModel(private val repository: BarUrSideRepository) : ViewModel
     }
 
     fun getDrinkBySearch(search: String) {
+
         coroutineScope.launch {
+
             val result = repository.getDrinkBySearch(search)
             searchInfo.value = when (result) {
                 is Result.Success -> {
@@ -98,4 +102,5 @@ class DiscoverViewModel(private val repository: BarUrSideRepository) : ViewModel
         _navigateToObject.value = null
         _navigateToTheme.value = null
     }
+
 }

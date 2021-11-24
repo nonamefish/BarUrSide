@@ -190,17 +190,17 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                         if (task.isSuccessful && task.result != null) {
                             // google map current location (blue point)
                             val location = task.result
-                            (requireActivity() as MainActivity).mlocation.value =
+                            (requireActivity() as MainActivity).location.value =
                                 LatLng(location.latitude, location.longitude)
                             // get near bar
-                            viewModel.getVenueByLocation((requireActivity() as MainActivity).mlocation.value!!)
+                            viewModel.getVenueByLocation((requireActivity() as MainActivity).location.value!!)
 
                             // set map current location and icon
                             mMap.isMyLocationEnabled = true
                             mMap.uiSettings.isMyLocationButtonEnabled = true
                             mMap.moveCamera(
                                 CameraUpdateFactory.newLatLngZoom(
-                                    (requireActivity() as MainActivity).mlocation.value, 15f
+                                    (requireActivity() as MainActivity).location.value, 15f
                                 )
                             )
                         }

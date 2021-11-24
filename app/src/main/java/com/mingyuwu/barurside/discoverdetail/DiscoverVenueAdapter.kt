@@ -19,7 +19,11 @@ class DiscoverVenueAdapter(val viewModel: DiscoverDetailViewModel) :
         companion object {
             fun from(parent: ViewGroup): DiscoverVenueViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemDiscoverObjectBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemDiscoverObjectBinding.inflate(
+                    layoutInflater,
+                    parent,
+                    false
+                )
 
                 return DiscoverVenueViewHolder(binding)
             }
@@ -27,15 +31,10 @@ class DiscoverVenueAdapter(val viewModel: DiscoverDetailViewModel) :
 
         fun bind(venue: Venue, viewModel: DiscoverDetailViewModel) {
             binding.name = venue.name
-
-            binding.img = if (venue.images.isNullOrEmpty()) {
-                ""
-            } else {
-                venue.images!![0]
-            }
+            binding.img = venue.images?.get(0) ?: ""
             binding.category = Style.valueOf(venue.style.uppercase()).chinese
             binding.info = venue.address
-            binding.info2 = binding.root.context.getString(
+            binding.rating = binding.root.context.getString(
                 R.string.venue_rating_info_list, venue.avgRating, venue.rtgCount
             )
 
@@ -73,4 +72,5 @@ class DiscoverVenueAdapter(val viewModel: DiscoverDetailViewModel) :
             }
         }
     }
+
 }
