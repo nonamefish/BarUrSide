@@ -1,14 +1,12 @@
 package com.mingyuwu.barurside.drink
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
-import com.mingyuwu.barurside.util.Category
+import com.mingyuwu.barurside.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,7 +24,7 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
     // navigate to all rating
     var navigateToAll = MutableLiveData<List<RatingInfo>?>()
 
-    // image list data
+    // _images: The internal MutableLiveData that stores the image urls
     private val _images = MutableLiveData<List<String>?>()
 
     val images: LiveData<List<String>?>
@@ -61,18 +59,23 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
         venueInfo = repository.getVenue(id)
     }
 
-    fun setImages(rtgs: List<RatingInfo>){
-        var list = listOf<String>()
-        rtgs?.forEach { ratingInfo ->
-            ratingInfo.images?.let { imgs ->
-                list += imgs
+    fun setImages(rtgs: List<RatingInfo>) {
+
+        val list = mutableListOf<String>()
+
+        rtgs.forEach { ratingInfo ->
+            ratingInfo.images?.let { images ->
+                list += images
             }
         }
+
         _images.value = list
     }
 
     private fun getCollect(userId: String) {
+
         coroutineScope.launch {
+
             val result = repository.getCollect(userId)
             isCollect.value = when (result) {
                 is Result.Success -> {
@@ -109,7 +112,9 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
     }
 
     private fun addCollect(collect: Collect) {
+
         coroutineScope.launch {
+
             val result = repository.addCollect(collect)
             when (result) {
                 is Result.Success -> {
@@ -118,21 +123,21 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
                 }
                 is Result.Fail -> {
                     _error.value = result.error
-                    null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
-                    null
                 }
                 else -> {
-                    null
+                    Logger.w("Wrong Result Type: $result")
                 }
             }
         }
     }
 
     private fun removeCollect(id: String, userId: String) {
+
         coroutineScope.launch {
+
             val result = repository.removeCollect(id, userId)
             when (result) {
                 is Result.Success -> {
@@ -141,14 +146,12 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
                 }
                 is Result.Fail -> {
                     _error.value = result.error
-                    null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
-                    null
                 }
                 else -> {
-                    null
+                    Logger.w("Wrong Result Type: $result")
                 }
             }
         }
@@ -161,6 +164,5 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
     fun onLeft() {
         navigateToAll.value = null
     }
-
 
 }

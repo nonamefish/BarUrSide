@@ -85,7 +85,7 @@ class AddVenueFragment : Fragment() {
             .build(requireContext())
 
         // address edit text click listener
-        binding.txtVenueAddress.setOnClickListener { // Set the fields to specify which types of place data to
+        binding.txtVenueAddress.setOnClickListener {
             //start activity result
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
         }

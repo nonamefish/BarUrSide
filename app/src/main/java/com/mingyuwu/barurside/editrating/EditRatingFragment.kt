@@ -27,6 +27,7 @@ import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.getResizedBitmap
 import com.mingyuwu.barurside.util.Util.randomName
 import com.mingyuwu.barurside.util.Util.saveBitmap
@@ -54,24 +55,27 @@ class EditRatingFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         // set adapter
-        val adapter = EditRatingAdapter(viewModel)
-        binding.venueRtgScoreList.adapter = adapter
+        val editRatingAdapter = EditRatingAdapter(viewModel)
+        binding.venueRtgScoreList.adapter = editRatingAdapter
 
         // add drink rating : set button click listener
         binding.btnAddDrinkRtg.setOnClickListener {
             if (viewModel.menu.value != null) {
                 addDrinkRating()
             } else {
-                Toast.makeText(binding.root.context, "無提供菜單", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    binding.root.context,
+                    Util.getString(R.string.no_menu),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
         // viewModel observer
         viewModel.objectId.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
-            adapter.notifyDataSetChanged()
-        }
-        )
+            editRatingAdapter.submitList(it)
+            editRatingAdapter.notifyDataSetChanged()
+        })
 
         // click add photo button
         viewModel.isUploadImgBtn.observe(viewLifecycleOwner, Observer {
@@ -102,7 +106,6 @@ class EditRatingFragment : Fragment() {
             }
         }
 
-
         // leave rating and to previous view
         viewModel.leave.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -111,7 +114,6 @@ class EditRatingFragment : Fragment() {
                 viewModel.onLeft()
             }
         })
-
 
         return binding.root
     }
@@ -124,17 +126,17 @@ class EditRatingFragment : Fragment() {
             .onExplainRequestReason { scope, deniedList ->
                 scope.showRequestReasonDialog(
                     deniedList,
-                    "請開通相片權限，以上傳照片",
-                    "確定",
-                    "忍痛拒絕"
+                    Util.getString(R.string.permission_camera),
+                    Util.getString(R.string.permission_confirm),
+                    Util.getString(R.string.permission_reject)
                 )
             }
             .onForwardToSettings { scope, deniedList ->
                 scope.showForwardToSettingsDialog(
                     deniedList,
-                    "請開通相片權限，以上傳照片",
-                    "確定",
-                    "忍痛拒絕"
+                    Util.getString(R.string.permission_camera),
+                    Util.getString(R.string.permission_confirm),
+                    Util.getString(R.string.permission_reject)
                 )
             }
             .request { allGranted, _, deniedList ->
@@ -145,7 +147,7 @@ class EditRatingFragment : Fragment() {
                 } else {
                     Toast.makeText(
                         binding.root.context,
-                        "These permissions are denied: $deniedList",
+                        getString(R.string.permission_reject_toast, deniedList),
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -153,24 +155,32 @@ class EditRatingFragment : Fragment() {
     }
 
     private fun chooseImage(context: Context) {
-        val optionsMenu = arrayOf<CharSequence>("從照片選擇", "離開") // create a menuOption Array
+
+        // create a menuOption Array
+        val optionsMenu = arrayOf<CharSequence>(
+            Util.getString(R.string.from_gallery),
+            Util.getString(R.string.exit),
+        )
+
         // create a dialog for showing the optionsMenu
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+
         // set the items in builder
         builder.setItems(
             optionsMenu
         ) { dialogInterface, i ->
-            if (optionsMenu[i] == "從照片選擇") {
+            if (optionsMenu[i] == Util.getString(R.string.from_gallery)) {
                 // choose from  external storage
                 val pickPhoto = Intent(
                     Intent.ACTION_PICK,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 )
                 startActivityForResult(pickPhoto, 1)
-            } else if (optionsMenu[i] == "Exit") {
+            } else if (optionsMenu[i] == Util.getString(R.string.exit)) {
                 dialogInterface.dismiss()
             }
         }
+
         builder.show()
     }
 
@@ -190,7 +200,7 @@ class EditRatingFragment : Fragment() {
                         // resize image and save into another img
                         bitMap?.let {
                             val resizeImg = getResizedBitmap(bitMap, 1000)
-                            val pathSave = saveBitmap(resizeImg!!, fileName)
+                            val pathSave = saveBitmap(resizeImg, fileName)
                             addImageToRecyclerView(resizeImg, pathSave)
                         }
                     }
@@ -203,31 +213,34 @@ class EditRatingFragment : Fragment() {
         viewModel.addUploadImg(viewModel.clickPosition.value!!, bitmap, url)
     }
 
-
     private fun addDrinkRating() {
-        // set add drink rating adapter
-        var menuItem = viewModel.menu.value?.map { it.name }
+        // set dialog view and create dialog
         val mBuilder = AlertDialog.Builder(binding.root.context)
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_venue_menu, null)
         val spinner = mView.findViewById<Spinner>(R.id.spinner)
+        mBuilder.setTitle(Util.getString(R.string.add_drink_item))
+
+        // set spinner adapter
+        val menuItem = viewModel.menu.value?.map { it.name }
         val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_dropdown_item_1line,
             menuItem!!
         )
         spinner.adapter = adapter
-        mBuilder.setTitle("選取評價項目")
+
 
         // set OK button for alert dialog
-        mBuilder.setPositiveButton("OK") { dialog, _ ->
+        mBuilder.setPositiveButton(Util.getString(R.string.add_drink_confirm)) { dialog, _ ->
             val selectedPosition = spinner.selectedItemPosition
             viewModel.addNewRating(viewModel.menu.value!![selectedPosition])
             viewModel.removeMenuItem(selectedPosition)
 
             dialog.dismiss()
         }
+
         // set Cancel button for alert dialog
-        mBuilder.setNegativeButton("Cancel") { dialog, _ ->
+        mBuilder.setNegativeButton(Util.getString(R.string.add_drink_cancel)) { dialog, _ ->
             dialog.dismiss()
         }
 
@@ -235,32 +248,38 @@ class EditRatingFragment : Fragment() {
     }
 
     private fun showRatingUncompleted() {
+        // set dialog view and create dialog
         val alertDialog = AlertDialog.Builder(binding.root.context)
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
         val btDialog = mView!!.findViewById<Button>(R.id.button_confirm)
-
         alertDialog.setView(mView)
         val dialog = alertDialog.create()
 
+        // dialog button on click listener
         btDialog.setOnClickListener { dialog.dismiss() }
         dialog.show()
+
+        // set windows transparent
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
     }
 
     private fun postRatingDialog(postDialog: AlertDialog.Builder): AlertDialog {
+        // set dialog view
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_post_rating, null)
-
         postDialog.setView(mView)
         val dialog = postDialog.create()
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()
+
+        // set windows transparent
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
         return dialog
     }
+
 }
 

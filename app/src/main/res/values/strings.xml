@@ -91,8 +91,13 @@
     </string-array>
 
 
-    <!--    Edit Rating Tab-->
+    <!--    Edit Rating-->
     <string name="tag_friend">標註朋友</string>
+    <string name="no_menu">無提供菜單</string>
+    <string name="add_drink_item">選取評價項目</string>
+    <string name="add_drink_confirm">OK</string>
+    <string name="add_drink_cancel">Cancel</string>
+
 
 
     <!--    Filter Tab-->

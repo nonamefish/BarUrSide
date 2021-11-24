@@ -1,10 +1,10 @@
 package com.mingyuwu.barurside.editrating
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +13,6 @@ import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.databinding.ItemEditRatingObjectBinding
 import com.mingyuwu.barurside.rating.BitmapAdapter
 import com.mingyuwu.barurside.rating.TagFriendAdapter
-
 
 class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
     ListAdapter<String, EditRatingAdapter.EditRatingViewHolder>(DiffCallback) {
@@ -42,19 +41,19 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
             binding.ratingAddImgList.adapter = imgAdapter
             binding.ratingTagFrdsList.adapter = tagFrdAdapter
 
-
             // upload photo : set button click listener
             binding.btnAddImage.setOnClickListener {
                 viewModel.isUploadImgBtn.value = true
                 viewModel.clickPosition.value = rtgOrder
             }
+
             binding.ratingAddImg.setOnClickListener {
                 viewModel.isUploadImgBtn.value = true
                 viewModel.clickPosition.value = rtgOrder
             }
 
             // tag friend : set adapter and item click listener
-            viewModel.frdList.observe(binding.lifecycleOwner!!, androidx.lifecycle.Observer {
+            viewModel.frdList.observe(binding.lifecycleOwner!!, Observer {
 
                 val friendList = viewModel.frdList.value?.map { "${it.name} (${it.id})" }
                 val adapter = ArrayAdapter(
@@ -69,7 +68,7 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
                     val selected = parent.getItemAtPosition(position)
                     val pos = friendList.indexOf(selected)
                     binding.btnTagFrd.setText("")
-                    viewModel.addTagFrd(rtgOrder, TagFriend(it[pos].id, it[pos].name))
+                    viewModel.addTagFrd(TagFriend(it[pos].id, it[pos].name))
                     adapter.remove("${it[pos].name} (${it[pos].id})")
                 }
             })
@@ -98,8 +97,6 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
 
     // Replaces the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: EditRatingViewHolder, position: Int) {
-        val id = getItem(position)
-
         holder.bind(viewModel, position)
     }
 

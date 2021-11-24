@@ -188,6 +188,7 @@ class DiscoverDetailViewModel(
                     _error.value = (result as Result.Error).exception.toString()
                 }
                 else -> {
+                    Logger.w("Wrong Result Type: $result")
                 }
             }
         }
@@ -208,6 +209,7 @@ class DiscoverDetailViewModel(
                     _error.value = (result as Result.Error).exception.toString()
                 }
                 else -> {
+                    Logger.w("Wrong Result Type: $result")
                 }
             }
         }

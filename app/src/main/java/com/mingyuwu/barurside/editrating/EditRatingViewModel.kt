@@ -1,47 +1,48 @@
 package com.mingyuwu.barurside.editrating
 
 import android.graphics.Bitmap
-import com.mingyuwu.barurside.login.UserManager
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.sql.Timestamp
 
-class EditRatingViewModel(val repository: BarUrSideRepository, private val venue: Venue) :
+class EditRatingViewModel(val repository: BarUrSideRepository, venue: Venue) :
     ViewModel() {
 
     private val userId = UserManager.user.value?.id
 
+    // star: The internal MutableLiveData that stores rating scores
     private val _star = MutableLiveData<MutableList<Int?>>()
     val star: LiveData<MutableList<Int?>>
         get() = _star
 
+    // comment: The internal MutableLiveData that rating comments
     private val _comment = MutableLiveData<MutableList<String?>>()
     val comment: LiveData<MutableList<String?>>
         get() = _comment
 
+    // uploadImg: The internal MutableLiveData that stores rating bitmap images
     private val _uploadImg = MutableLiveData<MutableList<MutableList<Bitmap?>>>()
     val uploadImg: LiveData<MutableList<MutableList<Bitmap?>>>
         get() = _uploadImg
 
+    // uploadImgUrl: The internal MutableLiveData that stores rating image client file urls
     private val _uploadImgUrl = MutableLiveData<MutableList<MutableList<String?>>>()
-    val uploadImgUrl: LiveData<MutableList<MutableList<String?>>>
-        get() = _uploadImgUrl
 
+    // firebaseImgUrl: The internal MutableLiveData that stores rating image firebase urls
     private val _firebaseImgUrl = MutableLiveData<MutableList<MutableList<String>>>()
-    val firebaseImgUrl: LiveData<MutableList<MutableList<String>>>
-        get() = _firebaseImgUrl
 
+    // tagFrd: The internal MutableLiveData that stores rating tag friends
     private val _tagFrd = MutableLiveData<MutableList<TagFriend>?>(null)
     val tagFrd: LiveData<MutableList<TagFriend>?>
         get() = _tagFrd
@@ -50,17 +51,17 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     val isUploadImgBtn = MutableLiveData<Boolean>()
     val clickPosition = MutableLiveData<Int>()
 
-    // all user item
+    // user: user information
     private var _user = MutableLiveData<User>()
     val user: LiveData<User>
         get() = _user
 
-    // all rating item
+    // frdList: The internal MutableLiveData that stores friends
     private val _frdList = MutableLiveData<List<User>>()
     val frdList: LiveData<List<User>>
         get() = _frdList
 
-    // menu: all drink item
+    // menu: The internal MutableLiveData that stores drink items
     private val _menu = MutableLiveData<MutableList<Drink>>()
     val menu: LiveData<MutableList<Drink>>
         get() = _menu
@@ -92,7 +93,6 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
 
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
 
     init {
         getUser()
@@ -147,18 +147,23 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     }
 
 
-    fun addTagFrd(position: Int, frdId: TagFriend) {
+    fun addTagFrd(frdId: TagFriend) {
+
         if (_tagFrd.value == null) {
             _tagFrd.value = mutableListOf(frdId)
         } else {
             _tagFrd.value!!.add(frdId)
         }
+
         _tagFrd.value = _tagFrd.value
     }
 
     private fun postRating() {
+
         coroutineScope.launch {
+
             objectId.value?.let {
+
                 var addShare = 0
                 var addShareImg = 0
 
@@ -171,17 +176,20 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
                         userId ?: "",
                         star.value!![index]!!.toLong(),
                         comment.value!![index] ?: "",
-                        _firebaseImgUrl?.value?.get(index) ?: null,
+                        _firebaseImgUrl.value?.get(index),
                         Timestamp(System.currentTimeMillis()),
                         tagFrd.value
                     )
+
                     addShare += 1
-                    addShareImg += _firebaseImgUrl?.value?.get(index)?.size ?: 0
+                    addShareImg += _firebaseImgUrl.value?.get(index)?.size ?: 0
                     repository.postRating(rtg)
                     updateObjectRating(objectId.value!![index], index == 0, rtg)
                 }
+
                 updateUserShare(addShare, addShareImg)
             }
+
             leave()
         }
     }
@@ -202,7 +210,6 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
                 _uploadImgUrl.value?.get(index).let {
 
                     it?.forEachIndexed { listIndex, url ->
-                        Log.d("Ming", "_uploadImgUrl: $url")
                         url?.let {
                             when (val result =
                                 repository.uploadPhoto(storageRef, userId ?: "", type, url)) {
@@ -212,26 +219,25 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
                                 }
                                 is Result.Fail -> {
                                     _error.value = result.error
-                                    null
                                 }
                                 is Result.Error -> {
                                     _error.value = result.exception.toString()
-                                    null
                                 }
                                 else -> {
-                                    null
+                                    Logger.w("Wrong Result Type: $result")
                                 }
                             }
                         }
                     }
+
                     if (_firebaseImgUrl.value == null) {
                         _firebaseImgUrl.value = mutableListOf(imgs)
                     } else {
                         _firebaseImgUrl.value!!.add(imgs)
                     }
-
                 }
             }
+
             postRating()
         }
     }
@@ -324,21 +330,25 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
     }
 
     fun checkRating(): Boolean {
-        _objectId?.value?.forEachIndexed { index, s ->
+
+        _objectId.value?.forEachIndexed { index, s ->
             if (_star.value?.get(index) == null) {
                 return false
             }
         }
+
         return true
     }
 
     fun removeRating(rtgOrder: Int) {
+
         _menu.value?.add(
             Drink(
                 id = _objectId.value!![rtgOrder],
                 name = _objectName.value!![rtgOrder]
             )
         )
+
         _objectId.value!!.removeAt(rtgOrder)
         _objectName.value!!.removeAt(rtgOrder)
         _star.value?.removeAt(rtgOrder)
@@ -348,4 +358,5 @@ class EditRatingViewModel(val repository: BarUrSideRepository, private val venue
         _objectId.value = _objectId.value
         _menu.value = _menu.value
     }
+
 }
