@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mingyuwu.barurside.activity.ActivityPageViewModel
 import com.mingyuwu.barurside.activity.ActivityTypeFilter
-import com.mingyuwu.barurside.collect.CollectPageViewModel
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 
 @Suppress("UNCHECKED_CAST")

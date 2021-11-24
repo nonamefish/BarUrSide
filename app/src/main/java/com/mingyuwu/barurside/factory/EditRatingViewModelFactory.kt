@@ -4,12 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
-import com.mingyuwu.barurside.discover.Theme
-import com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel
-import com.mingyuwu.barurside.drink.DrinkViewModel
 import com.mingyuwu.barurside.editrating.EditRatingViewModel
-import com.mingyuwu.barurside.filter.FilterParameter
-import com.mingyuwu.barurside.venue.VenueViewModel
 
 @Suppress("UNCHECKED_CAST")
 class EditRatingViewModelFactory(

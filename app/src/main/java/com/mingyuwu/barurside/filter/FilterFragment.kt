@@ -20,6 +20,7 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentFilterBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.util.Util
 
 
 class FilterFragment : BottomSheetDialogFragment() {
@@ -66,8 +67,8 @@ class FilterFragment : BottomSheetDialogFragment() {
         // set chip group selected item
         binding.chipGroupDistance.setOnCheckedChangeListener { chipGroup, id ->
             viewModel.choiceDistance.value = when (chipGroup.findViewById<Chip>(id).text) {
-                "500公尺" -> 0.5
-                "1公里" -> 1.0
+                Util.getString(R.string.five_hundred_meter) -> 0.5
+                Util.getString(R.string.one_kilometer) -> 1.0
                 else -> 2.0
             }
         }
@@ -86,12 +87,11 @@ class FilterFragment : BottomSheetDialogFragment() {
             }
         })
 
-        // Inflate the layout for this fragment
         return binding.root
     }
 
     private fun showAddUncompleted() {
-        // set dialog
+        // set dialog view and show
         val alertDialog = AlertDialog.Builder(binding.root.context)
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
         val btDialog = mView!!.findViewById<Button>(R.id.button_confirm)
@@ -100,11 +100,11 @@ class FilterFragment : BottomSheetDialogFragment() {
         val dialog = alertDialog.create()
 
         // set dialog content text and button click listener
-        txtDialog.text = "價格範圍為必填項目"
+        txtDialog.text = Util.getString(R.string.filter_uncompleted_context)
         btDialog.setOnClickListener { dialog.dismiss() }
         dialog.show()
 
-        // set parameter
+        // set parameter for window transparent
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

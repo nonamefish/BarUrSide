@@ -3,7 +3,6 @@ package com.mingyuwu.barurside.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mingyuwu.barurside.adddrink.AddDrinkViewModel
-import com.mingyuwu.barurside.addvenue.AddVenueViewModel
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.drink.DrinkViewModel
 import com.mingyuwu.barurside.profile.ProfileViewModel

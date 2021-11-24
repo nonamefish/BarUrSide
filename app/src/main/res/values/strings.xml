@@ -99,8 +99,10 @@
     <string name="add_drink_cancel">Cancel</string>
 
 
-
     <!--    Filter Tab-->
+    <string name="filter_uncompleted_context">價格範圍為必填項目</string>
+    <string name="five_hundred_meter">500公尺</string>
+    <string name="one_kilometer">1公里</string>
     <string name="filter_price_range_desc">平均消費金額，$ (300元以下)，$$ (301-900)\n$$$ (901-1800)，$$$$ (1801元以上)</string>
     <string name="style_american">美式餐廳</string>
     <string name="style_european">歐式餐廳</string>

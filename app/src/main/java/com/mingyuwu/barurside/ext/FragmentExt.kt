@@ -9,7 +9,6 @@ import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.factory.*
 import com.mingyuwu.barurside.filter.FilterParameter
-import com.mingyuwu.barurside.rating.all.AllRatingViewModel
 
 
 fun Fragment.getVmFactory(): ViewModelFactory {
@@ -52,6 +51,5 @@ fun Fragment.getVmFactory(venue: Venue): EditRatingViewModelFactory {
 }
 
 fun Fragment.getVmFactory(ratings: List<RatingInfo>): AllRatingViewModelFactory {
-//    val repository = (requireContext().applicationContext as BarUrSideApplication).repository
     return AllRatingViewModelFactory(ratings)
 }

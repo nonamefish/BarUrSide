@@ -11,7 +11,6 @@ import com.mingyuwu.barurside.filter.FilterViewModel
 import com.mingyuwu.barurside.login.LoginViewModel
 import com.mingyuwu.barurside.map.MapViewModel
 
-
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory constructor(
     private val repository: BarUrSideRepository

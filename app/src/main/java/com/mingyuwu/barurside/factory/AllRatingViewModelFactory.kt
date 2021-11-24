@@ -2,10 +2,7 @@ package com.mingyuwu.barurside.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.mingyuwu.barurside.activity.dialog.ActivityDetailViewModel
-import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.RatingInfo
-import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.rating.all.AllRatingViewModel
 
 @Suppress("UNCHECKED_CAST")
