@@ -3,6 +3,7 @@ package com.mingyuwu.barurside.util
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
+import android.util.Log
 import com.mingyuwu.barurside.BarUrSideApplication
 import java.io.File
 import java.io.FileNotFoundException

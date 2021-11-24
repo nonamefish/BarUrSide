@@ -31,6 +31,7 @@ import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.login.TAG
 import com.mingyuwu.barurside.util.CurrentFragmentType
+import com.mingyuwu.barurside.util.Logger
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,10 +42,11 @@ class MainActivity : AppCompatActivity() {
     private var userToken = UserManager.userToken
     val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
-    @RequiresApi(Build.VERSION_CODES.S)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Logger.d("MainActivity onCreate")
         auth = Firebase.auth
 
         // setting binding

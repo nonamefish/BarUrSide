@@ -182,9 +182,7 @@ class DiscoverDetailFragment() : Fragment() {
                 // set notification value
                 if (theme == Theme.NOTIFICATION) {
                     list = (it as List<Notification>).filter { ntfys ->
-                        ntfys.toId == UserManager.user.value!!.id &&
-                                (ntfys.type == "friend" ||
-                                        (ntfys.type == "activity" && getDiffHour(ntfys.timestamp!!) > 0))
+                        ntfys.toId == UserManager.user.value!!.id
                     }.take(20)
                     if (!it.isNullOrEmpty()) {
                         it.filter { it.isCheck == false }.map { it.id }?.let {

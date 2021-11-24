@@ -1,9 +1,9 @@
 package com.mingyuwu.barurside.activity.dialog
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +17,9 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.DialogActivityDetailBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.login.UserManager
-import android.content.Intent
-import android.net.Uri
-import com.mingyuwu.barurside.data.source.LoadStatus
 
+
+const val DEEPLINK_ACTIVITY = "https://www.barurside.com/activity?id"
 
 class ActivityDetailDialog : DialogFragment() {
 
@@ -36,7 +35,7 @@ class ActivityDetailDialog : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.dialog_activity_detail, container, false
@@ -63,12 +62,11 @@ class ActivityDetailDialog : DialogFragment() {
 
         // Set transparent background and no title
         if (dialog != null && dialog!!.window != null) {
-            dialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+            dialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
 
         // navigate to activity
         viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
-            Log.d("Ming", "navigateToDetail : ${viewModel.navigateToDetail.value}")
             it?.let {
                 val id = findNavController().previousBackStackEntry?.destination?.label
 
@@ -97,20 +95,20 @@ class ActivityDetailDialog : DialogFragment() {
 
         // sharing button
         binding.imgShare.setOnClickListener {
-            val message =
-                "與您分享品酒活動：${viewModel.dtActivity.value?.name} \n " +
-                        "https://www.barurside.com/activity?id=${viewModel.dtActivity.value?.id}"
+            val message = resources.getString(
+                R.string.activity_share_message,
+                viewModel.dtActivity.value?.name,
+                "$DEEPLINK_ACTIVITY=${viewModel.dtActivity.value?.id}"
+            )
+
             val share = Intent(Intent.ACTION_SEND)
             share.type = "text/plain"
             share.putExtra(Intent.EXTRA_TEXT, message)
 
-            startActivity(Intent.createChooser(share, "Title of the dialog the system will open"))
+            startActivity(Intent.createChooser(share, resources.getString(R.string.app_name)))
         }
 
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }

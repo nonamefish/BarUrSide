@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Result
@@ -11,12 +13,12 @@ import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
-import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.calculateDateByPeriod
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.sql.Timestamp
 
 class ActivityDetailViewModel(
     private val repository: BarUrSideRepository,
@@ -69,7 +71,7 @@ class ActivityDetailViewModel(
     }
 
     fun modifyActivity() {
-        dtActivity.value?.let{
+        dtActivity.value?.let {
             coroutineScope.launch {
                 repository.modifyActivity(it.id, userId)
                 navigateToDetail.value = true
@@ -78,8 +80,9 @@ class ActivityDetailViewModel(
     }
 
     fun bookActivity() {
-        dtActivity.value?.let{
+        dtActivity.value?.let {
             coroutineScope.launch {
+
                 val notification = Notification(
                     "",
                     "activity",
@@ -88,7 +91,10 @@ class ActivityDetailViewModel(
                     calculateDateByPeriod(it.startTimestamp!!, "DAY", -1),
                     it.id,
                     userId,
-                    "提醒：今日你有一個即將舉行的活動 <b>${it.name}</b> ",
+                    BarUrSideApplication.appContext?.resources?.getString(
+                        R.string.activity_notify,
+                        it.name
+                    ) ?: "",
                     null,
                     false
                 )
@@ -104,8 +110,8 @@ class ActivityDetailViewModel(
         }
     }
 
-    private fun checkUserIsBook(){
-        dtActivity.value?.let{
+    private fun checkUserIsBook() {
+        dtActivity.value?.let {
             isBook.value = it.bookers!!.any { it.id == userId }
         }
     }
@@ -114,7 +120,7 @@ class ActivityDetailViewModel(
         navigateToDetail.value = null
     }
 
-    private fun getActivity(activityId: String){
+    private fun getActivity(activityId: String) {
         coroutineScope.launch {
             val result = repository.getActivityById(activityId)
             dtActivity.value = when (result) {

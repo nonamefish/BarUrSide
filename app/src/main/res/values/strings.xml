@@ -13,6 +13,8 @@
     <!--    Activity Detail Page-->
     <string name="activity_time_range">%s至%s</string>
     <string name="activity_detail_limit">%d/%d</string>
+    <string name="activity_share_message">與您分享品酒活動：%s \n %s</string>
+    <string name="activity_notify">提醒：今日你有一個即將舉行的活動 <![CDATA[<b>%s</b>]]></string>
 
     <!--    ADD_ACTIVITY-->
 
@@ -69,11 +71,10 @@
     <string-array name="venue_level">
         <item>請選擇平均消費</item>
         <item>$ (低於300元)</item>
-        <item>$$ (301-900)</item>
+        <item>$$ (301–900)</item>
         <item>$$$ (901-1800)</item>
         <item>$$$$ (1800元以上)</item>
     </string-array>
-
 
 
     <!--    Edit Rating Tab-->

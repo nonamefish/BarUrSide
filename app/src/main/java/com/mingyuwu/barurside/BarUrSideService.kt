@@ -1,9 +1,11 @@
 package com.mingyuwu.barurside
 
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Intent
-import android.os.IBinder
-import android.util.Log
+import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.login.UserManager
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
@@ -12,13 +14,9 @@ import com.mingyuwu.barurside.util.Util.getDiffHour
 class BarUrSideService : LifecycleService() {
 
     private var notifications = MutableLiveData<List<com.mingyuwu.barurside.data.Notification>>()
-    private val channel = "BarUrSide"
+    private val channel = Util.getString(R.string.app_name)
     private lateinit var notificationManager: NotificationManager
     var id = 0
-
-    override fun onCreate() {
-        super.onCreate()
-    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
@@ -49,7 +47,7 @@ class BarUrSideService : LifecycleService() {
 
     private fun createNotificationChannel() {
         val mChannel = NotificationChannel(channel, channel, NotificationManager.IMPORTANCE_HIGH)
-        mChannel.description = "BarUrSide"
+        mChannel.description = Util.getString(R.string.app_name)
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(mChannel)
     }
@@ -62,7 +60,7 @@ class BarUrSideService : LifecycleService() {
             }
 
         val notification: Notification = Notification.Builder(this, channel)
-            .setContentTitle("BarUrSide")
+            .setContentTitle(getString(R.string.app_name))
             .setContentText(notify.content.replace("<b>", "").replace("</b>", ""))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentIntent(pendingIntent)
