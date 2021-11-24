@@ -51,6 +51,8 @@
     <string name="venue_rating_info_list">%,.1f&#160;|&#160;%d則評論</string>
 
     <!--    Add Drink Info -->
+    <string name="drink_uncompleted_context">酒名、類別及價格為必填項目</string>
+    <string name="adding_drink">酒項資訊新增中</string>
     <string-array name="drink_type">
         <item>請選擇類別</item>
         <item>啤酒</item>
@@ -64,6 +66,8 @@
     </string-array>
 
     <!--    Add Venue Info -->
+    <string name="venue_uncompleted_context">店名、地址、營業時間、價格範圍及店家風格為必填項目</string>
+    <string name="adding_venue">店家資訊新增中</string>
     <string-array name="venue_style">
         <item>請選擇店家風格</item>
         <item>美式餐廳</item>
@@ -132,7 +136,18 @@
     <!--    DatePicker-->
     <string name="date_format">yyyy/MM/dd</string>
     <string name="time_format">a hh:mm</string>
+    <string name="service_format">HH:mm</string>
     <string name="datetime_format">yyyy/MM/dd a hh:mm</string>
+
+    <!--    Permission-->
+    <string name="permission_camera">請開通相片權限，以上傳照片</string>
+    <string name="permission_confirm">確定</string>
+    <string name="permission_reject">忍痛拒絕</string>
+    <string name="permission_reject_toast">These permissions are denied: %s</string>
+
+    <!--    Choose Image-->
+    <string name="from_gallery">從照片選擇</string>
+    <string name="exit">離開</string>
 
 
     <string name="fail_nothing">Nothing</string>

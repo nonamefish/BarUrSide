@@ -4,10 +4,8 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
@@ -33,15 +31,17 @@ class AddVenueViewModel(private val repository: BarUrSideRepository) :
     val startTime = MutableLiveData<String>()
     val closeTime = MutableLiveData<String>()
 
+    // image: The internal MutableLiveData that stores the image(Bitmap)
     private val _image = MutableLiveData<Bitmap?>()
     val image: LiveData<Bitmap?>
         get() = _image
 
+    // imageUrl: The internal MutableLiveData that stores the imageUrl
     private val _imageUrl = MutableLiveData<String?>()
     val imageUrl: LiveData<String?>
         get() = _imageUrl
 
-    // after send drink info to firebase
+    // after send venue info to firebase then navigate to discover fragment
     private var _leave = MutableLiveData<Boolean?>()
 
     val leave: LiveData<Boolean?>
@@ -59,9 +59,9 @@ class AddVenueViewModel(private val repository: BarUrSideRepository) :
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     fun addVenue() {
         coroutineScope.launch {
+
             val venue = Venue(
                 "",
                 "",
@@ -78,7 +78,9 @@ class AddVenueViewModel(private val repository: BarUrSideRepository) :
                 0.0,
                 0
             )
+
             repository.addVenue(venue)
+
             _leave.value = true
         }
     }
@@ -102,14 +104,18 @@ class AddVenueViewModel(private val repository: BarUrSideRepository) :
         ) {
             return false
         }
+
         return true
     }
 
     fun uploadPhoto() {
+
         val storage = Firebase.storage
         val storageRef = storage.reference
+
         coroutineScope.launch {
-            imageUrl.value?.let{
+
+            imageUrl.value?.let {
                 val result = repository.uploadPhoto(storageRef, userId ?: "", "venue", it)
                 when (result) {
                     is Result.Success -> {
@@ -129,7 +135,9 @@ class AddVenueViewModel(private val repository: BarUrSideRepository) :
                     }
                 }
             }
+
             addVenue()
         }
     }
+
 }
