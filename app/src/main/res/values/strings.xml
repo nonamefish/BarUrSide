@@ -19,7 +19,11 @@
     <string name="activity_notify">提醒：今日你有一個即將舉行的活動 <![CDATA[<b>%s</b>]]></string>
 
     <!--    ADD_ACTIVITY-->
-
+    <string name="activity_uncompleted_title">活動資訊不完整</string>
+    <string name="activity_uncompleted_content">所有欄位皆必須填寫</string>
+    <string name="date_range_error_title">活動期間有誤</string>
+    <string name="date_range_error_content">開始時間必須早於結束時間</string>
+    <string name="adding_activity">活動資訊新增中</string>
 
     <!--    Collect Tab-->
     <string name="collect_title">我的收藏</string>
@@ -124,6 +128,11 @@
     <string name="btm_nvgt_discovery">Discover</string>
     <string name="btm_nvgt_collect">Collect</string>
     <string name="btm_nvgt_profile">Profile</string>
+
+    <!--    DatePicker-->
+    <string name="date_format">yyyy/MM/dd</string>
+    <string name="time_format">a hh:mm</string>
+    <string name="datetime_format">yyyy/MM/dd a hh:mm</string>
 
 
     <string name="fail_nothing">Nothing</string>

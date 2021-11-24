@@ -5,6 +5,7 @@ import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.util.Log
 import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.R
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -94,7 +95,7 @@ object Util {
     }
 
     fun convertStringToTimestamp(time: String): Timestamp {
-        val dateFormat = SimpleDateFormat("yyyy/MM/dd a hh:mm", Locale.TAIWAN)
+        val dateFormat = SimpleDateFormat(getString(R.string.datetime_format), Locale.TAIWAN)
         val parsedDate = dateFormat.parse(time)
         return Timestamp(parsedDate.time)
     }

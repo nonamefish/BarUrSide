@@ -3,19 +3,21 @@ package com.mingyuwu.barurside.addactivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Relationship
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.Util.calculateDateByPeriod
+import com.mingyuwu.barurside.util.Util.convertStringToTimestamp
+import com.mingyuwu.barurside.util.Util.getString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.sql.Timestamp
-import java.text.SimpleDateFormat
-import java.util.*
 
 class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewModel() {
 
@@ -43,16 +45,10 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
-    private fun convertStringToTimestamp(time: String): Timestamp {
-        val dateFormat = SimpleDateFormat("yyyy/MM/dd a hh:mm", Locale.TAIWAN)
-        val parsedDate = dateFormat.parse(time)
-        return Timestamp(parsedDate.time)
-    }
-
-
     fun postActivity() {
+
         coroutineScope.launch {
+
             val activity = Activity(
                 "",
                 name.value!!,
@@ -64,15 +60,23 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
                 userId,
                 listOf(Relationship(userId, Timestamp(System.currentTimeMillis())))
             )
+
             val notification = Notification(
                 "",
-                "activity",
+                getString(R.string.activity),
                 "",
-                "activity",
-                calculateDateByPeriod(convertStringToTimestamp(startTime.value!!), "DAY", -1),
+                getString(R.string.activity),
+                calculateDateByPeriod(
+                    convertStringToTimestamp(startTime.value!!),
+                    "DAY",
+                    -1
+                ),
                 "",
                 userId,
-                "提醒：今日你有一個即將舉行的活動 <b>${name.value!!}</b>",
+                BarUrSideApplication.appContext?.resources?.getString(
+                    R.string.activity_notify,
+                    name.value
+                ) ?: "",
                 null,
                 false
             )
@@ -86,7 +90,7 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
         navigateToDetail.value = null
     }
 
-    fun checkValue(): Boolean {
+    fun checkValueCompleted(): Boolean {
         if (name.value == null ||
             startTime.value == null ||
             endTime.value == null ||
@@ -100,6 +104,10 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
     }
 
     fun checkTimeRange(): Boolean {
-        return convertStringToTimestamp(startTime.value!!).time < convertStringToTimestamp(endTime.value!!).time
+        // convert time from string to time(Long) then check endTime is greater than startTime
+        val startTime = convertStringToTimestamp(startTime.value!!).time
+        val endTime = convertStringToTimestamp(endTime.value!!).time
+        return startTime < endTime
     }
+
 }

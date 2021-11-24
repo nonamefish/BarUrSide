@@ -4,41 +4,40 @@ import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.TimePickerDialog
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
-import androidx.navigation.fragment.findNavController
-import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.databinding.FragmentAddActivityBinding
-import com.mingyuwu.barurside.ext.getVmFactory
-import java.text.SimpleDateFormat
-import java.util.*
-import com.google.android.libraries.places.api.Places
-import com.mingyuwu.barurside.R
-import com.google.android.libraries.places.widget.Autocomplete
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.lifecycle.Observer
-import android.util.Log
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.Status
+import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.Constants.AUTOCOMPLETE_REQUEST_CODE
+import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.databinding.FragmentAddActivityBinding
+import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.convertStringToTimestamp
+import java.text.SimpleDateFormat
+import java.util.*
 import android.app.DatePickerDialog as DatePickerDialog1
 
-
-const val AUTOCOMPLETE_REQUEST_CODE = 201
 
 class AddActivityFragment : Fragment() {
 
@@ -70,12 +69,18 @@ class AddActivityFragment : Fragment() {
             .setCountries(listOf("TW"))
             .build(requireContext())
 
-        // activity start time
+        // address edit text click listener
+        binding.addActivityAddress.setOnClickListener {
+            // Set the fields to specify which types of place data to
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+        }
+
+        // call datePicker for set activity start time
         binding.addActivityStart.setOnClickListener {
             datePicker(viewModel.startTime)
         }
 
-        // activity end time
+        // call datePicker for set activity end time
         binding.addActivityEnd.setOnClickListener {
             datePicker(viewModel.endTime)
         }
@@ -85,27 +90,22 @@ class AddActivityFragment : Fragment() {
 
         // confirm button
         binding.btnAddActovityConfirm.setOnClickListener {
-            if (viewModel.checkValue()) {
+            if (viewModel.checkValueCompleted()) {
                 if (viewModel.checkTimeRange()) {
                     viewModel.postActivity()
                     alertDialog = postRatingDialog(AlertDialog.Builder(binding.root.context))
                 } else {
-                    showRatingUncompleted("活動期間有誤","開始時間必須早於結束時間")
+                    showRatingUncompleted(
+                        Util.getString(R.string.date_range_error_title),
+                        Util.getString(R.string.date_range_error_content)
+                    )
                 }
             } else {
-                showRatingUncompleted("活動資訊不完整","所有欄位皆必須填寫")
+                showRatingUncompleted(
+                    Util.getString(R.string.activity_uncompleted_title),
+                    Util.getString(R.string.activity_uncompleted_content)
+                )
             }
-        }
-
-        // cancel button
-        binding.btnCancel.setOnClickListener {
-            findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
-        }
-
-        // address edit text click listener
-        binding.addActivityAddress.setOnClickListener { // Set the fields to specify which types of place data to
-            //start activity result
-            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
         }
 
         // after post activity then navigate to activity fragment
@@ -117,15 +117,21 @@ class AddActivityFragment : Fragment() {
             }
         })
 
+        // cancel button
+        binding.btnCancel.setOnClickListener {
+            findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
+        }
+
         return binding.root
     }
 
     private fun datePicker(datetime: MutableLiveData<String>) {
+
         val dateListener = DatePickerDialog1.OnDateSetListener { _, year, month, day ->
             timePicker(datetime)
             datetime.value = ""
             calender.set(year, month, day)
-            format("yyyy/MM/dd", datetime)
+            format(Util.getString(R.string.date_format), datetime)
         }
 
         val dialog = DatePickerDialog1(
@@ -150,11 +156,12 @@ class AddActivityFragment : Fragment() {
     }
 
     private fun timePicker(datetime: MutableLiveData<String>) {
+
         val timeListener = TimePickerDialog.OnTimeSetListener { _, hour, min ->
             calender.set(Calendar.HOUR_OF_DAY, hour)
             calender.set(Calendar.MINUTE, min)
+            format(Util.getString(R.string.time_format), datetime)
         }
-
 
         val dialog = TimePickerDialog(
             binding.root.context,
@@ -170,7 +177,7 @@ class AddActivityFragment : Fragment() {
 
     private fun format(format: String, datetime: MutableLiveData<String>) {
         val time = SimpleDateFormat(format, Locale.TAIWAN)
-        datetime.value = "${datetime.value}${time.format(calender.time)}"
+        datetime.value = "${datetime.value} ${time.format(calender.time)}"
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -190,7 +197,7 @@ class AddActivityFragment : Fragment() {
                     "message: ${status.statusMessage!!}",
                     Toast.LENGTH_SHORT
                 ).show()
-                Log.d("Ming", status.statusMessage!!)
+
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
                 Toast.makeText(
@@ -200,7 +207,7 @@ class AddActivityFragment : Fragment() {
         }
     }
 
-    private fun showRatingUncompleted(title:String, content: String) {
+    private fun showRatingUncompleted(title: String, content: String) {
         // set alert dialog view
         val alertDialog = AlertDialog.Builder(binding.root.context)
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
@@ -211,10 +218,10 @@ class AddActivityFragment : Fragment() {
         val txtDialog = mView!!.findViewById<TextView>(R.id.dialog_content)
         val titleDialog = mView!!.findViewById<TextView>(R.id.dialog_title)
         titleDialog.text = title
-        txtDialog.text = content //""
+        txtDialog.text = content
 
         // set button click listener
-        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm) //連結關閉視窗的Button
+        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm)
         btDialog.setOnClickListener { dialog.dismiss() }
 
         dialog.show()
@@ -233,7 +240,7 @@ class AddActivityFragment : Fragment() {
         val dialog = postDialog.create()
 
         // set dialog content text
-        txtDialog.text = "活動資訊新增中"
+        txtDialog.text = Util.getString(R.string.adding_activity)
 
         // set parameter
         dialog.setCanceledOnTouchOutside(false)
@@ -241,6 +248,8 @@ class AddActivityFragment : Fragment() {
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
         return dialog
     }
+
 }

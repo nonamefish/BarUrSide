@@ -34,7 +34,7 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.mingyuwu.barurside.BarUrSideApplication
-import com.mingyuwu.barurside.addactivity.AUTOCOMPLETE_REQUEST_CODE
+import com.mingyuwu.barurside.Constants.AUTOCOMPLETE_REQUEST_CODE
 import com.mingyuwu.barurside.databinding.FragmentAddVenueBinding
 import com.mingyuwu.barurside.util.Util
 import com.permissionx.guolindev.PermissionX
