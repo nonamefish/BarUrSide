@@ -20,7 +20,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -29,7 +28,6 @@ import com.google.firebase.ktx.Firebase
 import com.mingyuwu.barurside.databinding.ActivityMainBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
-import com.mingyuwu.barurside.login.TAG
 import com.mingyuwu.barurside.util.CurrentFragmentType
 import com.mingyuwu.barurside.util.Logger
 
@@ -149,12 +147,12 @@ class MainActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     val user = auth.currentUser
-                    Log.d(TAG, "signInWithCredential:success, user:$user")
+                    Logger.d("signInWithCredential:success, user:$user")
                     viewModel.navigateToStart.value = true
                 } else {
                     // If sign in fails, display a message to the user.
                     viewModel.navigateToLogin.value = true
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Logger.d("signInWithCredential:failure ${task.exception}")
                 }
             }
     }

@@ -2,12 +2,11 @@ package com.mingyuwu.barurside.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -20,15 +19,15 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.Constants.RC_SIGN_IN
 import com.mingyuwu.barurside.MainActivity
-import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.databinding.FragmentLoginBinding
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.util.Logger
 
-const val TAG = "LoginFragment"
-const val RC_SIGN_IN = 102
 
 class LoginFragment : Fragment() {
 
@@ -83,12 +82,12 @@ class LoginFragment : Fragment() {
                     UserManager.userToken = account.idToken
                     firebaseAuthWithGoogle(UserManager.userToken!!, account)
                 }
-                Log.i(TAG, "google signInResult successful")
+                Logger.i("google signInResult successful")
             } catch (e: ApiException) {
-                Log.i(TAG, "google signInResult:failed code=" + e.message)
+                Logger.i("google signInResult:failed code=" + e.message)
             }
         } else {
-            Log.i(TAG, "login fail")
+            Logger.i("login fail")
         }
     }
 
@@ -98,11 +97,11 @@ class LoginFragment : Fragment() {
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success, user:$task")
+                    Logger.d("signInWithCredential:success, user:$task")
                     onFirebaseSignInSuccess(google)
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Logger.d("signInWithCredential:failure ${task.exception}")
                     Toast.makeText(
                         BarUrSideApplication.appContext,"message: ${task.exception}",Toast.LENGTH_SHORT).show()
                 }

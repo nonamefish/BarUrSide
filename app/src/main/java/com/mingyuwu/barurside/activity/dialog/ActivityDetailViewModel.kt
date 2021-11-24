@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.activity.dialog
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,11 +13,11 @@ import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.Util.calculateDateByPeriod
+import com.mingyuwu.barurside.util.Util.getString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.sql.Timestamp
 
 class ActivityDetailViewModel(
     private val repository: BarUrSideRepository,
@@ -26,15 +25,14 @@ class ActivityDetailViewModel(
     val activityId: String?
 ) : ViewModel() {
 
-    private val userId = UserManager.user.value?.id!!
-
-    var dtActivity = MutableLiveData<Activity>()
-    var isBook = MutableLiveData<Boolean>()
+    private val userId = UserManager.user.value?.id ?: ""
+    var dtActivity = MutableLiveData<Activity>() // MutableLiveData that stores activity data
+    var hasBook = MutableLiveData<Boolean>() // MutableLiveData that check user has book activity
 
     // navigate to activity detail
     var navigateToDetail = MutableLiveData<Any?>()
 
-    // error: The internal MutableLiveData that stores the error of the most recent request
+    // sponsor：The internal MutableLiveData that stores the activity sponsor data
     private var _sponsor = MutableLiveData<User>()
 
     val sponsor: LiveData<User?>
@@ -60,12 +58,14 @@ class ActivityDetailViewModel(
 
 
     init {
-        if (activityId != null) {
-            getActivity(activityId)
+        if (activityId.isNullOrEmpty()) {
+            activity?.let {
+                dtActivity.value = it
+                checkUserHasBook()
+                getSponsorData()
+            }
         } else {
-            dtActivity.value = activity ?: null
-            checkUserIsBook()
-            getSponsorData()
+            getActivity(activityId)
         }
 
     }
@@ -85,9 +85,9 @@ class ActivityDetailViewModel(
 
                 val notification = Notification(
                     "",
-                    "activity",
+                    getString(R.string.activity),
                     "",
-                    "activity",
+                    getString(R.string.activity),
                     calculateDateByPeriod(it.startTimestamp!!, "DAY", -1),
                     it.id,
                     userId,
@@ -110,9 +110,9 @@ class ActivityDetailViewModel(
         }
     }
 
-    private fun checkUserIsBook() {
+    private fun checkUserHasBook() {
         dtActivity.value?.let {
-            isBook.value = it.bookers!!.any { it.id == userId }
+            hasBook.value = it.bookers!!.any { it.id == userId }
         }
     }
 
@@ -144,7 +144,8 @@ class ActivityDetailViewModel(
                 }
             }
             getSponsorData()
-            checkUserIsBook()
+            checkUserHasBook()
         }
     }
+
 }

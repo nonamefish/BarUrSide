@@ -12,14 +12,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.mingyuwu.barurside.Constants.DEEPLINK_ACTIVITY
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.DialogActivityDetailBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.login.UserManager
 
-
-const val DEEPLINK_ACTIVITY = "https://www.barurside.com/activity?id"
 
 class ActivityDetailDialog : DialogFragment() {
 
@@ -46,9 +45,9 @@ class ActivityDetailDialog : DialogFragment() {
 
         // book button on click listener
         binding.btnBookActivity.setOnClickListener {
-            if (viewModel.isBook.value == true) {
+            if (viewModel.hasBook.value == true) {
                 viewModel.modifyActivity()
-            } else if (viewModel.isBook.value == false) {
+            } else if (viewModel.hasBook.value == false) {
                 viewModel.bookActivity()
             }
         }
@@ -60,7 +59,7 @@ class ActivityDetailDialog : DialogFragment() {
             }
         }
 
-        // Set transparent background and no title
+        // Set transparent background
         if (dialog != null && dialog!!.window != null) {
             dialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
@@ -85,7 +84,6 @@ class ActivityDetailDialog : DialogFragment() {
             }
         })
 
-
         // refresh viewModel setting
         viewModel.dtActivity.observe(viewLifecycleOwner, Observer {
             binding.viewModel = viewModel
@@ -93,7 +91,7 @@ class ActivityDetailDialog : DialogFragment() {
             binding.cnstActivityDetail.visibility = View.VISIBLE
         })
 
-        // sharing button
+        // sharing button on click listener
         binding.imgShare.setOnClickListener {
             val message = resources.getString(
                 R.string.activity_share_message,

@@ -17,18 +17,19 @@ import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.databinding.FragmentActivityPageBinding
 import com.mingyuwu.barurside.discover.Theme
-import com.mingyuwu.barurside.discoverdetail.*
+import com.mingyuwu.barurside.discoverdetail.DiscoverActivityAdapter
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
+import com.mingyuwu.barurside.util.Util
 
-class ActivityPageFragment() : Fragment() {
+class ActivityPageFragment : Fragment() {
 
     private lateinit var binding: FragmentActivityPageBinding
     private lateinit var adapter: ListAdapter<Any, RecyclerView.ViewHolder>
-
+    private val type = Util.getString(R.string.activity_tab_type)
     private val viewModel by viewModels<ActivityPageViewModel> {
         getVmFactory(
-            requireArguments().get("type") as ActivityTypeFilter
+            requireArguments().get(type) as ActivityTypeFilter
         )
     }
 
@@ -37,15 +38,13 @@ class ActivityPageFragment() : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_activity_page, container, false
         )
 
-        // get bundle data
-        val type = this.requireArguments().get("type")
+        // get activity tab type and set recyclerView adapter
+        val type = this.requireArguments().get(type)
 
-        // set recyclerView adapter
         when (type) {
             ActivityTypeFilter.RECOMMEND -> {
                 adapter = InfoRatingAdapter()
@@ -62,7 +61,6 @@ class ActivityPageFragment() : Fragment() {
                 binding.btnAddActivity.visibility = View.GONE
             }
         }
-
 
         // assign value to recyclerView
         viewModel.listDate.observe(viewLifecycleOwner, Observer {
@@ -93,7 +91,7 @@ class ActivityPageFragment() : Fragment() {
             }
         })
 
-        // set user data
+        // get friend data when activity pade is follow
         viewModel.user.observe(viewLifecycleOwner, Observer {
             if (type == ActivityTypeFilter.FOLLOW) {
                 viewModel.getRatingByFriend(true, it.id)
@@ -111,7 +109,6 @@ class ActivityPageFragment() : Fragment() {
                 binding.animationLoading.visibility = View.GONE
             }
         })
-
 
         return binding.root
     }

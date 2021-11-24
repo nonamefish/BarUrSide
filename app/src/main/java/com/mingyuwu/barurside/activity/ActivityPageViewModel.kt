@@ -17,10 +17,11 @@ class ActivityPageViewModel(
     val type: ActivityTypeFilter
 ) : ViewModel() {
 
-
     val user = UserManager.user
 
+    // listDate: The internal MutableLiveData that stores the recyclerView list data
     private var _listDate = MutableLiveData<List<Any>>()
+
     val listDate : LiveData<List<Any>>
         get() = _listDate
 
@@ -44,7 +45,6 @@ class ActivityPageViewModel(
 
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
 
     init {
         when (type) {

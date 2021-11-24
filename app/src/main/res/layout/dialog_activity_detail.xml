@@ -318,7 +318,7 @@
                 android:minHeight="0dp"
                 android:textColor="@color/white_ffffff"
                 android:textSize="14sp"
-                app:isBook="@{viewModel.isBook}"
+                app:hasBook="@{viewModel.hasBook}"
                 app:isFull="@{viewModel.dtActivity.bookers.size()==viewModel.dtActivity.peopleLimit}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
