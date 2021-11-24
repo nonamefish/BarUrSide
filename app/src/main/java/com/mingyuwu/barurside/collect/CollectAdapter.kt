@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.collect
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
@@ -8,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
-import com.google.common.math.DoubleMath.roundToInt
 import com.google.maps.android.SphericalUtil
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.R
@@ -134,4 +132,5 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
     class OnClickListener(val clickListener: (id: String) -> Unit) {
         fun onClick(id: String) = clickListener(id)
     }
+
 }

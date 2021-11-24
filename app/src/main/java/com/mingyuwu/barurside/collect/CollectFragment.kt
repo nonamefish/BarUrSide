@@ -22,7 +22,6 @@ class CollectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_collect, container, false
         )
@@ -39,7 +38,9 @@ class CollectFragment : Fragment() {
         // set page listener
         binding.viewPagerMain.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
+
             override fun onPageSelected(position: Int) {
+
                 if (position == 0 && !isInit) {
                     val animator = ObjectAnimator.ofFloat(
                         binding.indicator,
@@ -58,10 +59,12 @@ class CollectFragment : Fragment() {
                     animator.start()
                     isInit = false
                 }
+
                 super.onPageSelected(position)
             }
         })
 
         return binding.root
     }
+
 }

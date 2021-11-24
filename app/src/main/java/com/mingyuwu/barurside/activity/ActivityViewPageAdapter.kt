@@ -8,6 +8,7 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.util.Util.getString
 
 class ActivityViewPageAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+
     override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment {

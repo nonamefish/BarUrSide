@@ -1,13 +1,11 @@
 package com.mingyuwu.barurside.collect
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.data.Collect
 import com.mingyuwu.barurside.data.Result
-import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
@@ -50,7 +48,9 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
     }
 
     private fun getCollect(userId: String) {
+
         coroutineScope.launch {
+
             val result = repository.getCollect(userId)
             collectInfo.value = when (result) {
                 is Result.Success -> {
@@ -71,16 +71,20 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
                     null
                 }
             }
+
         }
     }
 
     fun getObjectInfo(isVenue: Boolean, collectInfo: List<Collect>) {
+
         coroutineScope.launch {
+
             val result = when (isVenue) {
                 true -> repository.getVenueByIds(collectInfo.map { it.objectId })
                 false -> repository.getDrinksByIds(collectInfo.map { it.objectId })
             }
-            isCollect.value = collectInfo.map{ true }.toMutableList()
+
+            isCollect.value = collectInfo.map { true }.toMutableList()
 
             objectInfo.value = when (result) {
                 is Result.Success -> {
@@ -102,11 +106,13 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
                     null
                 }
             }
+
         }
     }
 
     fun setCollect(id: String, position: Int, isVenue: Boolean) {
-        isCollect.value?.let{
+
+        isCollect.value?.let {
             when (it[position]) {
                 true -> {
                     it[position] = false
@@ -118,12 +124,15 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
                     it[position] = true
                 }
             }
+
             isCollect.value = isCollect.value
         }
     }
 
     private fun addCollect(collect: Collect) {
+
         coroutineScope.launch {
+
             val result = repository.addCollect(collect)
             when (result) {
                 is Result.Success -> {
@@ -146,7 +155,9 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
     }
 
     private fun removeCollect(id: String, userId: String) {
+
         coroutineScope.launch {
+
             val result = repository.removeCollect(id, userId)
             when (result) {
                 is Result.Success -> {
@@ -176,4 +187,5 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
     fun onLeft() {
         navigateToObject.value = null
     }
+
 }

@@ -3,12 +3,10 @@ package com.mingyuwu.barurside.collect
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +16,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
@@ -27,17 +26,20 @@ import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.databinding.FragmentCollectPageBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
+import com.mingyuwu.barurside.util.Logger
+import com.mingyuwu.barurside.util.Util
 import com.permissionx.guolindev.PermissionX
 
-class CollectPageFragment() : Fragment() {
+class CollectPageFragment : Fragment() {
 
+    val isVenue = Util.getString(R.string.collect_tab_is_venue)
     private lateinit var binding: FragmentCollectPageBinding
     private lateinit var mContext: Context
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private var locationPermissionGranted = false
     private val viewModel by viewModels<CollectPageViewModel> {
         getVmFactory(
-            this.requireArguments().getBoolean("isVenue")
+            this.requireArguments().getBoolean(isVenue)
         )
     }
 
@@ -46,12 +48,11 @@ class CollectPageFragment() : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_collect_page, container, false
         )
         binding.lifecycleOwner = this
-        val isVenue = this.requireArguments().getBoolean("isVenue")
+        val isVenue = this.requireArguments().getBoolean(isVenue)
 
         // set variable for get location
         mContext = binding.root.context
@@ -65,9 +66,10 @@ class CollectPageFragment() : Fragment() {
                 viewModel.setNavigateToObject(it)
             }
         )
+
         binding.collectList.adapter = adapter
 
-        viewModel.collectInfo.observe(viewLifecycleOwner, Observer {
+        viewModel.collectInfo.observe(viewLifecycleOwner, Observer{
             if (!it.isNullOrEmpty()) {
                 viewModel.getObjectInfo(isVenue, it)
             } else {
@@ -77,7 +79,7 @@ class CollectPageFragment() : Fragment() {
         })
 
         // get collect object information
-        viewModel.objectInfo.observe(viewLifecycleOwner, Observer {
+        viewModel.objectInfo.observe(viewLifecycleOwner, Observer{
             if (it.isEmpty()) {
                 binding.animationEmpty.visibility = View.VISIBLE
             } else {
@@ -87,7 +89,7 @@ class CollectPageFragment() : Fragment() {
         })
 
         // set navigation to object info page
-        viewModel.navigateToObject.observe(viewLifecycleOwner, Observer {
+        viewModel.navigateToObject.observe(viewLifecycleOwner, Observer{
             it?.let {
                 when (isVenue) {
                     true -> findNavController().navigate(
@@ -106,7 +108,7 @@ class CollectPageFragment() : Fragment() {
         })
 
         // check loading done and close loading animation
-        viewModel.status.observe(viewLifecycleOwner, Observer {
+        viewModel.status.observe(viewLifecycleOwner, Observer{
             if (it == LoadStatus.DONE) {
                 binding.animationLoading.visibility = View.GONE
             }
@@ -121,26 +123,6 @@ class CollectPageFragment() : Fragment() {
     private fun getDeviceLocation() {
         try {
             if (locationPermissionGranted) {
-                val locationRequest = LocationRequest.create().apply{
-                    priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                    numUpdates = 1
-                }
-
-//                mFusedLocationProviderClient.requestLocationUpdates(
-//                    locationRequest,
-//                    object : LocationCallback() {
-//                        override fun onLocationResult(locationResult: LocationResult?) {
-//                            locationResult ?: return
-//
-//                            (requireActivity() as MainActivity).mlocation.value =
-//                                LatLng(
-//                                    locationResult.lastLocation.latitude,
-//                                    locationResult.lastLocation.longitude,
-//                                )
-//                        }
-//                    },
-//                    null
-//                )
                 mFusedLocationProviderClient.lastLocation
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful && task.result != null) {
@@ -150,15 +132,15 @@ class CollectPageFragment() : Fragment() {
                                 LatLng(location.latitude, location.longitude)
                         }
                         else{
-                            Log.d("Ming","exception ${task.exception}")
-                            Log.d("Ming","task.result ${task.result}")
+                            Logger.d("exception ${task.exception}")
+                            Logger.d("task.result ${task.result}")
                         }
                     }
             } else {
                 getLocationPermission()
             }
         } catch (e: SecurityException) {
-            Log.e("Ming: %s", e.message, e)
+            Logger.d("exception ${e.message}")
         }
     }
 
@@ -171,17 +153,17 @@ class CollectPageFragment() : Fragment() {
             .onExplainRequestReason { scope, deniedList ->
                 scope.showRequestReasonDialog(
                     deniedList,
-                    "請開通位置存取權，以計算收藏店家與您的距離",
-                    "確定",
-                    "忍痛拒絕"
+                    Util.getString(R.string.permission_location_collect),
+                    Util.getString(R.string.permission_confirm),
+                    Util.getString(R.string.permission_reject)
                 )
             }
             .onForwardToSettings { scope, deniedList ->
                 scope.showForwardToSettingsDialog(
                     deniedList,
-                    "請開通位置存取權，以計算收藏店家與您的距離",
-                    "確定",
-                    "忍痛拒絕"
+                    Util.getString(R.string.permission_location_collect),
+                    Util.getString(R.string.permission_confirm),
+                    Util.getString(R.string.permission_reject)
                 )
             }
             .request { allGranted, _, deniedList ->
@@ -191,7 +173,7 @@ class CollectPageFragment() : Fragment() {
                 } else {
                     Toast.makeText(
                         mContext,
-                        "These permissions are denied: $deniedList",
+                        getString(R.string.permission_reject_toast, deniedList),
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -200,22 +182,24 @@ class CollectPageFragment() : Fragment() {
 
     // check GPS state
     private fun checkGPSState() {
+
         val locationManager = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertDialog.Builder(mContext)
-                .setTitle("GPS 尚未開啟")
-                .setMessage("使用此功能需要開啟 GPS 定位功能")
-                .setPositiveButton("前往開啟",
-                    DialogInterface.OnClickListener { _, _ ->
-                        startActivityForResult(
-                            Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_ENABLE_GPS
-                        )
-                    })
-                .setNegativeButton("取消", null)
+                .setTitle(Util.getString(R.string.request_gps_title))
+                .setMessage(Util.getString(R.string.request_gps_content))
+                .setPositiveButton(Util.getString(R.string.request_gps_positive)
+                ) { _, _ ->
+                    startActivityForResult(
+                        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_ENABLE_GPS
+                    )
+                }
+                .setNegativeButton(Util.getString(R.string.request_gps_cancel), null)
                 .show()
         } else {
             getDeviceLocation()
-            Log.d("Ming", "已獲取到位置權限且GPS已開啟，可以準備開始獲取經緯度")
         }
     }
+
 }

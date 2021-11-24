@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">BarUrSide</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
     <!--    Activity Fragment-->
     <string name="activity">activity</string>
@@ -26,6 +23,7 @@
     <string name="adding_activity">活動資訊新增中</string>
 
     <!--    Collect Tab-->
+    <string name="collect_tab_is_venue">isVenue</string>
     <string name="collect_title">我的收藏</string>
     <string name="collect_tab_venue">店家</string>
     <string name="collect_tab_drink">酒項</string>
@@ -141,9 +139,16 @@
 
     <!--    Permission-->
     <string name="permission_camera">請開通相片權限，以上傳照片</string>
+    <string name="permission_location_collect">請開通位置存取權，以計算收藏店家與您的距離</string>
     <string name="permission_confirm">確定</string>
     <string name="permission_reject">忍痛拒絕</string>
     <string name="permission_reject_toast">These permissions are denied: %s</string>
+
+    <!--    GPS-->
+    <string name="request_gps_title">GPS 尚未開啟</string>
+    <string name="request_gps_content">使用此功能需要開啟 GPS 定位功能</string>
+    <string name="request_gps_positive">前往開啟</string>
+    <string name="request_gps_cancel">取消</string>
 
     <!--    Choose Image-->
     <string name="from_gallery">從照片選擇</string>
