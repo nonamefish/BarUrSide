@@ -74,8 +74,8 @@ class ProfileFragment : Fragment() {
         })
 
 
-        // data
-        viewModel.rtgInfo.observe(viewLifecycleOwner, Observer { rtgInfo ->
+        // observe ratings data
+        viewModel.rtgInfos.observe(viewLifecycleOwner, Observer { rtgInfo ->
             rtgInfo?.let { rtgs ->
                 val sortRtgs = rtgs.sortedByDescending { it.postTimestamp }
                 viewModel.setImages(rtgs)
@@ -101,12 +101,12 @@ class ProfileFragment : Fragment() {
                 val listNotReply = notifications.filter { notification -> notification.reply == null }
                 if (listNotReply.any { it.toId == id }) {
 
-                    binding.btnAddFrd.text = "好友邀請寄送中"
+                    binding.btnAddFrd.text = getString(R.string.friend_requesting)
                     binding.btnAddFrd.isEnabled = false
 
                 } else if (listNotReply.any { it.fromId == id }) {
 
-                    binding.btnAddFrd.text = "好友邀請確認中"
+                    binding.btnAddFrd.text = getString(R.string.friend_confirm)
                     binding.btnAddFrd.isEnabled = false
                 }
             }
@@ -191,16 +191,14 @@ class ProfileFragment : Fragment() {
         alertDialog.setView(mView)
         val dialog = alertDialog.create()
 
-        // set dialog content
+        // set dialog title and content
         val titleDialog = mView!!.findViewById<TextView>(R.id.dialog_title)
-        titleDialog.text = "與 ${viewModel.userInfo.value?.name} 解除朋友關係?"
+        titleDialog.text = getString(R.string.unfriend_notify_title, viewModel.userInfo.value?.name)
         val txtDialog = mView!!.findViewById<TextView>(R.id.dialog_content)
-        txtDialog.text = """取消朋友關係的人將無法：
-            |1. 標註你
-            |2. 在動態牆即時看到評論消息""".trimMargin()
+        txtDialog.text = getString(R.string.unfriend_notify_content)
 
         // set button click listener
-        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm) //連結關閉視窗的Button
+        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm)
         btDialog.setOnClickListener {
             viewModel.unfriendUser()
             dialog.dismiss()

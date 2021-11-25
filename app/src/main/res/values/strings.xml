@@ -122,9 +122,16 @@
 
 
     <!--    Profile Page-->
+    <string name="profile">profile</string>
+    <string name="friend">friend</string>
     <string name="profile_title">個人頁面</string>
     <string name="profile_frds_cnt">%d位好友</string>
     <string name="profile_rtgs_cnt">共%d則評價</string>
+    <string name="friend_requesting">好友邀請寄送中</string>
+    <string name="friend_confirm">好友邀請寄送中</string>
+    <string name="add_friend_notify"><![CDATA[<b>%s</b>]]> 想要加你好友</string>
+    <string name="unfriend_notify_title">與 %s 解除朋友關係?</string>
+    <string name="unfriend_notify_content">取消朋友關係的人將無法：\n1. 標註你\n2. 在動態牆即時看到評論消息</string>
 
 
     <!--    All Rating-->

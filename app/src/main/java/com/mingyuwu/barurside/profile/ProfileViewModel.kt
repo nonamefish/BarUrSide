@@ -3,6 +3,8 @@ package com.mingyuwu.barurside.profile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.data.Result
@@ -11,6 +13,7 @@ import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.Logger
+import com.mingyuwu.barurside.util.Util.getString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,9 +28,9 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
     var userInfo = MutableLiveData<User>()
     var notifications = MutableLiveData<List<Notification>>()
 
-    private var _rtgInfo = MutableLiveData<List<RatingInfo>>()
-    val rtgInfo: LiveData<List<RatingInfo>>
-        get() = _rtgInfo
+    private var _rtgInfos = MutableLiveData<List<RatingInfo>>()
+    val rtgInfos: LiveData<List<RatingInfo>>
+        get() = _rtgInfos
 
     var isMyself = userId == UserManager.user.value?.id
     var isFriend =
@@ -79,7 +82,7 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
     private fun getRatingInfo(userId: String) {
         coroutineScope.launch {
             val result = repository.getRatingByUser(userId)
-            _rtgInfo.value = when (result) {
+            _rtgInfos.value = when (result) {
                 is Result.Success -> {
                     _error.value = null
                     _status.value = LoadStatus.DONE
@@ -102,7 +105,7 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
         }
     }
 
-    fun setImages(rtgs: List<RatingInfo>){
+    fun setImages(rtgs: List<RatingInfo>) {
 
         val list = mutableListOf<String>()
 
@@ -111,19 +114,21 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
                 list += images
             }
         }
+
         _images.value = list
     }
 
     fun addOnFriend() {
         val notification = Notification(
             "",
-            "profile",
+            getString(R.string.profile),
             UserManager.user.value?.image ?: "",
-            "friend",
+            getString(R.string.friend),
             Timestamp(System.currentTimeMillis()),
             UserManager.user.value?.id ?: "",
             userId,
-            "<b>${UserManager.user.value?.name}</b> 想要加你好友",
+            BarUrSideApplication.appContext?.resources?.getString(R.string.add_friend_notify,
+                UserManager.user.value?.name) ?: "",
             null,
             false
         )
@@ -171,9 +176,9 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
 
     fun navigateToAllRating(isVenue: Boolean) {
         if (isVenue) {
-            navigateToAll.value = rtgInfo.value?.filter { it.isVenue == true }
+            navigateToAll.value = rtgInfos.value?.filter { it.isVenue == true }
         } else {
-            navigateToAll.value = rtgInfo.value?.filter { it.isVenue == false }
+            navigateToAll.value = rtgInfos.value?.filter { it.isVenue == false }
         }
 
     }
