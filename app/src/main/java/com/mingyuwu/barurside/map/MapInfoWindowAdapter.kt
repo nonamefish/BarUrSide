@@ -19,11 +19,11 @@ import com.mingyuwu.barurside.databinding.InfoWindowBinding
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
 
 
-class MapInfoWindowAdapter(_context: Context, viewModel: MapViewModel, parent: ViewGroup) :
-    GoogleMap.InfoWindowAdapter {
-    private val context = _context
-    private val viewModel = viewModel
-    private val parent = parent
+class MapInfoWindowAdapter(
+    private val context: Context,
+    private val viewModel: MapViewModel,
+    private val parent: ViewGroup
+) : GoogleMap.InfoWindowAdapter {
 
     private fun render(marker: Marker, binding: InfoWindowBinding) {
         val info = marker.snippet.toString().split(",")
@@ -45,15 +45,14 @@ class MapInfoWindowAdapter(_context: Context, viewModel: MapViewModel, parent: V
         }
 
         // set venue image
-        if (info[3] != null) {
-            Glide.with(context)
-                .load(info[3])
-                .placeholder(R.drawable.image_placeholder)
-                .listener(MarkerCallback(marker))
-                .into(binding.imgInfo)
-        }
+        Glide.with(context)
+            .load(info[3])
+            .placeholder(R.drawable.image_placeholder)
+            .listener(MarkerCallback(marker))
+            .into(binding.imgInfo)
 
-        binding.executePendingBindings() // 即時觸發
+        // instant trigger
+        binding.executePendingBindings()
     }
 
     override fun getInfoContents(marker: Marker): View {
@@ -69,6 +68,7 @@ class MapInfoWindowAdapter(_context: Context, viewModel: MapViewModel, parent: V
     override fun getInfoWindow(marker: Marker): View? {
         return null
     }
+
 }
 
 class MarkerCallback internal constructor(marker: Marker?) :
@@ -78,8 +78,8 @@ class MarkerCallback internal constructor(marker: Marker?) :
 
     private fun onSuccess() {
         if (marker != null && marker!!.isInfoWindowShown) {
-            marker!!.hideInfoWindow()
-            marker!!.showInfoWindow()
+            marker?.hideInfoWindow()
+            marker?.showInfoWindow()
         }
     }
 
@@ -107,4 +107,5 @@ class MarkerCallback internal constructor(marker: Marker?) :
         onSuccess()
         return false
     }
+
 }

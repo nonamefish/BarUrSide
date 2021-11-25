@@ -1,12 +1,12 @@
 package com.mingyuwu.barurside.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.Result
+import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
+import com.mingyuwu.barurside.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,23 +34,21 @@ class LoginViewModel(private val repository: BarUrSideRepository) : ViewModel() 
     }
 
     fun addUser(user: User) {
+
         coroutineScope.launch {
             val result = repository.addUser(user)
             when (result) {
                 is Result.Success -> {
                     _error.value = null
-
                 }
                 is Result.Fail -> {
                     _error.value = result.error
-                    null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
-                    null
                 }
                 else -> {
-                    null
+                    Logger.w("Wrong Result Type: $result")
                 }
             }
 
@@ -61,4 +59,5 @@ class LoginViewModel(private val repository: BarUrSideRepository) : ViewModel() 
     fun getUserData(userId: String) {
         UserManager.user = repository.getUser(userId)
     }
+
 }

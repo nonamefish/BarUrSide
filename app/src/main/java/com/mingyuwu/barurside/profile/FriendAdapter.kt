@@ -21,8 +21,9 @@ class FriendAdapter(val viewModel: ViewModel) :
         fun bind(friend: User?, view: View) {
             binding.friend = friend
             binding.profileBaseImg.setOnClickListener {
-                friend?.let{
-                    view.findNavController().navigate(MainNavigationDirections.navigateToProfileFragment(friend.id))
+                friend?.let {
+                    view.findNavController()
+                        .navigate(MainNavigationDirections.navigateToProfileFragment(friend.id))
                 }
             }
         }
@@ -57,4 +58,5 @@ class FriendAdapter(val viewModel: ViewModel) :
             }
         }
     }
+
 }

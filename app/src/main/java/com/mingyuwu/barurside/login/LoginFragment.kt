@@ -72,6 +72,7 @@ class LoginFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == RC_SIGN_IN) {
 
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -84,10 +85,10 @@ class LoginFragment : Fragment() {
                 }
                 Logger.i("google signInResult successful")
             } catch (e: ApiException) {
-                Logger.i("google signInResult:failed code=" + e.message)
+                Logger.e("google signInResult:failed code=" + e.message)
             }
         } else {
-            Logger.i("login fail")
+            Logger.d("UnRegistered RequestCode $requestCode")
         }
     }
 
@@ -96,29 +97,36 @@ class LoginFragment : Fragment() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
+
                     // Sign in success, update UI with the signed-in user's information
                     Logger.d("signInWithCredential:success, user:$task")
                     onFirebaseSignInSuccess(google)
                 } else {
+
                     // If sign in fails, display a message to the user.
-                    Logger.d("signInWithCredential:failure ${task.exception}")
+                    Logger.e("signInWithCredential:failure ${task.exception}")
                     Toast.makeText(
-                        BarUrSideApplication.appContext,"message: ${task.exception}",Toast.LENGTH_SHORT).show()
+                        BarUrSideApplication.appContext,
+                        "message: ${task.exception}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
     }
 
-    private fun onFirebaseSignInSuccess(account: GoogleSignInAccount){
+    private fun onFirebaseSignInSuccess(account: GoogleSignInAccount) {
         val user = User(
-            account.email,
-            account.displayName,
-            account.photoUrl.toString(),
+            account.email ?: "",
+            account.displayName ?: "",
+            (account.photoUrl ?: "").toString(),
             null,
             0,
             0
         )
+
         viewModel.addUser(user)
         viewModel.getUserData(account.email!!)
         (requireActivity() as MainActivity).onGetUserDataFinished()
     }
+
 }

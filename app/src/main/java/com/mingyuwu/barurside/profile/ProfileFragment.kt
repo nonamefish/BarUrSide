@@ -4,14 +4,13 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -31,8 +30,9 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private val viewModel by viewModels<ProfileViewModel> {
         getVmFactory(
-            ProfileFragmentArgs.fromBundle(requireArguments()).id ?: (UserManager.user.value?.id
-                ?: "")
+            ProfileFragmentArgs.fromBundle(
+                requireArguments()
+            ).id ?: (UserManager.user.value?.id ?: "")
         )
     }
 
@@ -40,10 +40,12 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // user profile will get id from UserManager
         val id =
-            ProfileFragmentArgs.fromBundle(requireArguments()).id ?: (UserManager.user.value?.id
-                ?: "")
+            ProfileFragmentArgs.fromBundle(
+                requireArguments()
+            ).id ?: (UserManager.user.value?.id ?: "")
         val toolbarTitle = requireActivity().findViewById<TextView>(R.id.text_toolbar_title)
 
         // Inflate the layout for this fragment
@@ -94,13 +96,16 @@ class ProfileFragment : Fragment() {
         })
 
         // notification: if user send or get add friend request, then can't click add button
-        viewModel.notification.observe(viewLifecycleOwner, Observer {
-            it?.let { notifications ->
-                val list = notifications.filter { notification -> notification.reply == null }
-                if (list.any { it.toId == id }) {
+        viewModel.notifications.observe(viewLifecycleOwner, Observer { list ->
+            list?.let { notifications ->
+                val listNotReply = notifications.filter { notification -> notification.reply == null }
+                if (listNotReply.any { it.toId == id }) {
+
                     binding.btnAddFrd.text = "好友邀請寄送中"
                     binding.btnAddFrd.isEnabled = false
-                } else if (list.any { it.fromId == id }) {
+
+                } else if (listNotReply.any { it.fromId == id }) {
+
                     binding.btnAddFrd.text = "好友邀請確認中"
                     binding.btnAddFrd.isEnabled = false
                 }
@@ -110,7 +115,9 @@ class ProfileFragment : Fragment() {
         // navigate to all rating fragment
         viewModel.navigateToAll.observe(viewLifecycleOwner, Observer {
             it?.let {
-                findNavController().navigate(MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray()))
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray())
+                )
                 viewModel.onLeft()
             }
         })
@@ -139,7 +146,7 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(
                 MainNavigationDirections.navigateToDiscoverDetailFragment(
                     Theme.USER_ACTIVITY,
-                    listOf(id!!).toTypedArray(),
+                    listOf(id).toTypedArray(),
                     null
                 )
             )
@@ -156,7 +163,7 @@ class ProfileFragment : Fragment() {
 
         // set view all image's on click listener
         binding.txtProfileImg.setOnClickListener {
-            viewModel.images.value?.let{
+            viewModel.images.value?.let {
                 findNavController().navigate(
                     MainNavigationDirections.navigateToDiscoverDetailFragment(
                         Theme.IMAGES, it.toTypedArray(), null
@@ -166,8 +173,8 @@ class ProfileFragment : Fragment() {
         }
 
         // check user friend status: when unfriend then change isFriend status
-        UserManager.user.observe(viewLifecycleOwner, Observer {
-            it?.let {
+        UserManager.user.observe(viewLifecycleOwner, Observer { user ->
+            user?.let {
                 viewModel.isFriend.value = UserManager.user.value?.friends?.any { it.id == id }
             }
         })

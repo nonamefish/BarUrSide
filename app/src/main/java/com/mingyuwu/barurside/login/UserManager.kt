@@ -3,12 +3,11 @@ package com.mingyuwu.barurside.login
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.Constants.USER_DATA
+import com.mingyuwu.barurside.Constants.USER_TOKEN
 import com.mingyuwu.barurside.data.User
 
 object UserManager {
-
-    private const val USER_DATA = "user_data"
-    private const val USER_TOKEN = "user_token"
 
     var user = MutableLiveData<User>()
 

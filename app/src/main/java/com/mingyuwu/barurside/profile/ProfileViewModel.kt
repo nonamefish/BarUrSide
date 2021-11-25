@@ -10,6 +10,7 @@ import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -22,7 +23,7 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
 
     // set source data
     var userInfo = MutableLiveData<User>()
-    var notification = MutableLiveData<List<Notification>>()
+    var notifications = MutableLiveData<List<Notification>>()
 
     private var _rtgInfo = MutableLiveData<List<RatingInfo>>()
     val rtgInfo: LiveData<List<RatingInfo>>
@@ -67,10 +68,9 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
 
     private fun getNotification(userId: String?) {
         userId?.let {
-            notification = repository.getNotification(it)
+            notifications = repository.getNotification(it)
         }
     }
-
 
     private fun getUserInfo(userId: String) {
         userInfo = repository.getUser(userId)
@@ -103,10 +103,12 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
     }
 
     fun setImages(rtgs: List<RatingInfo>){
-        var list = listOf<String>()
-        rtgs?.forEach { ratingInfo ->
-            ratingInfo.images?.let { imgs ->
-                list += imgs
+
+        val list = mutableListOf<String>()
+
+        rtgs.forEach { ratingInfo ->
+            ratingInfo.images?.let { images ->
+                list += images
             }
         }
         _images.value = list
@@ -131,42 +133,36 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
             when (result) {
                 is Result.Success -> {
                     _error.value = null
-                    result.data
                 }
                 is Result.Fail -> {
                     _error.value = result.error
-                    null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
-                    null
                 }
                 else -> {
-                    null
+                    Logger.w("Wrong Result Type: $result")
                 }
             }
         }
     }
 
     fun unfriendUser() {
-        userId?.let {
+        userId.let {
             coroutineScope.launch {
                 val result = repository.unfriend(listOf(UserManager.user.value!!.id, userId))
                 when (result) {
                     is Result.Success -> {
                         _error.value = null
-                        result.data
                     }
                     is Result.Fail -> {
                         _error.value = result.error
-                        null
                     }
                     is Result.Error -> {
                         _error.value = result.exception.toString()
-                        null
                     }
                     else -> {
-                        null
+                        Logger.w("Wrong Result Type: $result")
                     }
                 }
             }
