@@ -11,14 +11,12 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideDataSource
 import com.mingyuwu.barurside.filter.FilterParameter
+import com.mingyuwu.barurside.util.Logger
 import java.io.File
 import java.sql.Timestamp
 import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-
-
-const val TAG = "RemoteDataSource"
 
 object BarUrSideRemoteDataSource : BarUrSideDataSource {
     private const val PATH_VENUE = "venue"
@@ -36,20 +34,19 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             .collection(PATH_VENUE)
             .whereEqualTo("id", id)
             .addSnapshotListener { snapshot, exception ->
-                Log.d(TAG, "getVenue snapshot ${snapshot!!.documents}")
+                Logger.d("getVenue snapshot ${snapshot!!.documents}")
                 exception?.let {
-                    Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                    Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
 
                 for (document in snapshot!!) {
                     val venue = document.toObject(Venue::class.java)
                     liveData.value = venue
-
                 }
                 liveData.value = liveData.value
-                Log.d(TAG, "getVenue liveData ${liveData}")
+                Logger.d("getVenue liveData $liveData")
             }
-        Log.d(TAG, "getVenue return ${liveData}")
+        Logger.d("getVenue return $liveData")
         return liveData
     }
 
@@ -64,7 +61,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             .addSnapshotListener { snapshot, exception ->
 
                 exception?.let {
-                    Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                    Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
                 val list = mutableListOf<Activity>()
                 for (document in snapshot!!) {
@@ -86,16 +83,15 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             .collection(PATH_DRINK)
             .whereEqualTo("id", id)
             .addSnapshotListener { snapshot, exception ->
-                Log.d(TAG, "getDrink snapshot ${snapshot!!.documents}")
+                Logger.d("getDrink snapshot ${snapshot!!.documents}")
                 exception?.let {
-                    Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                    Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
 
-                for (document in snapshot!!) {
+                for (document in snapshot) {
                     val drink = document.toObject(Drink::class.java)
                     liveData.value = drink
                 }
-
             }
 
         return liveData
@@ -108,12 +104,12 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             .collection(PATH_USER)
             .whereEqualTo("id", id)
             .addSnapshotListener { snapshot, exception ->
-                Log.d(TAG, "getUser snapshot ${snapshot!!.documents}")
+                Logger.d("getUser snapshot ${snapshot!!.documents}")
                 exception?.let {
-                    Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                    Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
 
-                for (document in snapshot!!) {
+                for (document in snapshot) {
                     val user = document.toObject(User::class.java)
                     liveData.value = user
                 }
@@ -133,17 +129,15 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     if (task.isSuccessful) {
 
                         for (document in task.result!!) {
-                            Log.d(TAG, document.id + " => " + document.data)
+                            Logger.d(document.id + " =>" + document.data)
                             val friend = document.toObject(User::class.java)
                             list.add(friend)
                         }
                         Log.d("Ming", "it: ${task.result.documents}")
                         continuation.resume(Result.Success(list))
-
                     } else {
                         task.exception?.let {
-                            Log.w(
-                                TAG,
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -170,7 +164,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
-                            Log.d(TAG, document.id + " => " + document.data)
+                            Logger.d(document.id + " =>" + document.data)
 
                             val drink = document.toObject(Drink::class.java)
                             list.add(drink)
@@ -178,8 +172,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         continuation.resume(Result.Success(list))
                     } else {
                         task.exception?.let {
-                            Log.w(
-                                TAG,
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -198,7 +191,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun getVenueByFilter(filter: FilterParameter): Result<List<Venue>> =
         suspendCoroutine { continuation ->
-            Log.d("Ming", "venue filter: ${filter}")
+            Log.d("Ming", "venue filter: $filter")
             val list = mutableListOf<Venue>()
 
             // filter venue
@@ -221,7 +214,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     continuation.resume(Result.Success(list))
                                 }
                             } else {
-
 
                                 // filter drink category
                                 FirebaseFirestore.getInstance()
@@ -272,7 +264,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             .addSnapshotListener { snapshot, exception ->
 
                 exception?.let {
-                    Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                    Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
 
                 val list = mutableListOf<RatingInfo>()
@@ -302,7 +294,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                     val venue = document.toObject(Venue::class.java)
                                                     rating.objectName = venue.name
 
-                                                    Log.d("Ming", "ratings venue: $venue")
+                                                    Logger.d("ratings venue: $venue")
 
                                                     if (!venue.images.isNullOrEmpty()) {
                                                         rating.objectImg =
@@ -404,16 +396,13 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             if (document == rtgTask.result!!.last()) {
                                                 continuation.resume(Result.Success(list))
                                             }
-
                                         }
                                 }
                             }
-
                         }
                     } else {
                         rtgTask.exception?.let {
-                            Log.w(
-                                TAG,
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -446,8 +435,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     } else {
                         task.exception?.let {
 
-                            Log.w(
-                                TAG,
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -476,8 +464,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         continuation.resume(Result.Success(list))
                     } else {
                         task.exception?.let {
-                            Log.w(
-                                TAG,
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -506,14 +493,13 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     if (task.isSuccessful) {
 
                         for (document in task.result!!) {
-                            Log.d(TAG, "document: $document")
+                            Logger.d("document: $document")
                             document.reference.delete()
                         }
                         continuation.resume(Result.Success(true))
                     } else {
                         task.exception?.let {
-                            Log.w(
-                                TAG,
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -545,15 +531,14 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .addOnSuccessListener {
 
                     eventsRef.downloadUrl.addOnSuccessListener {
-                        Log.i(TAG, "Success: $it")
+                        Logger.i("Success: $it")
                         continuation.resume(Result.Success(it.toString()))
                     }.addOnFailureListener { exception ->
-                        Log.i(TAG, exception.toString())
+                        Logger.i(exception.toString())
                     }
-
                 }
                 .addOnFailureListener { exception ->
-                    Log.i(TAG, exception.toString())
+                    Logger.i(exception.toString())
                 }
             File(localImage).delete()
         }
@@ -581,8 +566,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 }
 
                                 val newRtg =
-                                    (venue?.rtgCount?.times(venue?.avgRating)
-                                        ?.plus(rating!!.rating!!))?.div(venue?.rtgCount!!.plus(1))
+                                    (
+                                        venue?.rtgCount?.times(venue?.avgRating)
+                                            ?.plus(rating!!.rating!!)
+                                        )?.div(venue?.rtgCount!!.plus(1))
 
                                 FirebaseFirestore.getInstance().collection(PATH_VENUE)
                                     .document(id)
@@ -597,8 +584,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 continuation.resume(Result.Success(true))
                             } else {
                                 task.exception?.let {
-                                    Log.w(
-                                        TAG,
+                                    Logger.w(
                                         "[${this::class.simpleName}] Error getting documents. ${it.message}"
                                     )
                                     continuation.resume(Result.Error(it))
@@ -623,8 +609,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             if (task.isSuccessful) {
                                 val drink = task.result.toObject(Venue::class.java)
                                 val newRtg =
-                                    (drink?.rtgCount?.times(drink?.avgRating)
-                                        ?.plus(rating!!.rating!!))?.div(drink?.rtgCount!!.plus(1))
+                                    (
+                                        drink?.rtgCount?.times(drink?.avgRating)
+                                            ?.plus(rating!!.rating!!)
+                                        )?.div(drink?.rtgCount!!.plus(1))
 
                                 FirebaseFirestore.getInstance().collection(PATH_DRINK)
                                     .document(id)
@@ -637,11 +625,9 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     )
 
                                 continuation.resume(Result.Success(true))
-
                             } else {
                                 task.exception?.let {
-                                    Log.w(
-                                        TAG,
+                                    Logger.w(
                                         "[${this::class.simpleName}] Error getting documents. ${it.message}"
                                     )
                                     continuation.resume(Result.Error(it))
@@ -686,11 +672,9 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             )
 
                         continuation.resume(Result.Success(true))
-
                     } else {
                         task.exception?.let {
-                            Log.w(
-                                TAG,
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -733,8 +717,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         continuation.resume(Result.Success(list))
                     } else {
                         task.exception?.let {
-                            Log.w(
-                                TAG,
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -766,8 +749,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         }
                     } else {
                         task.exception?.let {
-                            Log.w(
-                                TAG,
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -832,7 +814,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             .addSnapshotListener { snapshot, exception ->
 
                 exception?.let {
-                    Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                    Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
                 val list = mutableListOf<Notification>()
 
@@ -849,8 +831,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     .orderBy("date", Query.Direction.DESCENDING)
                     .addSnapshotListener { snapshot, exception ->
                         exception?.let {
-                            Log.d(
-                                TAG,
+                            Logger.d(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                         }
@@ -867,7 +848,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             }
         return liveData
     }
-
 
     override suspend fun getVenueByIds(ids: List<String>): Result<List<Venue>> =
         suspendCoroutine { continuation ->
@@ -936,7 +916,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     }
                 }
         }
-
 
     override suspend fun getDrinkBySearch(search: String): Result<List<Drink>> =
         suspendCoroutine { continuation ->
@@ -1064,7 +1043,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     continuation.resume(Result.Success(list))
                                 }
                         }
-
                     } else {
                         drinkTask.exception?.let {
                             continuation.resume(Result.Error(it))
@@ -1080,7 +1058,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     }
                 }
         }
-
 
     override suspend fun getHighRateVenueResult(): Result<List<Venue>> =
         suspendCoroutine { continuation ->
@@ -1099,7 +1076,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     if (venueTask.isSuccessful) {
 
                         for (document in venueTask.result!!) {
-                            Log.d(TAG, document.id + " => " + document.data)
+                            Logger.d(document.id + " =>" + document.data)
                             val venue = document.toObject(Venue::class.java)
                             Log.d("Ming", venue.toString())
                             list.add(venue)
@@ -1157,7 +1134,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-
     override suspend fun getActivityByUser(userId: String): Result<List<Activity>> =
         suspendCoroutine { continuation ->
             val list = mutableListOf<Activity>()
@@ -1165,7 +1141,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             // filter activity
             FirebaseFirestore.getInstance()
                 .collection(PATH_ACTIVITY)
-//                .whereArrayContains("bookers", mapOf("id" to userId, "date" to null))
+//                .whereArrayContains("bookers", mapOf("id" to userId,"date" to null))
                 .get()
                 .addOnCompleteListener { activityTask ->
                     if (activityTask.isSuccessful) {
@@ -1197,7 +1173,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     }
                 }
         }
-
 
     override suspend fun getActivityById(activityId: String): Result<Activity> =
         suspendCoroutine { continuation ->
@@ -1395,7 +1370,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                                             if (check == rtgTask.result.size()) {
                                                                                 continuation.resume(
                                                                                     Result.Success(
-                                                                                        list.sortedByDescending { it.postDate })
+                                                                                        list.sortedByDescending { it.postDate }
+                                                                                    )
                                                                                 )
                                                                             }
                                                                         }
@@ -1427,7 +1403,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                                             if (check == rtgTask.result.size()) {
                                                                                 continuation.resume(
                                                                                     Result.Success(
-                                                                                        list.sortedByDescending { it.postDate })
+                                                                                        list.sortedByDescending { it.postDate }
+                                                                                    )
                                                                                 )
                                                                             }
                                                                         }
@@ -1446,8 +1423,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         }
                     } else {
                         userTask.exception?.let {
-                            Log.w(
-                                TAG,
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -1476,13 +1452,12 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .set(Collect.toHashMap(collect))
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "addCollect: isSuccessful")
+                        Logger.d("addCollect: isSuccessful")
                         continuation.resume(Result.Success(true))
                     } else {
                         task.exception?.let {
-                            Log.d(TAG, "addCollect: $it")
-                            Log.w(
-                                TAG,
+                            Logger.d("addCollect: $it")
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -1511,13 +1486,12 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .set(Venue.toHashMap(venue))
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "addVenue: isSuccessful")
+                        Logger.d("addVenue: isSuccessful")
                         continuation.resume(Result.Success(true))
                     } else {
                         task.exception?.let {
-                            Log.d(TAG, "addVenue: $it")
-                            Log.w(
-                                TAG,
+                            Logger.d("addVenue: $it")
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -1534,7 +1508,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-
     override suspend fun addDrink(drink: Drink): Result<Boolean> =
         suspendCoroutine { continuation ->
             val addDrink =
@@ -1547,13 +1520,12 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .set(Drink.toHashMap(drink))
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "addDrink: isSuccessful")
+                        Logger.d("addDrink: isSuccessful")
                         continuation.resume(Result.Success(true))
                     } else {
                         task.exception?.let {
-                            Log.d(TAG, "addDrink: $it")
-                            Log.w(
-                                TAG,
+                            Logger.d("addDrink: $it")
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -1597,7 +1569,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     continuation.resume(Result.Success(true))
                                 } else {
                                     task.exception?.let {
-                                        Log.w(TAG, "Error getting documents. ${it.message}")
+                                        Logger.d("Error getting documents. ${it.message}")
                                         continuation.resume(Result.Error(it))
                                         return@addOnCompleteListener
                                     }
@@ -1613,7 +1585,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             }
                     } else {
                         task.exception?.let {
-                            Log.w(TAG, "Error getting documents. ${it.message}")
+                            Logger.d("Error getting documents. ${it.message}")
                             continuation.resume(Result.Error(it))
                             return@addOnCompleteListener
                         }
@@ -1643,8 +1615,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     } else {
                         task.exception?.let {
 
-                            Log.w(
-                                TAG,
+                            Logger.w(
                                 "[${this::class.simpleName}] Error getting documents. ${it.message}"
                             )
                             continuation.resume(Result.Error(it))
@@ -1693,16 +1664,14 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             continuation.resume(Result.Success(true))
                                         }
                                     }
-
-
                             } else {
                                 document.reference
                                     .update("bookers", activity.bookers?.filter { it.id != userId })
                                     .addOnSuccessListener {
-                                        Log.d(TAG, "DocumentSnapshot successfully updated!")
+                                        Logger.d("DocumentSnapshot successfully updated!")
                                     }
                                     .addOnFailureListener { e ->
-                                        Log.w(TAG, "Error updating document", e)
+                                        Logger.d("Error updating document: $e")
                                     }
 
                                 // delete notification for user
@@ -1722,7 +1691,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         }
                     } else {
                         task.exception?.let {
-                            Log.w(TAG, "Error getting documents. ${it.message}")
+                            Logger.d("Error getting documents. ${it.message}")
                             continuation.resume(Result.Error(it))
                             return@addOnCompleteListener
                         }
@@ -1755,15 +1724,16 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                             document.reference
                                 .update(
-                                    "bookers", activity.bookers?.plus(
+                                    "bookers",
+                                    activity.bookers?.plus(
                                         Relationship(userId, Timestamp(System.currentTimeMillis()))
                                     )
                                 )
                                 .addOnSuccessListener {
-                                    Log.d(TAG, "DocumentSnapshot successfully updated!")
+                                    Logger.d("DocumentSnapshot successfully updated!")
                                 }
                                 .addOnFailureListener { e ->
-                                    Log.w(TAG, "Error updating document", e)
+                                    Logger.d("Error updating document: $e")
                                 }
 
                             // add notification info to firebase
@@ -1777,7 +1747,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                         continuation.resume(Result.Success(true))
                                     } else {
                                         task.exception?.let {
-                                            Log.w(TAG, "Error getting documents. ${it.message}")
+                                            Logger.d("Error getting documents. ${it.message}")
                                             continuation.resume(Result.Error(it))
                                             return@addOnCompleteListener
                                         }
@@ -1794,7 +1764,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                         }
                     } else {
                         task.exception?.let {
-                            Log.w(TAG, "Error getting documents. ${it.message}")
+                            Logger.d("Error getting documents. ${it.message}")
                             continuation.resume(Result.Error(it))
                             return@addOnCompleteListener
                         }
@@ -1827,8 +1797,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     continuation.resume(Result.Success(true))
                                 } else {
                                     task.exception?.let {
-                                        Log.w(
-                                            TAG,
+                                        Logger.w(
                                             "[${this::class.simpleName}] Error getting documents. ${it.message}"
                                         )
                                         continuation.resume(Result.Error(it))
@@ -1863,10 +1832,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             document.reference
                                 .set(Notification.toHashMap(notify))
                                 .addOnSuccessListener {
-                                    Log.d(TAG, "add successfully updated!")
+                                    Logger.d("add successfully updated!")
                                 }
                                 .addOnFailureListener { e ->
-                                    Log.w(TAG, "error updated!")
+                                    Logger.d("error updated!")
                                 }
                         }
 
@@ -1890,10 +1859,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                     user.friends?.plus(frd) ?: listOf(frd)
                                                 )
                                                 .addOnSuccessListener {
-                                                    Log.d(TAG, "add successfully updated!")
+                                                    Logger.d("add successfully updated!")
                                                 }
                                                 .addOnFailureListener { e ->
-                                                    Log.w(TAG, "error updated!")
+                                                    Logger.d("error updated!")
                                                 }
                                         }
                                     }
@@ -1916,10 +1885,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                             user.friends?.plus(frd) ?: listOf(frd)
                                                         )
                                                         .addOnSuccessListener {
-                                                            Log.d(TAG, "add successfully updated!")
+                                                            Logger.d("add successfully updated!")
                                                         }
                                                         .addOnFailureListener { e ->
-                                                            Log.w(TAG, "error updated!")
+                                                            Logger.d("error updated!")
                                                         }
                                                 }
                                             }
@@ -1928,8 +1897,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 }
                         } else {
                             task.exception?.let {
-                                Log.w(
-                                    TAG,
+                                Logger.w(
                                     "[${this::class.simpleName}] Error getting documents. ${it.message}"
                                 )
                                 continuation.resume(Result.Error(it))
@@ -1966,10 +1934,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     user.friends?.filter { it.id != ids[1] } ?: user.friends
                                 )
                                 .addOnSuccessListener {
-                                    Log.d(TAG, "add successfully updated!")
+                                    Logger.d("add successfully updated!")
                                 }
                                 .addOnFailureListener { e ->
-                                    Log.w(TAG, "error updated!")
+                                    Logger.d("error updated!")
                                 }
                         }
                     }
@@ -1989,10 +1957,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             user.friends?.filter { it.id != ids[0] } ?: user.friends
                                         )
                                         .addOnSuccessListener {
-                                            Log.d(TAG, "add successfully updated!")
+                                            Logger.d("add successfully updated!")
                                         }
                                         .addOnFailureListener { e ->
-                                            Log.w(TAG, "error updated!")
+                                            Logger.d("error updated!")
                                         }
                                 }
                             }
@@ -2023,28 +1991,26 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             )
                                         )
                                             .addOnSuccessListener {
-                                                Log.d(TAG, "add successfully updated!")
+                                                Logger.d("add successfully updated!")
                                             }
                                             .addOnFailureListener { e ->
-                                                Log.w(TAG, "error updated!")
+                                                Logger.d("error updated!")
                                             }
                                     } else {
                                         document.reference.update("isCheck", true)
                                             .addOnSuccessListener {
-                                                Log.d(TAG, "add successfully updated!")
+                                                Logger.d("add successfully updated!")
                                             }
                                             .addOnFailureListener { e ->
-                                                Log.w(TAG, "error updated!")
+                                                Logger.d("error updated!")
                                             }
                                     }
                                 }
-
                             }
                             continuation.resume(Result.Success(true))
                         } else {
                             task.exception?.let {
-                                Log.w(
-                                    TAG,
+                                Logger.w(
                                     "[${this::class.simpleName}] Error getting documents. ${it.message}"
                                 )
                                 continuation.resume(Result.Error(it))
@@ -2073,13 +2039,13 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             .whereEqualTo("isCheck", false)
             .addSnapshotListener { snapshot, exception ->
                 exception?.let {
-                    Log.d(TAG, "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                    Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
 
                 if (!snapshot!!.metadata.hasPendingWrites()) {
                     val list = mutableListOf<Notification>()
 
-                    for (document in snapshot!!.documents) {
+                    for (document in snapshot.documents) {
                         val notification = document.toObject(Notification::class.java)
                         if (notification != null) {
                             notification.timestamp = notification.date?.let { Timestamp(it.time) }
@@ -2092,5 +2058,4 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
         return liveData
     }
-
 }

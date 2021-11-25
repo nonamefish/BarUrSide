@@ -62,5 +62,4 @@ class MenuAdapter :
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         holder.bind(getItem(position), holder.itemView)
     }
-
 }

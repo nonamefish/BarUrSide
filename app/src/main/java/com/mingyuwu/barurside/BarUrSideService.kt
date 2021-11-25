@@ -64,13 +64,13 @@ class BarUrSideService : LifecycleService() {
                 )
             }
 
-        val notification
-                : Notification = Notification.Builder(this, channel)
-            .setContentTitle(getString(R.string.app_name))
-            .setContentText(notify.content.replace("<b>", "").replace("</b>", ""))
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentIntent(pendingIntent)
-            .build()
+        val notification: Notification =
+            Notification.Builder(this, channel)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(notify.content.replace("<b>", "").replace("</b>", ""))
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentIntent(pendingIntent)
+                .build()
 
         notificationManager.notify(id, notification)
         id += 1
@@ -80,5 +80,4 @@ class BarUrSideService : LifecycleService() {
         super.onDestroy()
         stopSelf()
     }
-
 }

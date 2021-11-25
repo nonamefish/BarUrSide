@@ -31,23 +31,23 @@ import com.mingyuwu.barurside.util.Util.getResizedBitmap
 import com.mingyuwu.barurside.util.Util.randomName
 import com.permissionx.guolindev.PermissionX
 
-
-class AddObjectFragment : Fragment() {
+class AddDrinkFragment : Fragment() {
 
     private lateinit var binding: FragmentAddDrinkBinding
     private var photoPermissionGranted = false
     private val viewModel by viewModels<AddDrinkViewModel> {
         getVmFactory(
-            AddObjectFragmentArgs.fromBundle(requireArguments()).id
+            AddDrinkFragmentArgs.fromBundle(requireArguments()).id
         )
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val id = AddObjectFragmentArgs.fromBundle(requireArguments()).id
+        val id = AddDrinkFragmentArgs.fromBundle(requireArguments()).id
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_add_drink, container, false
@@ -68,7 +68,7 @@ class AddObjectFragment : Fragment() {
             }
         }
 
-        //set spinner type and adapter
+        // set spinner type and adapter
         val adapter = ArrayAdapter.createFromResource(
             binding.root.context,
             R.array.drink_type,
@@ -80,7 +80,10 @@ class AddObjectFragment : Fragment() {
         binding.spinnerObjectType.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
                 ) {
                     if (position != 0) {
                         val selected = parent?.getItemAtPosition(position).toString()
@@ -105,13 +108,18 @@ class AddObjectFragment : Fragment() {
         }
 
         // after post activity then navigate to activity fragment
-        viewModel.leave.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                alertDialog!!.dismiss()
-                findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(id))
-                viewModel.onLeft()
+        viewModel.leave.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    alertDialog!!.dismiss()
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToVenueFragment(id)
+                    )
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         return binding.root
     }
@@ -232,7 +240,6 @@ class AddObjectFragment : Fragment() {
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
     }
 
     private fun postRatingDialog(postDialog: AlertDialog.Builder): AlertDialog {
@@ -254,5 +261,4 @@ class AddObjectFragment : Fragment() {
 
         return dialog
     }
-
 }

@@ -14,7 +14,10 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getVenue(id)
     }
 
-    override fun getRatingByObject(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>> {
+    override fun getRatingByObject(
+        id: String,
+        isVenue: Boolean
+    ): MutableLiveData<List<RatingInfo>> {
         return remoteDataSource.getRatingByObject(id, isVenue)
     }
 
@@ -108,7 +111,7 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getDrinkBySearch(search)
     }
 
-    override suspend fun addCollect(collect: Collect): Result<Boolean>{
+    override suspend fun addCollect(collect: Collect): Result<Boolean> {
         return remoteDataSource.addCollect(collect)
     }
 
@@ -144,15 +147,22 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getRatingByFriends(userId)
     }
 
-    override suspend fun postActivity(activity: Activity,notification: Notification): Result<Boolean> {
-        return remoteDataSource.postActivity(activity,notification)
+    override suspend fun postActivity(
+        activity: Activity,
+        notification: Notification
+    ): Result<Boolean> {
+        return remoteDataSource.postActivity(activity, notification)
     }
 
     override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> {
-        return remoteDataSource.modifyActivity(activityId,userId)
+        return remoteDataSource.modifyActivity(activityId, userId)
     }
 
-    override suspend fun bookActivity(activityId: String, userId: String, notification: Notification): Result<Boolean> {
+    override suspend fun bookActivity(
+        activityId: String,
+        userId: String,
+        notification: Notification
+    ): Result<Boolean> {
         return remoteDataSource.bookActivity(activityId, userId, notification)
     }
 
@@ -169,7 +179,7 @@ class DefaultBarUrSideRepository(
     }
 
     override suspend fun replyAddFriend(notify: Notification, reply: Boolean): Result<Boolean> {
-        return remoteDataSource.replyAddFriend(notify,reply)
+        return remoteDataSource.replyAddFriend(notify, reply)
     }
 
     override suspend fun unfriend(ids: List<String>): Result<Boolean> {

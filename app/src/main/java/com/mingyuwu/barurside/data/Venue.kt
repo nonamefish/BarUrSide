@@ -23,7 +23,7 @@ data class Venue(
 ) : Parcelable {
 
     companion object {
-        fun getLatLng(dt: Venue) = LatLng(dt.latitude,dt.longitude)
+        fun getLatLng(dt: Venue) = LatLng(dt.latitude, dt.longitude)
 
         fun toHashMap(dt: Venue) = hashMapOf(
             "id" to dt.id,

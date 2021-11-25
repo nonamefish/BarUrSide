@@ -22,7 +22,7 @@ class ActivityPageViewModel(
     // listDate: The internal MutableLiveData that stores the recyclerView list data
     private var _listDate = MutableLiveData<List<Any>>()
 
-    val listDate : LiveData<List<Any>>
+    val listDate: LiveData<List<Any>>
         get() = _listDate
 
     // navigate to activity detail
@@ -56,7 +56,7 @@ class ActivityPageViewModel(
                 _status.value = LoadStatus.DONE
             }
             ActivityTypeFilter.FOLLOW -> {
-                user.value?.let{
+                user.value?.let {
                     getRatingByFriend(true, it.id)
                 }
             }
@@ -126,8 +126,7 @@ class ActivityPageViewModel(
         }
     }
 
-    fun onLeft(){
+    fun onLeft() {
         navigateToDetail.value = null
     }
-
 }

@@ -58,20 +58,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         // navigate to Start
-        viewModel.navigateToStart.observe(this, Observer {
-            it?.let {
-                navController.navigate(MainNavigationDirections.navigateToActivityFragment())
-                viewModel.onLeft()
+        viewModel.navigateToStart.observe(
+            this,
+            Observer {
+                it?.let {
+                    navController.navigate(MainNavigationDirections.navigateToActivityFragment())
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         // navigate to Login
-        viewModel.navigateToLogin.observe(this, Observer {
-            it?.let {
-                navController.navigate(MainNavigationDirections.navigateToLoginFragment())
-                viewModel.onLeft()
+        viewModel.navigateToLogin.observe(
+            this,
+            Observer {
+                it?.let {
+                    navController.navigate(MainNavigationDirections.navigateToLoginFragment())
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
@@ -122,7 +128,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.profileFragment -> {
                     navController.navigate(
-                        MainNavigationDirections.navigateToProfileFragment(UserManager.user.value?.id)
+                        MainNavigationDirections.navigateToProfileFragment(
+                            UserManager.user.value?.id
+                        )
                     )
                     return@setOnItemSelectedListener true
                 }
@@ -150,7 +158,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupNavController() {
         findNavController(R.id.nav_host_fragment)
-            .addOnDestinationChangedListener { navController: NavController, _: NavDestination, _: Bundle? ->
+            .addOnDestinationChangedListener { navController: NavController,
+                _: NavDestination,
+                _: Bundle? ->
                 viewModel.currentFragmentType.value = when (navController.currentDestination?.id) {
                     R.id.activityFragment -> CurrentFragmentType.ACTIVITY
                     R.id.addActivityFragment -> CurrentFragmentType.ADD_ACTIVITY
@@ -172,22 +182,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onGetUserDataFinished() {
-        UserManager.user.observe(this, Observer {
-            it?.let {
+        UserManager.user.observe(
+            this,
+            Observer {
+                it?.let {
 
-                viewModel.getNotification(it.id)
+                    viewModel.getNotification(it.id)
 
-                binding.viewModel = viewModel
+                    binding.viewModel = viewModel
 
-                startService(Intent(this, BarUrSideService::class.java))
+                    startService(Intent(this, BarUrSideService::class.java))
 
-                intent.data?.let {
-                    handleIntent(intent)
+                    intent.data?.let {
+                        handleIntent(intent)
+                    }
+
+                    Logger.d("intent: $intent")
                 }
-
-                Logger.d("intent: $intent")
             }
-        })
+        )
     }
 
     private fun handleIntent(intent: Intent) {
@@ -220,5 +233,4 @@ class MainActivity : AppCompatActivity() {
         val intent = intent
         onNewIntent(intent)
     }
-
 }

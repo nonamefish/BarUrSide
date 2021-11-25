@@ -7,7 +7,6 @@ import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.discoverdetail.DiscoverDetailViewModel
 import com.mingyuwu.barurside.filter.FilterParameter
 
-
 @Suppress("UNCHECKED_CAST")
 class DiscoverDetailViewModelFactory(
     private val repository: BarUrSideRepository,

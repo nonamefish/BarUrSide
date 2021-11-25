@@ -218,5 +218,4 @@ class DiscoverDetailViewModel(
     fun onLeft() {
         navigateToInfo.value = null
     }
-
 }

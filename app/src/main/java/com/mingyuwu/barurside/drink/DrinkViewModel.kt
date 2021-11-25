@@ -164,5 +164,4 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
     fun onLeft() {
         navigateToAll.value = null
     }
-
 }

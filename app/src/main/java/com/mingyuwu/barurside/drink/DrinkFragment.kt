@@ -28,7 +28,8 @@ class DrinkFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -38,33 +39,44 @@ class DrinkFragment : Fragment() {
         binding.lifecycleOwner = this
 
         // navigate to all rating fragment
-        viewModel.navigateToAll.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                findNavController().navigate(MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray()))
-                viewModel.onLeft()
+        viewModel.navigateToAll.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray())
+                    )
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         // set drink data
-        viewModel.drinkInfo.observe(viewLifecycleOwner, Observer { drinkList->
-            drinkList?.let { drink ->
-                viewModel.getVenueResult(drink.venueId)
-                viewModel.getRatingResult(drink.id, false)
+        viewModel.drinkInfo.observe(
+            viewLifecycleOwner,
+            Observer { drinkList ->
+                drinkList?.let { drink ->
+                    viewModel.getVenueResult(drink.venueId)
+                    viewModel.getRatingResult(drink.id, false)
 
-                // after link viewModel venueInfo to datasource livedata,  then set binding viewModel
-                binding.viewModel = viewModel
+                    // after link viewModel venueInfo to datasource livedata,  then set binding viewModel
+                    binding.viewModel = viewModel
 
-                // set rating data
-                viewModel.rtgInfo.observe(viewLifecycleOwner, Observer { rtgList->
-                    rtgList?.let { ratings ->
-                        viewModel.setImages(ratings)
-                        binding.ratings =
-                            ratings.sortedByDescending { rating -> rating.postDate }.take(3)
-                        binding.imgs = viewModel.images.value?.take(10)
-                    }
-                })
+                    // set rating data
+                    viewModel.rtgInfo.observe(
+                        viewLifecycleOwner,
+                        Observer { rtgList ->
+                            rtgList?.let { ratings ->
+                                viewModel.setImages(ratings)
+                                binding.ratings =
+                                    ratings.sortedByDescending { rating -> rating.postDate }.take(3)
+                                binding.imgs = viewModel.images.value?.take(10)
+                            }
+                        }
+                    )
+                }
             }
-        })
+        )
 
         // set recyclerView Adapter
         binding.drinkRtgList.adapter = InfoRatingAdapter()
@@ -93,5 +105,4 @@ class DrinkFragment : Fragment() {
 
         return binding.root
     }
-
 }

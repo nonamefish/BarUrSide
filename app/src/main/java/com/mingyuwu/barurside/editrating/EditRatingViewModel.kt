@@ -10,11 +10,11 @@ import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.Logger
+import java.sql.Timestamp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.sql.Timestamp
 
 class EditRatingViewModel(val repository: BarUrSideRepository, venue: Venue) :
     ViewModel() {
@@ -146,7 +146,6 @@ class EditRatingViewModel(val repository: BarUrSideRepository, venue: Venue) :
         _uploadImgUrl.value = _uploadImgUrl.value
     }
 
-
     fun addTagFrd(frdId: TagFriend) {
 
         if (_tagFrd.value == null) {
@@ -211,8 +210,10 @@ class EditRatingViewModel(val repository: BarUrSideRepository, venue: Venue) :
 
                     it?.forEachIndexed { listIndex, url ->
                         url?.let {
-                            when (val result =
-                                repository.uploadPhoto(storageRef, userId ?: "", type, url)) {
+                            when (
+                                val result =
+                                    repository.uploadPhoto(storageRef, userId ?: "", type, url)
+                            ) {
                                 is Result.Success -> {
                                     _error.value = null
                                     imgs.add(listIndex, result.data)
@@ -358,5 +359,4 @@ class EditRatingViewModel(val repository: BarUrSideRepository, venue: Venue) :
         _objectId.value = _objectId.value
         _menu.value = _menu.value
     }
-
 }

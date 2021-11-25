@@ -44,7 +44,8 @@ class EditRatingFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -72,27 +73,35 @@ class EditRatingFragment : Fragment() {
         }
 
         // viewModel observer
-        viewModel.objectId.observe(viewLifecycleOwner, Observer {
-            editRatingAdapter.submitList(it)
-            editRatingAdapter.notifyDataSetChanged()
-        })
+        viewModel.objectId.observe(
+            viewLifecycleOwner,
+            Observer {
+                editRatingAdapter.submitList(it)
+                editRatingAdapter.notifyDataSetChanged()
+            }
+        )
 
         // click add photo button
-        viewModel.isUploadImgBtn.observe(viewLifecycleOwner, Observer {
-            if (photoPermissionGranted) {
-                chooseImage(binding.root.context)
-            } else {
-                getPhotoPermission()
+        viewModel.isUploadImgBtn.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (photoPermissionGranted) {
+                    chooseImage(binding.root.context)
+                } else {
+                    getPhotoPermission()
+                }
             }
-        })
+        )
 
         // get friend list
-        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
-            user.friends?.let {
-                viewModel.getFriendList(user)
+        viewModel.user.observe(
+            viewLifecycleOwner,
+            Observer { user ->
+                user.friends?.let {
+                    viewModel.getFriendList(user)
+                }
             }
-
-        })
+        )
 
         // set post rating button click listener
         var alertDialog: AlertDialog? = null
@@ -107,13 +116,16 @@ class EditRatingFragment : Fragment() {
         }
 
         // leave rating and to previous view
-        viewModel.leave.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                alertDialog!!.dismiss()
-                findNavController().navigateUp()
-                viewModel.onLeft()
+        viewModel.leave.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    alertDialog!!.dismiss()
+                    findNavController().navigateUp()
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         return binding.root
     }
@@ -143,7 +155,6 @@ class EditRatingFragment : Fragment() {
                 if (allGranted) {
                     photoPermissionGranted = true
                     chooseImage(binding.root.context)
-
                 } else {
                     Toast.makeText(
                         binding.root.context,
@@ -229,7 +240,6 @@ class EditRatingFragment : Fragment() {
         )
         spinner.adapter = adapter
 
-
         // set OK button for alert dialog
         mBuilder.setPositiveButton(Util.getString(R.string.add_drink_confirm)) { dialog, _ ->
             val selectedPosition = spinner.selectedItemPosition
@@ -280,6 +290,4 @@ class EditRatingFragment : Fragment() {
 
         return dialog
     }
-
 }
-

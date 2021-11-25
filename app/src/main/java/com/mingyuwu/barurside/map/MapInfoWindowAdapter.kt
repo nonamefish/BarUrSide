@@ -18,7 +18,6 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.InfoWindowBinding
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
 
-
 class MapInfoWindowAdapter(
     private val context: Context,
     private val viewModel: MapViewModel,
@@ -38,7 +37,6 @@ class MapInfoWindowAdapter(
         // set average score & rating count
         binding.avgRating = info[1].toDouble()
         binding.shareCount = info[2].toInt()
-
 
         binding.imgInfo.setOnClickListener {
             viewModel.navigateToVenue.value = info[0]
@@ -68,7 +66,6 @@ class MapInfoWindowAdapter(
     override fun getInfoWindow(marker: Marker): View? {
         return null
     }
-
 }
 
 class MarkerCallback internal constructor(marker: Marker?) :
@@ -107,5 +104,4 @@ class MarkerCallback internal constructor(marker: Marker?) :
         onSuccess()
         return false
     }
-
 }

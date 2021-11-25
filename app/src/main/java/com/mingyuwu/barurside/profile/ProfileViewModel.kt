@@ -13,12 +13,11 @@ import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.Logger
 import com.mingyuwu.barurside.util.Util.getString
+import java.sql.Timestamp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.sql.Timestamp
-
 
 class ProfileViewModel(private val repository: BarUrSideRepository, val userId: String) :
     ViewModel() {
@@ -181,11 +180,9 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
         } else {
             navigateToAll.value = rtgInfos.value?.filter { it.isVenue == false }
         }
-
     }
 
     fun onLeft() {
         navigateToAll.value = null
     }
-
 }

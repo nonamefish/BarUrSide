@@ -23,5 +23,4 @@ class BarUrSideApplication : Application() {
     // Depends on the flavor,
     val repository: BarUrSideRepository
         get() = ServiceLocator.provideRepository(this)
-
 }

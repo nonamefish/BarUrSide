@@ -44,7 +44,8 @@ class CollectPageFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -69,50 +70,62 @@ class CollectPageFragment : Fragment() {
 
         binding.collectList.adapter = adapter
 
-        viewModel.collectInfo.observe(viewLifecycleOwner, Observer{
-            if (!it.isNullOrEmpty()) {
-                viewModel.getObjectInfo(isVenue, it)
-            } else {
-                binding.animationEmpty.visibility = View.VISIBLE
-                binding.animationLoading.visibility = View.GONE
+        viewModel.collectInfo.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (!it.isNullOrEmpty()) {
+                    viewModel.getObjectInfo(isVenue, it)
+                } else {
+                    binding.animationEmpty.visibility = View.VISIBLE
+                    binding.animationLoading.visibility = View.GONE
+                }
             }
-        })
+        )
 
         // get collect object information
-        viewModel.objectInfo.observe(viewLifecycleOwner, Observer{
-            if (it.isEmpty()) {
-                binding.animationEmpty.visibility = View.VISIBLE
-            } else {
-                binding.animationLoading.visibility = View.GONE
-                adapter.submitList(it)
+        viewModel.objectInfo.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it.isEmpty()) {
+                    binding.animationEmpty.visibility = View.VISIBLE
+                } else {
+                    binding.animationLoading.visibility = View.GONE
+                    adapter.submitList(it)
+                }
             }
-        })
+        )
 
         // set navigation to object info page
-        viewModel.navigateToObject.observe(viewLifecycleOwner, Observer{
-            it?.let {
-                when (isVenue) {
-                    true -> findNavController().navigate(
-                        MainNavigationDirections.navigateToVenueFragment(
-                            it
+        viewModel.navigateToObject.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    when (isVenue) {
+                        true -> findNavController().navigate(
+                            MainNavigationDirections.navigateToVenueFragment(
+                                it
+                            )
                         )
-                    )
-                    false -> findNavController().navigate(
-                        MainNavigationDirections.navigateToDrinkFragment(
-                            it
+                        false -> findNavController().navigate(
+                            MainNavigationDirections.navigateToDrinkFragment(
+                                it
+                            )
                         )
-                    )
+                    }
+                    viewModel.onLeft()
                 }
-                viewModel.onLeft()
             }
-        })
+        )
 
         // check loading done and close loading animation
-        viewModel.status.observe(viewLifecycleOwner, Observer{
-            if (it == LoadStatus.DONE) {
-                binding.animationLoading.visibility = View.GONE
+        viewModel.status.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it == LoadStatus.DONE) {
+                    binding.animationLoading.visibility = View.GONE
+                }
             }
-        })
+        )
 
         // set location
         viewModel.location.value = (requireActivity() as MainActivity).location.value
@@ -130,8 +143,7 @@ class CollectPageFragment : Fragment() {
                             val location = task.result
                             (requireActivity() as MainActivity).location.value =
                                 LatLng(location.latitude, location.longitude)
-                        }
-                        else{
+                        } else {
                             Logger.d("exception ${task.exception}")
                             Logger.d("task.result ${task.result}")
                         }
@@ -189,7 +201,8 @@ class CollectPageFragment : Fragment() {
             AlertDialog.Builder(mContext)
                 .setTitle(Util.getString(R.string.request_gps_title))
                 .setMessage(Util.getString(R.string.request_gps_content))
-                .setPositiveButton(Util.getString(R.string.request_gps_positive)
+                .setPositiveButton(
+                    Util.getString(R.string.request_gps_positive)
                 ) { _, _ ->
                     startActivityForResult(
                         Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_ENABLE_GPS
@@ -201,5 +214,4 @@ class CollectPageFragment : Fragment() {
             getDeviceLocation()
         }
     }
-
 }

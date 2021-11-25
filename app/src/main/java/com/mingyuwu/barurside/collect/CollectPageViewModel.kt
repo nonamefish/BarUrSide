@@ -71,7 +71,6 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
                     null
                 }
             }
-
         }
     }
 
@@ -106,7 +105,6 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
                     null
                 }
             }
-
         }
     }
 
@@ -179,7 +177,6 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
         }
     }
 
-
     fun setNavigateToObject(id: String) {
         navigateToObject.value = id
     }
@@ -187,5 +184,4 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
     fun onLeft() {
         navigateToObject.value = null
     }
-
 }

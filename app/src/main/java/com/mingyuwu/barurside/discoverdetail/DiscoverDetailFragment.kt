@@ -55,9 +55,9 @@ class DiscoverDetailFragment : Fragment() {
         )
     }
 
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val ids = DiscoverDetailFragmentArgs.fromBundle(requireArguments()).id?.toList()
@@ -118,9 +118,12 @@ class DiscoverDetailFragment : Fragment() {
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
 
-                viewModel.location.observe(viewLifecycleOwner, Observer {
-                    viewModel.getAroundVenue(it)
-                })
+                viewModel.location.observe(
+                    viewLifecycleOwner,
+                    Observer {
+                        viewModel.getAroundVenue(it)
+                    }
+                )
             }
             Theme.IMAGES -> {
                 adapter = ImageAdapter(240, 220)
@@ -152,68 +155,71 @@ class DiscoverDetailFragment : Fragment() {
         }
 
         // click info button and navigate to info fragment
-        viewModel.navigateToInfo.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                when (it) {
-                    is Venue -> {
-                        findNavController().navigate(
-                            MainNavigationDirections.navigateToVenueFragment(it.id)
-                        )
-                        viewModel.onLeft()
-                    }
-                    is Drink -> {
-                        findNavController().navigate(
-                            MainNavigationDirections.navigateToDrinkFragment(it.id)
-                        )
-                        viewModel.onLeft()
-                    }
-                    is Activity -> {
-                        findNavController().navigate(
-                            MainNavigationDirections.navigateToActivityDetailDialog(it, null, theme)
-                        )
-                        viewModel.onLeft()
-                    }
-                }
-            }
-        })
-
-        // assign value to recyclerView
-        viewModel.detailData.observe(viewLifecycleOwner, Observer { it ->
-            if (it.isNullOrEmpty()) {
-                // finish loading and close lottie
-                binding.animationEmpty.visibility = View.VISIBLE
-                binding.animationLoading.visibility = View.GONE
-
-            } else {
-                val list: List<Any>?
-
-                // set notification value
-                if (theme == Theme.NOTIFICATION) {
-
-                    list = (it as List<Notification>).filter {
-                        it.toId == UserManager.user.value!!.id
-                    }.take(20)
-
-                    if (!it.isNullOrEmpty()) {
-                        it.filter { it.isCheck == false }.map { it.id }.let {
-                            viewModel.checkNotification(it)
+        viewModel.navigateToInfo.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    when (it) {
+                        is Venue -> {
+                            findNavController().navigate(
+                                MainNavigationDirections.navigateToVenueFragment(it.id)
+                            )
+                            viewModel.onLeft()
+                        }
+                        is Drink -> {
+                            findNavController().navigate(
+                                MainNavigationDirections.navigateToDrinkFragment(it.id)
+                            )
+                            viewModel.onLeft()
+                        }
+                        is Activity -> {
+                            findNavController().navigate(
+                                MainNavigationDirections.navigateToActivityDetailDialog(it, null, theme)
+                            )
+                            viewModel.onLeft()
                         }
                     }
-
-                } else {
-                    list = it
                 }
-
-                // submit list and set loading and empty animation
-                if (list.isEmpty()) {
-                    binding.animationEmpty.visibility = View.VISIBLE
-                } else {
-                    adapter.submitList(list)
-                }
-                binding.animationLoading.visibility = View.GONE
-
             }
-        })
+        )
+
+        // assign value to recyclerView
+        viewModel.detailData.observe(
+            viewLifecycleOwner,
+            Observer { it ->
+                if (it.isNullOrEmpty()) {
+                    // finish loading and close lottie
+                    binding.animationEmpty.visibility = View.VISIBLE
+                    binding.animationLoading.visibility = View.GONE
+                } else {
+                    val list: List<Any>?
+
+                    // set notification value
+                    if (theme == Theme.NOTIFICATION) {
+
+                        list = (it as List<Notification>).filter {
+                            it.toId == UserManager.user.value!!.id
+                        }.take(20)
+
+                        if (!it.isNullOrEmpty()) {
+                            it.filter { it.isCheck == false }.map { it.id }.let {
+                                viewModel.checkNotification(it)
+                            }
+                        }
+                    } else {
+                        list = it
+                    }
+
+                    // submit list and set loading and empty animation
+                    if (list.isEmpty()) {
+                        binding.animationEmpty.visibility = View.VISIBLE
+                    } else {
+                        adapter.submitList(list)
+                    }
+                    binding.animationLoading.visibility = View.GONE
+                }
+            }
+        )
 
         // set random button click listener
         binding.btnRandom.setOnClickListener {
@@ -237,7 +243,6 @@ class DiscoverDetailFragment : Fragment() {
                 else -> {
                 }
             }
-
         }
 
         return binding.root
@@ -324,6 +329,4 @@ class DiscoverDetailFragment : Fragment() {
             getDeviceLocation()
         }
     }
-
 }
-

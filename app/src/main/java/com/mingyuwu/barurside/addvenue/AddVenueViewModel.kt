@@ -139,5 +139,4 @@ class AddVenueViewModel(private val repository: BarUrSideRepository) :
             addVenue()
         }
     }
-
 }

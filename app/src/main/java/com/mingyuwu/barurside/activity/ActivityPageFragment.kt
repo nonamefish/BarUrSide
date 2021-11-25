@@ -34,7 +34,8 @@ class ActivityPageFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -63,40 +64,49 @@ class ActivityPageFragment : Fragment() {
         }
 
         // assign value to recyclerView
-        viewModel.listDate.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                if (it.isEmpty()) {
-                    binding.animationEmpty.visibility = View.VISIBLE
-                } else {
-                    adapter.submitList(it)
-                }
-            }
-        })
-
-        // navigate to detail fragment
-        viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                when (it) {
-                    is Activity -> {
-                        findNavController().navigate(
-                            MainNavigationDirections.navigateToActivityDetailDialog(
-                                it,
-                                null,
-                                Theme.NONE
-                            )
-                        )
-                        viewModel.onLeft()
+        viewModel.listDate.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    if (it.isEmpty()) {
+                        binding.animationEmpty.visibility = View.VISIBLE
+                    } else {
+                        adapter.submitList(it)
                     }
                 }
             }
-        })
+        )
+
+        // navigate to detail fragment
+        viewModel.navigateToDetail.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    when (it) {
+                        is Activity -> {
+                            findNavController().navigate(
+                                MainNavigationDirections.navigateToActivityDetailDialog(
+                                    it,
+                                    null,
+                                    Theme.NONE
+                                )
+                            )
+                            viewModel.onLeft()
+                        }
+                    }
+                }
+            }
+        )
 
         // get friend data when activity pade is follow
-        viewModel.user.observe(viewLifecycleOwner, Observer {
-            if (type == ActivityTypeFilter.FOLLOW) {
-                viewModel.getRatingByFriend(true, it.id)
+        viewModel.user.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (type == ActivityTypeFilter.FOLLOW) {
+                    viewModel.getRatingByFriend(true, it.id)
+                }
             }
-        })
+        )
 
         // set add activity on click listener
         binding.btnAddActivity.setOnClickListener {
@@ -104,13 +114,15 @@ class ActivityPageFragment : Fragment() {
         }
 
         // check loading done and close loading animation
-        viewModel.status.observe(viewLifecycleOwner, Observer {
-            if (it == LoadStatus.DONE) {
-                binding.animationLoading.visibility = View.GONE
+        viewModel.status.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it == LoadStatus.DONE) {
+                    binding.animationLoading.visibility = View.GONE
+                }
             }
-        })
+        )
 
         return binding.root
     }
-
 }

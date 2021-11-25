@@ -1,6 +1,6 @@
 package com.mingyuwu.barurside.discover
 
-enum class Theme (val order: Int?) {
+enum class Theme(val order: Int?) {
     AROUND_VENUE(0),
     RECENT_ACTIVITY(1),
     HOT_DRINK(2),
@@ -15,4 +15,3 @@ enum class Theme (val order: Int?) {
     IMAGES(11),
     NONE(null)
 }
-

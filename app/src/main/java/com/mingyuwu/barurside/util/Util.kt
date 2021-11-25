@@ -17,7 +17,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.cos
 
-
 object Util {
 
     /**
@@ -128,5 +127,4 @@ object Util {
 
         return listOf(minLat, maxLat, minLng, maxLng)
     }
-
 }

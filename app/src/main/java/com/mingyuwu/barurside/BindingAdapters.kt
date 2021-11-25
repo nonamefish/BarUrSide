@@ -30,7 +30,6 @@ import java.sql.Timestamp
 import java.time.LocalTime
 import kotlin.math.roundToInt
 
-
 @BindingAdapter("stars")
 fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
     val starList = mutableListOf<ScoreStatus>()
@@ -78,7 +77,6 @@ fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean?) {
         } else {
             imageView.setBackgroundResource(R.drawable.ic_baseline_star_border_24)
         }
-
     }
 }
 
@@ -216,7 +214,6 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
     }
 }
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 fun checkTime(open: String, close: String): Boolean {
     val openTime = LocalTime.parse(open)
@@ -308,4 +305,3 @@ fun bindDistance(textView: TextView, distance: Int?) {
         }
     }
 }
-

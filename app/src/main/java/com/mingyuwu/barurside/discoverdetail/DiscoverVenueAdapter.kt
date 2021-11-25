@@ -72,5 +72,4 @@ class DiscoverVenueAdapter(val viewModel: DiscoverDetailViewModel) :
             }
         }
     }
-
 }

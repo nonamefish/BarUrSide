@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mingyuwu.barurside.util.Style
 
-
 class FilterViewModel() : ViewModel() {
 
     // filter input
@@ -40,5 +39,4 @@ class FilterViewModel() : ViewModel() {
 
         return true
     }
-
 }

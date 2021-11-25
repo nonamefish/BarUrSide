@@ -56,7 +56,6 @@ class ActivityDetailViewModel(
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     init {
         if (activityId.isNullOrEmpty()) {
             activity?.let {
@@ -67,7 +66,6 @@ class ActivityDetailViewModel(
         } else {
             getActivity(activityId)
         }
-
     }
 
     fun modifyActivity() {
@@ -151,5 +149,4 @@ class ActivityDetailViewModel(
             checkUserHasBook()
         }
     }
-
 }

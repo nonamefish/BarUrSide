@@ -16,7 +16,6 @@ import com.mingyuwu.barurside.databinding.ItemCollectBinding
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
 import kotlin.math.roundToInt
 
-
 class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: OnClickListener) :
     ListAdapter<Any, CollectAdapter.CollectViewHolder>(DiffCallback) {
 
@@ -42,15 +41,15 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
                     binding.venue = collect
                     binding.isVenue = true
                     binding.position = adapterPosition
-                    viewModel.location.value?.let{
+                    viewModel.location.value?.let {
                         binding.distance =
                             SphericalUtil.computeDistanceBetween(
                                 it,
                                 LatLng(collect.latitude, collect.longitude)
                             ).roundToInt()
                     }
-                    binding.rtgInfo = when(collect.rtgCount){
-                         0L -> {
+                    binding.rtgInfo = when (collect.rtgCount) {
+                        0L -> {
                             "無評論"
                         }
                         else -> {
@@ -67,7 +66,7 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
                     binding.drink = collect
                     binding.isVenue = false
                     binding.position = adapterPosition
-                    binding.rtgInfo = when(collect.rtgCount){
+                    binding.rtgInfo = when (collect.rtgCount) {
                         0L -> {
                             "無評論"
                         }
@@ -132,5 +131,4 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
     class OnClickListener(val clickListener: (id: String) -> Unit) {
         fun onClick(id: String) = clickListener(id)
     }
-
 }

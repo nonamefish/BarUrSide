@@ -50,7 +50,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
     private val viewModel by viewModels<MapViewModel> { getVmFactory() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -80,50 +81,64 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
         }
 
         // search info: set auto completed text adapter
-        viewModel.searchInfo.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                val venueList = it.map { venue -> venue.name }
-                val adapter = ArrayAdapter(
-                    binding.root.context,
-                    android.R.layout.simple_spinner_dropdown_item,
-                    venueList
-                )
-                binding.autoMapFilter.setAdapter(adapter)
+        viewModel.searchInfo.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    val venueList = it.map { venue -> venue.name }
+                    val adapter = ArrayAdapter(
+                        binding.root.context,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        venueList
+                    )
+                    binding.autoMapFilter.setAdapter(adapter)
 
-                binding.autoMapFilter.setOnItemClickListener { parent, _, position, _ ->
-                    val selected = parent.getItemAtPosition(position)
-                    val pos = venueList.indexOf(selected)
-                    binding.autoMapFilter.setText("")
-                    addMapMark(it[pos], true)
+                    binding.autoMapFilter.setOnItemClickListener { parent, _, position, _ ->
+                        val selected = parent.getItemAtPosition(position)
+                        val pos = venueList.indexOf(selected)
+                        binding.autoMapFilter.setText("")
+                        addMapMark(it[pos], true)
+                    }
                 }
             }
-        })
+        )
 
         // search venue after autocompleted text
-        viewModel.searchText.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                if (it.length == 1) {
-                    viewModel.getVenueBySearch(it)
+        viewModel.searchText.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    if (it.length == 1) {
+                        viewModel.getVenueBySearch(it)
+                    }
                 }
             }
-        })
+        )
 
         // init : nearby venue list
-        viewModel.venueList.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                for (item in it) {
-                    addMapMark(item, false)
+        viewModel.venueList.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    for (item in it) {
+                        addMapMark(item, false)
+                    }
                 }
             }
-        })
+        )
 
         // navigate to Venue
-        viewModel.navigateToVenue.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                findNavController().navigate(MainNavigationDirections.navigateToVenueFragment(it))
-                viewModel.onLeft()
+        viewModel.navigateToVenue.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToVenueFragment(it)
+                    )
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         return binding.root
     }
@@ -176,9 +191,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                     .title(venue.name)
                     .snippet(
                         "${venue.id}," +
-                                "${venue.avgRating}," +
-                                "${venue.rtgCount}," +
-                                "$image"
+                            "${venue.avgRating}," +
+                            "${venue.rtgCount}," +
+                            "$image"
                     )
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_mark_wine))
             )
@@ -199,7 +214,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                             (requireActivity() as MainActivity).location.value =
                                 LatLng(location.latitude, location.longitude)
                             // get near bar
-                            viewModel.getVenueByLocation((requireActivity() as MainActivity).location.value!!)
+                            viewModel.getVenueByLocation(
+                                (requireActivity() as MainActivity).location.value!!
+                            )
 
                             // set map current location and icon
                             mMap.isMyLocationEnabled = true
@@ -283,5 +300,4 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             viewModel.navigateToVenue.value = info[0]
         }
     }
-
 }

@@ -38,7 +38,8 @@ import com.mingyuwu.barurside.util.Style
 import com.mingyuwu.barurside.util.Util
 import com.permissionx.guolindev.PermissionX
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class AddVenueFragment : Fragment() {
 
@@ -48,7 +49,8 @@ class AddVenueFragment : Fragment() {
     private val viewModel by viewModels<AddVenueViewModel> { getVmFactory() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -86,7 +88,7 @@ class AddVenueFragment : Fragment() {
 
         // address edit text click listener
         binding.txtVenueAddress.setOnClickListener {
-            //start activity result
+            // start activity result
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
         }
 
@@ -103,7 +105,10 @@ class AddVenueFragment : Fragment() {
         binding.spinnerVenueStyle.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
                 ) {
                     if (position != 0) {
                         val selected = parent?.getItemAtPosition(position).toString()
@@ -127,7 +132,10 @@ class AddVenueFragment : Fragment() {
         binding.spinnerVenueLevel.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
                 ) {
                     if (position != 0) {
                         viewModel.level.value = position
@@ -287,16 +295,14 @@ class AddVenueFragment : Fragment() {
                     if (resultCode == Activity.RESULT_OK) {
 
                         data?.let {
-                            //When success initialize place
+                            // When success initialize place
                             val place = Autocomplete.getPlaceFromIntent(it)
 
-                            //set address on edittext
+                            // set address on edittext
                             viewModel.address.value = place.address
                             viewModel.latitude.value = place.latLng?.latitude
                             viewModel.longtitude.value = place.latLng?.longitude
                         }
-
-
                     } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
 
                         data?.let {
@@ -336,7 +342,6 @@ class AddVenueFragment : Fragment() {
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
     }
 
     private fun postRatingDialog(postDialog: AlertDialog.Builder): AlertDialog {
@@ -359,5 +364,4 @@ class AddVenueFragment : Fragment() {
 
         return dialog
     }
-
 }

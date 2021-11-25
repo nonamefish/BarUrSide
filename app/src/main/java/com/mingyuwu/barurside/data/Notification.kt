@@ -1,28 +1,28 @@
 package com.mingyuwu.barurside.data
 
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import java.sql.Timestamp
-import java.util.*
+import java.util.Date
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Notification(
-    var id: String= "",
-    val objectId: String= "",
-    val image: String= "",
-    val type: String= "",
+    var id: String = "",
+    val objectId: String = "",
+    val image: String = "",
+    val type: String = "",
     val date: Date? = null,
-    var fromId: String= "",
-    val toId: String= "",
-    val content: String= "",
+    var fromId: String = "",
+    val toId: String = "",
+    val content: String = "",
     var reply: Boolean? = null,
     @JvmField val isCheck: Boolean? = null
-) : Parcelable{
+) : Parcelable {
 
     var timestamp = date?.let { Timestamp(it.time) }
 
-    companion object{
-        fun toHashMap(dt : Notification) = hashMapOf(
+    companion object {
+        fun toHashMap(dt: Notification) = hashMapOf(
             "id" to dt.id,
             "objectId" to dt.objectId,
             "image" to dt.image,
@@ -35,5 +35,4 @@ data class Notification(
             "isCheck" to dt.isCheck
         )
     }
-
 }

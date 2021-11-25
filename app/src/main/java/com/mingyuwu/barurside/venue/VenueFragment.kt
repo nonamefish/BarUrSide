@@ -21,7 +21,6 @@ import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
 
-
 class VenueFragment : Fragment() {
 
     private lateinit var binding: FragmentVenueBinding
@@ -32,7 +31,8 @@ class VenueFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -44,15 +44,18 @@ class VenueFragment : Fragment() {
         val id = VenueFragmentArgs.fromBundle(requireArguments()).id
 
         // navigate to all rating fragment
-        viewModel.navigateToAll.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                findNavController().navigate(
-                    MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray())
-                )
+        viewModel.navigateToAll.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray())
+                    )
 
-                viewModel.onLeft()
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         // set recyclerView Adapter
         binding.venueRtgList.adapter = InfoRatingAdapter()
@@ -72,13 +75,17 @@ class VenueFragment : Fragment() {
         binding.viewModel = viewModel
 
         // set ratings data
-        viewModel.rtgInfos.observe(viewLifecycleOwner, Observer { it ->
-            it?.let { ratings ->
-                viewModel.setImages(ratings)
-                binding.ratings = ratings.sortedByDescending { rating -> rating.postDate }.take(3)
-                binding.imgs = viewModel.images.value?.take(10)
+        viewModel.rtgInfos.observe(
+            viewLifecycleOwner,
+            Observer { it ->
+                it?.let { ratings ->
+                    viewModel.setImages(ratings)
+                    binding.ratings = ratings
+                        .sortedByDescending { rating -> rating.postDate }.take(3)
+                    binding.imgs = viewModel.images.value?.take(10)
+                }
             }
-        })
+        )
 
         // set venue phone on click listener
         binding.venuePhone.setOnClickListener {
@@ -89,24 +96,30 @@ class VenueFragment : Fragment() {
         }
 
         // check data had downloaded
-        viewModel.status.observe(viewLifecycleOwner, Observer {
-            if (it == LoadStatus.DONE) {
-                binding.animationLoading.visibility = View.GONE
-                binding.cnstVenue.visibility = View.VISIBLE
+        viewModel.status.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it == LoadStatus.DONE) {
+                    binding.animationLoading.visibility = View.GONE
+                    binding.cnstVenue.visibility = View.VISIBLE
+                }
             }
-        })
+        )
 
         // set menu on click listener
-        viewModel.navigateToMenu.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                findNavController().navigate(
-                    MainNavigationDirections.navigateToDiscoverDetailFragment(
-                        Theme.VENUE_MENU, listOf(id).toTypedArray(), null
+        viewModel.navigateToMenu.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToDiscoverDetailFragment(
+                            Theme.VENUE_MENU, listOf(id).toTypedArray(), null
+                        )
                     )
-                )
-                viewModel.onLeft()
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         // set view all image's on click listener
         binding.txtVenueImg.setOnClickListener {
@@ -121,5 +134,4 @@ class VenueFragment : Fragment() {
 
         return binding.root
     }
-
 }

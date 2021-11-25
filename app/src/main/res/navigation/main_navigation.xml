@@ -136,7 +136,7 @@
 
     <fragment
         android:id="@+id/addDrinkFragment"
-        android:name="com.mingyuwu.barurside.adddrink.AddObjectFragment"
+        android:name="com.mingyuwu.barurside.adddrink.AddDrinkFragment"
         android:label="AddDrinkFragment">
         <argument
             android:name="id"

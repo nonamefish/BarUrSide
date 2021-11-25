@@ -90,17 +90,16 @@ class DiscoverViewModel(private val repository: BarUrSideRepository) : ViewModel
         }
     }
 
-    fun navigateToObject(id: String){
+    fun navigateToObject(id: String) {
         _navigateToObject.value = id
     }
 
-    fun navigateToTheme(theme: Theme){
+    fun navigateToTheme(theme: Theme) {
         _navigateToTheme.value = theme
     }
 
-    fun onLeft(){
+    fun onLeft() {
         _navigateToObject.value = null
         _navigateToTheme.value = null
     }
-
 }

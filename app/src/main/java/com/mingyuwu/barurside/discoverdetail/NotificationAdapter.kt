@@ -27,7 +27,6 @@ class NotificationAdapter(val viewModel: DiscoverDetailViewModel) :
             binding.notification = notification
             binding.viewModel = viewModel
         }
-
     }
 
     // Allows the RecyclerView to determine which items have changed when the [List] of [Notification] has been updated.
@@ -58,5 +57,4 @@ class NotificationAdapter(val viewModel: DiscoverDetailViewModel) :
             }
         }
     }
-
 }

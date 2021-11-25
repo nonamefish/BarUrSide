@@ -10,7 +10,6 @@ import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.factory.*
 import com.mingyuwu.barurside.filter.FilterParameter
 
-
 fun Fragment.getVmFactory(): ViewModelFactory {
     val repository = (requireContext().applicationContext as BarUrSideApplication).repository
     return ViewModelFactory(repository)

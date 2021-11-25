@@ -27,5 +27,4 @@ class CollectViewPageAdapter(fragment: Fragment) : FragmentStateAdapter(fragment
 
         return fragment
     }
-
 }

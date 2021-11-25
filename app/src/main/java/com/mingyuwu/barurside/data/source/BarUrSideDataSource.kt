@@ -42,13 +42,14 @@ interface BarUrSideDataSource {
         minLng: Double,
         maxLng: Double
     ): Result<List<Venue>>
+
     suspend fun getDrinkByRating(id: String): Result<Drink>
     suspend fun getVenueBySearch(search: String): Result<List<Venue>>
     suspend fun getHotVenueResult(): Result<List<Venue>>
     suspend fun getHotDrinkResult(): Result<List<Drink>>
     suspend fun getHighRateVenueResult(): Result<List<Venue>>
     suspend fun getHighRateDrinkResult(): Result<List<Drink>>
-    fun getActivityResult() : MutableLiveData<List<Activity>>
+    fun getActivityResult(): MutableLiveData<List<Activity>>
     suspend fun getDrinkBySearch(search: String): Result<List<Drink>>
     suspend fun addCollect(collect: Collect): Result<Boolean>
     suspend fun getCollect(userId: String): Result<List<Collect>>
@@ -59,9 +60,13 @@ interface BarUrSideDataSource {
     suspend fun getActivityByUser(userId: String): Result<List<Activity>>
     suspend fun getRatingByRecommend(): Result<List<RatingInfo>>
     suspend fun getRatingByFriends(userId: String): Result<List<RatingInfo>>
-    suspend fun postActivity(activity: Activity,notification: Notification): Result<Boolean>
+    suspend fun postActivity(activity: Activity, notification: Notification): Result<Boolean>
     suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean>
-    suspend fun bookActivity(activityId: String, userId: String, notification: Notification): Result<Boolean>
+    suspend fun bookActivity(
+        activityId: String,
+        userId: String,
+        notification: Notification
+    ): Result<Boolean>
     suspend fun addUser(user: User): Result<Boolean>
     suspend fun addFriend(notification: Notification): Result<Boolean>
     fun getNotification(userId: String): MutableLiveData<List<Notification>>

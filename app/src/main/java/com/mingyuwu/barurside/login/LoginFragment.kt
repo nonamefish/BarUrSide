@@ -28,7 +28,6 @@ import com.mingyuwu.barurside.databinding.FragmentLoginBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.util.Logger
 
-
 class LoginFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
@@ -36,7 +35,8 @@ class LoginFragment : Fragment() {
     val viewModel by viewModels<LoginViewModel> { getVmFactory() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -49,12 +49,17 @@ class LoginFragment : Fragment() {
         }
 
         // after login navigate to start destination
-        viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
-                viewModel.onLeft()
+        viewModel.navigateToDetail.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToActivityFragment()
+                    )
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         return binding.root
     }
@@ -128,5 +133,4 @@ class LoginFragment : Fragment() {
         viewModel.getUserData(account.email!!)
         (requireActivity() as MainActivity).onGetUserDataFinished()
     }
-
 }

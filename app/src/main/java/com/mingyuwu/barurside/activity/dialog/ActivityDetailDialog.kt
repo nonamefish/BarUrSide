@@ -19,7 +19,6 @@ import com.mingyuwu.barurside.databinding.DialogActivityDetailBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.login.UserManager
 
-
 class ActivityDetailDialog : DialogFragment() {
 
     private lateinit var binding: DialogActivityDetailBinding
@@ -55,7 +54,9 @@ class ActivityDetailDialog : DialogFragment() {
         // navigate to sponsor profile page
         binding.constraintSponsorInfo.setOnClickListener {
             viewModel.sponsor.value?.let {
-                findNavController().navigate(MainNavigationDirections.navigateToProfileFragment(it.id))
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToProfileFragment(it.id)
+                )
             }
         }
 
@@ -65,31 +66,37 @@ class ActivityDetailDialog : DialogFragment() {
         }
 
         // navigate to activity
-        viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                val id = findNavController().previousBackStackEntry?.destination?.label
+        viewModel.navigateToDetail.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    val id = findNavController().previousBackStackEntry?.destination?.label
 
-                if (id == "ActivityFragment") {
-                    findNavController().popBackStack()
-                } else {
-                    findNavController().navigate(
-                        MainNavigationDirections.navigateToDiscoverDetailFragment(
-                            theme!!,
-                            listOf(UserManager.user.value?.id ?: "").toTypedArray(),
-                            null
+                    if (id == "ActivityFragment") {
+                        findNavController().popBackStack()
+                    } else {
+                        findNavController().navigate(
+                            MainNavigationDirections.navigateToDiscoverDetailFragment(
+                                theme!!,
+                                listOf(UserManager.user.value?.id ?: "").toTypedArray(),
+                                null
+                            )
                         )
-                    )
+                    }
+                    viewModel.onLeft()
                 }
-                viewModel.onLeft()
             }
-        })
+        )
 
         // refresh viewModel setting
-        viewModel.dtActivity.observe(viewLifecycleOwner, Observer {
-            binding.viewModel = viewModel
-            binding.animationLoading.visibility = View.GONE
-            binding.cnstActivityDetail.visibility = View.VISIBLE
-        })
+        viewModel.dtActivity.observe(
+            viewLifecycleOwner,
+            Observer {
+                binding.viewModel = viewModel
+                binding.animationLoading.visibility = View.GONE
+                binding.cnstActivityDetail.visibility = View.VISIBLE
+            }
+        )
 
         // sharing button on click listener
         binding.imgShare.setOnClickListener {
@@ -108,5 +115,4 @@ class ActivityDetailDialog : DialogFragment() {
 
         return binding.root
     }
-
 }
