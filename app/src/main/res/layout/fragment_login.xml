@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,7 +24,7 @@
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/anton"
         android:gravity="center"
-        android:text="Let's sign you in"
+        android:text="@string/txt_sign_in"
         android:textColor="@color/black"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,13 +57,14 @@
                 android:layout_height="24dp"
                 android:layout_gravity="start"
                 android:layout_marginEnd="5dp"
+                android:contentDescription="@string/img_google_sign_in"
                 android:src="@drawable/icons_96px_google" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Sign in with Google"
+                android:text="@string/txt_google_sign_in"
                 android:textAlignment="center"
                 android:textColor="@color/gray_646464"
                 android:textSize="16sp" />

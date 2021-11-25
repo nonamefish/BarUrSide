@@ -27,6 +27,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:contentDescription="@string/img_rtg_user"
             android:scaleType="centerCrop"
             app:imageUrl="@{img}"
             app:imgHeight="@{height}"

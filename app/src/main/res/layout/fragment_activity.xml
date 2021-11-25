@@ -29,17 +29,17 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="為你推薦" />
+                android:text="@string/activity_tab_recommend" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="近期活動" />
+                android:text="@string/activity_tab_activity" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="追蹤中" />
+                android:text="@string/activity_tab_follow" />
 
         </com.google.android.material.tabs.TabLayout>
 

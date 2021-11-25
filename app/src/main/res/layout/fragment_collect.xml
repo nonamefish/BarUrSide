@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" >
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -60,17 +58,18 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="店家" />
+                    android:text="@string/txt_venue" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="酒類" />
+                    android:text="@string/txt_drink" />
 
             </com.google.android.material.tabs.TabLayout>
 
 
         </FrameLayout>
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPagerMain"
             android:layout_width="0dp"

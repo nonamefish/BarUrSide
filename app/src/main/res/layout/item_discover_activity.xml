@@ -37,6 +37,7 @@
             android:layout_width="80dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
+            android:contentDescription="@string/img_object"
             android:scaleType="centerCrop"
             app:imageUrl="@{img}"
             app:layout_constraintBottom_toBottomOf="@+id/discover_object_info_2"

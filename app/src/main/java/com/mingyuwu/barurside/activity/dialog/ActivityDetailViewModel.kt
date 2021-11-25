@@ -3,7 +3,6 @@ package com.mingyuwu.barurside.activity.dialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.Notification

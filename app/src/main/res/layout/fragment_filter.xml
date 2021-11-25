@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -21,8 +20,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
+                android:layout_height="wrap_content"
                 android:background="@drawable/background_dialog_corner">
 
                 <TextView
@@ -32,7 +30,7 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="32dp"
                     android:letterSpacing="0.1"
-                    android:text="價格區間"
+                    android:text="@string/txt_price_range"
                     android:textColor="@color/black_3f3a3a"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -58,7 +56,7 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="70dp"
                         android:layout_height="30dp"
-                        android:text="$"
+                        android:text="@string/level_one"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -70,7 +68,7 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="70dp"
                         android:layout_height="30dp"
-                        android:text="$$"
+                        android:text="@string/level_two"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -82,7 +80,7 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="70dp"
                         android:layout_height="30dp"
-                        android:text="$$$"
+                        android:text="@string/level_three"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -94,7 +92,7 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="70dp"
                         android:layout_height="30dp"
-                        android:text="$$$$"
+                        android:text="@string/level_four"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -110,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="33dp"
                     android:layout_marginTop="32dp"
-                    android:text="店家風格"
+                    android:text="@string/txt_style"
                     android:textColor="@color/black_3f3a3a"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -125,39 +123,39 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="32dp"
                     android:textAlignment="center"
-                    app:chipSpacingVertical="12dp"
                     app:chipSpacingHorizontal="16dp"
+                    app:chipSpacingVertical="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txt_style">
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/american"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="美式"
+                        android:text="@string/style_american"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         app:checkedChip="@+id/american"
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/japanese"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="日式"
+                        android:text="@string/style_japanese"
                         android:textAlignment="center"
                         app:checkedChip="@+id/japanese"
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/korean"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="韓式"
+                        android:text="@string/style_korean"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -165,11 +163,11 @@
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/taiwanese"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="台式"
+                        android:text="@string/style_taiwanese"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -177,11 +175,11 @@
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/european"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="歐式"
+                        android:text="@string/style_european"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -189,11 +187,11 @@
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/bar"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="Bar"
+                        android:text="@string/style_bar"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -201,11 +199,11 @@
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/pub"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="Pub"
+                        android:text="@string/style_pub"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -221,7 +219,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="33dp"
                     android:layout_marginTop="32dp"
-                    android:text="酒類"
+                    android:text="@string/txt_drink"
                     android:textColor="@color/black_3f3a3a"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -236,19 +234,19 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="32dp"
                     android:textAlignment="center"
-                    app:chipSpacingVertical="12dp"
                     app:chipSpacingHorizontal="16dp"
+                    app:chipSpacingVertical="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txt_drink_category">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/cocktail"
                         style="@style/FilterChip"
                         contentPadding="4dp"
-                        android:id="@+id/cocktail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="雞尾酒"
+                        android:text="@string/category_cocktail"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -256,21 +254,21 @@
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/beer"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="啤酒"
+                        android:text="@string/category_beer"
                         android:textAlignment="center"
                         app:checkedChip="@+id/beer"
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/champagne"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="氣泡酒"
+                        android:text="@string/category_champagne"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -278,11 +276,11 @@
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/wine"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="葡萄酒"
+                        android:text="@string/category_wine"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -290,11 +288,11 @@
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/whiskey"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="威士忌"
+                        android:text="@string/category_whiskey"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -302,11 +300,11 @@
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/umeshu"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="梅酒"
+                        android:text="@string/category_umeshu"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -314,11 +312,11 @@
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/sake"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="清酒"
+                        android:text="@string/category_sake"
                         android:textAlignment="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -333,7 +331,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="33dp"
                     android:layout_marginTop="32dp"
-                    android:text="距離"
+                    android:text="@string/txt_distance"
                     android:textColor="@color/black_3f3a3a"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -349,8 +347,8 @@
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="32dp"
                     android:textAlignment="center"
-                    app:chipSpacingVertical="12dp"
                     app:chipSpacingHorizontal="16dp"
+                    app:chipSpacingVertical="12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -362,7 +360,7 @@
                         contentPadding="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="500公尺"
+                        android:text="@string/five_hundred_meter"
                         android:textAlignment="center"
                         app:checkedChip="@+id/chip_1"
                         app:chipMinTouchTargetSize="0dp" />
@@ -371,17 +369,17 @@
                         style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1公里"
+                        android:text="@string/one_kilometer"
                         android:textAlignment="center"
                         app:checkedChip="@+id/chip_2"
                         app:chipMinTouchTargetSize="0dp" />
 
                     <com.google.android.material.chip.Chip
-                        style="@style/FilterChip"
                         android:id="@+id/chip_3"
+                        style="@style/FilterChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2公里"
+                        android:text="@string/two_kilometer"
                         android:textAlignment="center"
                         app:checkedChip="@+id/chip_3"
                         app:chipMinTouchTargetSize="0dp" />
@@ -443,13 +441,12 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="16dp"
-                android:text="確認"
+                android:text="@string/confirm"
                 android:textSize="16sp"
                 app:backgroundTint="@color/primaryColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        >
     </LinearLayout>
 </layout>

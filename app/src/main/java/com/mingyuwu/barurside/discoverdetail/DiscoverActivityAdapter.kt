@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.activity.ActivityPageViewModel
 import com.mingyuwu.barurside.data.Activity

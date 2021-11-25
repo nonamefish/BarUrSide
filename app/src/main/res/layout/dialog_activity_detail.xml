@@ -55,6 +55,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginEnd="18dp"
+                android:contentDescription="@string/img_share_activity"
                 android:foregroundGravity="right"
                 android:padding="6dp"
                 android:src="@drawable/ic_baseline_share_24"
@@ -69,6 +70,7 @@
                 android:layout_marginStart="16dp"
                 android:background="@drawable/ic_baseline_access_time_24"
                 android:backgroundTint="@color/black_3f3a3a"
+                android:contentDescription="@string/img_activity_start"
                 app:layout_constraintBottom_toBottomOf="@+id/activity_detail_endtime"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/txt_time_from" />
@@ -79,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="開始："
+                android:text="@string/activity_start"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 app:layout_constraintStart_toEndOf="@+id/img_add_activity_time"
@@ -101,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="2dp"
-                android:text="結束："
+                android:text="@string/activity_end"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 app:layout_constraintStart_toEndOf="@+id/img_add_activity_time"
@@ -126,6 +128,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/ic_baseline_location_on_24"
                 android:backgroundTint="@color/black_3f3a3a"
+                android:contentDescription="@string/img_activity_location"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activity_detail_endtime" />
 
@@ -141,13 +144,14 @@
                 tools:text="新北市新莊區中正路1號" />
 
             <ImageView
-                android:id="@+id/img_activity_detail"
+                android:id="@+id/img_activity_people_limit"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/icons_32px_profile"
                 android:backgroundTint="@color/black_3f3a3a"
+                android:contentDescription="@string/img_activity_people_limit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_add_activity_address" />
 
@@ -157,21 +161,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@{@string/activity_detail_limit(viewModel.dtActivity.bookers.size(), viewModel.dtActivity.peopleLimit)}"
-                app:layout_constraintBottom_toBottomOf="@+id/img_activity_detail"
-                app:layout_constraintStart_toEndOf="@+id/img_activity_detail"
-                app:layout_constraintTop_toTopOf="@+id/img_activity_detail"
+                app:layout_constraintBottom_toBottomOf="@+id/img_activity_people_limit"
+                app:layout_constraintStart_toEndOf="@+id/img_activity_people_limit"
+                app:layout_constraintTop_toTopOf="@+id/img_activity_people_limit"
                 tools:text="11 / 20" />
 
             <ImageView
-                android:id="@+id/img_activity_detail_main"
+                android:id="@+id/img_activity_drink_main"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/ic_outline_local_drink_24"
                 android:backgroundTint="@color/black_3f3a3a"
+                android:contentDescription="@string/img_activity_main_drink"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_activity_detail" />
+                app:layout_constraintTop_toBottomOf="@+id/img_activity_people_limit" />
 
             <TextView
                 android:id="@+id/activity_detail_main"
@@ -179,9 +184,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@{viewModel.dtActivity.mainDrinking}"
-                app:layout_constraintBottom_toBottomOf="@+id/img_activity_detail_main"
-                app:layout_constraintStart_toEndOf="@+id/img_activity_detail_main"
-                app:layout_constraintTop_toTopOf="@+id/img_activity_detail_main"
+                app:layout_constraintBottom_toBottomOf="@+id/img_activity_drink_main"
+                app:layout_constraintStart_toEndOf="@+id/img_activity_drink_main"
+                app:layout_constraintTop_toTopOf="@+id/img_activity_drink_main"
                 tools:text="雞尾酒" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -195,16 +200,17 @@
                 android:foreground="@drawable/border_activity_detail"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_activity_detail_main">
+                app:layout_constraintTop_toBottomOf="@+id/img_activity_drink_main">
 
                 <ImageView
-                    android:id="@+id/img_activity_detail_sponsor"
+                    android:id="@+id/img_activity_people_limit_sponsor"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/ic_baseline_sponsor_24"
                     android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_activity_sponsor"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -213,10 +219,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="發起人"
-                    app:layout_constraintBottom_toBottomOf="@+id/img_activity_detail_sponsor"
-                    app:layout_constraintStart_toEndOf="@+id/img_activity_detail_sponsor"
-                    app:layout_constraintTop_toTopOf="@+id/img_activity_detail_sponsor" />
+                    android:text="@string/txt_sponsor"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_activity_people_limit_sponsor"
+                    app:layout_constraintStart_toEndOf="@+id/img_activity_people_limit_sponsor"
+                    app:layout_constraintTop_toTopOf="@+id/img_activity_people_limit_sponsor" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_base_img"
@@ -229,12 +235,13 @@
                     app:cardMaxElevation="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/img_activity_detail_sponsor">
+                    app:layout_constraintTop_toBottomOf="@+id/img_activity_people_limit_sponsor">
 
                     <ImageView
                         android:id="@+id/img_rtg_user"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:contentDescription="@string/sponsor_picture"
                         android:scaleType="centerCrop"
                         app:imageUrl="@{viewModel.sponsor.image}"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -260,6 +267,7 @@
                     android:layout_height="18dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="8dp"
+                    android:contentDescription="@string/img_user_post_cnt"
                     android:src="@drawable/ic_baseline_menu_24"
                     app:layout_constraintStart_toEndOf="@+id/profile_base_img"
                     app:layout_constraintTop_toBottomOf="@+id/rtg_user_name" />
@@ -281,6 +289,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@drawable/ic_baseline_image_24"
                     android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_user_posting_cnt"
                     app:layout_constraintStart_toEndOf="@+id/user_post_cnt"
                     app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt" />
 

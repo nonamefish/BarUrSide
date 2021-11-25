@@ -10,7 +10,6 @@
             type="com.mingyuwu.barurside.data.RatingInfo" />
     </data>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -31,6 +30,7 @@
                 android:layout_height="60dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:contentDescription="@string/img_discover_object"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{rating.images[0]}"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:gravity="right"
+                android:gravity="end"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/discover_object_name"
                 app:rtgDate="@{rating.postTimestamp}"

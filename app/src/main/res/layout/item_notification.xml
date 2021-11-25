@@ -42,7 +42,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/backgrounds/scenic" />
+                tools:src="@tools:sample/backgrounds/scenic"
+                android:contentDescription="@string/img_rtg_user" />
 
         </androidx.cardview.widget.CardView>
 
@@ -88,7 +89,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="8dp"
                 android:onClick="@{() -> viewModel.replyAddFriend(notification,true)}"
-                android:text="確認"
+                android:text="@string/confirm"
                 android:textSize="13sp"
                 android:visibility="@{notification.reply == null ? view.VISIBLE : view.GONE}"
                 app:backgroundTint="@color/primaryDarkColor"
@@ -105,7 +106,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="0dp"
                 android:onClick="@{() -> viewModel.replyAddFriend(notification,false)}"
-                android:text="取消"
+                android:text="@string/cancel"
                 android:textSize="13sp"
                 android:visibility="@{notification.reply == null ? view.VISIBLE : view.GONE}"
                 app:backgroundTint="@color/gray_999999"
@@ -117,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
-                android:text="@{notification.reply==true ? `已接受邀請` : `已拒絕邀請`}"
+                android:text="@{notification.reply==true ? @string/accept_invitation : @string/reject_invitation}"
                 android:visibility="@{notification.reply == null ? view.GONE : view.VISIBLE}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

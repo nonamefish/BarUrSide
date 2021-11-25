@@ -23,12 +23,12 @@
             app:cardBackgroundColor="@color/primaryLiteColor"
             app:cardCornerRadius="250dp"
             app:cardMaxElevation="5dp"
-            app:strokeColor="@color/primaryDarkColor"
-            app:strokeWidth="0.6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/primaryDarkColor"
+            app:strokeWidth="0.6dp">
 
             <TextView
                 android:id="@+id/img_rtg_user"

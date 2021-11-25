@@ -37,6 +37,7 @@
             android:layout_width="80dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
+            android:contentDescription="@string/img_object"
             android:scaleType="centerCrop"
             app:imageUrl="@{img}"
             app:layout_constraintBottom_toBottomOf="@+id/info_avg_star"
@@ -92,6 +93,7 @@
             android:layout_height="20dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/ic_baseline_star_rate_24"
+            android:contentDescription="@string/rating_score"
             app:layout_constraintStart_toStartOf="@+id/discover_object_category"
             app:layout_constraintTop_toBottomOf="@+id/discover_object_category" />
 
@@ -111,6 +113,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginEnd="16dp"
+            android:contentDescription="@string/more_info"
             android:src="@drawable/ic_outline_info_24"
             app:layout_constraintBottom_toBottomOf="@+id/discover_object_rating"
             app:layout_constraintEnd_toEndOf="parent"

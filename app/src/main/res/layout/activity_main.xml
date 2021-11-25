@@ -55,6 +55,7 @@
                         android:layout_marginBottom="12dp"
                         android:background="@drawable/ic_baseline_keyboard_backspace_24"
                         android:backgroundTint="@color/primaryLightColor"
+                        android:contentDescription="@string/back_previous_page"
                         app:iconBack="@{viewModel.currentFragmentType}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -67,7 +68,7 @@
                         android:layout_marginBottom="13dp"
                         android:fontFamily="@font/caveat_bold"
                         android:letterSpacing="0.1"
-                        android:text="BarUrSide"
+                        android:text="@string/app_name"
                         android:textColor="@color/primaryBabyColor"
                         android:textSize="36sp"
                         android:textStyle="bold"
@@ -111,6 +112,7 @@
                             android:layout_marginEnd="4dp"
                             android:background="@drawable/ic_baseline_notifications_24"
                             android:backgroundTint="@color/primaryLightColor"
+                            android:contentDescription="@string/img_notification"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -122,6 +124,7 @@
                             android:layout_marginEnd="1dp"
                             android:background="@drawable/ic_baseline_circle_24"
                             android:backgroundTint="@color/red_ff4436"
+                            android:contentDescription="@string/img_notification_not_check"
                             android:visibility="@{viewModel.notificationSize==0 ? View.GONE : View.VISIBLE}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -139,7 +142,8 @@
                             app:layout_constraintEnd_toEndOf="@+id/img_badge"
                             app:layout_constraintStart_toStartOf="@+id/img_badge"
                             app:layout_constraintTop_toTopOf="@+id/img_badge"
-                            tools:text="10"></TextView>
+                            tools:text="10">
+                        </TextView>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -162,7 +166,6 @@
                 style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_alignParentBottom="true"
                 android:layout_gravity="bottom"
                 android:layout_weight="1"
                 android:background="@color/white_ffffff"

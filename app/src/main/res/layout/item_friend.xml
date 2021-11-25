@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="friend"
             type="com.mingyuwu.barurside.data.User" />
@@ -37,6 +38,7 @@
                     android:id="@+id/img_rtg_user"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/img_rtg_user"
                     android:scaleType="centerCrop"
                     app:imageUrl="@{friend.image}"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -51,14 +53,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textStyle="bold"
                 android:text="@{friend.name}"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/profile_base_img"
                 app:layout_constraintStart_toStartOf="@+id/profile_base_img"
                 app:layout_constraintTop_toBottomOf="@+id/profile_base_img"
                 tools:text="無尾熊" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <data>
 
         <variable
@@ -36,6 +35,7 @@
                 android:id="@+id/img_drink"
                 android:layout_width="match_parent"
                 android:layout_height="260dp"
+                android:contentDescription="@string/img_object"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{viewModel.drinkInfo.images[0]}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -51,6 +51,7 @@
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/ic_baseline_favorite_36"
                 android:backgroundTint="@{viewModel.isCollect ? @color/red_e02401 : @color/gray_888888}"
+                android:contentDescription="@string/img_collect"
                 android:onClickListener="@{()->viewModel.setCollect()}"
                 app:alpha="@{viewModel.isCollect ?  1.0f : 0.5f }"
                 app:layout_constraintBottom_toBottomOf="@+id/img_drink"
@@ -62,6 +63,7 @@
                 android:layout_height="42dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
+                android:contentDescription="@string/img_collect"
                 app:layout_constraintBottom_toBottomOf="@+id/img_drink"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_baseline_favorite_border_36"
@@ -156,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="販售店家"
+                android:text="@string/txt_sale_store"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -245,9 +247,10 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/img_venue"
                 android:layout_width="48dp"
                 android:layout_height="0dp"
+                android:contentDescription="@string/img_object"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{viewModel.venueInfo.images[0]}"
                 app:layout_constraintBottom_toBottomOf="@+id/drink_by_venue_style"
@@ -266,7 +269,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/btn_venue_info"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/imageView6"
+                app:layout_constraintStart_toEndOf="@+id/img_venue"
                 app:layout_constraintTop_toBottomOf="@+id/txt_drink_by_venue"
                 tools:text="不醉不歸酒吧" />
 
@@ -288,9 +291,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                app:venueStyle="@{viewModel.venueInfo.style}"
-                app:layout_constraintStart_toEndOf="@+id/imageView6"
+                app:layout_constraintStart_toEndOf="@+id/img_venue"
                 app:layout_constraintTop_toBottomOf="@+id/drink_by_venue_address"
+                app:venueStyle="@{viewModel.venueInfo.style}"
                 tools:text="Restaurant" />
 
             <ImageView
@@ -298,6 +301,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginEnd="16dp"
+                android:contentDescription="@string/more_info"
                 android:src="@drawable/ic_outline_info_24"
                 app:layout_constraintBottom_toBottomOf="@+id/drink_by_venue_style"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -310,7 +314,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp"
                 android:onClick="@{() -> viewModel.navigateToAllRating()}"
-                android:text="查看全部 >"
+                android:text="@string/check_all"
                 android:visibility="@{viewModel.rtgInfo.size > 3 ? view.VISIBLE: view.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
