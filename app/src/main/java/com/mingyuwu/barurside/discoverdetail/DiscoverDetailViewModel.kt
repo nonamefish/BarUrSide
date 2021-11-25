@@ -114,7 +114,7 @@ class DiscoverDetailViewModel(
                     result = repository.getHighRateDrinkResult()
                 }
                 else -> {
-                    Logger.w("Wrong Theme: $theme")
+                    Logger.d("DiscoverDetailViewModel Other Theme: $theme")
                 }
             }
 

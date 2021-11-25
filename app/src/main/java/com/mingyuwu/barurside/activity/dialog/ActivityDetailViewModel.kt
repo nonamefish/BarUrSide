@@ -12,6 +12,7 @@ import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.DateUnit
 import com.mingyuwu.barurside.util.Util.calculateDateByPeriod
 import com.mingyuwu.barurside.util.Util.getString
 import kotlinx.coroutines.CoroutineScope
@@ -88,16 +89,20 @@ class ActivityDetailViewModel(
                     getString(R.string.activity),
                     "",
                     getString(R.string.activity),
-                    calculateDateByPeriod(it.startTimestamp!!, "DAY", -1),
+                    it.startTimestamp?.let {
+                        calculateDateByPeriod(
+                            it,
+                            DateUnit.DAY,
+                            -1
+                        )
+                    },
                     it.id,
                     userId,
-                    BarUrSideApplication.appContext?.resources?.getString(
-                        R.string.activity_notify,
-                        it.name
-                    ) ?: "",
+                    getString(R.string.activity_notify, it.name),
                     null,
                     false
                 )
+
                 repository.bookActivity(it.id, userId, notification)
                 navigateToDetail.value = true
             }
@@ -111,8 +116,8 @@ class ActivityDetailViewModel(
     }
 
     private fun checkUserHasBook() {
-        dtActivity.value?.let {
-            hasBook.value = it.bookers!!.any { it.id == userId }
+        dtActivity.value?.let { activity ->
+            hasBook.value = activity.bookers?.any { it.id == userId }
         }
     }
 

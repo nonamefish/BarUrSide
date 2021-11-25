@@ -3,7 +3,6 @@ package com.mingyuwu.barurside
 import android.graphics.Bitmap
 import android.os.Build
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -22,6 +21,7 @@ import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.rating.*
 import com.mingyuwu.barurside.util.CurrentFragmentType
 import com.mingyuwu.barurside.util.Style
+import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.getDiffDay
 import com.mingyuwu.barurside.util.Util.getDiffHour
 import com.mingyuwu.barurside.util.Util.getDiffMinute
@@ -33,16 +33,14 @@ import kotlin.math.roundToInt
 
 @BindingAdapter("stars")
 fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
-    stars?.let {
-        var starList = listOf<ScoreStatus>()
-        for (i in 0 until stars.roundToInt()) {
-            starList += ScoreStatus.FULL
-        }
-        recyclerView.adapter?.apply {
-            when (this) {
-                is RatingScoreAdapter -> {
-                    submitList(starList)
-                }
+    val starList = mutableListOf<ScoreStatus>()
+    for (i in 0 until stars.roundToInt()) {
+        starList += ScoreStatus.FULL
+    }
+    recyclerView.adapter?.apply {
+        when (this) {
+            is RatingScoreAdapter -> {
+                submitList(starList)
             }
         }
     }
@@ -71,7 +69,6 @@ fun bindRecyclerViewWithListData(recyclerView: RecyclerView, listData: List<Any>
         }
     }
 }
-
 
 @BindingAdapter("clickRtgScore")
 fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean?) {
@@ -129,13 +126,9 @@ fun bindUserImgSize(cardView: CardView, size: Int) {
 
 @BindingAdapter("imgHeight", "imgWidth")
 fun bindImgSize(imageView: ImageView, imgHeight: Int, imgWidth: Int) {
-    imgHeight?.let {
-        imgWidth?.let {
-            val dpToPx = BarUrSideApplication.appContext!!.resources.displayMetrics.density
-            imageView.layoutParams.height = imgHeight * dpToPx.toInt()
-            imageView.layoutParams.width = imgWidth * dpToPx.toInt()
-        }
-    }
+    val dpToPx = BarUrSideApplication.appContext!!.resources.displayMetrics.density
+    imageView.layoutParams.height = imgHeight * dpToPx.toInt()
+    imageView.layoutParams.width = imgWidth * dpToPx.toInt()
 }
 
 @BindingAdapter("imageBitmap")
@@ -153,7 +146,6 @@ fun bindRecyclerViewWithImageBitmaps(recyclerView: RecyclerView, imageBitmaps: L
             recyclerView.adapter?.apply {
                 when (this) {
                     is BitmapAdapter -> {
-                        Log.d("Ming", "imageBitmaps: $imageBitmaps")
                         submitList(imageBitmaps)
                         notifyDataSetChanged()
                     }
@@ -168,21 +160,26 @@ fun bindNotificationPeriod(textView: TextView, date: Timestamp?) {
     date?.let {
         val diffHour = getDiffHour(date)
         val diffDay = getDiffDay(date)
+        val diffWeek = (diffDay.toDouble() / 7).toString().substringBefore(".").toInt()
         when {
             diffHour < 0 -> {
-                textView.text = "${getDiffMinute(date)}分鐘前"
+                textView.text = Util.getString(R.string.minute_ago, getDiffMinute(date))
             }
             diffHour < 24 -> {
-                textView.text = "${diffHour}小時前"
+                textView.text =
+                    Util.getString(R.string.hour_ago, diffHour)
             }
             diffDay < 7 -> {
-                textView.text = "${diffDay}天前"
+                textView.text = Util.getString(R.string.day_ago, diffDay)
             }
             diffDay < 30 -> {
-                textView.text = "${(diffDay.toDouble() / 7).toString().substringBefore(".")}週前"
+                textView.text = Util.getString(
+                    R.string.week_ago,
+                    diffWeek
+                )
             }
             else -> {
-                textView.text = "幾個月前"
+                textView.text = Util.getString(R.string.month_ago)
             }
         }
     }
@@ -195,7 +192,6 @@ fun bindNotificationContent(textView: TextView, content: String?) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @BindingAdapter("isOpen")
 fun bindIsOpen(textView: TextView, serviceTime: String?) {
     serviceTime?.let {
@@ -204,16 +200,16 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
         when (checkTime(open, close)) {
             true -> {
                 if (open.split(":")[0].toInt() < close.split(":")[0].toInt()) {
-                    textView.text = "營業中 直至${close}"
+                    textView.text = Util.getString(R.string.service_until_today, close)
                 } else {
-                    textView.text = "營業中 直至明日${close}"
+                    textView.text = Util.getString(R.string.service_until_tomorrow, close)
                 }
             }
             false -> {
                 if (open.split(":")[0].toInt() < close.split(":")[0].toInt()) {
-                    textView.text = "休息中 開始營業時間：${open}"
+                    textView.text = Util.getString(R.string.rest_until_today, open)
                 } else {
-                    textView.text = "休息中 開始營業時間：明日${open}"
+                    textView.text = Util.getString(R.string.rest_until_tomorrow, open)
                 }
             }
         }
@@ -223,19 +219,19 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun checkTime(open: String, close: String): Boolean {
-    Log.d("Ming", "open: $open")
-    Log.d("Ming", "close: $close")
-    val open = LocalTime.parse(open)
-    val close = LocalTime.parse(close)
+    val openTime = LocalTime.parse(open)
+    val closeTime = LocalTime.parse(close)
     val current = LocalTime.now()
 
-    return current.isAfter(open) && current.isBefore(close)
+    return current.isAfter(openTime) && current.isBefore(closeTime)
 }
 
 @BindingAdapter("activityTime")
 fun bindTimeActivityTime(textView: TextView, activityTime: Timestamp?) {
     activityTime?.let {
-        textView.text = DateFormat.format("yyyy/MM/dd a hh:mm", activityTime).toString()
+        textView.text = DateFormat.format(
+            Util.getString(R.string.datetime_format), activityTime
+        ).toString()
     }
 }
 
@@ -274,7 +270,6 @@ fun bindIconBack(imageView: ImageView, currentFragmentType: CurrentFragmentType?
     }
 }
 
-
 @BindingAdapter("venueStyle")
 fun bindVenueStyle(textView: TextView, style: String?) {
     style?.let {
@@ -284,15 +279,19 @@ fun bindVenueStyle(textView: TextView, style: String?) {
 
 @BindingAdapter("isFull", "hasBook")
 fun bindActivityDetailBtn(button: Button, isFull: Boolean, hasBook: Boolean) {
-    if (isFull) {
-        button.text = "人數已滿"
-        button.isEnabled = false
-    } else if (hasBook) {
-        button.text = "退出活動"
-        button.isEnabled = true
-    } else {
-        button.text = "加入活動"
-        button.isEnabled = true
+    when {
+        isFull -> {
+            button.text = Util.getString(R.string.activity_full)
+            button.isEnabled = false
+        }
+        hasBook -> {
+            button.text = Util.getString(R.string.activity_quit)
+            button.isEnabled = true
+        }
+        else -> {
+            button.text = Util.getString(R.string.activity_join)
+            button.isEnabled = true
+        }
     }
 }
 
@@ -300,9 +299,12 @@ fun bindActivityDetailBtn(button: Button, isFull: Boolean, hasBook: Boolean) {
 fun bindDistance(textView: TextView, distance: Int?) {
     distance?.let {
         if (it < 1000) {
-            textView.text = "距 $it 公尺"
+            textView.text = Util.getString(R.string.distance_meter, distance)
         } else {
-            textView.text = "距 ${String.format("%.1f", (it.toDouble()/1000))} 公里"
+            textView.text = Util.getString(
+                R.string.distance_kilometer,
+                String.format("%.1f", (it.toDouble() / 1000))
+            )
         }
     }
 }

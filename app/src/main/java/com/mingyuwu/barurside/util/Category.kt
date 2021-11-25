@@ -4,7 +4,7 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.util.Util.getString
 
 enum class Category (val chinese: String?) {
-    COCKTAIL(getString(R.string.category_cacktail)),
+    COCKTAIL(getString(R.string.category_cocktail)),
     BEER(getString(R.string.category_beer)),
     CHAMPAGNE(getString(R.string.category_champagne)),
     WINE(getString(R.string.category_wine)),

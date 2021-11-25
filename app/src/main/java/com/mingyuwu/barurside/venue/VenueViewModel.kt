@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.venue
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +7,7 @@ import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -18,7 +18,7 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
     // set source data
     var venueInfo = MutableLiveData<Venue>()
     var menuInfo = MutableLiveData<List<Drink>>()
-    var rtgInfo = MutableLiveData<List<RatingInfo>>()
+    var rtgInfos = MutableLiveData<List<RatingInfo>>()
     var isCollect = MutableLiveData<Boolean?>()
     val userId = UserManager.user.value?.id ?: ""
 
@@ -28,7 +28,7 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
     // navigate to menu
     var navigateToMenu = MutableLiveData<String?>()
 
-    // image list data
+    // images: The firebase MutableLiveData that stores the venue images
     private val _images = MutableLiveData<List<String>?>()
 
     val images: LiveData<List<String>?>
@@ -55,7 +55,7 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
     init {
         getVenueResult(id)
         getMenu(id)
-        getRatingResult(id, true)
+        getVenueRatingResult(id)
         getCollect(userId)
     }
 
@@ -89,8 +89,8 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
         }
     }
 
-    private fun getRatingResult(id: String, isVenue: Boolean) {
-        rtgInfo = repository.getRatingByObject(id, isVenue)
+    private fun getVenueRatingResult(id: String) {
+        rtgInfos = repository.getRatingByObject(id, true)
     }
 
     private fun getCollect(userId: String) {
@@ -118,12 +118,15 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
 
 
     fun setImages(rtgs: List<RatingInfo>) {
-        var list = listOf<String>()
-        rtgs?.forEach { ratingInfo ->
-            ratingInfo.images?.let { imgs ->
-                list += imgs
+
+        val list = mutableListOf<String>()
+
+        rtgs.forEach { ratingInfo ->
+            ratingInfo.images?.let { images ->
+                list += images
             }
         }
+
         _images.value = list
     }
 
@@ -151,14 +154,12 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
                 }
                 is Result.Fail -> {
                     _error.value = result.error
-                    null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
-                    null
                 }
                 else -> {
-                    null
+                    Logger.w("Wrong Result Type: $result")
                 }
             }
         }
@@ -176,28 +177,26 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
                 is Result.Fail -> {
                     _error.value = result.error
                     _status.value = LoadStatus.ERROR
-                    null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
                     _status.value = LoadStatus.ERROR
-                    null
                 }
                 else -> {
-                    null
+                    Logger.w("Wrong Result Type: $result")
                 }
             }
         }
     }
 
     fun navigateToMenu() {
-        venueInfo.value?.let{
+        venueInfo.value?.let {
             navigateToMenu.value = venueInfo.value!!.id
         }
     }
 
     fun navigateToAllRating() {
-        navigateToAll.value = rtgInfo.value
+        navigateToAll.value = rtgInfos.value
     }
 
     fun onLeft() {

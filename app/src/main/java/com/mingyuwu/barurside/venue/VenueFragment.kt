@@ -3,11 +3,11 @@ package com.mingyuwu.barurside.venue
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -45,8 +45,11 @@ class VenueFragment : Fragment() {
 
         // navigate to all rating fragment
         viewModel.navigateToAll.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                findNavController().navigate(MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray()))
+            it?.let {
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray())
+                )
+
                 viewModel.onLeft()
             }
         })
@@ -68,11 +71,11 @@ class VenueFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        // set rating data
-        viewModel.rtgInfo.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                viewModel.setImages(it)
-                binding.ratings = it.sortedByDescending { it.postDate }.take(3)
+        // set ratings data
+        viewModel.rtgInfos.observe(viewLifecycleOwner, Observer { it ->
+            it?.let { ratings ->
+                viewModel.setImages(ratings)
+                binding.ratings = ratings.sortedByDescending { rating -> rating.postDate }.take(3)
                 binding.imgs = viewModel.images.value?.take(10)
             }
         })
@@ -80,7 +83,8 @@ class VenueFragment : Fragment() {
         // set venue phone on click listener
         binding.venuePhone.setOnClickListener {
             val dialIntent = Intent(Intent.ACTION_DIAL)
-            dialIntent.data = Uri.parse("tel:" + viewModel.venueInfo.value?.phone)
+            dialIntent.data =
+                Uri.parse(getString(R.string.venue_phone, viewModel.venueInfo.value?.phone))
             startActivity(dialIntent)
         }
 
@@ -94,10 +98,10 @@ class VenueFragment : Fragment() {
 
         // set menu on click listener
         viewModel.navigateToMenu.observe(viewLifecycleOwner, Observer {
-            it?.let{
+            it?.let {
                 findNavController().navigate(
                     MainNavigationDirections.navigateToDiscoverDetailFragment(
-                        Theme.VENUE_MENU, listOf(id!!).toTypedArray(), null
+                        Theme.VENUE_MENU, listOf(id).toTypedArray(), null
                     )
                 )
                 viewModel.onLeft()
@@ -106,7 +110,7 @@ class VenueFragment : Fragment() {
 
         // set view all image's on click listener
         binding.txtVenueImg.setOnClickListener {
-            viewModel.images.value?.let{
+            viewModel.images.value?.let {
                 findNavController().navigate(
                     MainNavigationDirections.navigateToDiscoverDetailFragment(
                         Theme.IMAGES, it.toTypedArray(), null

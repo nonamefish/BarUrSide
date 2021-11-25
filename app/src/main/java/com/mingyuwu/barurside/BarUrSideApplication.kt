@@ -24,5 +24,4 @@ class BarUrSideApplication : Application() {
     val repository: BarUrSideRepository
         get() = ServiceLocator.provideRepository(this)
 
-    fun isLiveDataDesign() = true
 }

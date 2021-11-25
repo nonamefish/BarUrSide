@@ -73,7 +73,6 @@ class ProfileFragment : Fragment() {
             }
         })
 
-
         // observe ratings data
         viewModel.rtgInfos.observe(viewLifecycleOwner, Observer { rtgInfo ->
             rtgInfo?.let { rtgs ->
@@ -157,7 +156,7 @@ class ProfileFragment : Fragment() {
             if (viewModel.isFriend.value != true) {
                 viewModel.addOnFriend()
             } else {
-                showConfirmRemoveFriend()
+                showUnfriendConfirm()
             }
         }
 
@@ -182,8 +181,7 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
-
-    private fun showConfirmRemoveFriend() {
+    private fun showUnfriendConfirm() {
         // set alert dialog view
         val alertDialog = AlertDialog.Builder(binding.root.context)
         val mView =
@@ -192,13 +190,13 @@ class ProfileFragment : Fragment() {
         val dialog = alertDialog.create()
 
         // set dialog title and content
-        val titleDialog = mView!!.findViewById<TextView>(R.id.dialog_title)
+        val titleDialog = mView.findViewById<TextView>(R.id.dialog_title)
         titleDialog.text = getString(R.string.unfriend_notify_title, viewModel.userInfo.value?.name)
-        val txtDialog = mView!!.findViewById<TextView>(R.id.dialog_content)
+        val txtDialog = mView.findViewById<TextView>(R.id.dialog_content)
         txtDialog.text = getString(R.string.unfriend_notify_content)
 
         // set button click listener
-        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm)
+        val btDialog = mView.findViewById<Button>(R.id.button_confirm)
         btDialog.setOnClickListener {
             viewModel.unfriendUser()
             dialog.dismiss()

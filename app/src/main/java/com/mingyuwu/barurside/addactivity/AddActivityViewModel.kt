@@ -10,6 +10,7 @@ import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.Relationship
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.DateUnit
 import com.mingyuwu.barurside.util.Util.calculateDateByPeriod
 import com.mingyuwu.barurside.util.Util.convertStringToTimestamp
 import com.mingyuwu.barurside.util.Util.getString
@@ -68,15 +69,12 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
                 getString(R.string.activity),
                 calculateDateByPeriod(
                     convertStringToTimestamp(startTime.value!!),
-                    "DAY",
+                    DateUnit.DAY,
                     -1
                 ),
                 "",
                 userId,
-                BarUrSideApplication.appContext?.resources?.getString(
-                    R.string.activity_notify,
-                    name.value
-                ) ?: "",
+                getString(R.string.activity_notify, name.value ?: ""),
                 null,
                 false
             )

@@ -11,7 +11,7 @@ import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.databinding.ItemUserRatingBinding
 
-class UserRatingAdapter() :
+class UserRatingAdapter :
     ListAdapter<RatingInfo?, UserRatingAdapter.UserRatingViewHolder>(DiffCallback) {
 
     class UserRatingViewHolder(private var binding: ItemUserRatingBinding) :
@@ -25,7 +25,7 @@ class UserRatingAdapter() :
                     if (it) {
                         view.findNavController()
                             .navigate(MainNavigationDirections.navigateToVenueFragment(rating.objectId))
-                    }else{
+                    } else {
                         view.findNavController()
                             .navigate(MainNavigationDirections.navigateToDrinkFragment(rating.objectId))
                     }
@@ -61,8 +61,7 @@ class UserRatingAdapter() :
 
     // Replaces the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: UserRatingViewHolder, position: Int) {
-        val rating = getItem(position)
-        holder.bind(rating, holder.itemView)
+        holder.bind(getItem(position), holder.itemView)
     }
 
 }

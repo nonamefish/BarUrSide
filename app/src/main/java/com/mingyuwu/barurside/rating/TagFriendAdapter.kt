@@ -12,7 +12,7 @@ import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.databinding.ItemTagFrdBinding
 
 
-class TagFriendAdapter() :
+class TagFriendAdapter :
     ListAdapter<TagFriend, TagFriendAdapter.TagFrdViewHolder>(DiffCallback) {
 
     class TagFrdViewHolder(private var binding: ItemTagFrdBinding) :
@@ -36,7 +36,7 @@ class TagFriendAdapter() :
         }
     }
 
-    // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
+    // Allows the RecyclerView to determine which items have changed when the [List] of [TagFriend] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<TagFriend>() {
         override fun areItemsTheSame(oldItem: TagFriend, newItem: TagFriend): Boolean {
             return oldItem === newItem

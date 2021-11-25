@@ -3,7 +3,6 @@ package com.mingyuwu.barurside.profile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.RatingInfo
@@ -127,8 +126,10 @@ class ProfileViewModel(private val repository: BarUrSideRepository, val userId: 
             Timestamp(System.currentTimeMillis()),
             UserManager.user.value?.id ?: "",
             userId,
-            BarUrSideApplication.appContext?.resources?.getString(R.string.add_friend_notify,
-                UserManager.user.value?.name) ?: "",
+            getString(
+                R.string.add_friend_notify,
+                UserManager.user.value?.name ?: ""
+            ),
             null,
             false
         )

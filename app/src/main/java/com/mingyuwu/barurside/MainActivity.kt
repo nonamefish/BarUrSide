@@ -1,18 +1,10 @@
 package com.mingyuwu.barurside
 
-import android.content.Context
 import android.content.Intent
-import android.content.pm.verify.domain.DomainVerificationManager
-import android.content.pm.verify.domain.DomainVerificationUserState
 import android.net.Uri
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Settings
-import com.mingyuwu.barurside.login.UserManager
-import android.util.Log
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -28,6 +20,7 @@ import com.google.firebase.ktx.Firebase
 import com.mingyuwu.barurside.databinding.ActivityMainBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.CurrentFragmentType
 import com.mingyuwu.barurside.util.Logger
 
@@ -36,10 +29,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    var location = MutableLiveData<LatLng>()
     private var userToken = UserManager.userToken
+    var location = MutableLiveData<LatLng>()
     val viewModel by viewModels<MainViewModel> { getVmFactory() }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,9 +73,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-
         // Check if user is signed in (non-null) and update UI accordingly.
-        var currentUser = auth.currentUser
+        val currentUser = auth.currentUser
 
         if (currentUser == null) {
             if (userToken == null) {
@@ -97,7 +88,6 @@ class MainActivity : AppCompatActivity() {
             viewModel.navigateToStart.value = true
         }
 
-
         // get navController and setting connection between bottom navigation item and navigation fragment
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -105,7 +95,9 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNav.setupWithNavController(navController)
 
         setContentView(binding.root)
+
         setupBottomNav()
+
         setupNavController()
     }
 
@@ -157,50 +149,59 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavController() {
-        findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener { navController: NavController, _: NavDestination, _: Bundle? ->
-            viewModel.currentFragmentType.value = when (navController.currentDestination?.id) {
-                R.id.activityFragment -> CurrentFragmentType.ACTIVITY
-                R.id.addActivityFragment -> CurrentFragmentType.ADD_ACTIVITY
-                R.id.collectFragment -> CurrentFragmentType.COLLECT
-                R.id.profileFragment -> CurrentFragmentType.PROFILE
-                R.id.discoverFragment -> CurrentFragmentType.DISCOVER
-                R.id.discoverDetailFragment -> CurrentFragmentType.DISCOVER_DETAIL
-                R.id.drinkFragment -> CurrentFragmentType.DRINK
-                R.id.venueFragment -> CurrentFragmentType.VENUE
-                R.id.editRatingFragment -> CurrentFragmentType.EDIT_RATING
-                R.id.mapFragment -> CurrentFragmentType.MAP
-                R.id.allRatingFragment -> CurrentFragmentType.ALL_RATING
-                R.id.loginFragment -> CurrentFragmentType.LOGIN
-                R.id.addDrinkFragment -> CurrentFragmentType.ADD_OBJECT
-                R.id.addVenueFragment -> CurrentFragmentType.ADD_OBJECT
-                else -> viewModel.currentFragmentType.value
+        findNavController(R.id.nav_host_fragment)
+            .addOnDestinationChangedListener { navController: NavController, _: NavDestination, _: Bundle? ->
+                viewModel.currentFragmentType.value = when (navController.currentDestination?.id) {
+                    R.id.activityFragment -> CurrentFragmentType.ACTIVITY
+                    R.id.addActivityFragment -> CurrentFragmentType.ADD_ACTIVITY
+                    R.id.collectFragment -> CurrentFragmentType.COLLECT
+                    R.id.profileFragment -> CurrentFragmentType.PROFILE
+                    R.id.discoverFragment -> CurrentFragmentType.DISCOVER
+                    R.id.discoverDetailFragment -> CurrentFragmentType.DISCOVER_DETAIL
+                    R.id.drinkFragment -> CurrentFragmentType.DRINK
+                    R.id.venueFragment -> CurrentFragmentType.VENUE
+                    R.id.editRatingFragment -> CurrentFragmentType.EDIT_RATING
+                    R.id.mapFragment -> CurrentFragmentType.MAP
+                    R.id.allRatingFragment -> CurrentFragmentType.ALL_RATING
+                    R.id.loginFragment -> CurrentFragmentType.LOGIN
+                    R.id.addDrinkFragment -> CurrentFragmentType.ADD_OBJECT
+                    R.id.addVenueFragment -> CurrentFragmentType.ADD_OBJECT
+                    else -> viewModel.currentFragmentType.value
+                }
             }
-        }
     }
 
     fun onGetUserDataFinished() {
         UserManager.user.observe(this, Observer {
             it?.let {
+
                 viewModel.getNotification(it.id)
+
                 binding.viewModel = viewModel
+
                 startService(Intent(this, BarUrSideService::class.java))
-                Log.d("Ming", "intent: $intent")
+
                 intent.data?.let {
                     handleIntent(intent)
                 }
+
+                Logger.d("intent: $intent")
             }
         })
     }
 
-
     private fun handleIntent(intent: Intent) {
+
         val appLinkAction = intent.action
         val appLinkData: Uri? = intent.data
+
         if (Intent.ACTION_VIEW == appLinkAction) {
+
             appLinkData?.lastPathSegment?.let {
                 when (it) {
-                    "activity" -> {
+                    getString(R.string.activity) -> {
                         val id = intent.data?.getQueryParameter("id")
+
                         navController.navigate(
                             MainNavigationDirections.navigateToActivityDetailDialog(
                                 null,

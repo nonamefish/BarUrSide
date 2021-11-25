@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.databinding.ItemRatingBitmapBinding
 import com.mingyuwu.barurside.editrating.EditRatingViewModel
 
-class BitmapAdapter(val width: Int, val height: Int, val rtgOrder: Int, val viewModel: ViewModel) :
+class BitmapAdapter(val width: Int, val height: Int, private val rtgOrder: Int, val viewModel: ViewModel) :
     ListAdapter<Bitmap, BitmapAdapter.ImageViewHolder>(DiffCallback) {
 
     class ImageViewHolder(private var binding: ItemRatingBitmapBinding) :
@@ -63,11 +63,7 @@ class BitmapAdapter(val width: Int, val height: Int, val rtgOrder: Int, val view
     // Replaces the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val img = getItem(position)
-        when (holder) {
-            is ImageViewHolder -> {
-                holder.bind(img, width, height, rtgOrder, viewModel)
-            }
-        }
+        holder.bind(img, width, height, rtgOrder, viewModel)
     }
 
 }

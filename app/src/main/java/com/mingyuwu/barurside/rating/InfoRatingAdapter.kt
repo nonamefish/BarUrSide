@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.rating
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +9,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.data.*
+import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.databinding.ItemInfoRatingBinding
 
-class InfoRatingAdapter() :
+class InfoRatingAdapter :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
 
     class InfoRatingViewHolder(private var binding: ItemInfoRatingBinding) :
@@ -45,7 +44,7 @@ class InfoRatingAdapter() :
                     if (it) {
                         view.findNavController()
                             .navigate(MainNavigationDirections.navigateToVenueFragment(rating.objectId))
-                    }else{
+                    } else {
                         view.findNavController()
                             .navigate(MainNavigationDirections.navigateToDrinkFragment(rating.objectId))
                     }
@@ -61,7 +60,6 @@ class InfoRatingAdapter() :
             binding.user = rating?.userInfo//UserData.user.user[0]
         }
     }
-
 
     // Allows the RecyclerView to determine which items have changed when the [List] of [RatingInfo] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<Any>() {
@@ -90,4 +88,5 @@ class InfoRatingAdapter() :
             }
         }
     }
+
 }

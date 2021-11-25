@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.MainNavigationDirections
-import com.mingyuwu.barurside.data.*
+import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.databinding.ItemVenueMenuBinding
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
 
-class MenuAdapter() :
+class MenuAdapter :
     ListAdapter<Drink, MenuAdapter.MenuViewHolder>(DiffCallback) {
 
     class MenuViewHolder(private var binding: ItemVenueMenuBinding) :
@@ -39,8 +39,7 @@ class MenuAdapter() :
         }
     }
 
-
-    // Allows the RecyclerView to determine which items have changed when the [List] of [Product] has been updated.
+    // Allows the RecyclerView to determine which items have changed when the [List] of [Drink] has been updated.
     companion object DiffCallback : DiffUtil.ItemCallback<Drink>() {
         override fun areItemsTheSame(oldItem: Drink, newItem: Drink): Boolean {
             return oldItem === newItem
@@ -63,4 +62,5 @@ class MenuAdapter() :
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         holder.bind(getItem(position), holder.itemView)
     }
+
 }

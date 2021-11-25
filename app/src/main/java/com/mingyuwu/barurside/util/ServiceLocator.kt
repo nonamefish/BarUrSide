@@ -32,4 +32,5 @@ object ServiceLocator {
     private fun createLocalDataSource(context: Context): BarUrSideDataSource {
         return BarUrSideLocalDataSource(context)
     }
+
 }

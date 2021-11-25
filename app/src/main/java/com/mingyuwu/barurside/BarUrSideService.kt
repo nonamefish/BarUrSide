@@ -5,10 +5,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
-import com.mingyuwu.barurside.util.Util
-import com.mingyuwu.barurside.login.UserManager
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
+import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.getDiffHour
 
 class BarUrSideService : LifecycleService() {
@@ -29,7 +29,7 @@ class BarUrSideService : LifecycleService() {
             it?.let { notifications ->
                 for (notification in notifications) {
                     when (notification.type) {
-                        "activity" -> {
+                        getString(R.string.activity) -> {
                             if (getDiffHour(notification.timestamp!!) < 24) {
                                 notify(notification)
                             }
@@ -56,10 +56,16 @@ class BarUrSideService : LifecycleService() {
 
         val pendingIntent: PendingIntent =
             Intent(this, MainActivity::class.java).let { notificationIntent ->
-                PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_MUTABLE)
+                PendingIntent.getActivity(
+                    this,
+                    0,
+                    notificationIntent,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
             }
 
-        val notification: Notification = Notification.Builder(this, channel)
+        val notification
+                : Notification = Notification.Builder(this, channel)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(notify.content.replace("<b>", "").replace("</b>", ""))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -69,7 +75,6 @@ class BarUrSideService : LifecycleService() {
         notificationManager.notify(id, notification)
         id += 1
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

@@ -16,6 +16,7 @@
     <string name="activity_notify">提醒：今日你有一個即將舉行的活動 <![CDATA[<b>%s</b>]]></string>
 
     <!--    ADD_ACTIVITY-->
+    <string name="add_activity_tile">新增活動</string>
     <string name="activity_uncompleted_title">活動資訊不完整</string>
     <string name="activity_uncompleted_content">所有欄位皆必須填寫</string>
     <string name="date_range_error_title">活動期間有誤</string>
@@ -55,6 +56,7 @@
     <string name="venue_rating_info_list">%,.1f&#160;|&#160;%d則評論</string>
 
     <!--    Add Drink Info -->
+    <string name="add_object_tile">新增項目</string>
     <string name="drink_uncompleted_context">酒名、類別及價格為必填項目</string>
     <string name="adding_drink">酒項資訊新增中</string>
     <string-array name="drink_type">
@@ -72,6 +74,7 @@
     <!--    Add Venue Info -->
     <string name="venue_uncompleted_context">店名、地址、營業時間、價格範圍及店家風格為必填項目</string>
     <string name="adding_venue">店家資訊新增中</string>
+    <string name="venue_phone">tel: %s</string>
     <string-array name="venue_style">
         <item>請選擇店家風格</item>
         <item>美式餐廳</item>
@@ -92,6 +95,7 @@
 
 
     <!--    Edit Rating-->
+    <string name="edit_rating_title">編輯評論</string>
     <string name="tag_friend">標註朋友</string>
     <string name="no_menu">無提供菜單</string>
     <string name="add_drink_item">選取評價項目</string>
@@ -111,7 +115,7 @@
     <string name="style_taiwanese">台式餐廳</string>
     <string name="style_bar">Bar</string>
     <string name="style_pub">Pub</string>
-    <string name="category_cacktail">調酒</string>
+    <string name="category_cocktail">調酒</string>
     <string name="category_beer">啤酒</string>
     <string name="category_champagne">氣泡酒</string>
     <string name="category_wine">葡萄酒</string>
@@ -174,7 +178,21 @@
     <string name="from_gallery">從照片選擇</string>
     <string name="exit">離開</string>
 
-
+    <!--    Binding Adapter-->
+    <string name="minute_ago">%d分鐘前</string>
+    <string name="hour_ago">%d小時前</string>
+    <string name="day_ago">%d天前</string>
+    <string name="week_ago">%d週前</string>
+    <string name="month_ago">幾個月前</string>
+    <string name="service_until_today">營業中 直至%s</string>
+    <string name="service_until_tomorrow">營業中 直至明日%s</string>
+    <string name="rest_until_today">休息中 開始營業時間：%s</string>
+    <string name="rest_until_tomorrow">休息中 開始營業時間：明日%s</string>
+    <string name="activity_full">人數已滿</string>
+    <string name="activity_quit">退出活動</string>
+    <string name="activity_join">加入活動</string>
+    <string name="distance_meter">距 %d公尺</string>
+    <string name="distance_kilometer">距 %s公里</string>
     <string name="fail_nothing">Nothing</string>
 
 </resources>

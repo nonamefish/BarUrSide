@@ -11,6 +11,7 @@ import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.activity.ActivityPageViewModel
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.databinding.ItemDiscoverActivityBinding
+import com.mingyuwu.barurside.util.Util.getString
 
 class DiscoverActivityAdapter(val viewModel: ViewModel) :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
@@ -46,10 +47,7 @@ class DiscoverActivityAdapter(val viewModel: ViewModel) :
             binding.img = ""
             binding.category = activity.mainDrinking
             binding.info = activity.address
-            binding.limit = BarUrSideApplication.appContext?.resources?.getString(
-                R.string.people_limit,
-                activity.peopleLimit
-            )
+            binding.limit = getString(R.string.people_limit, activity.peopleLimit ?: 0)
 
         }
     }

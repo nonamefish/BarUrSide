@@ -1,18 +1,15 @@
 package com.mingyuwu.barurside.rating.all
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentAllRatingBinding
-import com.mingyuwu.barurside.databinding.FragmentDrinkBinding
-import com.mingyuwu.barurside.drink.DrinkFragmentArgs
-import com.mingyuwu.barurside.drink.DrinkViewModel
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 
