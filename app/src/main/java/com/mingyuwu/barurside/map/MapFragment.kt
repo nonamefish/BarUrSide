@@ -1,6 +1,7 @@
 package com.mingyuwu.barurside.map
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -143,6 +144,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
         return binding.root
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     override fun onMapReady(googleMap: GoogleMap) {
         Logger.d("onMapReady")
 
@@ -300,4 +302,5 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
             viewModel.navigateToVenue.value = info[0]
         }
     }
+
 }

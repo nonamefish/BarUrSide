@@ -17,6 +17,7 @@ import java.sql.Timestamp
 import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.*
 
 object BarUrSideRemoteDataSource : BarUrSideDataSource {
     private const val PATH_VENUE = "venue"
@@ -96,6 +97,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
         return liveData
     }
+
 
     override fun getUser(id: String): MutableLiveData<User> {
         val liveData = MutableLiveData<User>()
@@ -250,6 +252,38 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
+    suspend fun getDrinkResult(id: String): Result<Drink> =
+        suspendCoroutine { continuation ->
+
+            FirebaseFirestore.getInstance()
+                .collection(PATH_DRINK)
+                .whereEqualTo("id", id)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            val drink = document.toObject(Drink::class.java)
+                            continuation.resume(Result.Success(drink))
+                        }
+                    } else {
+                        task.exception?.let {
+                            Logger.w(
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Result.Fail(
+                                BarUrSideApplication.instance.getString(
+                                    R.string.fail_nothing
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+
     override fun getRatingByObject(
         id: String,
         isVenue: Boolean
@@ -307,22 +341,13 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     }
                                     // get object info : drink
                                     false -> {
-                                        FirebaseFirestore.getInstance()
-                                            .collection(PATH_DRINK)
-                                            .whereEqualTo("id", id)
-                                            .get()
-                                            .addOnCompleteListener { task ->
-                                                for (document in task.result!!) {
-                                                    val drink = document.toObject(Drink::class.java)
-                                                    rating.objectName = drink.name
-                                                    if (!drink.images.isNullOrEmpty()) {
-                                                        rating.objectImg =
-                                                            drink.images!![0]
-                                                    }
-                                                }
-                                                list.add(rating)
-                                                liveData.value = list
-                                            }
+                                        GlobalScope.launch {
+                                            Logger.d("runBlocking")
+                                            val drink = getDrinkResult(id)
+//                                            rating.objectName = drink.name
+                                            list.add(rating)
+                                            liveData.value = list
+                                        }
                                     }
                                 }
                             }
@@ -567,9 +592,9 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                                 val newRtg =
                                     (
-                                        venue?.rtgCount?.times(venue?.avgRating)
-                                            ?.plus(rating!!.rating!!)
-                                        )?.div(venue?.rtgCount!!.plus(1))
+                                            venue?.rtgCount?.times(venue?.avgRating)
+                                                ?.plus(rating!!.rating!!)
+                                            )?.div(venue?.rtgCount!!.plus(1))
 
                                 FirebaseFirestore.getInstance().collection(PATH_VENUE)
                                     .document(id)
@@ -610,9 +635,9 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                 val drink = task.result.toObject(Venue::class.java)
                                 val newRtg =
                                     (
-                                        drink?.rtgCount?.times(drink?.avgRating)
-                                            ?.plus(rating!!.rating!!)
-                                        )?.div(drink?.rtgCount!!.plus(1))
+                                            drink?.rtgCount?.times(drink?.avgRating)
+                                                ?.plus(rating!!.rating!!)
+                                            )?.div(drink?.rtgCount!!.plus(1))
 
                                 FirebaseFirestore.getInstance().collection(PATH_DRINK)
                                     .document(id)

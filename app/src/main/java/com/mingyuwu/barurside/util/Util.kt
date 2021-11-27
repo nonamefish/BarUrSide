@@ -81,6 +81,12 @@ object Util {
         return path.path
     }
 
+    fun getDiffMinute(date: Timestamp): Long {
+        val current = Timestamp(System.currentTimeMillis())
+        val diff = current.time - date.time
+        return TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS)
+    }
+
     fun getDiffHour(date: Timestamp): Long {
         val current = Timestamp(System.currentTimeMillis())
         val diff = current.time - date.time
@@ -91,12 +97,6 @@ object Util {
         val current = Timestamp(System.currentTimeMillis())
         val diff = current.time - date.time
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
-    }
-
-    fun getDiffMinute(date: Timestamp): Long {
-        val current = Timestamp(System.currentTimeMillis())
-        val diff = current.time - date.time
-        return TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS)
     }
 
     fun convertStringToTimestamp(time: String): Timestamp {
