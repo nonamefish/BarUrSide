@@ -36,6 +36,7 @@ import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
 import com.mingyuwu.barurside.profile.FriendAdapter
 import com.mingyuwu.barurside.rating.ImageAdapter
+import com.mingyuwu.barurside.util.Location
 import com.mingyuwu.barurside.util.Logger
 import com.mingyuwu.barurside.util.Util
 import com.permissionx.guolindev.PermissionX
@@ -109,7 +110,7 @@ class DiscoverDetailFragment : Fragment() {
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
             Theme.AROUND_VENUE -> {
-                viewModel.location = (requireActivity() as MainActivity).location
+                viewModel.location = Location.getLocation(requireActivity())
 
                 if (viewModel.location.value == null) {
                     getLocationPermission()
@@ -252,18 +253,7 @@ class DiscoverDetailFragment : Fragment() {
         try {
             if (locationPermissionGranted
             ) {
-                mFusedLocationProviderClient.lastLocation
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful && task.result != null) {
-                            // google map current location (blue point)
-                            val location = task.result
-                            (requireActivity() as MainActivity).location.value =
-                                LatLng(location.latitude, location.longitude)
-                        } else {
-                            Logger.d("exception ${task.exception}")
-                            Logger.d("task.result ${task.result}")
-                        }
-                    }
+                Location.getLocation(requireActivity())
             } else {
                 getLocationPermission()
             }
@@ -297,7 +287,7 @@ class DiscoverDetailFragment : Fragment() {
             .request { allGranted, _, deniedList ->
                 if (allGranted) {
                     locationPermissionGranted = true
-                    checkGPSState()
+                    getDeviceLocation()
                 } else {
                     Toast.makeText(
                         mContext,
@@ -308,25 +298,4 @@ class DiscoverDetailFragment : Fragment() {
             }
     }
 
-    // check GPS state
-    private fun checkGPSState() {
-        val locationManager = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            AlertDialog.Builder(mContext)
-            AlertDialog.Builder(mContext)
-                .setTitle(Util.getString(R.string.request_gps_title))
-                .setMessage(Util.getString(R.string.request_gps_content))
-                .setPositiveButton(
-                    Util.getString(R.string.request_gps_positive)
-                ) { _, _ ->
-                    startActivityForResult(
-                        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_ENABLE_GPS,
-                    )
-                }
-                .setNegativeButton(Util.getString(R.string.request_gps_cancel), null)
-                .show()
-        } else {
-            getDeviceLocation()
-        }
-    }
 }

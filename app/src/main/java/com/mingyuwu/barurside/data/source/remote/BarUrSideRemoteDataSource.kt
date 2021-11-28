@@ -341,13 +341,25 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     }
                                     // get object info : drink
                                     false -> {
-                                        GlobalScope.launch {
-                                            Logger.d("runBlocking")
-                                            val drink = getDrinkResult(id)
-//                                            rating.objectName = drink.name
-                                            list.add(rating)
-                                            liveData.value = list
-                                        }
+                                        FirebaseFirestore.getInstance()
+                                            .collection(PATH_DRINK)
+                                            .whereEqualTo("id", id)
+                                            .get()
+                                            .addOnCompleteListener { task ->
+                                                for (document in task.result!!) {
+                                                    val drink = document.toObject(Drink::class.java)
+                                                    rating.objectName = drink.name
+
+                                                    Logger.d("ratings venue: $drink")
+
+                                                    if (!drink.images.isNullOrEmpty()) {
+                                                        rating.objectImg =
+                                                            drink.images!![0]
+                                                    }
+                                                }
+                                                list.add(rating)
+                                                liveData.value = list
+                                            }
                                     }
                                 }
                             }

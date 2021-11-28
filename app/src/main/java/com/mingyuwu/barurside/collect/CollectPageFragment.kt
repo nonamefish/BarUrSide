@@ -1,12 +1,8 @@
 package com.mingyuwu.barurside.collect
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
-import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,14 +14,12 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.LatLng
-import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.databinding.FragmentCollectPageBinding
 import com.mingyuwu.barurside.ext.getVmFactory
-import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
+import com.mingyuwu.barurside.util.Location
 import com.mingyuwu.barurside.util.Logger
 import com.mingyuwu.barurside.util.Util
 import com.permissionx.guolindev.PermissionX
@@ -128,7 +122,7 @@ class CollectPageFragment : Fragment() {
         )
 
         // set location
-        viewModel.location.value = (requireActivity() as MainActivity).location.value
+        viewModel.location = Location.getLocation(requireActivity())
 
         return binding.root
     }
@@ -136,18 +130,7 @@ class CollectPageFragment : Fragment() {
     private fun getDeviceLocation() {
         try {
             if (locationPermissionGranted) {
-                mFusedLocationProviderClient.lastLocation
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful && task.result != null) {
-                            // google map current location (blue point)
-                            val location = task.result
-                            (requireActivity() as MainActivity).location.value =
-                                LatLng(location.latitude, location.longitude)
-                        } else {
-                            Logger.d("exception ${task.exception}")
-                            Logger.d("task.result ${task.result}")
-                        }
-                    }
+                Location.getLocation(requireActivity())
             } else {
                 getLocationPermission()
             }
@@ -181,7 +164,7 @@ class CollectPageFragment : Fragment() {
             .request { allGranted, _, deniedList ->
                 if (allGranted) {
                     locationPermissionGranted = true
-                    checkGPSState()
+                    getDeviceLocation()
                 } else {
                     Toast.makeText(
                         mContext,
@@ -192,26 +175,4 @@ class CollectPageFragment : Fragment() {
             }
     }
 
-    // check GPS state
-    private fun checkGPSState() {
-
-        val locationManager = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            AlertDialog.Builder(mContext)
-                .setTitle(Util.getString(R.string.request_gps_title))
-                .setMessage(Util.getString(R.string.request_gps_content))
-                .setPositiveButton(
-                    Util.getString(R.string.request_gps_positive)
-                ) { _, _ ->
-                    startActivityForResult(
-                        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_ENABLE_GPS
-                    )
-                }
-                .setNegativeButton(Util.getString(R.string.request_gps_cancel), null)
-                .show()
-        } else {
-            getDeviceLocation()
-        }
-    }
 }

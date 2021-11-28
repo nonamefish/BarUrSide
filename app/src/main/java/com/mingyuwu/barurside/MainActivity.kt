@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private var userToken = UserManager.userToken
-    var location = MutableLiveData<LatLng>()
     val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
