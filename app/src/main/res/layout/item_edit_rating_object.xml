@@ -142,10 +142,11 @@
             <EditText
                 android:id="@+id/rtg_score_list"
                 android:layout_width="0dp"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
+                android:minHeight="140dp"
                 android:background="@drawable/background_map_search"
                 android:backgroundTint="@color/white"
                 android:ems="10"

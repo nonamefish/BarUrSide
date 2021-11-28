@@ -195,6 +195,7 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
     serviceTime?.let {
         val open = serviceTime.split("-")[0]
         val close = serviceTime.split("-")[1]
+        val current = LocalTime.now()
         when (checkTime(open, close)) {
             true -> {
                 if (open.split(":")[0].toInt() < close.split(":")[0].toInt()) {
@@ -204,7 +205,7 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
                 }
             }
             false -> {
-                if (open.split(":")[0].toInt() < close.split(":")[0].toInt()) {
+                if (current.isBefore(LocalTime.parse(open))) {
                     textView.text = Util.getString(R.string.rest_until_today, open)
                 } else {
                     textView.text = Util.getString(R.string.rest_until_tomorrow, open)

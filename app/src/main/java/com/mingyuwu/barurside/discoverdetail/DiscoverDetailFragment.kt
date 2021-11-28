@@ -75,6 +75,11 @@ class DiscoverDetailFragment : Fragment() {
             Theme.NOTIFICATION -> Util.getString(R.string.notification_title)
             Theme.VENUE_MENU -> Util.getString(R.string.menu_title)
             Theme.IMAGES -> Util.getString(R.string.image_title)
+            Theme.HOT_VENUE -> Util.getString(R.string.trend_bar)
+            Theme.HOT_VENUE -> Util.getString(R.string.trend_drink)
+            Theme.HIGH_RATE_VENUE -> Util.getString(R.string.high_rate_bar)
+            Theme.HIGH_RATE_DRINK -> Util.getString(R.string.high_rate_drink)
+            Theme.AROUND_VENUE -> Util.getString(R.string.around_bar)
             else -> Util.getString(R.string.filter_title)
         }
 
@@ -193,6 +198,7 @@ class DiscoverDetailFragment : Fragment() {
                     binding.animationEmpty.visibility = View.VISIBLE
                     binding.animationLoading.visibility = View.GONE
                 } else {
+
                     val list: List<Any>?
 
                     // set notification value
@@ -227,11 +233,13 @@ class DiscoverDetailFragment : Fragment() {
             when (theme) {
                 Theme.MAP_FILTER -> {
                     viewModel.detailData.value?.let {
-                        findNavController().navigate(
-                            MainNavigationDirections.navigateToRandomFragment(
-                                (it as List<Venue>).toTypedArray()
+                        it?.let{
+                            findNavController().navigate(
+                                MainNavigationDirections.navigateToRandomFragment(
+                                    (it as List<Venue>).toTypedArray()
+                                )
                             )
-                        )
+                        }
                     }
                 }
                 Theme.VENUE_MENU -> {
