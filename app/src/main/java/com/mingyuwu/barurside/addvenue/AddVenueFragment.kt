@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.addvenue
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.TimePickerDialog
@@ -29,30 +28,31 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.mingyuwu.barurside.BarUrSideApplication
-import com.mingyuwu.barurside.Constants.AUTOCOMPLETE_REQUEST_CODE
+import com.mingyuwu.barurside.Constants.REQUEST_MAP_AUTOCOMPLETE
+import com.mingyuwu.barurside.Constants.REQUEST_CHOOSE_IMAGE
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentAddVenueBinding
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.ext.isPermissionGranted
+import com.mingyuwu.barurside.ext.requestPermission
+import com.mingyuwu.barurside.util.AppPermission
 import com.mingyuwu.barurside.util.Style
 import com.mingyuwu.barurside.util.Util
-import com.permissionx.guolindev.PermissionX
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
 
 class AddVenueFragment : Fragment() {
 
     private lateinit var binding: FragmentAddVenueBinding
     private val calender = Calendar.getInstance()
-    private var photoPermissionGranted = false
     private val viewModel by viewModels<AddVenueViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -89,7 +89,7 @@ class AddVenueFragment : Fragment() {
         // address edit text click listener
         binding.txtVenueAddress.setOnClickListener {
             // start activity result
-            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+            startActivityForResult(intent, REQUEST_MAP_AUTOCOMPLETE)
         }
 
         // set spinner style and adapter
@@ -108,7 +108,7 @@ class AddVenueFragment : Fragment() {
                     parent: AdapterView<*>?,
                     view: View?,
                     position: Int,
-                    id: Long
+                    id: Long,
                 ) {
                     if (position != 0) {
                         val selected = parent?.getItemAtPosition(position).toString()
@@ -135,7 +135,7 @@ class AddVenueFragment : Fragment() {
                     parent: AdapterView<*>?,
                     view: View?,
                     position: Int,
-                    id: Long
+                    id: Long,
                 ) {
                     if (position != 0) {
                         viewModel.level.value = position
@@ -164,7 +164,7 @@ class AddVenueFragment : Fragment() {
 
         // add photo
         binding.txtVenuePhoto.setOnClickListener {
-            getPhotoPermission()
+            this.context?.let { context -> chooseImage(context) }
         }
 
         // after post activity then navigate to activity fragment
@@ -204,69 +204,44 @@ class AddVenueFragment : Fragment() {
         datetime.value = time.format(calender.time)
     }
 
-    private fun getPhotoPermission() {
-        PermissionX.init(activity)
-            .permissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-            .onExplainRequestReason { scope, deniedList ->
-                scope.showRequestReasonDialog(
-                    deniedList,
-                    Util.getString(R.string.permission_image),
-                    Util.getString(R.string.permission_confirm),
-                    Util.getString(R.string.permission_reject)
-                )
-            }
-            .onForwardToSettings { scope, deniedList ->
-                scope.showForwardToSettingsDialog(
-                    deniedList,
-                    Util.getString(R.string.permission_image),
-                    Util.getString(R.string.permission_confirm),
-                    Util.getString(R.string.permission_reject)
-                )
-            }
-            .request { allGranted, _, deniedList ->
-                if (allGranted) {
-                    photoPermissionGranted = true
-                    chooseImage(binding.root.context)
-                } else {
-                    Toast.makeText(
-                        binding.root.context,
-                        getString(R.string.permission_reject_toast, deniedList),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-    }
-
     private fun chooseImage(context: Context) {
 
-        // create a menuOption Array
-        val optionsMenu = arrayOf<CharSequence>(
-            Util.getString(R.string.from_gallery),
-            Util.getString(R.string.exit),
-        )
+        if (isPermissionGranted(AppPermission.ReadExternalStorage)) {
 
-        // create a dialog for showing the optionsMenu
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+            // create a menuOption Array
+            val optionsMenu = arrayOf<CharSequence>(
+                Util.getString(R.string.from_gallery),
+                Util.getString(R.string.exit),
+            )
 
-        // set the items in builder
-        builder.setItems(
-            optionsMenu
-        ) { dialogInterface, i ->
-            if (optionsMenu[i] == Util.getString(R.string.from_gallery)) {
-                // choose from  external storage
-                val pickPhoto = Intent(
-                    Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                )
-                startActivityForResult(pickPhoto, 1)
-            } else if (optionsMenu[i] == Util.getString(R.string.exit)) {
-                dialogInterface.dismiss()
+            // create a dialog for showing the optionsMenu
+            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+
+            // set the items in builder
+            builder.setItems(
+                optionsMenu
+            ) { dialogInterface, i ->
+                if (optionsMenu[i] == Util.getString(R.string.from_gallery)) {
+
+                    // choose from  external storage
+                    val pickPhoto = Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    )
+
+                    startActivityForResult(pickPhoto, REQUEST_CHOOSE_IMAGE)
+                } else if (optionsMenu[i] == Util.getString(R.string.exit)) {
+                    dialogInterface.dismiss()
+                }
             }
-        }
 
-        builder.show()
+            builder.show()
+        } else {
+
+            requestPermission(AppPermission.ReadExternalStorage)
+
+            chooseImage(context)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -274,27 +249,32 @@ class AddVenueFragment : Fragment() {
 
         if (resultCode != Activity.RESULT_CANCELED) {
             when (requestCode) {
-                1 -> if (resultCode == Activity.RESULT_OK && data != null) {
-                    val selectedImage: Uri? = data.data
+                REQUEST_CHOOSE_IMAGE ->
+                    if (resultCode == Activity.RESULT_OK && data != null) {
+                        val selectedImage: Uri? = data.data
 
-                    if (selectedImage != null) {
-                        val inputStream =
-                            context?.contentResolver?.openInputStream(selectedImage)
-                        val bitMap = BitmapFactory.decodeStream(inputStream)
-                        val fileName = "${Util.randomName(20)}.jpg"
+                        if (selectedImage != null) {
 
-                        // resize image and save into another img
-                        bitMap?.let {
-                            val resizeImg = Util.getResizedBitmap(bitMap, 1000)
-                            val pathSave = Util.saveBitmap(resizeImg, fileName)
-                            addImageToRecyclerView(resizeImg, pathSave)
+                            val inputStream =
+                                context?.contentResolver?.openInputStream(selectedImage)
+                            val bitMap = BitmapFactory.decodeStream(inputStream)
+                            val fileName = "${Util.randomName(20)}.jpg"
+
+                            // resize image and save into another img
+                            bitMap?.let {
+
+                                val resizeImg = Util.getResizedBitmap(bitMap, 1000)
+                                val pathSave = Util.saveBitmap(resizeImg, fileName)
+
+                                addImageToRecyclerView(resizeImg, pathSave)
+                            }
                         }
                     }
-                }
-                AUTOCOMPLETE_REQUEST_CODE -> {
+                REQUEST_MAP_AUTOCOMPLETE -> {
                     if (resultCode == Activity.RESULT_OK) {
 
                         data?.let {
+
                             // When success initialize place
                             val place = Autocomplete.getPlaceFromIntent(it)
 
@@ -303,10 +283,13 @@ class AddVenueFragment : Fragment() {
                             viewModel.latitude.value = place.latLng?.latitude
                             viewModel.longtitude.value = place.latLng?.longitude
                         }
+
                     } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
 
                         data?.let {
+
                             val status: Status = Autocomplete.getStatusFromIntent(data)
+
                             Toast.makeText(
                                 BarUrSideApplication.appContext,
                                 "message: ${status.statusMessage}",
@@ -364,4 +347,5 @@ class AddVenueFragment : Fragment() {
 
         return dialog
     }
+
 }

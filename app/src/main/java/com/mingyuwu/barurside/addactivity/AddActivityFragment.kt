@@ -28,7 +28,7 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.mingyuwu.barurside.BarUrSideApplication
-import com.mingyuwu.barurside.Constants.AUTOCOMPLETE_REQUEST_CODE
+import com.mingyuwu.barurside.Constants.REQUEST_MAP_AUTOCOMPLETE
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentAddActivityBinding
@@ -73,7 +73,7 @@ class AddActivityFragment : Fragment() {
         // address edit text click listener
         binding.addActivityAddress.setOnClickListener {
             // Set the fields to specify which types of place data to
-            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+            startActivityForResult(intent, REQUEST_MAP_AUTOCOMPLETE)
         }
 
         // call datePicker for set activity start time
@@ -188,7 +188,7 @@ class AddActivityFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+        if (requestCode == REQUEST_MAP_AUTOCOMPLETE) {
             if (resultCode == RESULT_OK) {
                 // When success initialize place
                 val place = Autocomplete.getPlaceFromIntent(data)

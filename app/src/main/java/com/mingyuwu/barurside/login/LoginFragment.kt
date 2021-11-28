@@ -19,7 +19,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.mingyuwu.barurside.BarUrSideApplication
-import com.mingyuwu.barurside.Constants.RC_SIGN_IN
+import com.mingyuwu.barurside.Constants.REQUEST_SIGN_IN
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
@@ -72,13 +72,13 @@ class LoginFragment : Fragment() {
 
         val googleSignInClient = GoogleSignIn.getClient(this.requireActivity(), gso)
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        startActivityForResult(signInIntent, REQUEST_SIGN_IN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == REQUEST_SIGN_IN) {
 
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
