@@ -132,7 +132,7 @@ class AddDrinkFragment : Fragment() {
             .onExplainRequestReason { scope, deniedList ->
                 scope.showRequestReasonDialog(
                     deniedList,
-                    Util.getString(R.string.permission_camera),
+                    Util.getString(R.string.permission_image),
                     Util.getString(R.string.permission_confirm),
                     Util.getString(R.string.permission_reject)
                 )
@@ -140,7 +140,7 @@ class AddDrinkFragment : Fragment() {
             .onForwardToSettings { scope, deniedList ->
                 scope.showForwardToSettingsDialog(
                     deniedList,
-                    Util.getString(R.string.permission_camera),
+                    Util.getString(R.string.permission_image),
                     Util.getString(R.string.permission_confirm),
                     Util.getString(R.string.permission_reject)
                 )

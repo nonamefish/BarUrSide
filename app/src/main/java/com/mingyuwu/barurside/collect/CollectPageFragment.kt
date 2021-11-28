@@ -1,28 +1,27 @@
 package com.mingyuwu.barurside.collect
 
-import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.databinding.FragmentCollectPageBinding
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.ext.isPermissionGranted
+import com.mingyuwu.barurside.ext.requestPermission
+import com.mingyuwu.barurside.util.AppPermission
 import com.mingyuwu.barurside.util.Location
 import com.mingyuwu.barurside.util.Logger
 import com.mingyuwu.barurside.util.Util
-import com.permissionx.guolindev.PermissionX
 
 class CollectPageFragment : Fragment() {
 
@@ -40,7 +39,7 @@ class CollectPageFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         binding = DataBindingUtil.inflate(
@@ -51,8 +50,7 @@ class CollectPageFragment : Fragment() {
 
         // set variable for get location
         mContext = binding.root.context
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext)
-        getLocationPermission()
+        getDeviceLocation()
 
         // set recyclerView adapter and get collect id list
         val adapter = CollectAdapter(
@@ -129,50 +127,15 @@ class CollectPageFragment : Fragment() {
 
     private fun getDeviceLocation() {
         try {
-            if (locationPermissionGranted) {
+            if (isPermissionGranted(AppPermission.AccessFineLocation)) {
                 Location.getLocation(requireActivity())
             } else {
-                getLocationPermission()
+                requestPermission(AppPermission.AccessFineLocation)
+                getDeviceLocation()
             }
         } catch (e: SecurityException) {
             Logger.d("exception ${e.message}")
         }
-    }
-
-    // get and check location permission
-    private fun getLocationPermission() {
-        PermissionX.init(activity)
-            .permissions(
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            .onExplainRequestReason { scope, deniedList ->
-                scope.showRequestReasonDialog(
-                    deniedList,
-                    Util.getString(R.string.permission_location_collect),
-                    Util.getString(R.string.permission_confirm),
-                    Util.getString(R.string.permission_reject)
-                )
-            }
-            .onForwardToSettings { scope, deniedList ->
-                scope.showForwardToSettingsDialog(
-                    deniedList,
-                    Util.getString(R.string.permission_location_collect),
-                    Util.getString(R.string.permission_confirm),
-                    Util.getString(R.string.permission_reject)
-                )
-            }
-            .request { allGranted, _, deniedList ->
-                if (allGranted) {
-                    locationPermissionGranted = true
-                    getDeviceLocation()
-                } else {
-                    Toast.makeText(
-                        mContext,
-                        getString(R.string.permission_reject_toast, deniedList),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
     }
 
 }

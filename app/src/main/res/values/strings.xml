@@ -172,8 +172,8 @@
     <string name="datetime_format">yyyy/MM/dd a hh:mm</string>
 
     <!--    Permission-->
-    <string name="permission_camera">請開通相片權限，以上傳照片</string>
-    <string name="permission_location_collect">請開通位置存取權，以計算收藏店家與您的距離</string>
+    <string name="permission_image">請開通相片權限，以上傳照片</string>
+    <string name="permission_location_collect">請開通位置存取權，以計算店家與您的距離</string>
     <string name="permission_confirm">確定</string>
     <string name="permission_reject">忍痛拒絕</string>
     <string name="permission_reject_toast">These permissions are denied: %s</string>

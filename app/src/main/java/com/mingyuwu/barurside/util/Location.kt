@@ -1,15 +1,12 @@
 package com.mingyuwu.barurside.util
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.provider.Settings
-import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.LocationCallback
@@ -18,8 +15,8 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.Constants.REQUEST_ENABLE_GPS
 import com.mingyuwu.barurside.R
-import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
 
 object Location {
 
@@ -28,18 +25,9 @@ object Location {
     fun getLocation(activity: Activity): MutableLiveData<LatLng> {
 
         if (location.value == null) {
-
             // set request Location Updates
-            if (ActivityCompat.checkSelfPermission(
-                    BarUrSideApplication.instance.applicationContext,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-
-                checkGPSState(activity)
-
-                startLocationUpdates()
-            }
+            checkGPSState(activity)
+            startLocationUpdates()
         }
 
         return location
