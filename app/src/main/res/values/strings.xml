@@ -103,8 +103,8 @@
     <string-array name="venue_level">
         <item>請選擇平均消費</item>
         <item>$ (低於300元)</item>
-        <item>$$ (301–900)</item>
-        <item>$$$ (901-1800)</item>
+        <item><![CDATA[$$ (301–900)]]></item>
+        <item><![CDATA[$$$ (901–1800)]]></item>
         <item>$$$$ (1800元以上)</item>
     </string-array>
 
@@ -121,7 +121,7 @@
     <string name="five_hundred_meter">500公尺</string>
     <string name="one_kilometer">1公里</string>
     <string name="two_kilometer">2公里</string>
-    <string name="filter_price_range_desc">平均消費金額，$ (300元以下)，$$ (301-900)\n$$$ (901-1800)，$$$$ (1801元以上)</string>
+    <string name="filter_price_range_desc"><![CDATA[平均消費金額，$ (300元以下)，$$ (301–900)\n$$$ (901–1800)，$$$$ (1801元以上)]]></string>
     <string name="style_american">美式餐廳</string>
     <string name="style_european">歐式餐廳</string>
     <string name="style_japanese">日式餐廳</string>
@@ -188,10 +188,10 @@
     <string name="from_gallery">從照片選擇</string>
     <string name="exit">離開</string>
 
-
+    <!--    Data Source-->
+    <string name="fail">Fail at getResult: nothing found</string>
 
     <!--    layout-->
-    <string name="fail_nothing">Nothing</string>
     <string name="venue_image">Venue image</string>
     <string name="img_discover_object">使用者發布評論時分享的照片</string>
     <string name="img_rtg_user">使用者發佈評論一同分享的圖片</string>

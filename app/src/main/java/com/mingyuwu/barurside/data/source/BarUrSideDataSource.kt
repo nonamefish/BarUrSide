@@ -23,7 +23,7 @@ interface BarUrSideDataSource {
         localImage: String
     ): Result<String>
 
-    suspend fun getFriend(frds: List<String>): Result<List<User>>
+    suspend fun getUsersResult(frds: List<String>): Result<List<User>>
 
     suspend fun getMenu(venueId: String): Result<List<Drink>>
 
@@ -43,7 +43,6 @@ interface BarUrSideDataSource {
         maxLng: Double
     ): Result<List<Venue>>
 
-    suspend fun getDrinkByRating(id: String): Result<Drink>
     suspend fun getVenueBySearch(search: String): Result<List<Venue>>
     suspend fun getHotVenueResult(): Result<List<Venue>>
     suspend fun getHotDrinkResult(): Result<List<Drink>>
@@ -76,5 +75,5 @@ interface BarUrSideDataSource {
     suspend fun addVenue(venue: Venue): Result<Boolean>
     suspend fun checkNotification(ids: List<String>): Result<Boolean>
     fun getNotificationChange(userId: String): MutableLiveData<List<Notification>>
-    suspend fun getActivityById(activityId: String): Result<Activity>
+    suspend fun getActivityById(activityId: String): Result<Activity?>
 }

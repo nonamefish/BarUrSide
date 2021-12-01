@@ -42,8 +42,8 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.uploadPhoto(storageRef, userId, type, localImage)
     }
 
-    override suspend fun getFriend(frds: List<String>): Result<List<User>> {
-        return remoteDataSource.getFriend(frds)
+    override suspend fun getUsersResult(frds: List<String>): Result<List<User>> {
+        return remoteDataSource.getUsersResult(frds)
     }
 
     override suspend fun getMenu(venueId: String): Result<List<Drink>> {
@@ -77,10 +77,6 @@ class DefaultBarUrSideRepository(
         maxLng: Double
     ): Result<List<Venue>> {
         return remoteDataSource.getVenueByLocation(minLat, maxLat, minLng, maxLng)
-    }
-
-    override suspend fun getDrinkByRating(id: String): Result<Drink> {
-        return remoteDataSource.getDrinkByRating(id)
     }
 
     override suspend fun getVenueBySearch(search: String): Result<List<Venue>> {
@@ -202,7 +198,7 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getNotificationChange(userId)
     }
 
-    override suspend fun getActivityById(activityId: String): Result<Activity> {
+    override suspend fun getActivityById(activityId: String): Result<Activity?> {
         return remoteDataSource.getActivityById(activityId)
     }
 }

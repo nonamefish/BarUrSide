@@ -91,7 +91,7 @@ class EditRatingFragment : Fragment() {
         // get friend list
         viewModel.user.observe(viewLifecycleOwner, { user ->
             user.friends?.let {
-                viewModel.getFriendList(user)
+                viewModel.getUsersResultList(user)
             }
         })
 

@@ -247,10 +247,10 @@ class EditRatingViewModel(val repository: BarUrSideRepository, venue: Venue) :
         _user = UserManager.user
     }
 
-    fun getFriendList(user: User) {
+    fun getUsersResultList(user: User) {
         coroutineScope.launch {
             user.friends?.let {
-                val result = repository.getFriend(user.friends.map { it.id })
+                val result = repository.getUsersResult(user.friends.map { it.id })
                 _frdList.value = when (result) {
                     is Result.Success -> {
                         _error.value = null

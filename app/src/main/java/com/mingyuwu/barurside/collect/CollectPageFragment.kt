@@ -28,8 +28,6 @@ class CollectPageFragment : Fragment() {
     val isVenue = Util.getString(R.string.collect_tab_is_venue)
     private lateinit var binding: FragmentCollectPageBinding
     private lateinit var mContext: Context
-    private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
-    private var locationPermissionGranted = false
     private val viewModel by viewModels<CollectPageViewModel> {
         getVmFactory(
             this.requireArguments().getBoolean(isVenue)

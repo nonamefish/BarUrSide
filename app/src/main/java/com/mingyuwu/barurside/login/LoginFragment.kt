@@ -85,8 +85,7 @@ class LoginFragment : Fragment() {
                 val account = task.getResult(ApiException::class.java)
 
                 account.email?.let {
-                    UserManager.userToken = account.idToken
-                    firebaseAuthWithGoogle(UserManager.userToken!!, account)
+                    firebaseAuthWithGoogle(account.idToken, account)
                 }
                 Logger.i("google signInResult successful")
             } catch (e: ApiException) {

@@ -203,6 +203,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
                 Location.getLocation(requireActivity()).observe(viewLifecycleOwner, {
                     Logger.d("MapFragment: $it")
                     it?.let {
+
+                        // get near bar
+                        viewModel.getVenueByLocation((it))
+
                         // google map current location (blue point)
                         mMap.isMyLocationEnabled = true
                         mMap.uiSettings.isMyLocationButtonEnabled = true

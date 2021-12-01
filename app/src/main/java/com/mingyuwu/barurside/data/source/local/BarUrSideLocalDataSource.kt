@@ -68,7 +68,7 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getFriend(frds: List<String>): Result<List<User>> {
+    override suspend fun getUsersResult(frds: List<String>): Result<List<User>> {
         TODO("Not yet implemented")
     }
 
@@ -82,10 +82,6 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         minLng: Double,
         maxLng: Double
     ): Result<List<Venue>> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getDrinkByRating(id: String): Result<Drink> {
         TODO("Not yet implemented")
     }
 
@@ -200,7 +196,7 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getActivityById(activityId: String): Result<Activity> {
+    override suspend fun getActivityById(activityId: String): Result<Activity?> {
         TODO("Not yet implemented")
     }
 }
