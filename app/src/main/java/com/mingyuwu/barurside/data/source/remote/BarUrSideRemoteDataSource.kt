@@ -16,6 +16,7 @@ import com.mingyuwu.barurside.util.Util.getLiveDataResult
 import com.mingyuwu.barurside.util.Util.getLiveDataListResult
 import com.mingyuwu.barurside.util.Util.getResult
 import com.mingyuwu.barurside.util.Util.taskSuccessReturn
+import com.mingyuwu.barurside.util.Util.getString
 import com.google.firebase.firestore.FieldValue
 import com.mingyuwu.barurside.util.Logger
 import java.io.File
@@ -333,19 +334,13 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun removeCollect(id: String, userId: String): Result<Boolean> =
         suspendCoroutine { continuation ->
-
-            FirebaseFirestore.getInstance()
-                .collection(PATH_COLLECT)
-                .whereEqualTo("objectId", id)
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnCompleteListener { task ->
+            db.collection(PATH_COLLECT)
+                .whereEqualTo("objectId", id).whereEqualTo("userId", userId)
+                .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-
                         for (document in task.result!!) {
                             document.reference.delete()
                         }
-
                         continuation.resume(Result.Success(true))
                     } else {
                         task.exception?.let {
@@ -370,18 +365,18 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         suspendCoroutine { continuation ->
 
             val file = Uri.fromFile(File(localImage))
-            Log.d("Ming", "file: ${file.path}")
             val eventsRef = storageRef.child("$uploadType/$userId/${file.lastPathSegment}" ?: "")
-            val uploadTask = eventsRef.putFile(file)
-            uploadTask
-                .addOnSuccessListener {
 
-                    eventsRef.downloadUrl.addOnSuccessListener {
-                        Logger.i("Success: $it")
-                        continuation.resume(Result.Success(it.toString()))
-                    }.addOnFailureListener { exception ->
-                        Logger.i(exception.toString())
-                    }
+            eventsRef.putFile(file)
+                .addOnSuccessListener {
+                    eventsRef.downloadUrl
+                        .addOnSuccessListener {
+                            Logger.i("Success: $it")
+                            continuation.resume(Result.Success(it.toString()))
+                        }
+                        .addOnFailureListener { exception ->
+                            Logger.i(exception.toString())
+                        }
                 }
                 .addOnFailureListener { exception ->
                     Logger.i(exception.toString())
@@ -494,45 +489,28 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         userId: String,
         addShareCnt: Int,
         addShareImgCnt: Int,
-    ): Result<Boolean> =
-        suspendCoroutine { continuation ->
+    ): Result<Boolean> = suspendCoroutine { continuation ->
+        coroutineScope.launch {
+            val result = User().getResult(
+                db.collection(PATH_USER).document(userId).get()
+            )
 
-            db.collection(PATH_USER)
-                .document(userId)
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val user = task.result.toObject(User::class.java)
+            if (result is Result.Success) {
+                val user = result.data
 
-                        db
-                            .collection(PATH_USER)
-                            .document(userId)
-                            .update(
-                                hashMapOf(
-                                    "shareCount" to user?.shareCount?.plus(addShareCnt),
-                                    "shareImageCount" to user?.shareImageCount?.plus(addShareImgCnt)
-                                ) as Map<String, Any>
-                            )
+                db.collection(PATH_USER).document(userId).update(
+                    hashMapOf(
+                        "shareCount" to user?.shareCount?.plus(addShareCnt),
+                        "shareImageCount" to user?.shareImageCount?.plus(addShareImgCnt)
+                    ) as Map<String, Any> ).taskSuccessReturn(true)
 
-                        continuation.resume(Result.Success(true))
-                    } else {
-                        task.exception?.let {
-                            Logger.w(
-                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                            )
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
-                        }
-                        continuation.resume(
-                            Result.Fail(
-                                BarUrSideApplication.instance.getString(
-                                    R.string.fail
-                                )
-                            )
-                        )
-                    }
-                }
+                continuation.resume(Result.Success(true))
+            } else {
+                continuation.resume(Result.Fail(getString(R.string.fail)))
+            }
         }
+    }
+
 
     override suspend fun getVenueByLocation(
         minLat: Double, maxLat: Double,
@@ -542,7 +520,6 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         val ref = db.collection(PATH_VENUE)
 
         ref.whereGreaterThan("latitude", minLat).whereLessThan("latitude", maxLat)
-
         ref.whereGreaterThan("longitude", minLng).whereLessThan("longitude", maxLng)
 
         return Venue().getListResult(ref.get())
@@ -572,7 +549,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                 for (document in snapshot!!) {
                     val notification = document.toObject(Notification::class.java)
-                    notification.timestamp = notification.date?.let { Timestamp(it.time) }
+                    notification.timestamp =
+                        notification.date?.let { Timestamp(it.time) } ?: Timestamp(0)
                     list.add(notification)
                 }
 
@@ -589,7 +567,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                         for (document in snapshot!!) {
                             val notification = document.toObject(Notification::class.java)
-                            notification.timestamp = notification.date?.let { Timestamp(it.time) }
+                            notification.timestamp = notification.date!!.let { Timestamp(it.time) }
                             list.add(notification)
                         }
                         liveData.value = list
@@ -1037,57 +1015,22 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         notification: Notification,
     ): Result<Boolean> = suspendCoroutine { continuation ->
 
-        val postActivity = db.collection(PATH_ACTIVITY)
-        val docActivity = postActivity.document()
-        activity.id = docActivity.id
-        notification.fromId = docActivity.id
+        coroutineScope.launch {
 
-        // add activity info to firebase
-        docActivity
-            .set(Activity.toHashMap(activity))
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
+            // add activity info to firebase
+            val docActivity = db.collection(PATH_ACTIVITY).document()
+            activity.id = docActivity.id
+            docActivity.set(Activity.toHashMap(activity)).taskSuccessReturn(true)
 
-                    // add notification info to firebase
-                    val postNotify =
-                        db.collection(PATH_NOTIFICATION)
-                    val docNotify = postNotify.document()
-                    notification.id = docNotify.id
-                    docNotify.set(Notification.toHashMap(notification))
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                continuation.resume(Result.Success(true))
-                            } else {
-                                task.exception?.let {
-                                    Logger.d("Error getting documents. ${it.message}")
-                                    continuation.resume(Result.Error(it))
-                                    return@addOnCompleteListener
-                                }
-                                continuation.resume(
-                                    Result.Fail(
-                                        BarUrSideApplication.instance
-                                            .getString(
-                                                R.string.fail
-                                            )
-                                    )
-                                )
-                            }
-                        }
-                } else {
-                    task.exception?.let {
-                        Logger.d("Error getting documents. ${it.message}")
-                        continuation.resume(Result.Error(it))
-                        return@addOnCompleteListener
-                    }
-                    continuation.resume(
-                        Result.Fail(
-                            BarUrSideApplication.instance.getString(
-                                R.string.fail
-                            )
-                        )
-                    )
-                }
-            }
+
+            // add notification to firebase
+            val docNotify = db.collection(PATH_NOTIFICATION).document()
+            notification.id = docNotify.id
+            notification.fromId = docActivity.id
+            docNotify.set(Notification.toHashMap(notification)).taskSuccessReturn(true)
+
+            continuation.resume(Result.Success(true))
+        }
     }
 
     override suspend fun addFriend(notification: Notification): Result<Boolean> {
@@ -1100,77 +1043,69 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
     override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> =
         suspendCoroutine { continuation ->
 
-            db.collection(PATH_ACTIVITY)
-                .whereEqualTo("id", activityId)
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        for (document in task.result!!) {
-                            val activity = document.toObject(Activity::class.java)
+            coroutineScope.launch {
 
-                            if (activity.sponsor == userId) {
-                                document.reference.delete()
+                // get modifief activity information
+                val result = Activity().getResult(
+                    db.collection(PATH_ACTIVITY).document(activityId).get()
+                )
 
-                                // modify notification for booker
+                if (result is Result.Success) {
+
+                    val activity = result.data
+
+                    activity?.let {
+                        // check person who quit activity is sponsor
+                        if (it.sponsor == userId) {
+                            // delete activity
+                            db.collection(PATH_ACTIVITY).document(activityId).delete()
+                                .taskSuccessReturn(true)
+
+                            // modify notification that sponsor cancel the activity
+                            val result = Notification().getListResult(
                                 db.collection(PATH_NOTIFICATION)
-                                    .whereEqualTo("fromId", activityId)
-                                    .get()
-                                    .addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                            for (document in task.result!!) {
-                                                document.reference
-                                                    .update(
-                                                        mapOf(
-                                                            "content" to "活動：<b>${activity.name}</b> 發起者已取消該活動",
-                                                            "type" to "activity_cancel",
-                                                            "isCheck" to false,
-                                                            "date" to Timestamp(System.currentTimeMillis())
-                                                        )
-                                                    )
-                                            }
-                                            continuation.resume(Result.Success(true))
-                                        }
-                                    }
-                            } else {
-                                document.reference
-                                    .update("bookers", activity.bookers?.filter { it.id != userId })
-                                    .addOnSuccessListener {
-                                        Logger.d("DocumentSnapshot successfully updated!")
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Logger.d("Error updating document: $e")
-                                    }
-
-                                // delete notification for user
-                                db.collection(PATH_NOTIFICATION)
-                                    .whereEqualTo("fromId", activityId)
-                                    .whereEqualTo("toId", userId)
-                                    .get()
-                                    .addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                            for (document in task.result!!) {
-                                                document.reference.delete()
-                                            }
-                                        }
-                                        continuation.resume(Result.Success(true))
-                                    }
-                            }
-                        }
-                    } else {
-                        task.exception?.let {
-                            Logger.d("Error getting documents. ${it.message}")
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
-                        }
-                        continuation.resume(
-                            Result.Fail(
-                                BarUrSideApplication.instance.getString(
-                                    R.string.fail
-                                )
+                                    .whereEqualTo("fromId", activityId).get()
                             )
-                        )
+
+                            if (result is Result.Success) {
+                                result.data.forEach {
+                                    db.collection(PATH_NOTIFICATION).document(it.id).update(
+                                        mapOf(
+                                            "content" to "活動：<b>${activity.name}</b> 發起者已取消該活動",
+                                            "type" to "activity_cancel",
+                                            "isCheck" to false,
+                                            "date" to Timestamp(System.currentTimeMillis())
+                                        )
+                                    ).taskSuccessReturn(true)
+                                }
+                            }
+
+                            continuation.resume(Result.Success(true))
+                        } else {
+                            // modify activity book amount
+                            db.collection(PATH_ACTIVITY).document(activityId)
+                                .update("bookers", it.bookers?.filter { it.id != userId })
+                                .taskSuccessReturn(true)
+
+                            // delete activity reminder notification
+                            val result = Notification().getResult(
+                                db.collection(PATH_NOTIFICATION).whereEqualTo("fromId", activityId)
+                                    .whereEqualTo("toId", userId).get()
+                            )
+
+                            if (result is Result.Success) {
+                                val notification = result.data
+                                notification?.let {
+                                    db.collection(PATH_NOTIFICATION).document(it.id).delete()
+                                        .taskSuccessReturn(true)
+                                }
+                            }
+
+                            continuation.resume(Result.Success(true))
+                        }
                     }
                 }
+            }
         }
 
     override suspend fun bookActivity(
@@ -1197,6 +1132,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                             // add activity notification to new booker
                             docNotify.set(Notification.toHashMap(notification))
                                 .taskSuccessReturn(true)
+
+                            continuation.resume(Result.Success(true))
                         }
                     }
                 } else {
@@ -1298,57 +1235,33 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         suspendCoroutine { continuation ->
 
             for (limitIds in ids.windowed(10, step = 10, partialWindows = true)) {
-                db.collection(PATH_NOTIFICATION)
-                    .whereIn("id", limitIds)
-                    .get()
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            for (document in task.result!!) {
-                                val notification = document.toObject(Notification::class.java)
 
-                                if (notification.isCheck == false) {
-                                    if (notification.type == "activity") {
-                                        document.reference.update(
-                                            mapOf(
-                                                "isCheck" to true,
-                                                "date" to Timestamp(System.currentTimeMillis())
-                                            )
-                                        )
-                                            .addOnSuccessListener {
-                                                Logger.d("add successfully updated!")
-                                            }
-                                            .addOnFailureListener { e ->
-                                                Logger.d("error updated!")
-                                            }
-                                    } else {
-                                        document.reference.update("isCheck", true)
-                                            .addOnSuccessListener {
-                                                Logger.d("add successfully updated!")
-                                            }
-                                            .addOnFailureListener { e ->
-                                                Logger.d("error updated!")
-                                            }
-                                    }
-                                }
+                coroutineScope.launch {
+                    val result = Notification().getListResult(
+                        db.collection(PATH_NOTIFICATION).whereIn("id", limitIds).get())
+
+                    if (result is Result.Success) {
+                        val notifications = result.data
+
+                        notifications.filter { it.isCheck == false }.forEach {
+
+                            if (it.type == "activity") {
+                                db.collection(PATH_NOTIFICATION).document(it.id).update(
+                                    mapOf("isCheck" to true,
+                                        "date" to Timestamp(System.currentTimeMillis()))
+                                ).taskSuccessReturn(true)
+                            } else {
+                                db.collection(PATH_NOTIFICATION).document(it.id).update(
+                                    mapOf("isCheck" to true)
+                                ).taskSuccessReturn(true)
                             }
-                            continuation.resume(Result.Success(true))
-                        } else {
-                            task.exception?.let {
-                                Logger.w(
-                                    "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                                )
-                                continuation.resume(Result.Error(it))
-                                return@addOnCompleteListener
-                            }
-                            continuation.resume(
-                                Result.Fail(
-                                    BarUrSideApplication.instance.getString(
-                                        R.string.fail
-                                    )
-                                )
-                            )
                         }
+
+                        continuation.resume(Result.Success(true))
+                    } else {
+                        continuation.resume(Result.Fail(getString(R.string.fail)))
                     }
+                }
             }
         }
 

@@ -6,19 +6,17 @@ import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
-import com.google.firebase.events.Event
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.Constants.TEMP_DIRECTORY
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Result
-import com.mingyuwu.barurside.util.Util.getLiveDataResult
-import com.mingyuwu.barurside.util.Util.getResult
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.ref.Reference
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
@@ -227,7 +225,6 @@ object Util {
             exception?.let {
                 Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
             }
-            if (!snapshot!!.metadata.hasPendingWrites()) {
                 val list = mutableListOf<T>()
                 for (document in snapshot!!) {
                     val data = document.toObject(this::class.java)
@@ -235,7 +232,6 @@ object Util {
                 }
 
                 liveData.value = list
-            }
         }
 
         return liveData
@@ -250,7 +246,7 @@ object Util {
                     when (val exception = task.exception) {
                         null -> continuation.resume(Result.Fail(Util.getString(R.string.fail)))
                         else -> {
-                            Logger.d("JJ_fire [${this::class.simpleName}] Error getting documents. ${exception.message}")
+                            Logger.d("[${this::class.simpleName}] Error getting documents. ${exception.message}")
                             continuation.resume(Result.Error(exception))
                         }
                     }

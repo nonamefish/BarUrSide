@@ -28,6 +28,7 @@ import com.mingyuwu.barurside.util.Util.getDiffMinute
 import com.mingyuwu.barurside.venue.MenuAdapter
 import java.sql.Timestamp
 import java.time.LocalTime
+import java.util.*
 import kotlin.math.roundToInt
 
 @BindingAdapter("stars")
@@ -225,7 +226,7 @@ fun checkTime(open: String, close: String): Boolean {
 }
 
 @BindingAdapter("activityTime")
-fun bindTimeActivityTime(textView: TextView, activityTime: Timestamp?) {
+fun bindTimeActivityTime(textView: TextView, activityTime: Date?) {
     activityTime?.let {
         textView.text = DateFormat.format(
             Util.getString(R.string.datetime_format), activityTime

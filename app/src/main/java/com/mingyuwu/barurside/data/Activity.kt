@@ -15,7 +15,7 @@ data class Activity(
     val peopleLimit: Long? = -1,
     val mainDrinking: String = "",
     val sponsor: String = "",
-    val bookers: List<Relationship>? = null
+    val bookers: List<Relationship>? = null,
 ) : Parcelable {
 
     var startTimestamp = startTime?.let { Timestamp(it.time) }

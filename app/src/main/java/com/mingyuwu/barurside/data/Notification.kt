@@ -1,6 +1,7 @@
 package com.mingyuwu.barurside.data
 
 import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
 import java.sql.Timestamp
 import java.util.Date
 import kotlinx.parcelize.Parcelize
@@ -16,7 +17,7 @@ data class Notification(
     val toId: String = "",
     val content: String = "",
     var reply: Boolean? = null,
-    @JvmField val isCheck: Boolean? = null
+    @JvmField val isCheck: Boolean? = null,
 ) : Parcelable {
 
     var timestamp = date?.let { Timestamp(it.time) }

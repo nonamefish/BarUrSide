@@ -67,8 +67,7 @@ class ActivityDetailDialog : DialogFragment() {
 
         // navigate to activity
         viewModel.navigateToDetail.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     val id = findNavController().previousBackStackEntry?.destination?.label
 
