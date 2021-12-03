@@ -71,7 +71,7 @@ click "check all" to view all rating, also can view the comments under each scor
 
 - Add Venue & Add Drink
 
-<img src="doc/add_venue.png" width="200"><br/>&nbsp;&nbsp; <img src="doc/add_drink.png" width="200"><br/>
+<img src="doc/add_venue.png" width="200"> &nbsp;&nbsp; <img src="doc/add_drink.png" width="200"><br/>
 
 - Add Rating: <br/>
 User can comment on the venue, also can comment drink by clicking "add drink comment" button
