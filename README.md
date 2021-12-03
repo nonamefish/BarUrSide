@@ -1,4 +1,4 @@
-<img src="doc/app_logo.png" width="80" height="80">&nbsp; # BarUrSide
+# <img src="doc/app_logo.png" width="35" height="35"> BarUrSide
 
 BarUrSide explores nearby top-rated bars/drinks,
 provides suitable bars based on user demand to enhance user's drinking experience. Cheers!
