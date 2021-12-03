@@ -15,12 +15,12 @@ Activity page display recent tastings and ratings shared from user's friends and
 - Published Rating Tab: <br/>
 Publish list of newly rating user post, including score, comment and related pictures.
 
-<img src="doc/activity_rating.png" width="200"><br/>
+  <img src="doc/activity_rating.png" width="200"><br/>
 
 - Activity Tab: <br/>
 List recent tastings, user can click activity to check detailed information, then join it or share to friends. Click the plus button to create your own tasting.
 
-<img src="doc/activity_tasting.gif" width="200"><br/>
+  <img src="doc/activity_tasting.gif" width="200"><br/>
 
 ### Map
 
@@ -30,12 +30,12 @@ Present in Google Map, allowing users to choose venue based on distance conditio
 - Nearby venue <br/>
 Show the venue within one kilometer of the user’s location. Click on the wine glass icon to quickly check the venue name and rating, click window will navigate to venue page.
 
-<img src="doc/map_nearby_venue.gif" width="200"><br/>
+  <img src="doc/map_nearby_venue.gif" width="200"><br/>
 
 - Filter venue <br/>
 Filter venue based on price range, sotre style, drink selled by the venue and distance, then list eligible venue after submit. If you are suffering from decidophobia, click random button, BarUrSide will pick a venue for you.
 
-<img src="doc/map_filter_venue.gif" width="200"><br/>
+  <img src="doc/map_filter_venue.gif" width="200"><br/>
 
 ### Discover
 
@@ -45,38 +45,38 @@ Recommend venue in a thematic way, can also search for venue/drink.
 - Theme: <br/>
 Themes including top-rated venues/drinks, trending venues/drinks, nearby venues and recent tastings. User can choose theme interested and BarUrSide will show the list of venues/drinks related.
 
-<img src="doc/discover_theme.gif" width="200"><br/>
+  <img src="doc/discover_theme.gif" width="200"><br/>
 
 - Search: <br/>
 Search for the venue or wine you want to know more about.
 
-<img src="doc/discover_search.gif" width="200"><br/>
+  <img src="doc/discover_search.gif" width="200"><br/>
 
 ### Venue & Drink
 
 - Venue Page: <br/>
 Display foundmantal information including address, service, phone etc., recommend drink, newest ratings and images user posted. If you are interested in the venue, you can add it to the collection.  
 
-<img src="doc/venue.png" width="200"><br/>
+  <img src="doc/venue.png" width="200"><br/>
 
 - Menu & Drink: <br/>
 Click "check menu" view drinks which venue sell. Drink page provide information including price, taste, rating etc. If drink not in the menu, click plus button to add drink by yourself.
 
-<img src="doc/venue_menu.gif" width="200"><br/>
+  <img src="doc/venue_menu.gif" width="200"><br/>
 
 - Check Rating: <br/>
 click "check all" to view all rating, also can view the comments under each score.
 
-<img src="doc/all_rating.gif" width="200"><br/>
+  <img src="doc/all_rating.gif" width="200"><br/>
 
 - Add Venue & Add Drink
 
-<img src="doc/add_venue.png" width="200"><br/>&nbsp;&nbsp; <img src="doc/add_drink.png" width="200"><br/>
+  <img src="doc/add_venue.png" width="200"> &nbsp;&nbsp; <img src="doc/add_drink.png" width="200"><br/>
 
 - Add Rating: <br/>
 User can comment on the venue, also can comment drink by clicking "add drink comment" button
 
-<img src="doc/add_rating.gif" width="200"><br/>
+  <img src="doc/add_rating.gif" width="200"><br/>
 
 ### Collect
 List the collect venues/drinks and show the distance between user's location and venue.
