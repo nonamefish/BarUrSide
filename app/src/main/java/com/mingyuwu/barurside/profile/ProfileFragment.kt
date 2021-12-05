@@ -24,7 +24,6 @@ import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.rating.ImageAdapter
 import com.mingyuwu.barurside.rating.UserRatingAdapter
 
-
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
@@ -37,7 +36,8 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -67,67 +67,83 @@ class ProfileFragment : Fragment() {
         binding.userRtgDrinkList.adapter = rtgDkAdapter
 
         // set tool bar title by user display name
-        viewModel.userInfo.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                toolbarTitle.text = viewModel.userInfo.value?.name ?: ""
-            }
-        })
-
-        // observe ratings data
-        viewModel.rtgInfos.observe(viewLifecycleOwner, Observer { rtgInfo ->
-            rtgInfo?.let { rtgs ->
-                val sortRtgs = rtgs.sortedByDescending { it.postTimestamp }
-                viewModel.setImages(rtgs)
-
-                // filter data
-                val rtgVenue = sortRtgs.filter { it.isVenue == true }
-                val rtgDrink = sortRtgs.filter { it.isVenue == false }
-
-                // recyclerView submit list
-                rtgVnAdapter.submitList(rtgVenue.take(3))
-                rtgDkAdapter.submitList(rtgDrink.take(3))
-                imgAdapter.submitList(viewModel.images.value?.take(10))
-
-                // set binding variable
-                binding.rtgVenueCnt = rtgVenue.size
-                binding.rtgDrinkCnt = rtgDrink.size
-            }
-        })
-
-        // notification: if user send or get add friend request, then can't click add button
-        viewModel.notifications.observe(viewLifecycleOwner, Observer { list ->
-            list?.let { notifications ->
-                val listNotReply = notifications.filter { notification -> notification.reply == null }
-                if (listNotReply.any { it.toId == id }) {
-
-                    binding.btnAddFrd.text = getString(R.string.friend_requesting)
-                    binding.btnAddFrd.isEnabled = false
-
-                } else if (listNotReply.any { it.fromId == id }) {
-
-                    binding.btnAddFrd.text = getString(R.string.friend_confirm)
-                    binding.btnAddFrd.isEnabled = false
+        viewModel.userInfo.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    toolbarTitle.text = viewModel.userInfo.value?.name ?: ""
                 }
             }
-        })
+        )
+
+        // observe ratings data
+        viewModel.rtgInfos.observe(
+            viewLifecycleOwner,
+            Observer { rtgInfo ->
+                rtgInfo?.let { rtgs ->
+                    val sortRtgs = rtgs.sortedByDescending { it.postTimestamp }
+                    viewModel.setImages(rtgs)
+
+                    // filter data
+                    val rtgVenue = sortRtgs.filter { it.isVenue == true }
+                    val rtgDrink = sortRtgs.filter { it.isVenue == false }
+
+                    // recyclerView submit list
+                    rtgVnAdapter.submitList(rtgVenue.take(3))
+                    rtgDkAdapter.submitList(rtgDrink.take(3))
+                    imgAdapter.submitList(viewModel.images.value?.take(10))
+
+                    // set binding variable
+                    binding.rtgVenueCnt = rtgVenue.size
+                    binding.rtgDrinkCnt = rtgDrink.size
+                }
+            }
+        )
+
+        // notification: if user send or get add friend request, then can't click add button
+        viewModel.notifications.observe(
+            viewLifecycleOwner,
+            Observer { list ->
+                list?.let { notifications ->
+                    val listNotReply = notifications.filter { notification ->
+                        notification.reply == null
+                    }
+                    if (listNotReply.any { it.toId == id }) {
+
+                        binding.btnAddFrd.text = getString(R.string.friend_requesting)
+                        binding.btnAddFrd.isEnabled = false
+                    } else if (listNotReply.any { it.fromId == id }) {
+
+                        binding.btnAddFrd.text = getString(R.string.friend_confirm)
+                        binding.btnAddFrd.isEnabled = false
+                    }
+                }
+            }
+        )
 
         // navigate to all rating fragment
-        viewModel.navigateToAll.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                findNavController().navigate(
-                    MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray())
-                )
-                viewModel.onLeft()
+        viewModel.navigateToAll.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray())
+                    )
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         // check loading done and close loading animation
-        viewModel.status.observe(viewLifecycleOwner, Observer {
-            if (it == LoadStatus.DONE) {
-                binding.animationLoading.visibility = View.GONE
-                binding.constProfile.visibility = View.VISIBLE
+        viewModel.status.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it == LoadStatus.DONE) {
+                    binding.animationLoading.visibility = View.GONE
+                    binding.constProfile.visibility = View.VISIBLE
+                }
             }
-        })
+        )
 
         // navigate to friend list page
         binding.myFriend.setOnClickListener {
@@ -172,11 +188,14 @@ class ProfileFragment : Fragment() {
         }
 
         // check user friend status: when unfriend then change isFriend status
-        UserManager.user.observe(viewLifecycleOwner, Observer { user ->
-            user?.let {
-                viewModel.isFriend.value = UserManager.user.value?.friends?.any { it.id == id }
+        UserManager.user.observe(
+            viewLifecycleOwner,
+            Observer { user ->
+                user?.let {
+                    viewModel.isFriend.value = UserManager.user.value?.friends?.any { it.id == id }
+                }
             }
-        })
+        )
 
         return binding.root
     }
@@ -209,5 +228,4 @@ class ProfileFragment : Fragment() {
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
-
 }

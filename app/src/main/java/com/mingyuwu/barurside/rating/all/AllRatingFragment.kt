@@ -13,7 +13,6 @@ import com.mingyuwu.barurside.databinding.FragmentAllRatingBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.rating.InfoRatingAdapter
 
-
 class AllRatingFragment : Fragment() {
 
     private lateinit var binding: FragmentAllRatingBinding
@@ -24,7 +23,8 @@ class AllRatingFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -38,13 +38,15 @@ class AllRatingFragment : Fragment() {
         // set adapter
         val adapter = InfoRatingAdapter()
         binding.recyclerRatingList.adapter = adapter
-        viewModel.ratings.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                adapter.submitList(viewModel.ratings.value)
+        viewModel.ratings.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    adapter.submitList(viewModel.ratings.value)
+                }
             }
-        })
+        )
 
         return binding.root
     }
-
 }

@@ -1,7 +1,11 @@
 package com.mingyuwu.barurside.ext
 
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.activity.ActivityTypeFilter
 import com.mingyuwu.barurside.data.Activity
 import com.mingyuwu.barurside.data.RatingInfo
@@ -9,7 +13,9 @@ import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.factory.*
 import com.mingyuwu.barurside.filter.FilterParameter
-
+import com.mingyuwu.barurside.util.AppPermission
+import com.mingyuwu.barurside.util.Util
+import com.permissionx.guolindev.PermissionX
 
 fun Fragment.getVmFactory(): ViewModelFactory {
     val repository = (requireContext().applicationContext as BarUrSideApplication).repository
@@ -53,3 +59,39 @@ fun Fragment.getVmFactory(venue: Venue): EditRatingViewModelFactory {
 fun Fragment.getVmFactory(ratings: List<RatingInfo>): AllRatingViewModelFactory {
     return AllRatingViewModelFactory(ratings)
 }
+
+fun Fragment.isPermissionGranted(permission: AppPermission) =
+    (this.context?.let {
+        PermissionChecker.checkSelfPermission(it, permission.permissionName)
+    } == PackageManager.PERMISSION_GRANTED)
+
+fun Fragment.requestPermission(permission: AppPermission) =
+    PermissionX.init(activity)
+        .permissions(
+            permission.permissionName
+        )
+        .onExplainRequestReason { scope, deniedList ->
+            scope.showRequestReasonDialog(
+                deniedList,
+                Util.getString(permission.explanationMessageId),
+                Util.getString(R.string.permission_confirm),
+                Util.getString(permission.deniedMessageId)
+            )
+        }
+        .onForwardToSettings { scope, deniedList ->
+            scope.showForwardToSettingsDialog(
+                deniedList,
+                Util.getString(permission.explanationMessageId),
+                Util.getString(R.string.permission_confirm),
+                Util.getString(permission.deniedMessageId)
+            )
+        }
+        .request { allGranted, _, deniedList ->
+            if (!allGranted) {
+                Toast.makeText(
+                    this.context,
+                    getString(R.string.permission_reject_toast, deniedList),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }

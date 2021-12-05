@@ -58,5 +58,4 @@ class FriendAdapter(val viewModel: ViewModel) :
             }
         }
     }
-
 }

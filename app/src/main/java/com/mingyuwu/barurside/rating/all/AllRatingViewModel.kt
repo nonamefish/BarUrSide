@@ -25,5 +25,4 @@ class AllRatingViewModel(val data: List<RatingInfo>) : ViewModel() {
     fun getSpecificStarCount(star: Int): Int {
         return data.filter { it.rating == star.toLong() }.size
     }
-
 }

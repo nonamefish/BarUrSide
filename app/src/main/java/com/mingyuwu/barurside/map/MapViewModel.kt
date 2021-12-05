@@ -87,5 +87,4 @@ class MapViewModel(private val repository: BarUrSideRepository) : ViewModel() {
     fun onLeft() {
         navigateToVenue.value = null
     }
-
 }

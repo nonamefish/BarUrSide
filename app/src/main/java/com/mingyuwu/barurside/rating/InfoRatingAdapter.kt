@@ -43,10 +43,14 @@ class InfoRatingAdapter :
                 rating?.isVenue?.let {
                     if (it) {
                         view.findNavController()
-                            .navigate(MainNavigationDirections.navigateToVenueFragment(rating.objectId))
+                            .navigate(
+                                MainNavigationDirections.navigateToVenueFragment(rating.objectId)
+                            )
                     } else {
                         view.findNavController()
-                            .navigate(MainNavigationDirections.navigateToDrinkFragment(rating.objectId))
+                            .navigate(
+                                MainNavigationDirections.navigateToDrinkFragment(rating.objectId)
+                            )
                     }
                 }
             }
@@ -57,7 +61,7 @@ class InfoRatingAdapter :
             binding.rating = rating
 
             // set user Info
-            binding.user = rating?.userInfo//UserData.user.user[0]
+            binding.user = rating?.userInfo // UserData.user.user[0]
         }
     }
 
@@ -88,5 +92,4 @@ class InfoRatingAdapter :
             }
         }
     }
-
 }

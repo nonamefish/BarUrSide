@@ -1,27 +1,17 @@
 package com.mingyuwu.barurside.discoverdetail
 
-import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
-import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.LatLng
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
@@ -32,20 +22,20 @@ import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.FragmentDiscoverDetailBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.ext.isPermissionGranted
+import com.mingyuwu.barurside.ext.requestPermission
 import com.mingyuwu.barurside.login.UserManager
-import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
 import com.mingyuwu.barurside.profile.FriendAdapter
 import com.mingyuwu.barurside.rating.ImageAdapter
+import com.mingyuwu.barurside.util.AppPermission
+import com.mingyuwu.barurside.util.Location
 import com.mingyuwu.barurside.util.Logger
 import com.mingyuwu.barurside.util.Util
-import com.permissionx.guolindev.PermissionX
 
 class DiscoverDetailFragment : Fragment() {
 
     private lateinit var mContext: Context
     private lateinit var binding: FragmentDiscoverDetailBinding
-    private var locationPermissionGranted = false
-    private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var adapter: ListAdapter<Any, RecyclerView.ViewHolder>
     private val viewModel by viewModels<DiscoverDetailViewModel> {
         getVmFactory(
@@ -55,11 +45,11 @@ class DiscoverDetailFragment : Fragment() {
         )
     }
 
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         val ids = DiscoverDetailFragmentArgs.fromBundle(requireArguments()).id?.toList()
         val theme = DiscoverDetailFragmentArgs.fromBundle(requireArguments()).theme
 
@@ -69,11 +59,17 @@ class DiscoverDetailFragment : Fragment() {
             in arrayOf(
                 Theme.RECENT_ACTIVITY,
                 Theme.USER_ACTIVITY
-            ) -> Util.getString(R.string.activity_list_title)
+            ),
+            -> Util.getString(R.string.activity_list_title)
             Theme.USER_FRIEND -> Util.getString(R.string.user_friend_title)
             Theme.NOTIFICATION -> Util.getString(R.string.notification_title)
             Theme.VENUE_MENU -> Util.getString(R.string.menu_title)
             Theme.IMAGES -> Util.getString(R.string.image_title)
+            Theme.HOT_VENUE -> Util.getString(R.string.trend_bar)
+            Theme.HOT_DRINK -> Util.getString(R.string.trend_drink)
+            Theme.HIGH_RATE_VENUE -> Util.getString(R.string.high_rate_bar)
+            Theme.HIGH_RATE_DRINK -> Util.getString(R.string.high_rate_drink)
+            Theme.AROUND_VENUE -> Util.getString(R.string.around_bar)
             else -> Util.getString(R.string.filter_title)
         }
 
@@ -83,7 +79,6 @@ class DiscoverDetailFragment : Fragment() {
         )
         binding.lifecycleOwner = this
         mContext = binding.root.context
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext)
 
         // set recyclerView adapter
         when (theme) {
@@ -109,18 +104,20 @@ class DiscoverDetailFragment : Fragment() {
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
             }
             Theme.AROUND_VENUE -> {
-                viewModel.location = (requireActivity() as MainActivity).location
+                viewModel.location = Location.getLocation(requireActivity())
 
                 if (viewModel.location.value == null) {
-                    getLocationPermission()
+                    getDeviceLocation()
                 }
                 adapter = DiscoverVenueAdapter(viewModel)
                 binding.discoverObjectList.adapter = adapter
                 binding.btnRandom.visibility = View.GONE // set random button invisibility
 
-                viewModel.location.observe(viewLifecycleOwner, Observer {
-                    viewModel.getAroundVenue(it)
-                })
+                viewModel.location.observe(
+                    viewLifecycleOwner, {
+                        viewModel.getAroundVenue(it)
+                    }
+                )
             }
             Theme.IMAGES -> {
                 adapter = ImageAdapter(240, 220)
@@ -152,79 +149,85 @@ class DiscoverDetailFragment : Fragment() {
         }
 
         // click info button and navigate to info fragment
-        viewModel.navigateToInfo.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                when (it) {
-                    is Venue -> {
-                        findNavController().navigate(
-                            MainNavigationDirections.navigateToVenueFragment(it.id)
-                        )
-                        viewModel.onLeft()
-                    }
-                    is Drink -> {
-                        findNavController().navigate(
-                            MainNavigationDirections.navigateToDrinkFragment(it.id)
-                        )
-                        viewModel.onLeft()
-                    }
-                    is Activity -> {
-                        findNavController().navigate(
-                            MainNavigationDirections.navigateToActivityDetailDialog(it, null, theme)
-                        )
-                        viewModel.onLeft()
-                    }
-                }
-            }
-        })
-
-        // assign value to recyclerView
-        viewModel.detailData.observe(viewLifecycleOwner, Observer { it ->
-            if (it.isNullOrEmpty()) {
-                // finish loading and close lottie
-                binding.animationEmpty.visibility = View.VISIBLE
-                binding.animationLoading.visibility = View.GONE
-
-            } else {
-                val list: List<Any>?
-
-                // set notification value
-                if (theme == Theme.NOTIFICATION) {
-
-                    list = (it as List<Notification>).filter {
-                        it.toId == UserManager.user.value!!.id
-                    }.take(20)
-
-                    if (!it.isNullOrEmpty()) {
-                        it.filter { it.isCheck == false }.map { it.id }.let {
-                            viewModel.checkNotification(it)
+        viewModel.navigateToInfo.observe(
+            viewLifecycleOwner, {
+                it?.let {
+                    when (it) {
+                        is Venue -> {
+                            findNavController().navigate(
+                                MainNavigationDirections.navigateToVenueFragment(it.id)
+                            )
+                            viewModel.onLeft()
+                        }
+                        is Drink -> {
+                            findNavController().navigate(
+                                MainNavigationDirections.navigateToDrinkFragment(it.id)
+                            )
+                            viewModel.onLeft()
+                        }
+                        is Activity -> {
+                            findNavController().navigate(
+                                MainNavigationDirections.navigateToActivityDetailDialog(it,
+                                    null,
+                                    theme)
+                            )
+                            viewModel.onLeft()
                         }
                     }
-
-                } else {
-                    list = it
                 }
-
-                // submit list and set loading and empty animation
-                if (list.isEmpty()) {
-                    binding.animationEmpty.visibility = View.VISIBLE
-                } else {
-                    adapter.submitList(list)
-                }
-                binding.animationLoading.visibility = View.GONE
-
             }
-        })
+        )
+
+        // assign value to recyclerView
+        viewModel.detailData.observe(
+            viewLifecycleOwner, { it ->
+                if (it.isNullOrEmpty()) {
+                    // finish loading and close lottie
+                    binding.animationEmpty.visibility = View.VISIBLE
+                    binding.animationLoading.visibility = View.GONE
+                } else {
+
+                    val list: List<Any>?
+
+                    // set notification value
+                    if (theme == Theme.NOTIFICATION) {
+
+                        list = (it as List<Notification>).filter {
+                            it.toId == UserManager.user.value!!.id
+                        }.take(20)
+
+                        if (!it.isNullOrEmpty()) {
+                            it.filter { it.isCheck == false }.map { it.id }.let {
+                                viewModel.checkNotification(it)
+                            }
+                        }
+                    } else {
+                        list = it
+                    }
+
+                    // submit list and set loading and empty animation
+                    if (list.isEmpty()) {
+                        binding.animationEmpty.visibility = View.VISIBLE
+                    } else {
+                        adapter.submitList(list)
+                    }
+                    binding.animationLoading.visibility = View.GONE
+                }
+            }
+        )
 
         // set random button click listener
         binding.btnRandom.setOnClickListener {
             when (theme) {
                 Theme.MAP_FILTER -> {
                     viewModel.detailData.value?.let {
-                        findNavController().navigate(
-                            MainNavigationDirections.navigateToRandomFragment(
-                                (it as List<Venue>).toTypedArray()
+                        it.let {
+                            findNavController().navigate(
+                                MainNavigationDirections.navigateToRandomFragment(
+                                    (it as List<Venue>).toTypedArray()
+                                )
                             )
-                        )
+                        }
                     }
                 }
                 Theme.VENUE_MENU -> {
@@ -237,7 +240,6 @@ class DiscoverDetailFragment : Fragment() {
                 else -> {
                 }
             }
-
         }
 
         return binding.root
@@ -245,85 +247,15 @@ class DiscoverDetailFragment : Fragment() {
 
     private fun getDeviceLocation() {
         try {
-            if (locationPermissionGranted
-            ) {
-                mFusedLocationProviderClient.lastLocation
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful && task.result != null) {
-                            // google map current location (blue point)
-                            val location = task.result
-                            (requireActivity() as MainActivity).location.value =
-                                LatLng(location.latitude, location.longitude)
-                        } else {
-                            Logger.d("exception ${task.exception}")
-                            Logger.d("task.result ${task.result}")
-                        }
-                    }
+            if (isPermissionGranted(AppPermission.AccessFineLocation)) {
+                Location.getLocation(requireActivity())
             } else {
-                getLocationPermission()
+                requestPermission(AppPermission.AccessFineLocation)
+                getDeviceLocation()
             }
         } catch (e: SecurityException) {
             Logger.d("exception ${e.message}")
         }
     }
 
-    // get and check location permission
-    private fun getLocationPermission() {
-        PermissionX.init(activity)
-            .permissions(
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            .onExplainRequestReason { scope, deniedList ->
-                scope.showRequestReasonDialog(
-                    deniedList,
-                    Util.getString(R.string.permission_location_collect),
-                    Util.getString(R.string.permission_confirm),
-                    Util.getString(R.string.permission_reject)
-                )
-            }
-            .onForwardToSettings { scope, deniedList ->
-                scope.showForwardToSettingsDialog(
-                    deniedList,
-                    Util.getString(R.string.permission_location_collect),
-                    Util.getString(R.string.permission_confirm),
-                    Util.getString(R.string.permission_reject)
-                )
-            }
-            .request { allGranted, _, deniedList ->
-                if (allGranted) {
-                    locationPermissionGranted = true
-                    checkGPSState()
-                } else {
-                    Toast.makeText(
-                        mContext,
-                        getString(R.string.permission_reject_toast, deniedList),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-    }
-
-    // check GPS state
-    private fun checkGPSState() {
-        val locationManager = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            AlertDialog.Builder(mContext)
-            AlertDialog.Builder(mContext)
-                .setTitle(Util.getString(R.string.request_gps_title))
-                .setMessage(Util.getString(R.string.request_gps_content))
-                .setPositiveButton(
-                    Util.getString(R.string.request_gps_positive)
-                ) { _, _ ->
-                    startActivityForResult(
-                        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_ENABLE_GPS,
-                    )
-                }
-                .setNegativeButton(Util.getString(R.string.request_gps_cancel), null)
-                .show()
-        } else {
-            getDeviceLocation()
-        }
-    }
-
 }
-

@@ -133,5 +133,4 @@ class AddDrinkViewModel(private val repository: BarUrSideRepository, val id: Str
             addDrink()
         }
     }
-
 }

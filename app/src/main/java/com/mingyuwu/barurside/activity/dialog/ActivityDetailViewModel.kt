@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.sql.Timestamp
 
 class ActivityDetailViewModel(
     private val repository: BarUrSideRepository,
@@ -56,7 +57,6 @@ class ActivityDetailViewModel(
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     init {
         if (activityId.isNullOrEmpty()) {
             activity?.let {
@@ -67,7 +67,6 @@ class ActivityDetailViewModel(
         } else {
             getActivity(activityId)
         }
-
     }
 
     fun modifyActivity() {
@@ -151,5 +150,4 @@ class ActivityDetailViewModel(
             checkUserHasBook()
         }
     }
-
 }

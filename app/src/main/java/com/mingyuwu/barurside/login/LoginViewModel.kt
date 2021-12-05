@@ -59,5 +59,4 @@ class LoginViewModel(private val repository: BarUrSideRepository) : ViewModel() 
     fun getUserData(userId: String) {
         UserManager.user = repository.getUser(userId)
     }
-
 }

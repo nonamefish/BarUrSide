@@ -28,8 +28,8 @@ import com.mingyuwu.barurside.util.Util.getDiffMinute
 import com.mingyuwu.barurside.venue.MenuAdapter
 import java.sql.Timestamp
 import java.time.LocalTime
+import java.util.*
 import kotlin.math.roundToInt
-
 
 @BindingAdapter("stars")
 fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
@@ -78,7 +78,6 @@ fun bindClickRtgScore(imageView: ImageView, flgFull: Boolean?) {
         } else {
             imageView.setBackgroundResource(R.drawable.ic_baseline_star_border_24)
         }
-
     }
 }
 
@@ -197,6 +196,7 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
     serviceTime?.let {
         val open = serviceTime.split("-")[0]
         val close = serviceTime.split("-")[1]
+        val current = LocalTime.now()
         when (checkTime(open, close)) {
             true -> {
                 if (open.split(":")[0].toInt() < close.split(":")[0].toInt()) {
@@ -206,7 +206,7 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
                 }
             }
             false -> {
-                if (open.split(":")[0].toInt() < close.split(":")[0].toInt()) {
+                if (current.isBefore(LocalTime.parse(open))) {
                     textView.text = Util.getString(R.string.rest_until_today, open)
                 } else {
                     textView.text = Util.getString(R.string.rest_until_tomorrow, open)
@@ -215,7 +215,6 @@ fun bindIsOpen(textView: TextView, serviceTime: String?) {
         }
     }
 }
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun checkTime(open: String, close: String): Boolean {
@@ -227,7 +226,7 @@ fun checkTime(open: String, close: String): Boolean {
 }
 
 @BindingAdapter("activityTime")
-fun bindTimeActivityTime(textView: TextView, activityTime: Timestamp?) {
+fun bindTimeActivityTime(textView: TextView, activityTime: Date?) {
     activityTime?.let {
         textView.text = DateFormat.format(
             Util.getString(R.string.datetime_format), activityTime
@@ -308,4 +307,3 @@ fun bindDistance(textView: TextView, distance: Int?) {
         }
     }
 }
-

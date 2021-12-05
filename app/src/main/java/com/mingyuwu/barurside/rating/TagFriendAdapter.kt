@@ -11,7 +11,6 @@ import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.databinding.ItemTagFrdBinding
 
-
 class TagFriendAdapter :
     ListAdapter<TagFriend, TagFriendAdapter.TagFrdViewHolder>(DiffCallback) {
 
@@ -27,11 +26,12 @@ class TagFriendAdapter :
             }
         }
 
-
         fun bind(tagFriend: TagFriend, view: View) {
             binding.name = tagFriend.name
             binding.profileBaseImg.setOnClickListener {
-                view.findNavController().navigate(MainNavigationDirections.navigateToProfileFragment(tagFriend.id))
+                view.findNavController().navigate(
+                    MainNavigationDirections.navigateToProfileFragment(tagFriend.id)
+                )
             }
         }
     }
@@ -61,5 +61,4 @@ class TagFriendAdapter :
         val tagFriend = getItem(position)
         holder.bind(tagFriend, holder.itemView)
     }
-
 }

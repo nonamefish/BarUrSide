@@ -89,7 +89,7 @@ class DiscoverDetailViewModel(
                 // profile Page
                 Theme.USER_FRIEND -> {
                     result = if (id != null) {
-                        repository.getFriend(id)
+                        repository.getUsersResult(id)
                     } else {
                         Result.Success(null)
                     }
@@ -218,5 +218,4 @@ class DiscoverDetailViewModel(
     fun onLeft() {
         navigateToInfo.value = null
     }
-
 }

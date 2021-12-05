@@ -89,10 +89,12 @@
 
             <TextView
                 android:id="@+id/activity_detail_time"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:activityTime="@{viewModel.dtActivity.startTimestamp}"
+                android:layout_marginEnd="16dp"
+                app:activityTime="@{viewModel.dtActivity.startTime}"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_time_from"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txt_time_from"
                 app:layout_constraintTop_toTopOf="@+id/txt_time_from"
                 tools:text="2021/10/1 下午 1:00" />
@@ -111,49 +113,52 @@
 
             <TextView
                 android:id="@+id/activity_detail_endtime"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                app:activityTime="@{viewModel.dtActivity.endTimestamp}"
+                android:layout_marginEnd="16dp"
+                app:activityTime="@{viewModel.dtActivity.endTime}"
                 app:layout_constraintBottom_toBottomOf="@+id/activity_time_dash"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/activity_time_dash"
                 app:layout_constraintTop_toTopOf="@+id/activity_time_dash"
                 tools:text="2021/10/1 下午 3:00" />
 
             <ImageView
                 android:id="@+id/img_add_activity_address"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/ic_baseline_location_on_24"
+                android:background="@drawable/ic_outline_location_on_24"
                 android:backgroundTint="@color/black_3f3a3a"
                 android:contentDescription="@string/img_activity_location"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_detail_address"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_detail_endtime" />
+                app:layout_constraintTop_toTopOf="@+id/activity_detail_address" />
 
             <TextView
                 android:id="@+id/activity_detail_address"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:text="@{viewModel.dtActivity.address}"
-                app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_address"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/img_add_activity_address"
-                app:layout_constraintTop_toTopOf="@+id/img_add_activity_address"
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_endtime"
                 tools:text="新北市新莊區中正路1號" />
 
             <ImageView
                 android:id="@+id/img_activity_people_limit"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/icons_32px_profile"
-                android:backgroundTint="@color/black_3f3a3a"
                 android:contentDescription="@string/img_activity_people_limit"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_add_activity_address" />
+                app:layout_constraintEnd_toEndOf="@+id/img_add_activity_address"
+                app:layout_constraintStart_toStartOf="@+id/img_add_activity_address"
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_address"
+                app:tint="@color/black_3f3a3a" />
 
             <TextView
                 android:id="@+id/activity_detail_limit"
@@ -170,13 +175,13 @@
                 android:id="@+id/img_activity_drink_main"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/ic_outline_local_drink_24"
                 android:backgroundTint="@color/black_3f3a3a"
                 android:contentDescription="@string/img_activity_main_drink"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_activity_people_limit" />
+                app:layout_constraintEnd_toEndOf="@+id/img_activity_people_limit"
+                app:layout_constraintStart_toStartOf="@+id/img_activity_people_limit"
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_limit" />
 
             <TextView
                 android:id="@+id/activity_detail_main"
@@ -253,10 +258,12 @@
 
                 <TextView
                     android:id="@+id/rtg_user_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
+                    android:layout_marginEnd="16dp"
                     android:text="@{viewModel.sponsor.name}"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/profile_base_img"
                     app:layout_constraintTop_toTopOf="@+id/profile_base_img"
                     tools:text="無尾熊" />

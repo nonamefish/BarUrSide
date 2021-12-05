@@ -7,9 +7,9 @@ import kotlinx.parcelize.Parcelize
 class TagFriend(
     val id: String? = "",
     val name: String? = ""
-) : Parcelable{
-    companion object{
-        fun toHashMap(dt : TagFriend) = hashMapOf(
+) : Parcelable {
+    companion object {
+        fun toHashMap(dt: TagFriend) = hashMapOf(
             "id" to dt.id,
             "name" to dt.name
         )

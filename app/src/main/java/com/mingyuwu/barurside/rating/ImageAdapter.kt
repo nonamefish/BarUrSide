@@ -50,5 +50,4 @@ class ImageAdapter(val width: Int, val height: Int) :
             }
         }
     }
-
 }

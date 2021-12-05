@@ -47,7 +47,6 @@ class DiscoverActivityAdapter(val viewModel: ViewModel) :
             binding.category = activity.mainDrinking
             binding.info = activity.address
             binding.limit = getString(R.string.people_limit, activity.peopleLimit ?: 0)
-
         }
     }
 
@@ -79,5 +78,4 @@ class DiscoverActivityAdapter(val viewModel: ViewModel) :
             }
         }
     }
-
 }

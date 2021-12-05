@@ -28,5 +28,4 @@ class ActivityViewPageAdapter(fragment: Fragment) : FragmentStateAdapter(fragmen
 
         return fragment
     }
-
 }

@@ -53,25 +53,28 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
             }
 
             // tag friend : set adapter and item click listener
-            viewModel.frdList.observe(binding.lifecycleOwner!!, Observer {
+            viewModel.frdList.observe(
+                binding.lifecycleOwner!!,
+                Observer {
 
-                val friendList = viewModel.frdList.value?.map { "${it.name} (${it.id})" }
-                val adapter = ArrayAdapter(
-                    binding.root.context,
-                    R.layout.spinner_friend_list,
-                    friendList!!
-                )
+                    val friendList = viewModel.frdList.value?.map { "${it.name} (${it.id})" }
+                    val adapter = ArrayAdapter(
+                        binding.root.context,
+                        R.layout.spinner_friend_list,
+                        friendList!!
+                    )
 
-                binding.btnTagFrd.setAdapter(adapter)
+                    binding.btnTagFrd.setAdapter(adapter)
 
-                binding.btnTagFrd.setOnItemClickListener { parent, _, position, _ ->
-                    val selected = parent.getItemAtPosition(position)
-                    val pos = friendList.indexOf(selected)
-                    binding.btnTagFrd.setText("")
-                    viewModel.addTagFrd(TagFriend(it[pos].id, it[pos].name))
-                    adapter.remove("${it[pos].name} (${it[pos].id})")
+                    binding.btnTagFrd.setOnItemClickListener { parent, _, position, _ ->
+                        val selected = parent.getItemAtPosition(position)
+                        val pos = friendList.indexOf(selected)
+                        binding.btnTagFrd.setText("")
+                        viewModel.addTagFrd(TagFriend(it[pos].id, it[pos].name))
+                        adapter.remove("${it[pos].name} (${it[pos].id})")
+                    }
                 }
-            })
+            )
         }
     }
 
@@ -99,6 +102,4 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
     override fun onBindViewHolder(holder: EditRatingViewHolder, position: Int) {
         holder.bind(viewModel, position)
     }
-
 }
-

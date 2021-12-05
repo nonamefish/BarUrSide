@@ -69,5 +69,4 @@ class DiscoverDrinkAdapter(val viewModel: DiscoverDetailViewModel) :
             }
         }
     }
-
 }

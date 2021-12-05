@@ -9,4 +9,4 @@ data class FilterParameter(
     val category: List<String>?,
     val style: List<String>?,
     val distance: Double?
-): Parcelable
+) : Parcelable

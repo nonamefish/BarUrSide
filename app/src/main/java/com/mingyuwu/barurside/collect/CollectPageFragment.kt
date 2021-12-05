@@ -1,42 +1,33 @@
 package com.mingyuwu.barurside.collect
 
-import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
-import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.LatLng
-import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.databinding.FragmentCollectPageBinding
 import com.mingyuwu.barurside.ext.getVmFactory
-import com.mingyuwu.barurside.map.REQUEST_ENABLE_GPS
+import com.mingyuwu.barurside.ext.isPermissionGranted
+import com.mingyuwu.barurside.ext.requestPermission
+import com.mingyuwu.barurside.util.AppPermission
+import com.mingyuwu.barurside.util.Location
 import com.mingyuwu.barurside.util.Logger
 import com.mingyuwu.barurside.util.Util
-import com.permissionx.guolindev.PermissionX
 
 class CollectPageFragment : Fragment() {
 
     val isVenue = Util.getString(R.string.collect_tab_is_venue)
     private lateinit var binding: FragmentCollectPageBinding
     private lateinit var mContext: Context
-    private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
-    private var locationPermissionGranted = false
     private val viewModel by viewModels<CollectPageViewModel> {
         getVmFactory(
             this.requireArguments().getBoolean(isVenue)
@@ -44,8 +35,9 @@ class CollectPageFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View? {
 
         binding = DataBindingUtil.inflate(
@@ -56,8 +48,7 @@ class CollectPageFragment : Fragment() {
 
         // set variable for get location
         mContext = binding.root.context
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext)
-        getLocationPermission()
+        getDeviceLocation()
 
         // set recyclerView adapter and get collect id list
         val adapter = CollectAdapter(
@@ -69,136 +60,79 @@ class CollectPageFragment : Fragment() {
 
         binding.collectList.adapter = adapter
 
-        viewModel.collectInfo.observe(viewLifecycleOwner, Observer{
-            if (!it.isNullOrEmpty()) {
-                viewModel.getObjectInfo(isVenue, it)
-            } else {
-                binding.animationEmpty.visibility = View.VISIBLE
-                binding.animationLoading.visibility = View.GONE
+        viewModel.collectInfo.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (!it.isNullOrEmpty()) {
+                    viewModel.getObjectInfo(isVenue, it)
+                } else {
+                    binding.animationEmpty.visibility = View.VISIBLE
+                    binding.animationLoading.visibility = View.GONE
+                }
             }
-        })
+        )
 
         // get collect object information
-        viewModel.objectInfo.observe(viewLifecycleOwner, Observer{
-            if (it.isEmpty()) {
-                binding.animationEmpty.visibility = View.VISIBLE
-            } else {
-                binding.animationLoading.visibility = View.GONE
-                adapter.submitList(it)
+        viewModel.objectInfo.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it.isEmpty()) {
+                    binding.animationEmpty.visibility = View.VISIBLE
+                } else {
+                    binding.animationLoading.visibility = View.GONE
+                    adapter.submitList(it)
+                }
             }
-        })
+        )
 
         // set navigation to object info page
-        viewModel.navigateToObject.observe(viewLifecycleOwner, Observer{
-            it?.let {
-                when (isVenue) {
-                    true -> findNavController().navigate(
-                        MainNavigationDirections.navigateToVenueFragment(
-                            it
+        viewModel.navigateToObject.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    when (isVenue) {
+                        true -> findNavController().navigate(
+                            MainNavigationDirections.navigateToVenueFragment(
+                                it
+                            )
                         )
-                    )
-                    false -> findNavController().navigate(
-                        MainNavigationDirections.navigateToDrinkFragment(
-                            it
+                        false -> findNavController().navigate(
+                            MainNavigationDirections.navigateToDrinkFragment(
+                                it
+                            )
                         )
-                    )
+                    }
+                    viewModel.onLeft()
                 }
-                viewModel.onLeft()
             }
-        })
+        )
 
         // check loading done and close loading animation
-        viewModel.status.observe(viewLifecycleOwner, Observer{
-            if (it == LoadStatus.DONE) {
-                binding.animationLoading.visibility = View.GONE
+        viewModel.status.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it == LoadStatus.DONE) {
+                    binding.animationLoading.visibility = View.GONE
+                }
             }
-        })
+        )
 
         // set location
-        viewModel.location.value = (requireActivity() as MainActivity).location.value
+        viewModel.location = Location.getLocation(requireActivity())
 
         return binding.root
     }
 
     private fun getDeviceLocation() {
         try {
-            if (locationPermissionGranted) {
-                mFusedLocationProviderClient.lastLocation
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful && task.result != null) {
-                            // google map current location (blue point)
-                            val location = task.result
-                            (requireActivity() as MainActivity).location.value =
-                                LatLng(location.latitude, location.longitude)
-                        }
-                        else{
-                            Logger.d("exception ${task.exception}")
-                            Logger.d("task.result ${task.result}")
-                        }
-                    }
+            if (isPermissionGranted(AppPermission.AccessFineLocation)) {
+                Location.getLocation(requireActivity())
             } else {
-                getLocationPermission()
+                requestPermission(AppPermission.AccessFineLocation)
+                getDeviceLocation()
             }
         } catch (e: SecurityException) {
             Logger.d("exception ${e.message}")
-        }
-    }
-
-    // get and check location permission
-    private fun getLocationPermission() {
-        PermissionX.init(activity)
-            .permissions(
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            .onExplainRequestReason { scope, deniedList ->
-                scope.showRequestReasonDialog(
-                    deniedList,
-                    Util.getString(R.string.permission_location_collect),
-                    Util.getString(R.string.permission_confirm),
-                    Util.getString(R.string.permission_reject)
-                )
-            }
-            .onForwardToSettings { scope, deniedList ->
-                scope.showForwardToSettingsDialog(
-                    deniedList,
-                    Util.getString(R.string.permission_location_collect),
-                    Util.getString(R.string.permission_confirm),
-                    Util.getString(R.string.permission_reject)
-                )
-            }
-            .request { allGranted, _, deniedList ->
-                if (allGranted) {
-                    locationPermissionGranted = true
-                    checkGPSState()
-                } else {
-                    Toast.makeText(
-                        mContext,
-                        getString(R.string.permission_reject_toast, deniedList),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-    }
-
-    // check GPS state
-    private fun checkGPSState() {
-
-        val locationManager = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            AlertDialog.Builder(mContext)
-                .setTitle(Util.getString(R.string.request_gps_title))
-                .setMessage(Util.getString(R.string.request_gps_content))
-                .setPositiveButton(Util.getString(R.string.request_gps_positive)
-                ) { _, _ ->
-                    startActivityForResult(
-                        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_ENABLE_GPS
-                    )
-                }
-                .setNegativeButton(Util.getString(R.string.request_gps_cancel), null)
-                .show()
-        } else {
-            getDeviceLocation()
         }
     }
 

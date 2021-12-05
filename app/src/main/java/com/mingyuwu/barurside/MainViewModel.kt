@@ -10,6 +10,7 @@ import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.CurrentFragmentType
 import com.mingyuwu.barurside.util.Util.getDiffHour
 import com.mingyuwu.barurside.util.Util.getString
+import java.sql.Timestamp
 
 class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
 
@@ -39,10 +40,13 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
         notificationSize = Transformations.map(notification) { it ->
             it.filter {
                 it.toId == UserManager.user.value!!.id &&
-                        (it.isCheck == false && (it.type == getString(R.string.friend)
-                                || (it.type == getString(R.string.activity) && getDiffHour(it.timestamp!!) < 24)))
+                        (it.isCheck == false && (
+                                it.type == getString(R.string.friend) ||
+                                        (it.type == getString(R.string.activity) &&
+                                                getDiffHour(Timestamp(it.date?.time
+                                                    ?: 0)) < 24
+                                                )))
             }.size
         }
     }
-
 }

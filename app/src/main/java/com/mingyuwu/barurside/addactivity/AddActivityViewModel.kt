@@ -13,11 +13,11 @@ import com.mingyuwu.barurside.util.DateUnit
 import com.mingyuwu.barurside.util.Util.calculateDateByPeriod
 import com.mingyuwu.barurside.util.Util.convertStringToTimestamp
 import com.mingyuwu.barurside.util.Util.getString
+import java.sql.Timestamp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.sql.Timestamp
 
 class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewModel() {
 
@@ -106,5 +106,4 @@ class AddActivityViewModel(private val repository: BarUrSideRepository) : ViewMo
         val endTime = convertStringToTimestamp(endTime.value!!).time
         return startTime < endTime
     }
-
 }

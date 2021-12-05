@@ -3,10 +3,16 @@ package com.mingyuwu.barurside.util
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.Constants.TEMP_DIRECTORY
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.data.Result
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -15,8 +21,9 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import kotlin.math.cos
-
 
 object Util {
 
@@ -33,10 +40,6 @@ object Util {
             Logger.d("$resourceId IllegalAccessException: $e")
             ""
         }
-    }
-
-    fun getColor(resourceId: Int): Int {
-        return BarUrSideApplication.instance.getColor(resourceId)
     }
 
     fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap {
@@ -82,6 +85,12 @@ object Util {
         return path.path
     }
 
+    fun getDiffMinute(date: Timestamp): Long {
+        val current = Timestamp(System.currentTimeMillis())
+        val diff = current.time - date.time
+        return TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS)
+    }
+
     fun getDiffHour(date: Timestamp): Long {
         val current = Timestamp(System.currentTimeMillis())
         val diff = current.time - date.time
@@ -92,12 +101,6 @@ object Util {
         val current = Timestamp(System.currentTimeMillis())
         val diff = current.time - date.time
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
-    }
-
-    fun getDiffMinute(date: Timestamp): Long {
-        val current = Timestamp(System.currentTimeMillis())
-        val diff = current.time - date.time
-        return TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS)
     }
 
     fun convertStringToTimestamp(time: String): Timestamp {
@@ -128,5 +131,127 @@ object Util {
 
         return listOf(minLat, maxLat, minLng, maxLng)
     }
+
+    suspend fun <T : Any> T.getResult(source: Task<*>): Result<T?> =
+        suspendCoroutine { continuation ->
+            source.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+
+                    when (val result = task.result) {
+                        is QuerySnapshot -> {
+                            if (result.isEmpty) {
+                                continuation.resume(Result.Success(null))
+                            } else {
+                                continuation.resume(
+                                    Result.Success(result.toObjects(this::class.java)[0])
+                                )
+                            }
+                        }
+                        is DocumentSnapshot -> {
+                            continuation.resume(Result.Success(result.toObject(this::class.java)))
+                        }
+                    }
+
+                } else {
+                    when (val exception = task.exception) {
+                        null -> continuation.resume(
+                            Result.Fail(getString(R.string.fail))
+                        )
+                        else -> {
+                            Logger.w(
+                                "[${this::class.simpleName}] Error getting documents. ${exception.message}"
+                            )
+                            continuation.resume(Result.Error(exception))
+                        }
+                    }
+                }
+            }
+        }
+
+    suspend fun <T : Any> T.getListResult(source: Task<QuerySnapshot>): Result<List<T>> =
+        suspendCoroutine { continuation ->
+            source.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+
+                    if (task.result == null || task.result!!.isEmpty) {
+                        continuation.resume(Result.Success(listOf()))
+                    } else {
+                        continuation.resume(Result.Success(task.result!!.toObjects(this::class.java)))
+                    }
+
+                } else {
+                    when (val exception = task.exception) {
+
+                        null -> continuation.resume(Result.Fail(getString(R.string.fail)))
+
+                        else -> {
+                            Logger.w(
+                                "[${this::class.simpleName}] Error getting documents. ${exception.message}"
+                            )
+                            continuation.resume(Result.Error(exception))
+                        }
+                    }
+                }
+            }
+        }
+
+    fun <T : Any> T.getLiveDataResult(ref: Query): MutableLiveData<T> {
+        val liveData = MutableLiveData<T>()
+
+        ref.addSnapshotListener { snapshot, exception ->
+
+            exception?.let {
+                Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
+            }
+
+            for (document in snapshot!!) {
+                val venue = document.toObject(this::class.java)
+                liveData.value = venue
+            }
+
+            liveData.value = liveData.value
+        }
+
+        Logger.d("[${this::class.simpleName}] return $liveData")
+
+        return liveData
+    }
+
+    fun <T : Any> T.getLiveDataListResult(ref: Query): MutableLiveData<List<T>> {
+        val liveData = MutableLiveData<List<T>>()
+
+        ref.addSnapshotListener { snapshot, exception ->
+
+            exception?.let {
+                Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
+            }
+                val list = mutableListOf<T>()
+                for (document in snapshot!!) {
+                    val data = document.toObject(this::class.java)
+                    list.add(data)
+                }
+
+                liveData.value = list
+        }
+
+        return liveData
+    }
+
+    suspend fun Task<*>.taskSuccessReturn(ifSuccess: Boolean): Result<Boolean> =
+        suspendCoroutine { continuation ->
+            addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    continuation.resume(Result.Success(ifSuccess))
+                } else {
+                    when (val exception = task.exception) {
+                        null -> continuation.resume(Result.Fail(Util.getString(R.string.fail)))
+                        else -> {
+                            Logger.d("[${this::class.simpleName}] Error getting documents. ${exception.message}")
+                            continuation.resume(Result.Error(exception))
+                        }
+                    }
+                }
+            }
+        }
 
 }

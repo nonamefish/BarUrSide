@@ -14,7 +14,10 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getVenue(id)
     }
 
-    override fun getRatingByObject(id: String, isVenue: Boolean): MutableLiveData<List<RatingInfo>> {
+    override fun getRatingByObject(
+        id: String,
+        isVenue: Boolean
+    ): MutableLiveData<List<RatingInfo>> {
         return remoteDataSource.getRatingByObject(id, isVenue)
     }
 
@@ -39,8 +42,8 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.uploadPhoto(storageRef, userId, type, localImage)
     }
 
-    override suspend fun getFriend(frds: List<String>): Result<List<User>> {
-        return remoteDataSource.getFriend(frds)
+    override suspend fun getUsersResult(frds: List<String>): Result<List<User>> {
+        return remoteDataSource.getUsersResult(frds)
     }
 
     override suspend fun getMenu(venueId: String): Result<List<Drink>> {
@@ -76,10 +79,6 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getVenueByLocation(minLat, maxLat, minLng, maxLng)
     }
 
-    override suspend fun getDrinkByRating(id: String): Result<Drink> {
-        return remoteDataSource.getDrinkByRating(id)
-    }
-
     override suspend fun getVenueBySearch(search: String): Result<List<Venue>> {
         return remoteDataSource.getVenueBySearch(search)
     }
@@ -108,7 +107,7 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getDrinkBySearch(search)
     }
 
-    override suspend fun addCollect(collect: Collect): Result<Boolean>{
+    override suspend fun addCollect(collect: Collect): Result<Boolean> {
         return remoteDataSource.addCollect(collect)
     }
 
@@ -144,15 +143,22 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getRatingByFriends(userId)
     }
 
-    override suspend fun postActivity(activity: Activity,notification: Notification): Result<Boolean> {
-        return remoteDataSource.postActivity(activity,notification)
+    override suspend fun postActivity(
+        activity: Activity,
+        notification: Notification
+    ): Result<Boolean> {
+        return remoteDataSource.postActivity(activity, notification)
     }
 
     override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> {
-        return remoteDataSource.modifyActivity(activityId,userId)
+        return remoteDataSource.modifyActivity(activityId, userId)
     }
 
-    override suspend fun bookActivity(activityId: String, userId: String, notification: Notification): Result<Boolean> {
+    override suspend fun bookActivity(
+        activityId: String,
+        userId: String,
+        notification: Notification
+    ): Result<Boolean> {
         return remoteDataSource.bookActivity(activityId, userId, notification)
     }
 
@@ -169,7 +175,7 @@ class DefaultBarUrSideRepository(
     }
 
     override suspend fun replyAddFriend(notify: Notification, reply: Boolean): Result<Boolean> {
-        return remoteDataSource.replyAddFriend(notify,reply)
+        return remoteDataSource.replyAddFriend(notify, reply)
     }
 
     override suspend fun unfriend(ids: List<String>): Result<Boolean> {
@@ -192,7 +198,7 @@ class DefaultBarUrSideRepository(
         return remoteDataSource.getNotificationChange(userId)
     }
 
-    override suspend fun getActivityById(activityId: String): Result<Activity> {
+    override suspend fun getActivityById(activityId: String): Result<Activity?> {
         return remoteDataSource.getActivityById(activityId)
     }
 }

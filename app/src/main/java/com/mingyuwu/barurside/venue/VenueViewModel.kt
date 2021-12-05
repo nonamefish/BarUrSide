@@ -116,7 +116,6 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
         }
     }
 
-
     fun setImages(rtgs: List<RatingInfo>) {
 
         val list = mutableListOf<String>()

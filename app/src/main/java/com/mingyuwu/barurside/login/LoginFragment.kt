@@ -19,7 +19,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.mingyuwu.barurside.BarUrSideApplication
-import com.mingyuwu.barurside.Constants.RC_SIGN_IN
+import com.mingyuwu.barurside.Constants.REQUEST_SIGN_IN
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
@@ -28,7 +28,6 @@ import com.mingyuwu.barurside.databinding.FragmentLoginBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.util.Logger
 
-
 class LoginFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
@@ -36,7 +35,8 @@ class LoginFragment : Fragment() {
     val viewModel by viewModels<LoginViewModel> { getVmFactory() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -49,12 +49,17 @@ class LoginFragment : Fragment() {
         }
 
         // after login navigate to start destination
-        viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                findNavController().navigate(MainNavigationDirections.navigateToActivityFragment())
-                viewModel.onLeft()
+        viewModel.navigateToDetail.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToActivityFragment()
+                    )
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         return binding.root
     }
@@ -67,21 +72,20 @@ class LoginFragment : Fragment() {
 
         val googleSignInClient = GoogleSignIn.getClient(this.requireActivity(), gso)
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        startActivityForResult(signInIntent, REQUEST_SIGN_IN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == REQUEST_SIGN_IN) {
 
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
 
                 account.email?.let {
-                    UserManager.userToken = account.idToken
-                    firebaseAuthWithGoogle(UserManager.userToken!!, account)
+                    firebaseAuthWithGoogle(account.idToken, account)
                 }
                 Logger.i("google signInResult successful")
             } catch (e: ApiException) {
@@ -128,5 +132,4 @@ class LoginFragment : Fragment() {
         viewModel.getUserData(account.email!!)
         (requireActivity() as MainActivity).onGetUserDataFinished()
     }
-
 }

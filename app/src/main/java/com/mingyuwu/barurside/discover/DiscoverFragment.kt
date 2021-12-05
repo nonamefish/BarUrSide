@@ -1,17 +1,17 @@
 package com.mingyuwu.barurside.discover
 
-import com.mingyuwu.barurside.R
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.FragmentDiscoverBinding
@@ -22,7 +22,8 @@ class DiscoverFragment : Fragment() {
     private val viewModel by viewModels<DiscoverViewModel> { getVmFactory() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -30,7 +31,7 @@ class DiscoverFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        //set spinner type and adapter
+        // set spinner type and adapter
         val adapter = ArrayAdapter.createFromResource(
             binding.root.context,
             R.array.search_type,
@@ -40,7 +41,10 @@ class DiscoverFragment : Fragment() {
         binding.spinnerSearchType.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
                 ) {
                     viewModel.searchType.value = when (position) {
                         0 -> false
@@ -58,102 +62,116 @@ class DiscoverFragment : Fragment() {
         }
 
         // observe search type
-        viewModel.searchType.observe(viewLifecycleOwner, Observer {
-            binding.autoDiscoverFilter.setText("")
-            viewModel.searchInfo.value = null
-        })
+        viewModel.searchType.observe(
+            viewLifecycleOwner,
+            Observer {
+                binding.autoDiscoverFilter.setText("")
+                viewModel.searchInfo.value = null
+            }
+        )
 
         // search venue after autocompleted text
-        viewModel.searchText.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                if (it.isNotEmpty()) {
-                    if (viewModel.searchInfo.value == null) {
-                        when (viewModel.searchType.value) {
-                            true -> viewModel.getDrinkBySearch(it)
-                            false -> viewModel.getVenueBySearch(it)
+        viewModel.searchText.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    if (it.isNotEmpty()) {
+                        if (viewModel.searchInfo.value == null) {
+                            when (viewModel.searchType.value) {
+                                true -> viewModel.getDrinkBySearch(it)
+                                false -> viewModel.getVenueBySearch(it)
+                            }
                         }
+                    } else {
+                        viewModel.searchInfo.value = null
                     }
-                } else {
-                    viewModel.searchInfo.value = null
                 }
             }
-        })
+        )
 
         // search info: set auto completed text adapter
-        viewModel.searchInfo.observe(viewLifecycleOwner, Observer {
+        viewModel.searchInfo.observe(
+            viewLifecycleOwner,
+            Observer {
 
-            it?.let {
+                it?.let {
 
-                val list: List<String>?
-                val id: List<String>?
+                    val list: List<String>?
+                    val id: List<String>?
 
-                // set autocomplete hint list
-                when (it[0]) {
-                    is Drink -> {
-                        list = (it as List<Drink>).map { drink -> drink.name }
-                        id = it.map { drink -> drink.id }
+                    // set autocomplete hint list
+                    when (it[0]) {
+                        is Drink -> {
+                            list = (it as List<Drink>).map { drink -> drink.name }
+                            id = it.map { drink -> drink.id }
+                        }
+                        is Venue -> {
+                            list = (it as List<Venue>).map { venue -> venue.name }
+                            id = it.map { venue -> venue.id }
+                        }
+                        else -> {
+                            list = listOf()
+                            id = listOf()
+                        }
                     }
-                    is Venue -> {
-                        list = (it as List<Venue>).map { venue -> venue.name }
-                        id = it.map { venue -> venue.id }
-                    }
-                    else -> {
-                        list = listOf()
-                        id = listOf()
+
+                    // set adapter
+                    val filterAdapter = ArrayAdapter(
+                        binding.root.context,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        list,
+                    )
+                    binding.autoDiscoverFilter.setAdapter(filterAdapter)
+
+                    // auto complete text click listener
+                    binding.autoDiscoverFilter.setOnItemClickListener { parent, _, position, _ ->
+                        val selected = parent.getItemAtPosition(position)
+                        val pos = list.indexOf(selected)
+                        binding.autoDiscoverFilter.setText("")
+
+                        // navigate
+                        viewModel.navigateToObject(id[pos])
                     }
                 }
-
-                // set adapter
-                val filterAdapter = ArrayAdapter(
-                    binding.root.context,
-                    android.R.layout.simple_spinner_dropdown_item,
-                    list,
-                )
-                binding.autoDiscoverFilter.setAdapter(filterAdapter)
-
-                // auto complete text click listener
-                binding.autoDiscoverFilter.setOnItemClickListener { parent, _, position, _ ->
-                    val selected = parent.getItemAtPosition(position)
-                    val pos = list.indexOf(selected)
-                    binding.autoDiscoverFilter.setText("")
-
-                    // navigate
-                    viewModel.navigateToObject(id[pos])
-                }
-
             }
-        })
+        )
 
         // navigate to object info
-        viewModel.navigateToObject.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                when (viewModel.searchType.value) {
-                    true -> {
-                        findNavController().navigate(
-                            MainNavigationDirections.navigateToDrinkFragment(it)
-                        )
+        viewModel.navigateToObject.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    when (viewModel.searchType.value) {
+                        true -> {
+                            findNavController().navigate(
+                                MainNavigationDirections.navigateToDrinkFragment(it)
+                            )
+                        }
+                        false -> {
+                            findNavController().navigate(
+                                MainNavigationDirections.navigateToVenueFragment(it)
+                            )
+                        }
                     }
-                    false -> {
-                        findNavController().navigate(
-                            MainNavigationDirections.navigateToVenueFragment(it)
-                        )
-                    }
+                    viewModel.onLeft()
                 }
-                viewModel.onLeft()
             }
-        })
+        )
 
         // navigate to theme
-        viewModel.navigateToTheme.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                findNavController().navigate(
-                    MainNavigationDirections.navigateToDiscoverDetailFragment(
-                        it, null, null
+        viewModel.navigateToTheme.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToDiscoverDetailFragment(
+                            it, null, null
+                        )
                     )
-                )
-                viewModel.onLeft()
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         return binding.root
     }

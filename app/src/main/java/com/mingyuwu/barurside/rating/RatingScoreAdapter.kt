@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.databinding.ItemRatingScoreBinding
 
-class RatingScoreAdapter (val width: Int, val height: Int) :
+class RatingScoreAdapter(val width: Int, val height: Int) :
     ListAdapter<ScoreStatus, RatingScoreAdapter.RatingScoreViewHolder>(DiffCallback) {
 
     class RatingScoreViewHolder(private var binding: ItemRatingScoreBinding) :
@@ -44,8 +44,4 @@ class RatingScoreAdapter (val width: Int, val height: Int) :
         val starStatus = getItem(position)
         holder.bind(starStatus)
     }
-
 }
-
-
-

@@ -22,7 +22,6 @@ import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.util.Util
 
-
 class FilterFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentFilterBinding
@@ -34,7 +33,8 @@ class FilterFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
@@ -55,7 +55,7 @@ class FilterFragment : BottomSheetDialogFragment() {
                 }
                 viewModel.navigateToResult()
             } else {
-                showAddUncompleted()  // remind user some filed haven't set
+                showAddUncompleted() // remind user some filed haven't set
             }
         }
 
@@ -74,18 +74,21 @@ class FilterFragment : BottomSheetDialogFragment() {
         }
 
         // navigate to filter result
-        viewModel.navigateToResult.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                findNavController().navigate(
-                    MainNavigationDirections.navigateToDiscoverDetailFragment(
-                        Theme.MAP_FILTER,
-                        null,
-                        it
+        viewModel.navigateToResult.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(
+                        MainNavigationDirections.navigateToDiscoverDetailFragment(
+                            Theme.MAP_FILTER,
+                            null,
+                            it
+                        )
                     )
-                )
-                viewModel.onLeft()
+                    viewModel.onLeft()
+                }
             }
-        })
+        )
 
         return binding.root
     }
@@ -109,5 +112,4 @@ class FilterFragment : BottomSheetDialogFragment() {
         layoutParameter?.width = 800
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
-
 }

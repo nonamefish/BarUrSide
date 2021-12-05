@@ -3,7 +3,6 @@ package com.mingyuwu.barurside.util
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.util.Util.getString
 
-
 enum class CurrentFragmentType(val value: String?) {
     ACTIVITY(getString(R.string.activity_title)),
     ADD_ACTIVITY(getString(R.string.add_activity_tile)),

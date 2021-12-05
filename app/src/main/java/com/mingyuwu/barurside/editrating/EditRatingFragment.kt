@@ -1,6 +1,5 @@
 package com.mingyuwu.barurside.editrating
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -22,20 +21,21 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.mingyuwu.barurside.Constants.REQUEST_CHOOSE_IMAGE
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.ext.isPermissionGranted
+import com.mingyuwu.barurside.ext.requestPermission
+import com.mingyuwu.barurside.util.AppPermission
 import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.getResizedBitmap
 import com.mingyuwu.barurside.util.Util.randomName
 import com.mingyuwu.barurside.util.Util.saveBitmap
-import com.permissionx.guolindev.PermissionX
 
 class EditRatingFragment : Fragment() {
 
-    private var photoPermissionGranted = false
     private lateinit var binding: FragmentEditRatingBinding
     private val viewModel by viewModels<EditRatingViewModel> {
         getVmFactory(
@@ -44,9 +44,10 @@ class EditRatingFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_edit_rating, container, false
@@ -72,26 +73,26 @@ class EditRatingFragment : Fragment() {
         }
 
         // viewModel observer
-        viewModel.objectId.observe(viewLifecycleOwner, Observer {
+        viewModel.objectId.observe(viewLifecycleOwner, {
             editRatingAdapter.submitList(it)
             editRatingAdapter.notifyDataSetChanged()
         })
 
         // click add photo button
-        viewModel.isUploadImgBtn.observe(viewLifecycleOwner, Observer {
-            if (photoPermissionGranted) {
+        viewModel.isUploadImgBtn.observe(viewLifecycleOwner, {
+            if (isPermissionGranted(AppPermission.ReadExternalStorage)) {
                 chooseImage(binding.root.context)
             } else {
-                getPhotoPermission()
+                requestPermission(AppPermission.ReadExternalStorage)
+                chooseImage(binding.root.context)
             }
         })
 
         // get friend list
-        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
+        viewModel.user.observe(viewLifecycleOwner, { user ->
             user.friends?.let {
-                viewModel.getFriendList(user)
+                viewModel.getUsersResultList(user)
             }
-
         })
 
         // set post rating button click listener
@@ -107,7 +108,7 @@ class EditRatingFragment : Fragment() {
         }
 
         // leave rating and to previous view
-        viewModel.leave.observe(viewLifecycleOwner, Observer {
+        viewModel.leave.observe(viewLifecycleOwner, {
             it?.let {
                 alertDialog!!.dismiss()
                 findNavController().navigateUp()
@@ -118,41 +119,6 @@ class EditRatingFragment : Fragment() {
         return binding.root
     }
 
-    private fun getPhotoPermission() {
-        PermissionX.init(activity)
-            .permissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-            .onExplainRequestReason { scope, deniedList ->
-                scope.showRequestReasonDialog(
-                    deniedList,
-                    Util.getString(R.string.permission_camera),
-                    Util.getString(R.string.permission_confirm),
-                    Util.getString(R.string.permission_reject)
-                )
-            }
-            .onForwardToSettings { scope, deniedList ->
-                scope.showForwardToSettingsDialog(
-                    deniedList,
-                    Util.getString(R.string.permission_camera),
-                    Util.getString(R.string.permission_confirm),
-                    Util.getString(R.string.permission_reject)
-                )
-            }
-            .request { allGranted, _, deniedList ->
-                if (allGranted) {
-                    photoPermissionGranted = true
-                    chooseImage(binding.root.context)
-
-                } else {
-                    Toast.makeText(
-                        binding.root.context,
-                        getString(R.string.permission_reject_toast, deniedList),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-    }
 
     private fun chooseImage(context: Context) {
 
@@ -175,7 +141,7 @@ class EditRatingFragment : Fragment() {
                     Intent.ACTION_PICK,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 )
-                startActivityForResult(pickPhoto, 1)
+                startActivityForResult(pickPhoto, REQUEST_CHOOSE_IMAGE)
             } else if (optionsMenu[i] == Util.getString(R.string.exit)) {
                 dialogInterface.dismiss()
             }
@@ -189,28 +155,35 @@ class EditRatingFragment : Fragment() {
 
         if (resultCode != Activity.RESULT_CANCELED) {
             when (requestCode) {
-                1 -> if (resultCode == Activity.RESULT_OK && data != null) {
-                    val selectedImage: Uri? = data.data
+                REQUEST_CHOOSE_IMAGE ->
+                    if (resultCode == Activity.RESULT_OK && data != null) {
+                        val selectedImage: Uri? = data.data
 
-                    if (selectedImage != null) {
-                        val inputStream = context?.contentResolver?.openInputStream(selectedImage)
-                        val bitMap = BitmapFactory.decodeStream(inputStream)
-                        val fileName = "${randomName(20)}.jpg"
+                        if (selectedImage != null) {
 
-                        // resize image and save into another img
-                        bitMap?.let {
-                            val resizeImg = getResizedBitmap(bitMap, 1000)
-                            val pathSave = saveBitmap(resizeImg, fileName)
-                            addImageToRecyclerView(resizeImg, pathSave)
+                            val inputStream =
+                                context?.contentResolver?.openInputStream(selectedImage)
+                            val bitMap = BitmapFactory.decodeStream(inputStream)
+                            val fileName = "${randomName(20)}.jpg"
+
+                            // resize image and save into another img
+                            bitMap?.let {
+
+                                val resizeImg = getResizedBitmap(bitMap, 1000)
+                                val pathSave = saveBitmap(resizeImg, fileName)
+
+                                addImageToRecyclerView(resizeImg, pathSave)
+                            }
                         }
                     }
-                }
             }
         }
     }
 
     private fun addImageToRecyclerView(bitmap: Bitmap?, url: String) {
-        viewModel.addUploadImg(viewModel.clickPosition.value!!, bitmap, url)
+        viewModel.clickPosition.value?.let {
+            viewModel.addUploadImg(it, bitmap, url)
+        }
     }
 
     private fun addDrinkRating() {
@@ -229,11 +202,17 @@ class EditRatingFragment : Fragment() {
         )
         spinner.adapter = adapter
 
-
         // set OK button for alert dialog
         mBuilder.setPositiveButton(Util.getString(R.string.add_drink_confirm)) { dialog, _ ->
+
             val selectedPosition = spinner.selectedItemPosition
-            viewModel.addNewRating(viewModel.menu.value!![selectedPosition])
+
+            viewModel.menu.value?.let { it[selectedPosition] }?.let {
+                viewModel.addNewRating(
+                    it
+                )
+            }
+
             viewModel.removeMenuItem(selectedPosition)
 
             dialog.dismiss()
@@ -282,4 +261,3 @@ class EditRatingFragment : Fragment() {
     }
 
 }
-
