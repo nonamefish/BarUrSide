@@ -18,11 +18,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.mingyuwu.barurside.Constants.REQUEST_CHOOSE_IMAGE
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentAddDrinkBinding
@@ -31,14 +32,15 @@ import com.mingyuwu.barurside.ext.isPermissionGranted
 import com.mingyuwu.barurside.ext.requestPermission
 import com.mingyuwu.barurside.util.AppPermission
 import com.mingyuwu.barurside.util.Category
-import com.mingyuwu.barurside.util.Logger
 import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.getResizedBitmap
 import com.mingyuwu.barurside.util.Util.randomName
+import com.mingyuwu.barurside.util.Util.saveBitmap
 
 class AddDrinkFragment : Fragment() {
 
     private lateinit var binding: FragmentAddDrinkBinding
+    private val startForGallery = registerStartForGallery()
     private val viewModel by viewModels<AddDrinkViewModel> {
         getVmFactory(
             AddDrinkFragmentArgs.fromBundle(requireArguments()).id
@@ -146,10 +148,10 @@ class AddDrinkFragment : Fragment() {
                 if (optionsMenu[i] == Util.getString(R.string.from_gallery)) {
                     // choose from  external storage
                     val pickPhoto = Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                        Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                     )
-                    startActivityForResult(pickPhoto, REQUEST_CHOOSE_IMAGE)
+
+                    startForGallery.launch(pickPhoto)
                 } else if (optionsMenu[i] == Util.getString(R.string.exit)) {
                     dialogInterface.dismiss()
                 }
@@ -165,27 +167,25 @@ class AddDrinkFragment : Fragment() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private fun registerStartForGallery(): ActivityResultLauncher<Intent> {
 
-        if (resultCode != Activity.RESULT_CANCELED) {
-            when (requestCode) {
-                REQUEST_CHOOSE_IMAGE -> if (resultCode == Activity.RESULT_OK && data != null) {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val resultCode = result.resultCode
+            val data = result.data
+            if (resultCode == Activity.RESULT_OK && data != null) {
 
-                    val selectedImage: Uri? = data.data
+                val selectedImage: Uri? = data.data
 
-                    if (selectedImage != null) {
-                        val inputStream =
-                            context?.contentResolver?.openInputStream(selectedImage)
-                        val bitMap = BitmapFactory.decodeStream(inputStream)
-                        val fileName = "${randomName(20)}.jpg"
+                if (selectedImage != null) {
+                    val inputStream = context?.contentResolver?.openInputStream(selectedImage)
+                    val bitMap = BitmapFactory.decodeStream(inputStream)
+                    val fileName = "${randomName(20)}.jpg"
 
-                        // resize image and save into another img
-                        bitMap?.let {
-                            val resizeImg = getResizedBitmap(bitMap, 1000)
-                            val pathSave = Util.saveBitmap(resizeImg, fileName)
-                            addImageToRecyclerView(resizeImg, pathSave)
-                        }
+                    // resize image and save into another img
+                    bitMap?.let {
+                        val resizeImg = getResizedBitmap(bitMap, 1000)
+                        val pathSave = saveBitmap(resizeImg, fileName)
+                        addImageToRecyclerView(resizeImg, pathSave)
                     }
                 }
             }

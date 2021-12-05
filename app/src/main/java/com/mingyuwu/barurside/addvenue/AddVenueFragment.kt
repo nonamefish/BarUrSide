@@ -16,6 +16,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,8 +30,6 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.mingyuwu.barurside.BarUrSideApplication
-import com.mingyuwu.barurside.Constants.REQUEST_MAP_AUTOCOMPLETE
-import com.mingyuwu.barurside.Constants.REQUEST_CHOOSE_IMAGE
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentAddVenueBinding
@@ -45,6 +45,8 @@ import java.util.*
 class AddVenueFragment : Fragment() {
 
     private lateinit var binding: FragmentAddVenueBinding
+    private val startForGallery = registerStartForGallery()
+    private val startForMapAutoComplete = registerStartForMapAutoComplete()
     private val calender = Calendar.getInstance()
     private val viewModel by viewModels<AddVenueViewModel> { getVmFactory() }
 
@@ -89,7 +91,7 @@ class AddVenueFragment : Fragment() {
         // address edit text click listener
         binding.txtVenueAddress.setOnClickListener {
             // start activity result
-            startActivityForResult(intent, REQUEST_MAP_AUTOCOMPLETE)
+            startForMapAutoComplete.launch(intent)
         }
 
         // set spinner style and adapter
@@ -229,7 +231,7 @@ class AddVenueFragment : Fragment() {
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                     )
 
-                    startActivityForResult(pickPhoto, REQUEST_CHOOSE_IMAGE)
+                    startForGallery.launch(pickPhoto)
                 } else if (optionsMenu[i] == Util.getString(R.string.exit)) {
                     dialogInterface.dismiss()
                 }
@@ -244,59 +246,60 @@ class AddVenueFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private fun registerStartForGallery(): ActivityResultLauncher<Intent> {
 
-        if (resultCode != Activity.RESULT_CANCELED) {
-            when (requestCode) {
-                REQUEST_CHOOSE_IMAGE ->
-                    if (resultCode == Activity.RESULT_OK && data != null) {
-                        val selectedImage: Uri? = data.data
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val resultCode = result.resultCode
+            val data = result.data
+            if (resultCode == Activity.RESULT_OK && data != null) {
 
-                        if (selectedImage != null) {
+                val selectedImage: Uri? = data.data
 
-                            val inputStream =
-                                context?.contentResolver?.openInputStream(selectedImage)
-                            val bitMap = BitmapFactory.decodeStream(inputStream)
-                            val fileName = "${Util.randomName(20)}.jpg"
+                if (selectedImage != null) {
+                    val inputStream = context?.contentResolver?.openInputStream(selectedImage)
+                    val bitMap = BitmapFactory.decodeStream(inputStream)
+                    val fileName = "${Util.randomName(20)}.jpg"
 
-                            // resize image and save into another img
-                            bitMap?.let {
-
-                                val resizeImg = Util.getResizedBitmap(bitMap, 1000)
-                                val pathSave = Util.saveBitmap(resizeImg, fileName)
-
-                                addImageToRecyclerView(resizeImg, pathSave)
-                            }
-                        }
+                    // resize image and save into another img
+                    bitMap?.let {
+                        val resizeImg = Util.getResizedBitmap(bitMap, 1000)
+                        val pathSave = Util.saveBitmap(resizeImg, fileName)
+                        addImageToRecyclerView(resizeImg, pathSave)
                     }
-                REQUEST_MAP_AUTOCOMPLETE -> {
-                    if (resultCode == Activity.RESULT_OK) {
+                }
+            }
+        }
+    }
 
-                        data?.let {
+    private fun registerStartForMapAutoComplete(): ActivityResultLauncher<Intent> {
 
-                            // When success initialize place
-                            val place = Autocomplete.getPlaceFromIntent(it)
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val resultCode = result.resultCode
+            val data = result.data
+            if (resultCode == Activity.RESULT_OK) {
 
-                            // set address on edittext
-                            viewModel.address.value = place.address
-                            viewModel.latitude.value = place.latLng?.latitude
-                            viewModel.longtitude.value = place.latLng?.longitude
-                        }
+                data?.let {
 
-                    } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                    // When success initialize place
+                    val place = Autocomplete.getPlaceFromIntent(it)
 
-                        data?.let {
+                    // set address on edittext
+                    viewModel.address.value = place.address
+                    viewModel.latitude.value = place.latLng?.latitude
+                    viewModel.longtitude.value = place.latLng?.longitude
+                }
 
-                            val status: Status = Autocomplete.getStatusFromIntent(data)
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
 
-                            Toast.makeText(
-                                BarUrSideApplication.appContext,
-                                "message: ${status.statusMessage}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+                data?.let {
+
+                    val status: Status = Autocomplete.getStatusFromIntent(data)
+
+                    Toast.makeText(
+                        BarUrSideApplication.appContext,
+                        "message: ${status.statusMessage}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

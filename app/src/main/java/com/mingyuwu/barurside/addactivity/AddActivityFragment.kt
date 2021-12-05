@@ -1,9 +1,7 @@
 package com.mingyuwu.barurside.addactivity
 
-import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.app.DatePickerDialog as DatePickerDialog1
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Color
@@ -15,11 +13,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.Places
@@ -28,7 +27,6 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.mingyuwu.barurside.BarUrSideApplication
-import com.mingyuwu.barurside.Constants.REQUEST_MAP_AUTOCOMPLETE
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentAddActivityBinding
@@ -36,20 +34,21 @@ import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.convertStringToTimestamp
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
+import android.app.DatePickerDialog as DatePickerDialog1
 
 class AddActivityFragment : Fragment() {
 
     private val calender = Calendar.getInstance()
     private lateinit var binding: FragmentAddActivityBinding
+    private val startForMapAutoComplete = registerStartForMapAutoComplete()
     private val viewModel by viewModels<AddActivityViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -73,7 +72,7 @@ class AddActivityFragment : Fragment() {
         // address edit text click listener
         binding.addActivityAddress.setOnClickListener {
             // Set the fields to specify which types of place data to
-            startActivityForResult(intent, REQUEST_MAP_AUTOCOMPLETE)
+            startForMapAutoComplete.launch(intent)
         }
 
         // call datePicker for set activity start time
@@ -111,8 +110,7 @@ class AddActivityFragment : Fragment() {
 
         // after post activity then navigate to activity fragment
         viewModel.navigateToDetail.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     alertDialog!!.dismiss()
                     findNavController().navigate(
@@ -186,27 +184,29 @@ class AddActivityFragment : Fragment() {
         datetime.value = "${datetime.value} ${time.format(calender.time)}"
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_MAP_AUTOCOMPLETE) {
-            if (resultCode == RESULT_OK) {
-                // When success initialize place
-                val place = Autocomplete.getPlaceFromIntent(data)
+    private fun registerStartForMapAutoComplete(): ActivityResultLauncher<Intent> {
 
-                // set address on edittext
-                binding.addActivityAddress.text = place.address
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                val status: Status = Autocomplete.getStatusFromIntent(data)
-                Toast.makeText(
-                    BarUrSideApplication.appContext,
-                    "message: ${status.statusMessage!!}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-                Toast.makeText(
-                    BarUrSideApplication.appContext, "message: RESULT_CANCELED", Toast.LENGTH_SHORT
-                ).show()
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val resultCode = result.resultCode
+            val data = result.data
+            if (data != null) {
+                when (resultCode) {
+                    RESULT_OK -> {
+                        // When success initialize place
+                        val place = Autocomplete.getPlaceFromIntent(data)
+
+                        // set address on edittext
+                        binding.addActivityAddress.text = place.address
+                    }
+                    AutocompleteActivity.RESULT_ERROR -> {
+                        val status: Status = Autocomplete.getStatusFromIntent(data)
+                        Toast.makeText(
+                            BarUrSideApplication.appContext,
+                            "message: ${status.statusMessage!!}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
         }
     }
@@ -218,15 +218,17 @@ class AddActivityFragment : Fragment() {
         alertDialog.setView(mView)
         val dialog = alertDialog.create()
 
-        // set dialog content
-        val txtDialog = mView!!.findViewById<TextView>(R.id.dialog_content)
-        val titleDialog = mView!!.findViewById<TextView>(R.id.dialog_title)
-        titleDialog.text = title
-        txtDialog.text = content
+        mView?.let{
+            // set dialog content
+            val txtDialog = it.findViewById<TextView>(R.id.dialog_content)
+            val titleDialog = it.findViewById<TextView>(R.id.dialog_title)
+            titleDialog.text = title
+            txtDialog.text = content
 
-        // set button click listener
-        val btDialog = mView!!.findViewById<Button>(R.id.button_confirm)
-        btDialog.setOnClickListener { dialog.dismiss() }
+            // set button click listener
+            val btDialog = it.findViewById<Button>(R.id.button_confirm)
+            btDialog.setOnClickListener { dialog.dismiss() }
+        }
 
         dialog.show()
 

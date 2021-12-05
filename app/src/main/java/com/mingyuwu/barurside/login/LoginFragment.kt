@@ -1,14 +1,16 @@
 package com.mingyuwu.barurside.login
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -19,7 +21,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.mingyuwu.barurside.BarUrSideApplication
-import com.mingyuwu.barurside.Constants.REQUEST_SIGN_IN
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
@@ -32,13 +33,14 @@ class LoginFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentLoginBinding
+    private val startForSignIn = registerStartForSignIn()
     val viewModel by viewModels<LoginViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
 
         auth = Firebase.auth
         binding = FragmentLoginBinding.inflate(inflater, container, false)
@@ -50,8 +52,7 @@ class LoginFragment : Fragment() {
 
         // after login navigate to start destination
         viewModel.navigateToDetail.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     findNavController().navigate(
                         MainNavigationDirections.navigateToActivityFragment()
@@ -72,27 +73,29 @@ class LoginFragment : Fragment() {
 
         val googleSignInClient = GoogleSignIn.getClient(this.requireActivity(), gso)
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, REQUEST_SIGN_IN)
+
+        startForSignIn.launch(signInIntent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private fun registerStartForSignIn(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val resultCode = result.resultCode
+            val data = result.data
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                try {
+                    val account = task.getResult(ApiException::class.java)
 
-        if (requestCode == REQUEST_SIGN_IN) {
-
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-
-                account.email?.let {
-                    firebaseAuthWithGoogle(account.idToken, account)
+                    account.idToken?.let {
+                        firebaseAuthWithGoogle(it, account)
+                    }
+                    Logger.i("google signInResult successful")
+                } catch (e: ApiException) {
+                    Logger.e("google signInResult:failed code=" + e.message)
                 }
-                Logger.i("google signInResult successful")
-            } catch (e: ApiException) {
-                Logger.e("google signInResult:failed code=" + e.message)
+            } else {
+                Logger.d("registered cancel")
             }
-        } else {
-            Logger.d("UnRegistered RequestCode $requestCode")
         }
     }
 
