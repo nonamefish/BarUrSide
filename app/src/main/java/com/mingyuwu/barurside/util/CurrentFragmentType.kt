@@ -14,7 +14,8 @@ enum class CurrentFragmentType(val value: String?) {
     VENUE(getString(R.string.venue_title)),
     EDIT_RATING(getString(R.string.edit_rating_title)),
     MAP(null),
-    PROFILE(getString(R.string.profile_title)),
+    OTHER_PROFILE(getString(R.string.other_profile_title)),
+    USER_PROFILE(getString(R.string.user_profile_title)),
     ALL_RATING(getString(R.string.all_rating_title)),
     LOGIN(null)
 }

@@ -1,8 +1,14 @@
 package com.mingyuwu.barurside
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -17,6 +23,7 @@ import com.mingyuwu.barurside.databinding.ActivityMainBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.profile.ProfileFragmentArgs
 import com.mingyuwu.barurside.util.CurrentFragmentType
 import com.mingyuwu.barurside.util.Logger
 
@@ -44,6 +51,11 @@ class MainActivity : AppCompatActivity() {
                     Theme.NOTIFICATION, null, null
                 )
             )
+        }
+
+        // set report onclick listener
+        binding.imgReport.setOnClickListener{
+            reportUser()
         }
 
         // set toolbar back button on click listener
@@ -132,13 +144,19 @@ class MainActivity : AppCompatActivity() {
             .addOnDestinationChangedListener {
                     navController: NavController,
                     _: NavDestination,
-                    _: Bundle?,
+                    arguments: Bundle?,
                 ->
                 viewModel.currentFragmentType.value = when (navController.currentDestination?.id) {
                     R.id.activityFragment -> CurrentFragmentType.ACTIVITY
                     R.id.addActivityFragment -> CurrentFragmentType.ADD_ACTIVITY
                     R.id.collectFragment -> CurrentFragmentType.COLLECT
-                    R.id.profileFragment -> CurrentFragmentType.PROFILE
+                    R.id.profileFragment -> {
+                        if (arguments?.get("id") == UserManager.user.value?.id) {
+                            CurrentFragmentType.USER_PROFILE
+                        } else {
+                            CurrentFragmentType.OTHER_PROFILE
+                        }
+                    }
                     R.id.discoverFragment -> CurrentFragmentType.DISCOVER
                     R.id.discoverDetailFragment -> CurrentFragmentType.DISCOVER_DETAIL
                     R.id.drinkFragment -> CurrentFragmentType.DRINK
@@ -173,6 +191,34 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )
+    }
+
+    private fun reportUser() {
+        // set alert dialog view
+        val alertDialog = AlertDialog.Builder(binding.root.context)
+        val mView = LayoutInflater.from(this).inflate(R.layout.dialog_rating_uncompleted, null)
+        alertDialog.setView(mView)
+        val dialog = alertDialog.create()
+
+        mView.let{
+            // set dialog content
+            val txtDialog = it.findViewById<TextView>(R.id.dialog_content)
+            val titleDialog = it.findViewById<TextView>(R.id.dialog_title)
+            titleDialog.text = getString(R.string.report_title)
+            txtDialog.text = getString(R.string.report_text_1)
+
+            // set button click listener
+            val btDialog = it.findViewById<Button>(R.id.button_confirm)
+            btDialog.text = getString(R.string.report_confirm)
+            btDialog.setOnClickListener { dialog.dismiss() }
+        }
+
+        dialog.show()
+
+        // set border as transparent
+        val layoutParameter = dialog.window?.attributes
+        layoutParameter?.width = 900
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     private fun handleIntent(intent: Intent) {

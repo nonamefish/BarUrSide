@@ -240,7 +240,7 @@ fun bindIconNotify(constraintLayout: ConstraintLayout, currentFragmentType: Curr
     currentFragmentType?.let {
         if (currentFragmentType in listOf(
                 CurrentFragmentType.ACTIVITY,
-                CurrentFragmentType.PROFILE,
+                CurrentFragmentType.USER_PROFILE,
                 CurrentFragmentType.DISCOVER,
                 CurrentFragmentType.COLLECT
             )
@@ -257,6 +257,7 @@ fun bindIconBack(imageView: ImageView, currentFragmentType: CurrentFragmentType?
     currentFragmentType?.let {
         if (currentFragmentType !in listOf(
                 CurrentFragmentType.DISCOVER_DETAIL,
+                CurrentFragmentType.OTHER_PROFILE,
                 CurrentFragmentType.EDIT_RATING,
                 CurrentFragmentType.ALL_RATING,
                 CurrentFragmentType.DRINK,

@@ -146,6 +146,21 @@
                         </TextView>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <ImageView
+                        android:id="@+id/img_report"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:visibility="@{viewModel.currentFragmentType==CurrentFragmentType.OTHER_PROFILE ? View.VISIBLE : View.GONE}"
+                        android:background="@drawable/ic_outline_info_24"
+                        android:backgroundTint="@color/primaryLightColor"
+                        android:contentDescription="@string/img_notification"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:visibility="gone"/>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.appcompat.widget.Toolbar>
 
