@@ -86,73 +86,55 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun getVenueByFilter(filter: FilterParameter): Result<List<Venue>> =
         suspendCoroutine { continuation ->
+
             val list = mutableListOf<Venue>()
 
-            // filter venue
-            db.collection(PATH_VENUE)
-                .whereIn("style", filter.style ?: listOf())
-                .whereEqualTo("level", filter.level)
-                .get()
-                .addOnCompleteListener { venueTask ->
+            coroutineScope.launch {
+                val venueResult = Venue().getListResult(
+                    db.collection(PATH_VENUE).whereIn("style", filter.style ?: listOf())
+                        .whereEqualTo("level", filter.level).get()
+                )
 
+                if (venueResult is Result.Success) {
+                    val venueList = venueResult.data
                     var venueCnt = 0
-                    if (venueTask.isSuccessful) {
-                        for (document in venueTask.result!!) {
-                            val venue = document.toObject(Venue::class.java)
 
-                            if (filter.category.isNullOrEmpty()) {
-                                list.add(venue)
-                                venueCnt += 1
-                                if (venueCnt == venueTask.result.size()) {
-                                    continuation.resume(Result.Success(list))
+                    if (venueList.size > 0 && !filter.category.isNullOrEmpty()) {
+                        for (venue in venueList) {
+
+                            val drinkResult = Drink().getListResult(
+                                db.collection(PATH_DRINK).whereIn("category", filter.category)
+                                    .whereEqualTo("venueId", venue.id).get()
+                            )
+
+                            if (drinkResult is Result.Success) {
+                                if (drinkResult.data.size > 0) {
+                                    list.add(venue)
                                 }
-                            } else {
+                            }
 
-                                // filter drink category
-                                db
-                                    .collection(PATH_DRINK)
-                                    .whereIn("category", filter.category)
-                                    .whereEqualTo("venueId", venue.id)
-                                    .get()
-                                    .addOnCompleteListener { drinkTask ->
-                                        if (drinkTask.isSuccessful && drinkTask.result.size() > 0) {
-
-                                            list.add(venue)
-                                        }
-                                        Log.d("Ming", "venue: ${venue.name}, venueCnt: $venueCnt")
-                                        venueCnt += 1
-                                        if (venueCnt == venueTask.result.size()) {
-                                            continuation.resume(Result.Success(list))
-                                        }
-                                    }
+                            venueCnt += 1
+                            if (venueCnt == venueList.size) {
+                                continuation.resume(Result.Success(list))
                             }
                         }
                     } else {
-                        venueTask.exception?.let {
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
-                        }
-                        continuation.resume(
-                            Result.Fail(
-                                BarUrSideApplication.instance.getString(
-                                    R.string.fail
-                                )
-                            )
-                        )
+                        continuation.resume(Result.Success(listOf()))
                     }
+                } else {
+                    continuation.resume(
+                        Result.Fail(BarUrSideApplication.instance.getString(R.string.fail)))
                 }
+            }
         }
 
     override fun getRatingByObject(
-        id: String,
-        isVenue: Boolean,
+        id: String, isVenue: Boolean,
     ): MutableLiveData<List<RatingInfo>> {
         val liveData = MutableLiveData<List<RatingInfo>>()
 
         // get rating data
-        db.collection(PATH_RATING)
-            .whereEqualTo("isVenue", isVenue)
-            .whereEqualTo("objectId", id)
+        db.collection(PATH_RATING).whereEqualTo("isVenue", isVenue).whereEqualTo("objectId", id)
             .addSnapshotListener { snapshot, exception ->
 
                 exception?.let {
@@ -214,117 +196,73 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         return liveData
     }
 
-
     override suspend fun getRatingByUser(userId: String): Result<List<RatingInfo>> =
         suspendCoroutine { continuation ->
+            val list = mutableListOf<RatingInfo>()
 
-            FirebaseFirestore.getInstance()
-                .collection(PATH_RATING)
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnCompleteListener { rtgTask ->
-                    if (rtgTask.isSuccessful) {
-                        val list = mutableListOf<RatingInfo>()
+            coroutineScope.launch {
+                // get rating list
+                val rtgResult = RatingInfo().getListResult(
+                    db.collection(PATH_RATING).whereEqualTo("userId", userId).get()
+                )
 
-                        if (rtgTask.result.size() == 0) {
-                            continuation.resume(Result.Success(list))
-                        }
-
-                        for (document in rtgTask.result!!) {
-                            val rating = document.toObject(RatingInfo::class.java)
-
+                if (rtgResult is Result.Success) {
+                    val rtgList = rtgResult.data
+                    if (rtgList.size > 0) {
+                        for (rating in rtgList) {
                             rating.postTimestamp = rating.postDate?.let { Timestamp(it.time) }
 
-                            // get object info : venue
-                            when (rating.isVenue) {
-                                true -> {
-                                    FirebaseFirestore.getInstance()
-                                        .collection(PATH_VENUE)
-                                        .whereEqualTo("id", rating.objectId)
-                                        .get()
-                                        .addOnCompleteListener { task ->
-                                            for (document in task.result!!) {
-                                                val venue = document.toObject(Venue::class.java)
-                                                rating.objectName = venue.name
-                                                if (!venue.images.isNullOrEmpty()) {
-                                                    rating.objectImg =
-                                                        venue.images!![0]
-                                                }
-                                            }
-                                            list.add(rating)
+                            // get rating related object: venue
+                            if (rating.isVenue == true) {
+                                val result = getVenueByIds(listOf(rating.objectId))
+                                if (result is Result.Success && !result.data.isNullOrEmpty()) {
 
-                                            if (document == rtgTask.result!!.last()) {
-                                                continuation.resume(Result.Success(list))
-                                            }
-                                        }
+                                    val venue = result.data
+                                    rating.objectName = venue[0].name
+
+                                    if (!venue[0].images.isNullOrEmpty()) {
+                                        rating.objectImg = venue[0].images!![0]
+                                    }
+
+                                    list.add(rating)
                                 }
-                                // get object info : drink
-                                false -> {
-                                    FirebaseFirestore.getInstance()
-                                        .collection(PATH_DRINK)
-                                        .whereEqualTo("id", rating.objectId)
-                                        .get()
-                                        .addOnCompleteListener { task ->
-                                            for (document in task.result!!) {
-                                                val drink = document.toObject(Drink::class.java)
-                                                rating.objectName = drink.name
-                                                if (!drink.images.isNullOrEmpty()) {
-                                                    rating.objectImg =
-                                                        drink.images!![0]
-                                                }
-                                            }
-                                            list.add(rating)
+                                // get rating related object: drink
+                            } else {
+                                val result = getDrinksByIds(listOf(rating.objectId))
+                                if (result is Result.Success && !result.data.isNullOrEmpty()) {
 
-                                            if (document == rtgTask.result!!.last()) {
-                                                continuation.resume(Result.Success(list))
-                                            }
+                                    val drink = result.data
+                                    rating.objectName = drink[0].name
 
-                                        }
+                                    if (!drink[0].images.isNullOrEmpty()) {
+                                        rating.objectImg = drink[0].images!![0]
+                                    }
+
+                                    list.add(rating)
                                 }
                             }
-
+                            // retuen value
+                            if (rating == rtgList.last()) {
+                                continuation.resume(Result.Success(list))
+                            }
                         }
                     } else {
-                        rtgTask.exception?.let {
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
-                        }
-                        continuation.resume(
-                            Result.Fail(
-                                BarUrSideApplication.instance.getString(
-                                    R.string.fail
-                                )
-                            )
-                        )
+                        continuation.resume(Result.Success(list))
                     }
+                } else {
+                    continuation.resume(
+                        Result.Fail(BarUrSideApplication.instance.getString(R.string.fail)))
                 }
+            }
         }
 
-    override suspend fun postRating(rating: Rating): Result<Boolean> =
-        suspendCoroutine { continuation ->
-            val ratings = db.collection(PATH_RATING)
-            val document = ratings.document()
+    override suspend fun postRating(rating: Rating): Result<Boolean> {
+        val document = db.collection(PATH_RATING).document()
+        rating.id = document.id
+        rating.postDate = Timestamp(System.currentTimeMillis())
 
-            rating.id = document.id
-            rating.postDate = Timestamp(System.currentTimeMillis())
-
-            document.set(Rating.toHashMap(rating))
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        continuation.resume(Result.Success(true))
-                    } else {
-                        task.exception?.let {
-
-                            Logger.w(
-                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                            )
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
-                        }
-                        continuation.resume(Result.Fail(BarUrSideApplication.instance.getString(R.string.fail)))
-                    }
-                }
-        }
+        return document.set(Rating.toHashMap(rating)).taskSuccessReturn(true)
+    }
 
     override suspend fun getCollect(userId: String): Result<List<Collect>> {
         return Collect().getListResult(
@@ -334,8 +272,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun removeCollect(id: String, userId: String): Result<Boolean> =
         suspendCoroutine { continuation ->
-            db.collection(PATH_COLLECT)
-                .whereEqualTo("objectId", id).whereEqualTo("userId", userId)
+            db.collection(PATH_COLLECT).whereEqualTo("objectId", id).whereEqualTo("userId", userId)
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
@@ -355,12 +292,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
         }
 
-
     override suspend fun uploadPhoto(
-        storageRef: StorageReference,
-        userId: String,
-        uploadType: String,
-        localImage: String,
+        storageRef: StorageReference, userId: String, uploadType: String, localImage: String,
     ): Result<String> =
         suspendCoroutine { continuation ->
 
@@ -385,110 +318,67 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         }
 
     override suspend fun updateObjectRating(
-        id: String,
-        isVenue: Boolean,
-        rating: Rating,
-    ): Result<Boolean> =
-        suspendCoroutine { continuation ->
+        id: String, isVenue: Boolean, rating: Rating,
+    ): Result<Boolean> = suspendCoroutine { continuation ->
 
-            when (isVenue) {
-                true -> {
-                    db.collection(PATH_VENUE)
-                        .document(id)
-                        .get()
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
+        coroutineScope.launch {
+            if (isVenue) {
+                // get venue data and update venue rating
+                val result = Venue().getResult(db.collection(PATH_VENUE).document(id).get())
 
-                                var venue = task.result.toObject(Venue::class.java)
-                                val imgs = when (venue?.images) {
-                                    null -> rating?.images
-                                    else -> rating?.images?.plus(venue?.images as List<String>)
-                                }
+                if (result is Result.Success) {
+                    var venue = result.data
+                    val imgs = when (venue?.images) {
+                        null -> rating?.images
+                        else -> rating?.images?.plus(venue?.images as List<String>)
+                    }
 
-                                val newRtg =
-                                    (
-                                            venue?.rtgCount?.times(venue?.avgRating)
-                                                ?.plus(rating!!.rating!!)
-                                            )?.div(venue?.rtgCount!!.plus(1))
+                    val newRtg =
+                        (venue?.rtgCount?.times(venue?.avgRating)?.plus(rating!!.rating!!)
+                                )?.div(venue?.rtgCount!!.plus(1))
 
-                                db.collection(PATH_VENUE)
-                                    .document(id)
-                                    .update(
-                                        mapOf(
-                                            "images" to imgs,
-                                            "avgRating" to newRtg,
-                                            "rtgCount" to venue?.rtgCount!!.plus(1)
-                                        )
-                                    )
+                    continuation.resume(
+                        db.collection(PATH_VENUE).document(id).update(mapOf(
+                            "images" to imgs,
+                            "avgRating" to newRtg,
+                            "rtgCount" to venue?.rtgCount!!.plus(1)
+                        )).taskSuccessReturn(true)
+                    )
 
-                                continuation.resume(Result.Success(true))
-                            } else {
-                                task.exception?.let {
-                                    Logger.w(
-                                        "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                                    )
-                                    continuation.resume(Result.Error(it))
-                                    return@addOnCompleteListener
-                                }
-                                continuation.resume(
-                                    Result.Fail(
-                                        BarUrSideApplication.instance.getString(
-                                            R.string.fail
-                                        )
-                                    )
-                                )
-                            }
-                        }
+                } else {
+                    continuation.resume(
+                        Result.Fail(BarUrSideApplication.instance.getString(R.string.fail))
+                    )
                 }
-                false -> {
-                    db.collection(PATH_DRINK)
-                        .document(id)
-                        .get()
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val drink = task.result.toObject(Venue::class.java)
-                                val newRtg =
-                                    (
-                                            drink?.rtgCount?.times(drink?.avgRating)
-                                                ?.plus(rating!!.rating!!)
-                                            )?.div(drink?.rtgCount!!.plus(1))
 
-                                db.collection(PATH_DRINK)
-                                    .document(id)
-                                    .update(
-                                        mapOf(
-                                            "images" to rating?.images?.plus(drink?.images as List<String>),
-                                            "avgRating" to newRtg,
-                                            "rtgCount" to drink?.rtgCount!!.plus(1)
-                                        )
-                                    )
+            } else {
+                // get drink data and update drink rating
+                val result = Drink().getResult(db.collection(PATH_DRINK).document(id).get())
 
-                                continuation.resume(Result.Success(true))
-                            } else {
-                                task.exception?.let {
-                                    Logger.w(
-                                        "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                                    )
-                                    continuation.resume(Result.Error(it))
-                                    return@addOnCompleteListener
-                                }
-                                continuation.resume(
-                                    Result.Fail(
-                                        BarUrSideApplication.instance.getString(
-                                            R.string.fail
-                                        )
-                                    )
-                                )
-                            }
-                        }
+                if (result is Result.Success) {
+                    val drink = result.data
+                    val newRtg = (drink?.rtgCount?.times(drink?.avgRating)?.plus(rating!!.rating!!)
+                            )?.div(drink?.rtgCount!!.plus(1))
+
+                    continuation.resume(
+                        db.collection(PATH_DRINK).document(id).update(
+                            mapOf(
+                                "images" to rating?.images?.plus(drink?.images as List<String>),
+                                "avgRating" to newRtg,
+                                "rtgCount" to drink?.rtgCount!!.plus(1)
+                            )).taskSuccessReturn(true)
+                    )
+                } else {
+                    continuation.resume(
+                        Result.Fail(BarUrSideApplication.instance.getString(R.string.fail))
+                    )
                 }
             }
         }
+    }
 
     override suspend fun updateUserShare(
-        userId: String,
-        addShareCnt: Int,
-        addShareImgCnt: Int,
+        userId: String, addShareCnt: Int, addShareImgCnt: Int,
     ): Result<Boolean> = suspendCoroutine { continuation ->
         coroutineScope.launch {
             val result = User().getResult(
@@ -498,23 +388,21 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             if (result is Result.Success) {
                 val user = result.data
 
-                db.collection(PATH_USER).document(userId).update(
-                    hashMapOf(
-                        "shareCount" to user?.shareCount?.plus(addShareCnt),
-                        "shareImageCount" to user?.shareImageCount?.plus(addShareImgCnt)
-                    ) as Map<String, Any> ).taskSuccessReturn(true)
-
-                continuation.resume(Result.Success(true))
+                continuation.resume(
+                    db.collection(PATH_USER).document(userId).update(
+                        hashMapOf(
+                            "shareCount" to user?.shareCount?.plus(addShareCnt),
+                            "shareImageCount" to user?.shareImageCount?.plus(addShareImgCnt)
+                        ) as Map<String, Any>).taskSuccessReturn(true)
+                )
             } else {
                 continuation.resume(Result.Fail(getString(R.string.fail)))
             }
         }
     }
 
-
     override suspend fun getVenueByLocation(
-        minLat: Double, maxLat: Double,
-        minLng: Double, maxLng: Double,
+        minLat: Double, maxLat: Double, minLng: Double, maxLng: Double,
     ): Result<List<Venue>> {
 
         val ref = db.collection(PATH_VENUE)
@@ -536,45 +424,40 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         val liveData = MutableLiveData<List<Notification>>()
 
         // notification from user
-        db.collection(PATH_NOTIFICATION)
-            .whereEqualTo("toId", userId)
-            .orderBy("date", Query.Direction.DESCENDING)
-            .limit(80)
+        db.collection(PATH_NOTIFICATION).whereEqualTo("toId", userId)
+            .orderBy("date", Query.Direction.DESCENDING).limit(80)
             .addSnapshotListener { snapshot, exception ->
 
                 exception?.let {
                     Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
+
                 val list = mutableListOf<Notification>()
 
                 for (document in snapshot!!) {
                     val notification = document.toObject(Notification::class.java)
-                    notification.timestamp =
-                        notification.date?.let { Timestamp(it.time) } ?: Timestamp(0)
+                    notification.timestamp = notification.date?.let { Timestamp(it.time) }
                     list.add(notification)
                 }
 
                 // notification send user
-                db.collection(PATH_NOTIFICATION)
-                    .whereEqualTo("fromId", userId)
+                db.collection(PATH_NOTIFICATION).whereEqualTo("fromId", userId)
                     .orderBy("date", Query.Direction.DESCENDING)
                     .addSnapshotListener { snapshot, exception ->
                         exception?.let {
-                            Logger.d(
-                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                            )
+                            Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
                         }
 
                         for (document in snapshot!!) {
                             val notification = document.toObject(Notification::class.java)
-                            notification.timestamp = notification.date!!.let { Timestamp(it.time) }
+                            notification.timestamp = notification.date?.let { Timestamp(it.time) }
                             list.add(notification)
                         }
+
                         liveData.value = list
                         liveData.value = liveData.value
                     }
             }
-
         return liveData
     }
 
@@ -606,44 +489,30 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.MONTH, -1)
 
-            // filter rating
-            db.collection(PATH_RATING)
-                .whereEqualTo("isVenue", true)
-                .whereGreaterThan("postDate", calendar.time)
-                .get()
-                .addOnCompleteListener { venueTask ->
+            coroutineScope.launch {
+                val result = Rating().getListResult(
+                    db.collection(PATH_RATING).whereEqualTo("isVenue", true)
+                        .whereGreaterThan("postDate", calendar.time).get())
 
-                    if (venueTask.isSuccessful) {
+                if (result is Result.Success) {
+                    val rtgList = result.data
+                    val hotVenueList = rtgList.groupingBy { it.objectId }.eachCount().toList()
+                        .sortedByDescending { it.second }.take(10)
 
-                        val venueRtgs = venueTask.result.toObjects(Rating::class.java)
-                        val hotVenueList = venueRtgs.groupingBy { it.objectId }.eachCount().toList()
-                            .sortedByDescending { it.second }.take(10)
+                    if (!hotVenueList.isNullOrEmpty()) {
+                        val result = Venue().getListResult(
+                            db.collection(PATH_VENUE)
+                                .whereIn("id", hotVenueList.map { it.first }).get())
 
-                        if (!hotVenueList.isNullOrEmpty()) {
-
-                            coroutineScope.launch {
-                                val result = Venue().getListResult(
-                                    db.collection(PATH_VENUE)
-                                        .whereIn("id", hotVenueList.map { it.first }).get()
-                                )
-
-                                continuation.resume(result)
-                            }
-                        }
+                        continuation.resume(result)
                     } else {
-                        venueTask.exception?.let {
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
-                        }
-                        continuation.resume(
-                            Result.Fail(
-                                BarUrSideApplication.instance.getString(
-                                    R.string.fail
-                                )
-                            )
-                        )
+                        continuation.resume(Result.Success(listOf()))
                     }
+                } else {
+                    continuation.resume(Result.Fail(
+                        BarUrSideApplication.instance.getString(R.string.fail)))
                 }
+            }
         }
 
     override suspend fun getHotDrinkResult(): Result<List<Drink>> =
@@ -655,47 +524,30 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.MONTH, -1)
 
-            // filter rating
-            db.collection(PATH_RATING)
-                .whereEqualTo("isVenue", false)
-                .whereGreaterThan("postDate", calendar.time)
-                .get()
-                .addOnCompleteListener { drinkTask ->
+            coroutineScope.launch {
+                val result = Rating().getListResult(
+                    db.collection(PATH_RATING).whereEqualTo("isVenue", false)
+                        .whereGreaterThan("postDate", calendar.time).get())
 
-                    if (drinkTask.isSuccessful) {
+                if (result is Result.Success) {
+                    val rtgList = result.data
+                    val hotDrinkList = rtgList.groupingBy { it.objectId }.eachCount().toList()
+                        .sortedByDescending { it.second }.take(10)
 
-                        val drinkRtgs = drinkTask.result.toObjects(Rating::class.java)
-                        val hotDrinkList = drinkRtgs.groupingBy { it.objectId }.eachCount().toList()
-                            .sortedByDescending { it.second }.take(10)
+                    if (!hotDrinkList.isNullOrEmpty()) {
+                        val result = Drink().getListResult(
+                            db.collection(PATH_DRINK)
+                                .whereIn("id", hotDrinkList.map { it.first }).get())
 
-                        if (!hotDrinkList.isNullOrEmpty()) {
-                            // filter drink
-                            db
-                                .collection(PATH_DRINK)
-                                .whereIn("id", hotDrinkList.map { it.first })
-                                .get()
-                                .addOnCompleteListener { task ->
-                                    for (document in task.result!!) {
-                                        val drink = document.toObject(Drink::class.java)
-                                        list.add(drink)
-                                    }
-                                    continuation.resume(Result.Success(list))
-                                }
-                        }
+                        continuation.resume(result)
                     } else {
-                        drinkTask.exception?.let {
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
-                        }
-                        continuation.resume(
-                            Result.Fail(
-                                BarUrSideApplication.instance.getString(
-                                    R.string.fail
-                                )
-                            )
-                        )
+                        continuation.resume(Result.Success(listOf()))
                     }
+                } else {
+                    continuation.resume(Result.Fail(
+                        BarUrSideApplication.instance.getString(R.string.fail)))
                 }
+            }
         }
 
     override suspend fun getHighRateVenueResult(): Result<List<Venue>> {
@@ -716,37 +568,30 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun getActivityByUser(userId: String): Result<List<Activity>> =
         suspendCoroutine { continuation ->
-            val list = mutableListOf<Activity>()
 
-            // filter activity
-            db.collection(PATH_ACTIVITY)
-                .get()
-                .addOnCompleteListener { activityTask ->
-                    if (activityTask.isSuccessful) {
-                        for (document in activityTask.result!!) {
-                            val activity = document.toObject(Activity::class.java)
-                            activity.bookers?.let { bookers ->
-                                if (bookers.any { it.id == userId }) {
-                                    activity.startTimestamp =
-                                        activity.startTime?.let { Timestamp(it.time) }
-                                    activity.endTimestamp =
-                                        activity.endTime?.let { Timestamp(it.time) }
-                                    list.add(activity)
-                                }
+            coroutineScope.launch {
+                val list = mutableListOf<Activity>()
+                val result = Activity().getListResult(
+                    db.collection(PATH_ACTIVITY).get())
+
+                if (result is Result.Success) {
+                    val activityList = result.data
+                    for (activity in activityList) {
+                        activity.bookers?.let { bookers ->
+                            if (bookers.any { it.id == userId }) {
+                                activity.startTimestamp =
+                                    activity.startTime?.let { Timestamp(it.time) }
+                                activity.endTimestamp = activity.endTime?.let { Timestamp(it.time) }
+                                list.add(activity)
                             }
                         }
-                        continuation.resume(Result.Success(list))
-                    } else {
-                        activityTask.exception?.let {
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
-                        }
-                        continuation.resume(
-                            Result.Fail(BarUrSideApplication.instance.getString(R.string.fail)
-                            )
-                        )
                     }
+                    continuation.resume(Result.Success(list))
+                } else {
+                    continuation.resume(
+                        Result.Fail(BarUrSideApplication.instance.getString(R.string.fail)))
                 }
+            }
         }
 
     override suspend fun getActivityById(activityId: String): Result<Activity?> {
@@ -757,234 +602,149 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
     override suspend fun getRatingByRecommend(): Result<List<RatingInfo>> =
         suspendCoroutine { continuation ->
-            val list = mutableListOf<RatingInfo>()
-            var check = 0
 
-            // get recommend user data
-            db.collection(PATH_USER)
-                .orderBy("shareCount", Query.Direction.DESCENDING)
-                .limit(10)
-                .get()
-                .addOnCompleteListener { userTask ->
+            coroutineScope.launch {
+                val list = mutableListOf<RatingInfo>()
+                var check = 0
 
-                    if (userTask.isSuccessful) {
-                        for (docUser in userTask.result!!) {
-                            val user = docUser.toObject(User::class.java)
+                // get recommend user data
+                val userResult = User().getListResult(
+                    db.collection(PATH_USER).orderBy("shareCount", Query.Direction.DESCENDING)
+                        .limit(10).get())
 
-                            // get rating data
-                            db.collection(PATH_RATING)
-                                .whereEqualTo("userId", user.id)
+                if (userResult is Result.Success) {
+                    val userList = userResult.data
+
+                    for (user in userList) {
+
+                        // get rating infoemation
+                        val rtgResult = RatingInfo().getResult(
+                            db.collection(PATH_RATING).whereEqualTo("userId", user.id)
                                 .whereEqualTo("isVenue", true)
-                                .orderBy("postDate", Query.Direction.DESCENDING)
-                                .limit(1)
-                                .get()
-                                .addOnCompleteListener { rtgTask ->
-                                    if (rtgTask.result.size() == 0) {
-                                        check += 1
-                                    }
-                                    for (docRtg in rtgTask.result!!) {
-                                        var rtg = docRtg.toObject(RatingInfo::class.java)
-                                        rtg.postTimestamp = rtg.postDate?.let { Timestamp(it.time) }
+                                .orderBy("postDate", Query.Direction.DESCENDING).limit(1).get())
 
-                                        // get user info
-                                        db.collection(PATH_USER)
-                                            .whereEqualTo("id", rtg.userId)
-                                            .get()
-                                            .addOnCompleteListener { task ->
-                                                for (document in task.result!!) {
-                                                    val user = document.toObject(User::class.java)
-                                                    rtg.userInfo = user
+                        if (rtgResult is Result.Success && rtgResult.data != null) {
+                            val rtg = rtgResult.data
+                            rtg.userInfo = user
+                            rtg.postTimestamp = rtg.postDate?.let { Timestamp(it.time) }
 
-                                                    // get venue Info
-                                                    db.collection(PATH_VENUE)
-                                                        .whereEqualTo("id", rtg.objectId)
-                                                        .limit(1)
-                                                        .get()
-                                                        .addOnCompleteListener { venueTask ->
-                                                            check += 1
-                                                            for (docVenue in venueTask.result!!) {
-                                                                val venue =
-                                                                    docVenue.toObject(Venue::class.java)
-                                                                rtg.objectName = venue.name
+                            // get object information
+                            val objResult = Venue().getResult(
+                                db.collection(PATH_VENUE).whereEqualTo("id", rtg.objectId)
+                                    .limit(1).get())
 
-                                                                if (!venue.images.isNullOrEmpty()) {
-                                                                    rtg.objectImg =
-                                                                        venue.images!![0]
-                                                                }
-                                                                list.add(rtg)
-                                                            }
+                            if (objResult is Result.Success && objResult.data != null) {
+                                val obj = objResult.data
+                                rtg.objectName = obj.name
 
-                                                            if (check == userTask.result.size()) {
-                                                                continuation.resume(
-                                                                    Result.Success(list.sortedByDescending { it.postDate })
-                                                                )
-                                                            }
-                                                        }
-                                                }
-                                            }
-                                    }
+                                if (!obj.images.isNullOrEmpty()) {
+                                    rtg.objectImg = obj.images!![0]
                                 }
+
+                                check += 1
+                                list.add(rtg)
+                            } else {
+                                check += 1
+                            }
+                        } else {
+                            check += 1
                         }
-                    } else {
-                        userTask.exception?.let {
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
+
+                        if (check == userList.size) {
+                            continuation.resume(Result.Success(list.sortedByDescending { it.postDate }))
                         }
-                        continuation.resume(
-                            Result.Fail(
-                                BarUrSideApplication.instance.getString(
-                                    R.string.fail
-                                )
-                            )
-                        )
                     }
+                } else {
+                    continuation.resume(
+                        Result.Fail(BarUrSideApplication.instance.getString(R.string.fail))
+                    )
                 }
+            }
         }
 
     override suspend fun getRatingByFriends(userId: String): Result<List<RatingInfo>> =
         suspendCoroutine { continuation ->
-            var list = mutableListOf<RatingInfo>()
-            var check = 0
+            coroutineScope.launch {
+                val list = mutableListOf<RatingInfo>()
+                var check = 0
 
-            // get friend list
-            db.collection(PATH_USER)
-                .whereEqualTo("id", userId)
-                .limit(10)
-                .get()
-                .addOnCompleteListener { userTask ->
-                    if (userTask.isSuccessful) {
+                // get recommend user data
+                val userResult = User().getResult(
+                    db.collection(PATH_USER).whereEqualTo("id", userId).get())
 
-                        for (document in userTask.result!!) {
-                            val friends = document.toObject(User::class.java).friends?.map { it.id }
+                if (userResult is Result.Success && userResult.data != null) {
+                    val user = userResult.data
+                    val friends = user.friends?.map { it.id }
 
-                            if (!friends.isNullOrEmpty()) {
-                                db.collection(PATH_RATING)
-                                    .whereIn("userId", friends)
-                                    .orderBy("postDate", Query.Direction.DESCENDING)
-                                    .limit(10)
-                                    .get()
-                                    .addOnCompleteListener { rtgTask ->
+                    if (!friends.isNullOrEmpty()) {
+                        // get rating infoemation
+                        val rtgResult = RatingInfo().getListResult(
+                            db.collection(PATH_RATING).whereIn("userId", friends)
+                                .orderBy("postDate", Query.Direction.DESCENDING).limit(10)
+                                .get())
 
-                                        if (rtgTask.isSuccessful) {
-                                            if (rtgTask.result.size() == 0) {
-                                                check += 1
-                                            }
+                        if (rtgResult is Result.Success && rtgResult.data.size > 0) {
+                            val rtgList = rtgResult.data
+                            for (rtg in rtgList) {
+                                rtg.postTimestamp = rtg.postDate?.let { Timestamp(it.time) }
 
-                                            for (document in rtgTask.result!!) {
+                                // get userinfo
+                                val friendResult = User().getResult(
+                                    db.collection(PATH_USER).whereEqualTo("id", rtg.userId).get())
 
-                                                val rtg =
-                                                    document.toObject(RatingInfo::class.java)
-                                                rtg.postTimestamp =
-                                                    rtg.postDate?.let { Timestamp(it.time) }
+                                if (friendResult is Result.Success) {
+                                    rtg.userInfo = friendResult.data
+                                }
 
-                                                // get user info
-                                                db.collection(PATH_USER)
-                                                    .whereEqualTo("id", rtg.userId)
-                                                    .get()
-                                                    .addOnCompleteListener { task ->
-                                                        for (document in task.result!!) {
-                                                            val user =
-                                                                document.toObject(User::class.java)
-                                                            rtg.userInfo = user
+                                // get object information
+                                if (rtg.isVenue == true) {
+                                    val objResult = Venue().getResult(
+                                        db.collection(PATH_VENUE).whereEqualTo("id", rtg.objectId)
+                                            .limit(1).get())
 
-                                                            // get object info : venue
-                                                            when (rtg.isVenue) {
-                                                                true -> {
-                                                                    db.collection(PATH_VENUE)
-                                                                        .whereEqualTo(
-                                                                            "id",
-                                                                            rtg.objectId
-                                                                        )
-                                                                        .get()
-                                                                        .addOnCompleteListener { task ->
-                                                                            check += 1
+                                    if (objResult is Result.Success && objResult.data != null) {
+                                        val obj = objResult.data
+                                        rtg.objectName = obj.name
 
-                                                                            for (document in task.result!!) {
-                                                                                val venue =
-                                                                                    document.toObject(
-                                                                                        Venue::class.java
-                                                                                    )
-                                                                                rtg.objectName =
-                                                                                    venue.name
-                                                                                if (!venue.images.isNullOrEmpty()) {
-                                                                                    rtg.objectImg =
-                                                                                        venue.images!![0]
-                                                                                }
-                                                                            }
-
-                                                                            list.add(rtg)
-
-                                                                            if (check == rtgTask.result.size()) {
-                                                                                continuation.resume(
-                                                                                    Result.Success(
-                                                                                        list.sortedByDescending { it.postDate }
-                                                                                    )
-                                                                                )
-                                                                            }
-                                                                        }
-                                                                }
-
-                                                                // get object info : drink
-                                                                false -> {
-                                                                    db.collection(PATH_DRINK)
-                                                                        .whereEqualTo(
-                                                                            "id",
-                                                                            rtg.objectId
-                                                                        )
-                                                                        .get()
-                                                                        .addOnCompleteListener { task ->
-                                                                            check += 1
-                                                                            for (document in task.result!!) {
-                                                                                val drink =
-                                                                                    document.toObject(
-                                                                                        Drink::class.java
-                                                                                    )
-                                                                                rtg.objectName =
-                                                                                    drink.name
-                                                                                if (!drink.images.isNullOrEmpty()) {
-                                                                                    rtg.objectImg =
-                                                                                        drink.images!![0]
-                                                                                }
-                                                                            }
-                                                                            list.add(rtg)
-                                                                            if (check == rtgTask.result.size()) {
-                                                                                continuation.resume(
-                                                                                    Result.Success(
-                                                                                        list.sortedByDescending { it.postDate }
-                                                                                    )
-                                                                                )
-                                                                            }
-                                                                        }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                            }
+                                        if (!obj.images.isNullOrEmpty()) {
+                                            rtg.objectImg = obj.images!![0]
                                         }
+
+                                        check += 1
+                                        list.add(rtg)
+                                    } else {
+                                        check += 1
                                     }
-                            } else {
-                                continuation.resume(
-                                    Result.Success(list.sortedByDescending { it.postDate })
-                                )
+                                } else {
+                                    val objResult = Drink().getResult(
+                                        db.collection(PATH_DRINK).whereEqualTo("id", rtg.objectId)
+                                            .limit(1).get())
+
+                                    if (objResult is Result.Success && objResult.data != null) {
+                                        val obj = objResult.data
+                                        rtg.objectName = obj.name
+
+                                        if (!obj.images.isNullOrEmpty()) {
+                                            rtg.objectImg = obj.images!![0]
+                                        }
+
+                                        check += 1
+                                        list.add(rtg)
+                                    } else {
+                                        check += 1
+                                    }
+                                }
                             }
+
+                            continuation.resume(Result.Success(list.sortedByDescending { it.postDate }))
                         }
                     } else {
-                        userTask.exception?.let {
-                            Logger.w(
-                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                            )
-                            continuation.resume(Result.Error(it))
-                            return@addOnCompleteListener
-                        }
                         continuation.resume(
-                            Result.Fail(
-                                BarUrSideApplication.instance.getString(
-                                    R.string.fail
-                                )
-                            )
+                            Result.Fail(BarUrSideApplication.instance.getString(R.string.fail))
                         )
                     }
                 }
+            }
         }
 
     override suspend fun addCollect(collect: Collect): Result<Boolean> {
@@ -1040,7 +800,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         return document.set(Notification.toHashMap(notification)).taskSuccessReturn(true)
     }
 
-    override suspend fun modifyActivity(activityId: String, userId: String): Result<Boolean> =
+    override suspend fun modifyActivity(
+        activityId: String,
+        userId: String,
+    ): Result<Boolean> =
         suspendCoroutine { continuation ->
 
             coroutineScope.launch {
@@ -1089,14 +852,16 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                             // delete activity reminder notification
                             val result = Notification().getResult(
-                                db.collection(PATH_NOTIFICATION).whereEqualTo("fromId", activityId)
+                                db.collection(PATH_NOTIFICATION)
+                                    .whereEqualTo("fromId", activityId)
                                     .whereEqualTo("toId", userId).get()
                             )
 
                             if (result is Result.Success) {
                                 val notification = result.data
                                 notification?.let {
-                                    db.collection(PATH_NOTIFICATION).document(it.id).delete()
+                                    db.collection(PATH_NOTIFICATION).document(it.id)
+                                        .delete()
                                         .taskSuccessReturn(true)
                                 }
                             }
@@ -1148,26 +913,33 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             }
     }
 
-    override suspend fun addUser(user: User): Result<Boolean> = suspendCoroutine { continuation ->
+    override suspend fun addUser(user: User): Result<Boolean> =
+        suspendCoroutine { continuation ->
 
-        // check user is not in collection, then add
-        db.collection(PATH_USER)
-            .whereEqualTo("id", user.id)
-            .get()
-            .addOnCompleteListener { userTask ->
+            // check user is not in collection, then add
+            db.collection(PATH_USER)
+                .whereEqualTo("id", user.id)
+                .get()
+                .addOnCompleteListener { userTask ->
 
-                if (userTask.isSuccessful && userTask.result.isEmpty) {
-                    coroutineScope.launch {
-                        db.collection(PATH_USER).document(user.id).set(User.toHashMap(user))
-                            .taskSuccessReturn(true)
+                    if (userTask.isSuccessful && userTask.result.isEmpty) {
+                        coroutineScope.launch {
+                            continuation.resume(
+                                db.collection(PATH_USER).document(user.id)
+                                    .set(User.toHashMap(user))
+                                    .taskSuccessReturn(true)
+                            )
+                        }
+                    } else {
+                        continuation.resume(Result.Success(true))
                     }
-                } else {
-                    continuation.resume(Result.Success(true))
                 }
-            }
-    }
+        }
 
-    override suspend fun replyAddFriend(notify: Notification, reply: Boolean): Result<Boolean> =
+    override suspend fun replyAddFriend(
+        notify: Notification,
+        reply: Boolean,
+    ): Result<Boolean> =
         suspendCoroutine { continuation ->
 
             coroutineScope.launch {
@@ -1220,7 +992,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     val user = document.toObject(User::class.java)
                                     coroutineScope.launch {
                                         document.reference.update("friends",
-                                            user.friends?.filter { it.id != ids[0] } ?: user.friends
+                                            user.friends?.filter { it.id != ids[0] }
+                                                ?: user.friends
                                         ).taskSuccessReturn(true)
                                     }
                                 }

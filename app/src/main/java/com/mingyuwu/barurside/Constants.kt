@@ -8,4 +8,6 @@ object Constants {
     const val REQUEST_CHOOSE_IMAGE = 202
     const val TAG = "Ming-BarUrSide"
     const val TEMP_DIRECTORY = "imageDir"
+
+
 }
