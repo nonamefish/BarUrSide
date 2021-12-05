@@ -18,7 +18,7 @@ class RandomFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val venues = RandomFragmentArgs.fromBundle(requireArguments()).venue.toList()
         binding = FragmentRandomBinding.inflate(inflater, container, false)

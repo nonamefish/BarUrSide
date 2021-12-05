@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
@@ -34,7 +33,7 @@ class VenueFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_venue, container, false
@@ -45,8 +44,7 @@ class VenueFragment : Fragment() {
 
         // navigate to all rating fragment
         viewModel.navigateToAll.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     findNavController().navigate(
                         MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray())
@@ -76,8 +74,7 @@ class VenueFragment : Fragment() {
 
         // set ratings data
         viewModel.rtgInfos.observe(
-            viewLifecycleOwner,
-            Observer { it ->
+            viewLifecycleOwner, { it ->
                 it?.let { ratings ->
                     viewModel.setImages(ratings)
                     binding.ratings = ratings
@@ -97,8 +94,7 @@ class VenueFragment : Fragment() {
 
         // check data had downloaded
         viewModel.status.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 if (it == LoadStatus.DONE) {
                     binding.animationLoading.visibility = View.GONE
                     binding.cnstVenue.visibility = View.VISIBLE
@@ -108,8 +104,7 @@ class VenueFragment : Fragment() {
 
         // set menu on click listener
         viewModel.navigateToMenu.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     findNavController().navigate(
                         MainNavigationDirections.navigateToDiscoverDetailFragment(

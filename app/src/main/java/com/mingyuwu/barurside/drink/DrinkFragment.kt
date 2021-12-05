@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
@@ -31,7 +30,7 @@ class DrinkFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_drink, container, false
@@ -40,8 +39,7 @@ class DrinkFragment : Fragment() {
 
         // navigate to all rating fragment
         viewModel.navigateToAll.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     findNavController().navigate(
                         MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray())
@@ -53,8 +51,7 @@ class DrinkFragment : Fragment() {
 
         // set drink data
         viewModel.drinkInfo.observe(
-            viewLifecycleOwner,
-            Observer { drinkList ->
+            viewLifecycleOwner, { drinkList ->
                 drinkList?.let { drink ->
                     viewModel.getVenueResult(drink.venueId)
                     viewModel.getRatingResult(drink.id, false)
@@ -64,8 +61,7 @@ class DrinkFragment : Fragment() {
 
                     // set rating data
                     viewModel.rtgInfo.observe(
-                        viewLifecycleOwner,
-                        Observer { rtgList ->
+                        viewLifecycleOwner, { rtgList ->
                             rtgList?.let { ratings ->
                                 viewModel.setImages(ratings)
                                 binding.ratings =

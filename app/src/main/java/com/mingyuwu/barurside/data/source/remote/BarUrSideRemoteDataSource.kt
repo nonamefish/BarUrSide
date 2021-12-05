@@ -298,7 +298,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         suspendCoroutine { continuation ->
 
             val file = Uri.fromFile(File(localImage))
-            val eventsRef = storageRef.child("$uploadType/$userId/${file.lastPathSegment}" ?: "")
+            val eventsRef = storageRef.child("$uploadType/$userId/${file.lastPathSegment}")
 
             eventsRef.putFile(file)
                 .addOnSuccessListener {
@@ -334,7 +334,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     }
 
                     val newRtg =
-                        (venue?.rtgCount?.times(venue?.avgRating)?.plus(rating!!.rating!!)
+                        (venue?.rtgCount?.times(venue?.avgRating)?.plus(rating.rating!!)
                                 )?.div(venue?.rtgCount!!.plus(1))
 
                     continuation.resume(
@@ -357,8 +357,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                 if (result is Result.Success) {
                     val drink = result.data
-                    val newRtg = (drink?.rtgCount?.times(drink?.avgRating)?.plus(rating!!.rating!!)
-                            )?.div(drink?.rtgCount!!.plus(1))
+                    val newRtg = (drink?.rtgCount?.times(drink?.avgRating)?.plus(rating.rating!!)
+                            )?.div(drink?.rtgCount.plus(1))
 
                     continuation.resume(
                         db.collection(PATH_DRINK).document(id).update(
@@ -723,7 +723,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                             val dtDrink = drink.data.get(0)
                                                             rtg.objectName = dtDrink.name
                                                             if (!dtDrink.images.isNullOrEmpty()) {
-                                                                rtg.objectImg = dtDrink.images!![0]
+                                                                rtg.objectImg = dtDrink.images[0]
                                                             }
                                                             list.add(rtg)
                                                         }
@@ -955,7 +955,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         suspendCoroutine { continuation ->
 
             coroutineScope.launch {
-                val result = db.collection(PATH_NOTIFICATION).document(notify.id)
+                db.collection(PATH_NOTIFICATION).document(notify.id)
                     .set(Notification.toHashMap(notify)).taskSuccessReturn(true)
 
                 if (reply) {

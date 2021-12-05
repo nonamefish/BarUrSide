@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.source.LoadStatus
@@ -38,7 +36,7 @@ class CollectPageFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_collect_page, container, false
@@ -61,8 +59,7 @@ class CollectPageFragment : Fragment() {
         binding.collectList.adapter = adapter
 
         viewModel.collectInfo.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 if (!it.isNullOrEmpty()) {
                     viewModel.getObjectInfo(isVenue, it)
                 } else {
@@ -74,8 +71,7 @@ class CollectPageFragment : Fragment() {
 
         // get collect object information
         viewModel.objectInfo.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 if (it.isEmpty()) {
                     binding.animationEmpty.visibility = View.VISIBLE
                 } else {
@@ -87,8 +83,7 @@ class CollectPageFragment : Fragment() {
 
         // set navigation to object info page
         viewModel.navigateToObject.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     when (isVenue) {
                         true -> findNavController().navigate(
@@ -109,8 +104,7 @@ class CollectPageFragment : Fragment() {
 
         // check loading done and close loading animation
         viewModel.status.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 if (it == LoadStatus.DONE) {
                     binding.animationLoading.visibility = View.GONE
                 }

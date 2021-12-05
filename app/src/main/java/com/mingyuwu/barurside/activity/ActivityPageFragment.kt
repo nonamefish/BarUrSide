@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -37,7 +36,7 @@ class ActivityPageFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_activity_page, container, false
@@ -65,8 +64,7 @@ class ActivityPageFragment : Fragment() {
 
         // assign value to recyclerView
         viewModel.listDate.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     if (it.isEmpty()) {
                         binding.animationEmpty.visibility = View.VISIBLE
@@ -79,8 +77,7 @@ class ActivityPageFragment : Fragment() {
 
         // navigate to detail fragment
         viewModel.navigateToDetail.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     when (it) {
                         is Activity -> {
@@ -100,8 +97,7 @@ class ActivityPageFragment : Fragment() {
 
         // get friend data when activity pade is follow
         viewModel.user.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 if (type == ActivityTypeFilter.FOLLOW) {
                     viewModel.getRatingByFriend(true, it.id)
                 }
@@ -115,8 +111,7 @@ class ActivityPageFragment : Fragment() {
 
         // check loading done and close loading animation
         viewModel.status.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 if (it == LoadStatus.DONE) {
                     binding.animationLoading.visibility = View.GONE
                 }

@@ -12,7 +12,6 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
@@ -39,7 +38,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // user profile will get id from UserManager
         val id =
@@ -68,8 +67,7 @@ class ProfileFragment : Fragment() {
 
         // set tool bar title by user display name
         viewModel.userInfo.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     toolbarTitle.text = viewModel.userInfo.value?.name ?: ""
                 }
@@ -78,8 +76,7 @@ class ProfileFragment : Fragment() {
 
         // observe ratings data
         viewModel.rtgInfos.observe(
-            viewLifecycleOwner,
-            Observer { rtgInfo ->
+            viewLifecycleOwner, { rtgInfo ->
                 rtgInfo?.let { rtgs ->
                     val sortRtgs = rtgs.sortedByDescending { it.postTimestamp }
                     viewModel.setImages(rtgs)
@@ -102,8 +99,7 @@ class ProfileFragment : Fragment() {
 
         // notification: if user send or get add friend request, then can't click add button
         viewModel.notifications.observe(
-            viewLifecycleOwner,
-            Observer { list ->
+            viewLifecycleOwner, { list ->
                 list?.let { notifications ->
                     val listNotReply = notifications.filter { notification ->
                         notification.reply == null
@@ -123,8 +119,7 @@ class ProfileFragment : Fragment() {
 
         // navigate to all rating fragment
         viewModel.navigateToAll.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     findNavController().navigate(
                         MainNavigationDirections.navigateToAllRatingFragment(it.toTypedArray())
@@ -136,8 +131,7 @@ class ProfileFragment : Fragment() {
 
         // check loading done and close loading animation
         viewModel.status.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 if (it == LoadStatus.DONE) {
                     binding.animationLoading.visibility = View.GONE
                     binding.constProfile.visibility = View.VISIBLE
@@ -189,8 +183,7 @@ class ProfileFragment : Fragment() {
 
         // check user friend status: when unfriend then change isFriend status
         UserManager.user.observe(
-            viewLifecycleOwner,
-            Observer { user ->
+            viewLifecycleOwner, { user ->
                 user?.let {
                     viewModel.isFriend.value = UserManager.user.value?.friends?.any { it.id == id }
                 }

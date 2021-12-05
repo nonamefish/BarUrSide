@@ -56,12 +56,13 @@ fun bindRecyclerViewWithListData(recyclerView: RecyclerView, listData: List<Any>
                         submitList((listData).toMutableList())
                     }
                     is TagFriendAdapter -> {
-                        submitList((listData as List<TagFriend>).toMutableList())
+                        val list = listData.filterIsInstance<TagFriend>()
+                        submitList(list.toMutableList())
                     }
                     is MenuAdapter -> {
+                        val list = listData.filterIsInstance<Drink>()
                         submitList(
-                            (listData as List<Drink>).toMutableList()
-                                .sortedByDescending { it.avgRating }.take(10)
+                            list.toMutableList().sortedByDescending { it.avgRating }.take(10)
                         )
                     }
                 }

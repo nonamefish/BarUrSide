@@ -332,7 +332,7 @@ class EditRatingViewModel(val repository: BarUrSideRepository, venue: Venue) :
 
     fun checkRating(): Boolean {
 
-        _objectId.value?.forEachIndexed { index, s ->
+        _objectId.value?.forEachIndexed { index, _ ->
             if (_star.value?.get(index) == null) {
                 return false
             }

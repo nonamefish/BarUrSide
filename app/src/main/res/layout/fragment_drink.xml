@@ -143,7 +143,7 @@
                 tools:text="TextView" />
 
             <View
-                android:id="@+id/view"
+                android:id="@+id/separateLine"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="16dp"
@@ -162,7 +162,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
+                app:layout_constraintTop_toBottomOf="@+id/separateLine" />
 
             <View
                 android:id="@+id/view2"

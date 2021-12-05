@@ -9,6 +9,7 @@ import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -139,14 +140,12 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
                 }
                 is Result.Fail -> {
                     _error.value = result.error
-                    null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
-                    null
                 }
                 else -> {
-                    null
+                    Logger.d("Unknoen Result type: $result")
                 }
             }
         }
@@ -164,14 +163,12 @@ class CollectPageViewModel(val repository: BarUrSideRepository, val isVenue: Boo
                 }
                 is Result.Fail -> {
                     _error.value = result.error
-                    null
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
-                    null
                 }
                 else -> {
-                    null
+                    Logger.d("Unknoen Result type: $result")
                 }
             }
         }

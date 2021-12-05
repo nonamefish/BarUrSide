@@ -8,7 +8,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
@@ -25,7 +24,7 @@ class DiscoverFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val binding = FragmentDiscoverBinding.inflate(layoutInflater)
         binding.viewModel = viewModel
@@ -42,7 +41,7 @@ class DiscoverFragment : Fragment() {
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
-                    view: View?,
+                    view: View,
                     position: Int,
                     id: Long
                 ) {
@@ -63,8 +62,7 @@ class DiscoverFragment : Fragment() {
 
         // observe search type
         viewModel.searchType.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 binding.autoDiscoverFilter.setText("")
                 viewModel.searchInfo.value = null
             }
@@ -72,8 +70,7 @@ class DiscoverFragment : Fragment() {
 
         // search venue after autocompleted text
         viewModel.searchText.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     if (it.isNotEmpty()) {
                         if (viewModel.searchInfo.value == null) {
@@ -91,8 +88,7 @@ class DiscoverFragment : Fragment() {
 
         // search info: set auto completed text adapter
         viewModel.searchInfo.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
 
                 it?.let {
 
@@ -138,8 +134,7 @@ class DiscoverFragment : Fragment() {
 
         // navigate to object info
         viewModel.navigateToObject.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     when (viewModel.searchType.value) {
                         true -> {
@@ -160,8 +155,7 @@ class DiscoverFragment : Fragment() {
 
         // navigate to theme
         viewModel.navigateToTheme.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     findNavController().navigate(
                         MainNavigationDirections.navigateToDiscoverDetailFragment(

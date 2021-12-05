@@ -15,10 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
-import com.mingyuwu.barurside.data.Activity
-import com.mingyuwu.barurside.data.Drink
-import com.mingyuwu.barurside.data.Notification
-import com.mingyuwu.barurside.data.Venue
+import com.mingyuwu.barurside.data.*
 import com.mingyuwu.barurside.databinding.FragmentDiscoverDetailBinding
 import com.mingyuwu.barurside.discover.Theme
 import com.mingyuwu.barurside.ext.getVmFactory
@@ -192,12 +189,13 @@ class DiscoverDetailFragment : Fragment() {
                     // set notification value
                     if (theme == Theme.NOTIFICATION) {
 
-                        list = (it as List<Notification>).filter {
+                        list = it.filterIsInstance<Notification>().filter {
                             it.toId == UserManager.user.value!!.id
                         }.take(20)
 
                         if (!it.isNullOrEmpty()) {
-                            it.filter { it.isCheck == false }.map { it.id }.let {
+                            it.filterIsInstance<Notification>()
+                                .filter { it.isCheck == false }.map { it.id }.let {
                                 viewModel.checkNotification(it)
                             }
                         }
@@ -224,7 +222,7 @@ class DiscoverDetailFragment : Fragment() {
                         it.let {
                             findNavController().navigate(
                                 MainNavigationDirections.navigateToRandomFragment(
-                                    (it as List<Venue>).toTypedArray()
+                                    it.filterIsInstance<Venue>().toTypedArray()
                                 )
                             )
                         }

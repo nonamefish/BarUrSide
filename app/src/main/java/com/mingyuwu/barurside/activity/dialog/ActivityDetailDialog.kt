@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mingyuwu.barurside.Constants.DEEPLINK_ACTIVITY
 import com.mingyuwu.barurside.MainNavigationDirections
@@ -76,7 +75,7 @@ class ActivityDetailDialog : DialogFragment() {
                     } else {
                         findNavController().navigate(
                             MainNavigationDirections.navigateToDiscoverDetailFragment(
-                                theme!!,
+                                theme,
                                 listOf(UserManager.user.value?.id ?: "").toTypedArray(),
                                 null
                             )
@@ -89,8 +88,7 @@ class ActivityDetailDialog : DialogFragment() {
 
         // refresh viewModel setting
         viewModel.dtActivity.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 binding.viewModel = viewModel
                 binding.animationLoading.visibility = View.GONE
                 binding.cnstActivityDetail.visibility = View.VISIBLE

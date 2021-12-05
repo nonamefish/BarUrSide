@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
@@ -75,8 +74,7 @@ class FilterFragment : BottomSheetDialogFragment() {
 
         // navigate to filter result
         viewModel.navigateToResult.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     findNavController().navigate(
                         MainNavigationDirections.navigateToDiscoverDetailFragment(

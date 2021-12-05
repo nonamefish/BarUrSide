@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentAllRatingBinding
 import com.mingyuwu.barurside.ext.getVmFactory
@@ -26,7 +25,7 @@ class AllRatingFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_all_rating, container, false
@@ -39,8 +38,7 @@ class AllRatingFragment : Fragment() {
         val adapter = InfoRatingAdapter()
         binding.recyclerRatingList.adapter = adapter
         viewModel.ratings.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner, {
                 it?.let {
                     adapter.submitList(viewModel.ratings.value)
                 }

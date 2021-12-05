@@ -218,7 +218,7 @@ class AddActivityFragment : Fragment() {
         alertDialog.setView(mView)
         val dialog = alertDialog.create()
 
-        mView?.let{
+        mView.let{
             // set dialog content
             val txtDialog = it.findViewById<TextView>(R.id.dialog_content)
             val titleDialog = it.findViewById<TextView>(R.id.dialog_title)
