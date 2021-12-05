@@ -23,7 +23,7 @@ class AddVenueViewModel(private val repository: BarUrSideRepository) :
     val name = MutableLiveData<String>()
     var address = MutableLiveData<String>()
     var latitude = MutableLiveData<Double>()
-    var longtitude = MutableLiveData<Double>()
+    var longitude = MutableLiveData<Double>()
     val level = MutableLiveData<Int>()
     val phone = MutableLiveData<String>()
     val web = MutableLiveData<String>()
@@ -73,7 +73,7 @@ class AddVenueViewModel(private val repository: BarUrSideRepository) :
                 phone.value ?: "",
                 address.value!!,
                 latitude.value!!,
-                longtitude.value!!,
+                longitude.value!!,
                 imageUrl.value?.let { listOf(it) },
                 0.0,
                 0

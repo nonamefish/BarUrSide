@@ -1,6 +1,7 @@
 package com.mingyuwu.barurside.ext
 
 import android.content.pm.PackageManager
+import android.view.Gravity
 import android.widget.Toast
 import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
@@ -25,7 +26,7 @@ fun Fragment.getVmFactory(): ViewModelFactory {
 fun Fragment.getVmFactory(
     id: List<String>?,
     theme: Theme,
-    filterParameter: FilterParameter?
+    filterParameter: FilterParameter?,
 ): DiscoverDetailViewModelFactory {
     val repository = (requireContext().applicationContext as BarUrSideApplication).repository
     return DiscoverDetailViewModelFactory(repository, id, theme, filterParameter)
@@ -88,10 +89,13 @@ fun Fragment.requestPermission(permission: AppPermission) =
         }
         .request { allGranted, _, deniedList ->
             if (!allGranted) {
-                Toast.makeText(
-                    this.context,
-                    getString(R.string.permission_reject_toast, deniedList),
-                    Toast.LENGTH_LONG
-                ).show()
+                showToast("message: ${getString(R.string.permission_reject_toast, deniedList)}")
             }
         }
+
+fun Fragment.showToast(message: String) {
+    Toast.makeText(this.context, message, Toast.LENGTH_SHORT).apply {
+        setGravity(Gravity.CENTER, 0, 0)
+        show()
+    }
+}

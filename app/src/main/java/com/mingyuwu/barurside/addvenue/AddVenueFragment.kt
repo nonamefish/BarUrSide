@@ -36,6 +36,7 @@ import com.mingyuwu.barurside.databinding.FragmentAddVenueBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.ext.isPermissionGranted
 import com.mingyuwu.barurside.ext.requestPermission
+import com.mingyuwu.barurside.ext.showToast
 import com.mingyuwu.barurside.util.AppPermission
 import com.mingyuwu.barurside.util.Style
 import com.mingyuwu.barurside.util.Util
@@ -286,7 +287,7 @@ class AddVenueFragment : Fragment() {
                     // set address on edittext
                     viewModel.address.value = place.address
                     viewModel.latitude.value = place.latLng?.latitude
-                    viewModel.longtitude.value = place.latLng?.longitude
+                    viewModel.longitude.value = place.latLng?.longitude
                 }
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
@@ -294,12 +295,7 @@ class AddVenueFragment : Fragment() {
                 data?.let {
 
                     val status: Status = Autocomplete.getStatusFromIntent(data)
-
-                    Toast.makeText(
-                        BarUrSideApplication.appContext,
-                        "message: ${status.statusMessage}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showToast("message: ${status.statusMessage}")
                 }
             }
         }

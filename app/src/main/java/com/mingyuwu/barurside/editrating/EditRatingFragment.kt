@@ -17,7 +17,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -29,6 +28,7 @@ import com.mingyuwu.barurside.databinding.FragmentEditRatingBinding
 import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.ext.isPermissionGranted
 import com.mingyuwu.barurside.ext.requestPermission
+import com.mingyuwu.barurside.ext.showToast
 import com.mingyuwu.barurside.util.AppPermission
 import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.getResizedBitmap
@@ -66,11 +66,7 @@ class EditRatingFragment : Fragment() {
             if (viewModel.menu.value != null) {
                 addDrinkRating()
             } else {
-                Toast.makeText(
-                    binding.root.context,
-                    Util.getString(R.string.no_menu),
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToast("message: ${Util.getString(R.string.no_menu)}")
             }
         }
 

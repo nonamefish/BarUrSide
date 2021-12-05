@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -20,13 +19,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.MainActivity
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.databinding.FragmentLoginBinding
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.ext.showToast
 import com.mingyuwu.barurside.util.Logger
 
 class LoginFragment : Fragment() {
@@ -112,11 +111,7 @@ class LoginFragment : Fragment() {
 
                     // If sign in fails, display a message to the user.
                     Logger.e("signInWithCredential:failure ${task.exception}")
-                    Toast.makeText(
-                        BarUrSideApplication.appContext,
-                        "message: ${task.exception}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showToast("message: ${task.exception}")
                 }
             }
     }

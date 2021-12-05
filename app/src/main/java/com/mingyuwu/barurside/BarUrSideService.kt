@@ -8,7 +8,6 @@ import android.content.Intent
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.mingyuwu.barurside.login.UserManager
-import com.mingyuwu.barurside.util.Logger
 import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.getDiffHour
 import java.sql.Timestamp

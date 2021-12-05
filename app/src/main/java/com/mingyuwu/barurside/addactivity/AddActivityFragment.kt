@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -26,11 +25,11 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentAddActivityBinding
 import com.mingyuwu.barurside.ext.getVmFactory
+import com.mingyuwu.barurside.ext.showToast
 import com.mingyuwu.barurside.util.Util
 import com.mingyuwu.barurside.util.Util.convertStringToTimestamp
 import java.text.SimpleDateFormat
@@ -200,11 +199,7 @@ class AddActivityFragment : Fragment() {
                     }
                     AutocompleteActivity.RESULT_ERROR -> {
                         val status: Status = Autocomplete.getStatusFromIntent(data)
-                        Toast.makeText(
-                            BarUrSideApplication.appContext,
-                            "message: ${status.statusMessage!!}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showToast("message: ${status.statusMessage}")
                     }
                 }
             }

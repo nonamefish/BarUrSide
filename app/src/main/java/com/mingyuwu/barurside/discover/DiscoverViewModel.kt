@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class DiscoverViewModel(private val repository: BarUrSideRepository) : ViewModel() {
 
-    var searchType = MutableLiveData<Boolean?>(false) // search type for venue(store) or drink
+    var searchType = MutableLiveData(false) // search type for venue(store) or drink
     var searchText = MutableLiveData<String?>() // search content user written
     var searchInfo = MutableLiveData<List<*>?>() // info after user set search on editText
 

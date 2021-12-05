@@ -11,7 +11,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.mingyuwu.barurside.databinding.ActivityMainBinding
@@ -126,23 +125,6 @@ class MainActivity : AppCompatActivity() {
             }
             false
         }
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    val user = auth.currentUser
-                    Logger.d("signInWithCredential:success, user:$user")
-                    viewModel.navigateToStart.value = true
-                } else {
-                    // If sign in fails, display a message to the user.
-                    viewModel.navigateToLogin.value = true
-                    Logger.d("signInWithCredential:failure ${task.exception}")
-                }
-            }
     }
 
     private fun setupNavController() {

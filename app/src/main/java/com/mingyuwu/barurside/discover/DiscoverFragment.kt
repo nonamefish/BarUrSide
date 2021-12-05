@@ -98,12 +98,14 @@ class DiscoverFragment : Fragment() {
                     // set autocomplete hint list
                     when (it[0]) {
                         is Drink -> {
-                            list = (it as List<Drink>).map { drink -> drink.name }
-                            id = it.map { drink -> drink.id }
+                            val data = it.filterIsInstance<Drink>()
+                            list = data.map { drink -> drink.name }
+                            id = data.map { drink -> drink.id }
                         }
                         is Venue -> {
-                            list = (it as List<Venue>).map { venue -> venue.name }
-                            id = it.map { venue -> venue.id }
+                            val data = it.filterIsInstance<Venue>()
+                            list = data.map { venue -> venue.name }
+                            id = data.map { venue -> venue.id }
                         }
                         else -> {
                             list = listOf()
