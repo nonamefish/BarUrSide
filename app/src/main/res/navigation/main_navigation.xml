@@ -217,9 +217,7 @@
 
     <action
         android:id="@+id/navigate_to_profile_fragment"
-        app:destination="@id/profileFragment"
-        app:popUpTo="@id/main_navigation"
-        app:popUpToInclusive="true">
+        app:destination="@id/profileFragment">
     </action>
 
     <action
