@@ -51,7 +51,7 @@ class LoginFragment : Fragment() {
 
         // set sign in onclick listener
         binding.Signin.setOnClickListener {
-            firebaseSignInWithPopup()
+            reportUser()
         }
 
         // after login navigate to start destination
@@ -152,13 +152,16 @@ class LoginFragment : Fragment() {
             // set dialog content
             val txtDialog = it.findViewById<TextView>(R.id.dialog_content)
             val titleDialog = it.findViewById<TextView>(R.id.dialog_title)
-            titleDialog.text = getString(R.string.text_report)
+            titleDialog.text = getString(R.string.report_rule)
             txtDialog.text = getString(R.string.rules_of_use)
 
             // set button click listener
             val btDialog = it.findViewById<Button>(R.id.button_confirm)
-            btDialog.text = getString(R.string.confirm)
-            btDialog.setOnClickListener { dialog.dismiss() }
+            btDialog.text = getString(R.string.rule_confirm)
+            btDialog.setOnClickListener {
+                firebaseSignInWithPopup()
+                dialog.dismiss()
+            }
         }
 
         dialog.show()

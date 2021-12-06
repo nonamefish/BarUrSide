@@ -194,7 +194,9 @@
 
     <!--    Report-->
     <string name="report_confirm">送出檢舉</string>
+    <string name="rule_confirm">同意</string>
     <string name="text_report">請詳閱《社群規範》</string>
+    <string name="report_rule">《社群規範》</string>
     <string name="report_title">檢舉使用者/不當內容</string>
     <string name="report_text_1">感謝您提出檢舉，我們會立即進行審查，如果這位使用者確實違反了 BarUrSide 的《社群規範》，我們就會對他做出懲處，情節嚴重的話我們會移除該使用者帳號以及他所有已發布的內容。</string>
     <string name="report_text_2">感謝您提出檢舉，我們會立即進行審查，如果這則留言確實違反了 BarUrSide 的《社群規範》，我們就會移除它，並對違規的使用者進行懲處，情節嚴重的話我們會移除該使用者帳號以及他所有已發布的內容。</string>
