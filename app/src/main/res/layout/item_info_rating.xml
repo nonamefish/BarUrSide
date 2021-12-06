@@ -127,6 +127,18 @@
                 app:layout_constraintStart_toEndOf="@+id/user_postimg_cnt"
                 app:layout_constraintTop_toTopOf="@+id/user_postimg_cnt" />
 
+            <ImageView
+                android:id="@+id/img_report"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/ic_outline_info_24"
+                android:backgroundTint="@color/gray_888888"
+                android:contentDescription="@string/img_notification"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_base_img"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/profile_base_img" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

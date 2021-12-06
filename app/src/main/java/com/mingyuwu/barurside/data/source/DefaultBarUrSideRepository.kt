@@ -201,4 +201,8 @@ class DefaultBarUrSideRepository(
     override suspend fun getActivityById(activityId: String): Result<Activity?> {
         return remoteDataSource.getActivityById(activityId)
     }
+
+    override fun postReport(report: Report) {
+        return remoteDataSource.postReport(report)
+    }
 }

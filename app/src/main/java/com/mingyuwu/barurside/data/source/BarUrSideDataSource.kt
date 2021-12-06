@@ -76,4 +76,5 @@ interface BarUrSideDataSource {
     suspend fun checkNotification(ids: List<String>): Result<Boolean>
     fun getNotificationChange(userId: String): MutableLiveData<List<Notification>>
     suspend fun getActivityById(activityId: String): Result<Activity?>
+    fun postReport(report: Report)
 }

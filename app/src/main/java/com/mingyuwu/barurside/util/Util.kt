@@ -1,8 +1,14 @@
 package com.mingyuwu.barurside.util
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
@@ -12,7 +18,9 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.Constants.TEMP_DIRECTORY
 import com.mingyuwu.barurside.R
+import com.mingyuwu.barurside.data.Report
 import com.mingyuwu.barurside.data.Result
+import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -225,13 +233,13 @@ object Util {
             exception?.let {
                 Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
             }
-                val list = mutableListOf<T>()
-                for (document in snapshot!!) {
-                    val data = document.toObject(this::class.java)
-                    list.add(data)
-                }
+            val list = mutableListOf<T>()
+            for (document in snapshot!!) {
+                val data = document.toObject(this::class.java)
+                list.add(data)
+            }
 
-                liveData.value = list
+            liveData.value = list
         }
 
         return liveData
@@ -253,5 +261,67 @@ object Util {
                 }
             }
         }
+
+    fun reportRating(context: Context, id: String) {
+        // set alert dialog view
+        val alertDialog = AlertDialog.Builder(context)
+        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
+        alertDialog.setView(mView)
+        val dialog = alertDialog.create()
+
+        mView.let {
+            // set dialog content
+            val txtDialog = it.findViewById<TextView>(R.id.dialog_content)
+            val titleDialog = it.findViewById<TextView>(R.id.dialog_title)
+            titleDialog.text = getString(R.string.report_title)
+            txtDialog.text = getString(R.string.report_text_2)
+
+            // set button click listener
+            val btDialog = it.findViewById<Button>(R.id.button_confirm)
+            btDialog.text = getString(R.string.report_confirm)
+            btDialog.setOnClickListener {
+                BarUrSideApplication.instance.repository.postReport(Report(id, "rating"))
+                dialog.dismiss()
+            }
+        }
+
+        dialog.show()
+
+        // set border as transparent
+        val layoutParameter = dialog.window?.attributes
+        layoutParameter?.width = 900
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
+    fun reportUser(context: Context, id: String) {
+        // set alert dialog view
+        val alertDialog = AlertDialog.Builder(context)
+        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
+        alertDialog.setView(mView)
+        val dialog = alertDialog.create()
+
+        mView.let {
+            // set dialog content
+            val txtDialog = it.findViewById<TextView>(R.id.dialog_content)
+            val titleDialog = it.findViewById<TextView>(R.id.dialog_title)
+            titleDialog.text = getString(R.string.report_title)
+            txtDialog.text = getString(R.string.report_text_1)
+
+            // set button click listener
+            val btDialog = it.findViewById<Button>(R.id.button_confirm)
+            btDialog.text = getString(R.string.report_confirm)
+            btDialog.setOnClickListener {
+                BarUrSideApplication.instance.repository.postReport(Report(id, "user"))
+                dialog.dismiss()
+            }
+        }
+
+        dialog.show()
+
+        // set border as transparent
+        val layoutParameter = dialog.window?.attributes
+        layoutParameter?.width = 900
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
 
 }

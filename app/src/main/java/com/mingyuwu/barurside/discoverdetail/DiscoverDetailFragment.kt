@@ -1,10 +1,15 @@
 package com.mingyuwu.barurside.discoverdetail
 
+import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -254,6 +259,34 @@ class DiscoverDetailFragment : Fragment() {
         } catch (e: SecurityException) {
             Logger.d("exception ${e.message}")
         }
+    }
+
+    private fun reportUser() {
+        // set alert dialog view
+        val alertDialog = AlertDialog.Builder(binding.root.context)
+        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
+        alertDialog.setView(mView)
+        val dialog = alertDialog.create()
+
+        mView.let{
+            // set dialog content
+            val txtDialog = it.findViewById<TextView>(R.id.dialog_content)
+            val titleDialog = it.findViewById<TextView>(R.id.dialog_title)
+            titleDialog.text = getString(R.string.report_title)
+            txtDialog.text = getString(R.string.report_text_2)
+
+            // set button click listener
+            val btDialog = it.findViewById<Button>(R.id.button_confirm)
+            btDialog.text = getString(R.string.report_confirm)
+            btDialog.setOnClickListener { dialog.dismiss() }
+        }
+
+        dialog.show()
+
+        // set border as transparent
+        val layoutParameter = dialog.window?.attributes
+        layoutParameter?.width = 900
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
 }

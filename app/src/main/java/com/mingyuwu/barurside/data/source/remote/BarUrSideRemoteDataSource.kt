@@ -39,6 +39,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
     private const val PATH_ACTIVITY = "activity"
     private const val PATH_COLLECT = "collect"
     private const val PATH_NOTIFICATION = "notification"
+    private const val PATH_REPORT = "report"
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var DataSourceJob = Job()
@@ -1056,4 +1057,12 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .whereEqualTo("toId", userId).whereEqualTo("isCheck", false)
         )
     }
+
+    override fun postReport(report: Report){
+        coroutineScope.launch {
+            val document = db.collection(PATH_REPORT).document()
+            document.set(report).taskSuccessReturn(true)
+        }
+    }
+
 }

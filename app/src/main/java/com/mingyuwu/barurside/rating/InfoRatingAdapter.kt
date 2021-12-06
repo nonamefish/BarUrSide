@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.databinding.ItemInfoRatingBinding
+import com.mingyuwu.barurside.util.Util.reportRating
 
 class InfoRatingAdapter :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
@@ -62,6 +63,11 @@ class InfoRatingAdapter :
 
             // set user Info
             binding.user = rating?.userInfo // UserData.user.user[0]
+
+            // set report click listener
+            binding.imgReport.setOnClickListener {
+                reportRating(binding.root.context, rating?.id ?: "")
+            }
         }
     }
 
@@ -79,7 +85,7 @@ class InfoRatingAdapter :
     // Create new [RecyclerView] item views (invoked by the layout manager)
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): InfoRatingViewHolder {
         return InfoRatingViewHolder.from(parent)
     }
@@ -92,4 +98,5 @@ class InfoRatingAdapter :
             }
         }
     }
+
 }

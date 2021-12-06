@@ -199,4 +199,8 @@ class BarUrSideLocalDataSource(val context: Context) : BarUrSideDataSource {
     override suspend fun getActivityById(activityId: String): Result<Activity?> {
         TODO("Not yet implemented")
     }
+
+    override fun postReport(report: Report){
+        TODO("Not yet implemented")
+    }
 }
