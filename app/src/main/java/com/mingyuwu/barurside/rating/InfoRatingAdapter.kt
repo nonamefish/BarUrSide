@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.databinding.ItemInfoRatingBinding
+import com.mingyuwu.barurside.util.Util.popUpMenuReport
 import com.mingyuwu.barurside.util.Util.reportRating
 
 class InfoRatingAdapter :
@@ -32,7 +33,7 @@ class InfoRatingAdapter :
         fun bind(rating: RatingInfo?, view: View) {
 
             // setting navigate to profile page
-            binding.constraintUserInfo.setOnClickListener {
+            binding.imgRtgUser.setOnClickListener {
                 if (rating != null) {
                     view.findNavController()
                         .navigate(MainNavigationDirections.navigateToProfileFragment(rating.userId))
@@ -66,7 +67,8 @@ class InfoRatingAdapter :
 
             // set report click listener
             binding.imgReport.setOnClickListener {
-                reportRating(binding.root.context, rating?.id ?: "")
+                popUpMenuReport(binding.imgReport, binding.root.context, rating?.id ?: "")
+//                reportRating(binding.root.context, rating?.id ?: "")
             }
         }
     }

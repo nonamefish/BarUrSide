@@ -6,8 +6,12 @@ import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.ContextThemeWrapper
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
@@ -322,6 +326,19 @@ object Util {
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 900
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
+    fun popUpMenuReport(view: View, context: Context, id: String){
+        val wrapper = ContextThemeWrapper(context, R.style.PopupMenu)
+        val popup = PopupMenu(wrapper, view, Gravity.END)
+        popup.inflate(R.menu.menu_report)
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.reportMenu -> { reportRating(context, id)}
+            }
+            false
+        }
+        popup.show()
     }
 
 }

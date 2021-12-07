@@ -129,10 +129,11 @@
 
             <ImageView
                 android:id="@+id/img_report"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/ic_outline_info_24"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="7dp"
+                android:layout_marginEnd="24dp"
+                android:src="@drawable/ic_baseline_more_horiz_24"
                 android:backgroundTint="@color/gray_888888"
                 android:contentDescription="@string/img_notification"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_base_img"
