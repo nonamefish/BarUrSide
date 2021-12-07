@@ -123,7 +123,7 @@ class DiscoverDetailViewModel(
                     is Result.Success -> {
                         _error.value = null
                         _status.value = LoadStatus.DONE
-                        (result as Result.Success<*>).data as List<Any>
+                        (result as Result.Success<*>).data as List<Any>?
                     }
                     is Result.Fail -> {
                         _error.value = (result as Result.Fail).error
@@ -154,7 +154,7 @@ class DiscoverDetailViewModel(
                 is Result.Success -> {
                     _error.value = null
                     _status.value = LoadStatus.DONE
-                    (result as Result.Success<*>).data as List<Any>
+                    (result as Result.Success<*>).data as List<Any>?
                 }
                 is Result.Fail -> {
                     _error.value = (result as Result.Fail).error
