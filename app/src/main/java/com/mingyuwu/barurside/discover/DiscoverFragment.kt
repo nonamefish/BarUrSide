@@ -90,7 +90,7 @@ class DiscoverFragment : Fragment() {
         viewModel.searchInfo.observe(
             viewLifecycleOwner, {
 
-                it?.let {
+                if(!it.isNullOrEmpty()){
 
                     val list: List<String>?
                     val id: List<String>?
