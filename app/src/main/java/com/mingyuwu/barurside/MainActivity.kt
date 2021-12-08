@@ -19,7 +19,9 @@ import com.mingyuwu.barurside.ext.getVmFactory
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.CurrentFragmentType
 import com.mingyuwu.barurside.util.Logger
-import com.mingyuwu.barurside.util.Util.reportUser
+import com.mingyuwu.barurside.util.Util.popUpMenuOtherUser
+import com.mingyuwu.barurside.util.Util.popUpMenuUser
+import com.mingyuwu.barurside.util.Util.reportRule
 
 class MainActivity : AppCompatActivity() {
 
@@ -140,13 +142,17 @@ class MainActivity : AppCompatActivity() {
                     R.id.addActivityFragment -> CurrentFragmentType.ADD_ACTIVITY
                     R.id.collectFragment -> CurrentFragmentType.COLLECT
                     R.id.profileFragment -> {
-                        if (arguments?.get("id") == UserManager.user.value?.id) {
+                        val id = arguments?.get("id") as String?
+                        if (id == UserManager.user.value?.id) {
+                            // set report onclick listener
+                            binding.imgReport.setOnClickListener {
+                                popUpMenuUser(binding.imgReport, this)
+                            }
                             CurrentFragmentType.USER_PROFILE
                         } else {
                             // set report onclick listener
                             binding.imgReport.setOnClickListener {
-                                val id = arguments?.get("id") as String?
-                                reportUser(this,  id ?: "")
+                                popUpMenuOtherUser(binding.imgReport, this, id ?: "")
                             }
                             CurrentFragmentType.OTHER_PROFILE
                         }

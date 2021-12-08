@@ -24,7 +24,6 @@ import com.mingyuwu.barurside.Constants.TEMP_DIRECTORY
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Report
 import com.mingyuwu.barurside.data.Result
-import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -266,7 +265,8 @@ object Util {
             }
         }
 
-    fun reportRating(context: Context, id: String) {
+
+    fun showSimpleDialog(context: Context, title: String, content: String, positiveTxt: String) {
         // set alert dialog view
         val alertDialog = AlertDialog.Builder(context)
         val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
@@ -277,14 +277,13 @@ object Util {
             // set dialog content
             val txtDialog = it.findViewById<TextView>(R.id.dialog_content)
             val titleDialog = it.findViewById<TextView>(R.id.dialog_title)
-            titleDialog.text = getString(R.string.report_title)
-            txtDialog.text = getString(R.string.report_text_2)
+            titleDialog.text = title
+            txtDialog.text = content
 
             // set button click listener
             val btDialog = it.findViewById<Button>(R.id.button_confirm)
-            btDialog.text = getString(R.string.report_confirm)
+            btDialog.text = positiveTxt
             btDialog.setOnClickListener {
-                BarUrSideApplication.instance.repository.postReport(Report(id, "rating"))
                 dialog.dismiss()
             }
         }
@@ -295,46 +294,92 @@ object Util {
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 900
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
+    fun reportRating(context: Context, id: String) {
+        BarUrSideApplication.instance.repository.postReport(Report(id, "rating"))
+
+        showSimpleDialog(context,
+            getString(R.string.report_title),
+            getString(R.string.report_text_2),
+            getString(R.string.confirm))
+    }
+
+    fun reportRule(context: Context) {
+
+        showSimpleDialog(context,
+            getString(R.string.report_rule),
+            getString(R.string.rules_of_use),
+            getString(R.string.confirm))
+
     }
 
     fun reportUser(context: Context, id: String) {
-        // set alert dialog view
-        val alertDialog = AlertDialog.Builder(context)
-        val mView = LayoutInflater.from(context).inflate(R.layout.dialog_rating_uncompleted, null)
-        alertDialog.setView(mView)
-        val dialog = alertDialog.create()
 
-        mView.let {
-            // set dialog content
-            val txtDialog = it.findViewById<TextView>(R.id.dialog_content)
-            val titleDialog = it.findViewById<TextView>(R.id.dialog_title)
-            titleDialog.text = getString(R.string.report_title)
-            txtDialog.text = getString(R.string.report_text_1)
+        BarUrSideApplication.instance.repository.postReport(Report(id, "user"))
 
-            // set button click listener
-            val btDialog = it.findViewById<Button>(R.id.button_confirm)
-            btDialog.text = getString(R.string.report_confirm)
-            btDialog.setOnClickListener {
-                BarUrSideApplication.instance.repository.postReport(Report(id, "user"))
-                dialog.dismiss()
-            }
-        }
+        showSimpleDialog(context,
+            getString(R.string.report_user),
+            getString(R.string.report_text_1),
+            getString(R.string.confirm))
 
-        dialog.show()
-
-        // set border as transparent
-        val layoutParameter = dialog.window?.attributes
-        layoutParameter?.width = 900
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    fun popUpMenuReport(view: View, context: Context, id: String){
+    fun blockUser(context: Context, id: String) {
+
+        showSimpleDialog(context,
+            getString(R.string.block_user),
+            getString(R.string.block_text),
+            getString(R.string.confirm))
+
+    }
+
+
+    fun popUpMenuReport(view: View, context: Context, id: String) {
         val wrapper = ContextThemeWrapper(context, R.style.PopupMenu)
         val popup = PopupMenu(wrapper, view, Gravity.END)
-        popup.inflate(R.menu.menu_report)
+        popup.inflate(R.menu.menu_report_rating)
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.reportMenu -> { reportRating(context, id)}
+                R.id.reportMenu -> {
+                    reportRating(context, id)
+                }
+            }
+            false
+        }
+        popup.show()
+    }
+
+    fun popUpMenuOtherUser(view: View, context: Context, id: String) {
+        val wrapper = ContextThemeWrapper(context, R.style.PopupMenu)
+        val popup = PopupMenu(wrapper, view, Gravity.END)
+        popup.inflate(R.menu.menu_other_user)
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.reportUser -> {
+                    reportUser(context, id)
+                }
+                R.id.blockUser -> {
+                    blockUser(context, id)
+                }
+                R.id.reportRule -> {
+                    reportRule(context)
+                }
+            }
+            false
+        }
+        popup.show()
+    }
+
+    fun popUpMenuUser(view: View, context: Context) {
+        val wrapper = ContextThemeWrapper(context, R.style.PopupMenu)
+        val popup = PopupMenu(wrapper, view, Gravity.END)
+        popup.inflate(R.menu.menu_user)
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.reportRule -> {
+                    reportRule(context)
+                }
             }
             false
         }

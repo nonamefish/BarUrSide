@@ -193,11 +193,15 @@
     <string name="fail">Fail at getResult: nothing found</string>
 
     <!--    Report-->
-    <string name="report_confirm">送出檢舉</string>
+    <string name="report_confirm">送出</string>
     <string name="rule_confirm">同意</string>
     <string name="text_report">請詳閱《社群規範》</string>
     <string name="report_rule">《社群規範》</string>
-    <string name="report_title">檢舉使用者/不當內容</string>
+    <string name="report_menu">檢舉不當內容</string>
+    <string name="block_user">封鎖使用者</string>
+    <string name="report_title">檢舉不當內容</string>
+    <string name="report_user">檢舉使用者</string>
+    <string name="block_text">封鎖需求已送出，我們會立即進行後續事宜，您將不會看到任何有關該使用者的評論以及無法建立朋友關係</string>
     <string name="report_text_1">感謝您提出檢舉，我們會立即進行審查，如果這位使用者確實違反了 BarUrSide 的《社群規範》，我們就會對他做出懲處，情節嚴重的話我們會移除該使用者帳號以及他所有已發布的內容。</string>
     <string name="report_text_2">感謝您提出檢舉，我們會立即進行審查，如果這則留言確實違反了 BarUrSide 的《社群規範》，我們就會移除它，並對違規的使用者進行懲處，情節嚴重的話我們會移除該使用者帳號以及他所有已發布的內容。</string>
     <string name="rules_of_use">若您想要使用"BarUrSide"，請您詳閱並接受以下使用條款:\n
@@ -339,7 +343,7 @@ barurside@gmail.com</string>
     <string name="img_activity_sponsor">活動發起人示意圖</string>
     <string name="txt_sponsor">發起人</string>
     <string name="sponsor_picture">活動發起人頭像</string>
-    <string name="report_menu">檢舉不當內容</string>
+
 
 
 </resources>
