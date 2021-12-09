@@ -216,9 +216,11 @@ object Util {
                 Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
             }
 
-            for (document in snapshot!!) {
-                val venue = document.toObject(this::class.java)
-                liveData.value = venue
+            snapshot?.let{
+                for (document in it) {
+                    val venue = document.toObject(this::class.java)
+                    liveData.value = venue
+                }
             }
 
             liveData.value = liveData.value
@@ -238,9 +240,11 @@ object Util {
                 Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
             }
             val list = mutableListOf<T>()
-            for (document in snapshot!!) {
-                val data = document.toObject(this::class.java)
-                list.add(data)
+            snapshot?.let{
+                for (document in it) {
+                    val data = document.toObject(this::class.java)
+                    list.add(data)
+                }
             }
 
             liveData.value = list
@@ -256,7 +260,7 @@ object Util {
                     continuation.resume(Result.Success(ifSuccess))
                 } else {
                     when (val exception = task.exception) {
-                        null -> continuation.resume(Result.Fail(Util.getString(R.string.fail)))
+                        null -> continuation.resume(Result.Fail(getString(R.string.fail)))
                         else -> {
                             Logger.d("[${this::class.simpleName}] Error getting documents. ${exception.message}")
                             continuation.resume(Result.Error(exception))
