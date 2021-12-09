@@ -240,7 +240,6 @@ fun bindIconNotify(constraintLayout: ConstraintLayout, currentFragmentType: Curr
     currentFragmentType?.let {
         if (currentFragmentType in listOf(
                 CurrentFragmentType.ACTIVITY,
-                CurrentFragmentType.USER_PROFILE,
                 CurrentFragmentType.DISCOVER,
                 CurrentFragmentType.COLLECT
             )
@@ -248,6 +247,21 @@ fun bindIconNotify(constraintLayout: ConstraintLayout, currentFragmentType: Curr
             constraintLayout.visibility = View.VISIBLE
         } else {
             constraintLayout.visibility = View.GONE
+        }
+    }
+}
+
+@BindingAdapter("iconReport")
+fun bindIconReport(imageView: ImageView, currentFragmentType: CurrentFragmentType?) {
+    currentFragmentType?.let {
+        if (currentFragmentType in listOf(
+                CurrentFragmentType.OTHER_PROFILE,
+                CurrentFragmentType.USER_PROFILE
+            )
+        ) {
+            imageView.visibility = View.VISIBLE
+        } else {
+            imageView.visibility = View.GONE
         }
     }
 }
