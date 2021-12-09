@@ -7,6 +7,7 @@ import com.mingyuwu.barurside.data.Result
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.data.source.LoadStatus
 import com.mingyuwu.barurside.login.UserManager
+import com.mingyuwu.barurside.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -54,11 +55,6 @@ class ActivityPageViewModel(
             ActivityTypeFilter.ACTIVITY -> {
                 getRecentActivity()
                 _status.value = LoadStatus.DONE
-            }
-            ActivityTypeFilter.FOLLOW -> {
-                user.value?.let {
-                    getRatingByFriend(true, it.id)
-                }
             }
         }
     }

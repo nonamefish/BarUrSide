@@ -143,50 +143,52 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 }
 
                 val list = mutableListOf<RatingInfo>()
-                for (document in snapshot!!) {
+                snapshot?.let {
+                    for (document in it) {
 
-                    coroutineScope.launch {
+                        coroutineScope.launch {
 
-                        val rating = document.toObject(RatingInfo::class.java)
-                        rating.postTimestamp = rating.postDate?.let { Timestamp(it.time) }
+                            val rating = document.toObject(RatingInfo::class.java)
+                            rating.postTimestamp = rating.postDate?.let { Timestamp(it.time) }
 
-                        // get user info
-                        val result = getUsersResult(listOf(rating.userId))
-                        if (result is Result.Success && !result.data.isNullOrEmpty()) {
-                            rating.userInfo = result.data.get(0)
-                        }
-
-                        when (isVenue) {
-                            // get object venue info
-                            true -> {
-                                val result = getVenueByIds(listOf(id))
-                                if (result is Result.Success && !result.data.isNullOrEmpty()) {
-
-                                    val venue = result.data
-                                    rating.objectName = venue[0].name
-
-                                    if (!venue[0].images.isNullOrEmpty()) {
-                                        rating.objectImg = venue[0].images!![0]
-                                    }
-
-                                    list.add(rating)
-                                    liveData.value = list
-                                }
+                            // get user info
+                            val result = getUsersResult(listOf(rating.userId))
+                            if (result is Result.Success && !result.data.isNullOrEmpty()) {
+                                rating.userInfo = result.data.get(0)
                             }
-                            // get object drink info
-                            false -> {
-                                val result = getDrinksByIds(listOf(id))
-                                if (result is Result.Success && !result.data.isNullOrEmpty()) {
 
-                                    val drink = result.data
-                                    rating.objectName = drink[0].name
+                            when (isVenue) {
+                                // get object venue info
+                                true -> {
+                                    val result = getVenueByIds(listOf(id))
+                                    if (result is Result.Success && !result.data.isNullOrEmpty()) {
 
-                                    if (!drink[0].images.isNullOrEmpty()) {
-                                        rating.objectImg = drink[0].images!![0]
+                                        val venue = result.data
+                                        rating.objectName = venue[0].name
+
+                                        if (!venue[0].images.isNullOrEmpty()) {
+                                            rating.objectImg = venue[0].images?.let { it[0] }
+                                        }
+
+                                        list.add(rating)
+                                        liveData.value = list
                                     }
+                                }
+                                // get object drink info
+                                false -> {
+                                    val result = getDrinksByIds(listOf(id))
+                                    if (result is Result.Success && !result.data.isNullOrEmpty()) {
 
-                                    list.add(rating)
-                                    liveData.value = list
+                                        val drink = result.data
+                                        rating.objectName = drink[0].name
+
+                                        if (!drink[0].images.isNullOrEmpty()) {
+                                            rating.objectImg = drink[0].images?.let { it[0] }
+                                        }
+
+                                        list.add(rating)
+                                        liveData.value = list
+                                    }
                                 }
                             }
                         }
@@ -222,7 +224,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     rating.objectName = venue[0].name
 
                                     if (!venue[0].images.isNullOrEmpty()) {
-                                        rating.objectImg = venue[0].images!![0]
+                                        rating.objectImg = venue[0].images?.let { it[0] }
                                     }
 
                                     list.add(rating)
@@ -236,7 +238,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     rating.objectName = drink[0].name
 
                                     if (!drink[0].images.isNullOrEmpty()) {
-                                        rating.objectImg = drink[0].images!![0]
+                                        rating.objectImg = drink[0].images?.let { it[0] }
                                     }
 
                                     list.add(rating)
@@ -276,7 +278,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
             db.collection(PATH_COLLECT).whereEqualTo("objectId", id).whereEqualTo("userId", userId)
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        for (document in task.result!!) {
+                        for (document in task.result) {
                             document.reference.delete()
                         }
                         continuation.resume(Result.Success(true))
@@ -335,14 +337,14 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     }
 
                     val newRtg =
-                        (venue?.rtgCount?.times(venue?.avgRating)?.plus(rating.rating!!)
-                                )?.div(venue?.rtgCount!!.plus(1))
+                        (venue?.rtgCount?.times(venue?.avgRating)?.plus(rating.rating ?: 0)
+                                )?.div(venue.rtgCount?.plus(1) ?: -1)
 
                     continuation.resume(
                         db.collection(PATH_VENUE).document(id).update(mapOf(
                             "images" to imgs,
                             "avgRating" to newRtg,
-                            "rtgCount" to venue?.rtgCount!!.plus(1)
+                            "rtgCount" to venue?.rtgCount?.plus(1)
                         )).taskSuccessReturn(true)
                     )
 
@@ -358,15 +360,15 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                 if (result is Result.Success) {
                     val drink = result.data
-                    val newRtg = (drink?.rtgCount?.times(drink?.avgRating)?.plus(rating.rating!!)
-                            )?.div(drink?.rtgCount.plus(1))
+                    val newRtg = (drink?.rtgCount?.times(drink?.avgRating)?.plus(rating.rating ?: 0)
+                            )?.div(drink.rtgCount?.plus(1) ?: -1)
 
                     continuation.resume(
                         db.collection(PATH_DRINK).document(id).update(
                             mapOf(
                                 "images" to rating?.images?.plus(drink?.images as List<String>),
                                 "avgRating" to newRtg,
-                                "rtgCount" to drink?.rtgCount!!.plus(1)
+                                "rtgCount" to drink?.rtgCount?.plus(1)
                             )).taskSuccessReturn(true)
                     )
                 } else {
@@ -435,29 +437,33 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                 val list = mutableListOf<Notification>()
 
-                for (document in snapshot!!) {
-                    val notification = document.toObject(Notification::class.java)
-                    notification.timestamp = notification.date?.let { Timestamp(it.time) }
-                    list.add(notification)
+                snapshot?.let {
+                    for (document in it) {
+                        val notification = document.toObject(Notification::class.java)
+                        notification.timestamp = notification.date?.let { Timestamp(it.time) }
+                        list.add(notification)
+                    }
+
+                    // notification send user
+                    db.collection(PATH_NOTIFICATION).whereEqualTo("fromId", userId)
+                        .orderBy("date", Query.Direction.DESCENDING)
+                        .addSnapshotListener { snapshot, exception ->
+                            exception?.let {
+                                Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                            }
+
+                            for (document in snapshot!!) {
+                                val notification = document.toObject(Notification::class.java)
+                                notification.timestamp =
+                                    notification.date?.let { Timestamp(it.time) }
+                                list.add(notification)
+                            }
+
+                            liveData.value = list
+                            liveData.value = liveData.value
+                        }
                 }
 
-                // notification send user
-                db.collection(PATH_NOTIFICATION).whereEqualTo("fromId", userId)
-                    .orderBy("date", Query.Direction.DESCENDING)
-                    .addSnapshotListener { snapshot, exception ->
-                        exception?.let {
-                            Logger.d("[${this::class.simpleName}] Error getting documents. ${it.message}")
-                        }
-
-                        for (document in snapshot!!) {
-                            val notification = document.toObject(Notification::class.java)
-                            notification.timestamp = notification.date?.let { Timestamp(it.time) }
-                            list.add(notification)
-                        }
-
-                        liveData.value = list
-                        liveData.value = liveData.value
-                    }
             }
         return liveData
     }
@@ -611,8 +617,8 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .limit(10).get()
                 .addOnCompleteListener { userTask ->
 
-                    if (userTask.isSuccessful) {
-                        for (docUser in userTask.result!!) {
+                    if (userTask.isSuccessful && userTask.result.size() > 0) {
+                        for (docUser in userTask.result) {
                             val user = docUser.toObject(User::class.java)
 
                             // get rating data
@@ -623,7 +629,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     if (rtgTask.result.size() == 0) {
                                         check += 1
                                     }
-                                    for (docRtg in rtgTask.result!!) {
+                                    for (docRtg in rtgTask.result) {
                                         var rtg = docRtg.toObject(RatingInfo::class.java)
 
                                         rtg.postTimestamp = rtg.postDate?.let { Timestamp(it.time) }
@@ -634,12 +640,12 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                             .limit(1).get()
                                             .addOnCompleteListener { venueTask ->
                                                 check += 1
-                                                for (docVenue in venueTask.result!!) {
+                                                for (docVenue in venueTask.result) {
                                                     val venue = docVenue.toObject(Venue::class.java)
                                                     rtg.objectName = venue.name
 
                                                     if (!venue.images.isNullOrEmpty()) {
-                                                        rtg.objectImg = venue.images!![0]
+                                                        rtg.objectImg = venue.images?.let { it[0] }
                                                     }
                                                     list.add(rtg)
                                                 }
@@ -676,7 +682,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                 .addOnCompleteListener { userTask ->
                     if (userTask.isSuccessful) {
 
-                        for (document in userTask.result!!) {
+                        for (document in userTask.result) {
                             val friends = document.toObject(User::class.java).friends?.map { it.id }
 
                             if (!friends.isNullOrEmpty()) {
@@ -684,12 +690,9 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                     .orderBy("postDate", Query.Direction.DESCENDING).limit(10).get()
                                     .addOnCompleteListener { rtgTask ->
 
-                                        if (rtgTask.isSuccessful) {
-                                            if (rtgTask.result.size() == 0) {
-                                                check += 1
-                                            }
+                                        if (rtgTask.isSuccessful && rtgTask.result.size() > 0) {
 
-                                            for (document in rtgTask.result!!) {
+                                            for (document in rtgTask.result) {
 
                                                 val rtg = document.toObject(RatingInfo::class.java)
                                                 rtg.postTimestamp =
@@ -709,10 +712,10 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                                                         if (venue is Result.Success && venue.data.size > 0) {
                                                             val dtVenue = venue.data.get(0)
-
                                                             rtg.objectName = dtVenue.name
                                                             if (!dtVenue.images.isNullOrEmpty()) {
-                                                                rtg.objectImg = dtVenue.images!![0]
+                                                                rtg.objectImg =
+                                                                    dtVenue.images?.let { it[0] }
                                                             }
                                                             list.add(rtg)
                                                         }
@@ -720,6 +723,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                     } else {
                                                         val drink =
                                                             getDrinksByIds(listOf(rtg.objectId))
+
                                                         if (drink is Result.Success && drink.data.size > 0) {
                                                             val dtDrink = drink.data.get(0)
                                                             rtg.objectName = dtDrink.name
@@ -727,18 +731,22 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                                                                 rtg.objectImg = dtDrink.images[0]
                                                             }
                                                             list.add(rtg)
+
                                                         }
                                                         check += 1
-
                                                     }
-                                                    if (check == rtgTask.result.size()) {
-                                                        continuation.resume(Result.Success(
-                                                            list.sortedByDescending { it.postDate })
-                                                        )
-                                                    }
+                                                }
 
+                                                if (check == rtgTask.result.size()) {
+                                                    continuation.resume(Result.Success(
+                                                        list.sortedByDescending { it.postDate })
+                                                    )
                                                 }
                                             }
+                                        }else{
+                                            continuation.resume(
+                                                Result.Success(list.sortedByDescending { it.postDate })
+                                            )
                                         }
                                     }
                             } else {
@@ -894,7 +902,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         db.collection(PATH_ACTIVITY).whereEqualTo("id", activityId).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    for (document in task.result!!) {
+                    for (document in task.result) {
 
                         val activity = document.toObject(Activity::class.java)
                         val docNotify = db.collection(PATH_NOTIFICATION).document()
@@ -986,7 +994,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                     if (task.isSuccessful) {
 
-                        for (document in task.result!!) {
+                        for (document in task.result) {
                             val user = document.toObject(User::class.java)
                             coroutineScope.launch {
                                 document.reference.update("friends",
@@ -1001,7 +1009,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                             if (task.isSuccessful) {
 
-                                for (document in task.result!!) {
+                                for (document in task.result) {
                                     val user = document.toObject(User::class.java)
                                     coroutineScope.launch {
                                         document.reference.update("friends",
@@ -1058,7 +1066,7 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
         )
     }
 
-    override fun postReport(report: Report){
+    override fun postReport(report: Report) {
         coroutineScope.launch {
             val document = db.collection(PATH_REPORT).document()
             document.set(report).taskSuccessReturn(true)

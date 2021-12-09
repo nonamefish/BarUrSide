@@ -69,7 +69,7 @@ class ProfileFragment : Fragment() {
         viewModel.userInfo.observe(
             viewLifecycleOwner, {
                 it?.let {
-                    toolbarTitle.text = viewModel.userInfo.value?.name ?: ""
+                    toolbarTitle.text = it.name
                 }
             }
         )
