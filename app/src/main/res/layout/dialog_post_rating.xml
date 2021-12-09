@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/drawable_round_edge">
 
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieAnimationView"
         android:layout_width="280dp"
