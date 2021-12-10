@@ -144,7 +144,7 @@ Display rating posted by users, user's friends and activty booked.
 
 ## Latest Version
 
-5.6.9
+5.6.10
 
 ## Contact
 
