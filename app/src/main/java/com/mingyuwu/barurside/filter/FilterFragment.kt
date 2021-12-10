@@ -34,7 +34,7 @@ class FilterFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         // set binding and viewModel
@@ -60,7 +60,12 @@ class FilterFragment : BottomSheetDialogFragment() {
 
         // set chip group selected item
         binding.chipGroupLevel.setOnCheckedChangeListener { chipGroup, id ->
-            viewModel.choiceLevel.value = chipGroup.findViewById<Chip>(id).text.length
+            viewModel.choiceLevel.value =
+                if (chipGroup.findViewById<Chip>(id) == null) {
+                    null
+                } else {
+                    chipGroup.findViewById<Chip>(id).text.length
+                }
         }
 
         // set chip group selected item
