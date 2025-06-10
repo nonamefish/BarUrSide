@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/reportUser"
+        android:title="@string/report_user" />
+    <item
+        android:id="@+id/blockUser"
+        android:title="@string/block_user" />
+    <item
+        android:id="@+id/reportRule"
+        android:title="@string/report_rule" />
+</menu>

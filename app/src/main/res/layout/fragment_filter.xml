@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.filter.FilterViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_dialog_corner">
+
+                <TextView
+                    android:id="@+id/txt_price_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="32dp"
+                    android:letterSpacing="0.1"
+                    android:text="@string/txt_price_range"
+                    android:textColor="@color/black_3f3a3a"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view10" />
+
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_level"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="32dp"
+                    android:textAlignment="center"
+                    app:chipSpacingHorizontal="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/desc_price_range"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        android:text="@string/level_one"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/chip_1"
+                        app:chipBackgroundColor="@color/sl_chip_state_list"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        android:text="@string/level_two"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/chip_2"
+                        app:chipBackgroundColor="@color/sl_chip_state_list"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        android:text="@string/level_three"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/chip_3"
+                        app:chipBackgroundColor="@color/sl_chip_state_list"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        android:text="@string/level_four"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/chip_4"
+                        app:chipBackgroundColor="@color/sl_chip_state_list"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/txt_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/txt_style"
+                    android:textColor="@color/black_3f3a3a"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chipGroup_level" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="32dp"
+                    android:textAlignment="center"
+                    app:chipSpacingHorizontal="16dp"
+                    app:chipSpacingVertical="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_style">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/american"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/style_american"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:checkedChip="@+id/american"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/japanese"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/style_japanese"
+                        android:textAlignment="center"
+                        app:checkedChip="@+id/japanese"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/korean"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="@string/style_korean"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/korean"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/taiwanese"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="@string/style_taiwanese"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/taiwanese"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/european"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="@string/style_european"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/european"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/bar"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="@string/style_bar"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/bar"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/pub"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="@string/style_pub"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/pub"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+
+                <TextView
+                    android:id="@+id/txt_drink_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/txt_drink"
+                    android:textColor="@color/black_3f3a3a"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chipGroup_style" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_category"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="32dp"
+                    android:textAlignment="center"
+                    app:chipSpacingHorizontal="16dp"
+                    app:chipSpacingVertical="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_drink_category">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cocktail"
+                        style="@style/FilterChip"
+                        contentPadding="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/category_cocktail"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/cocktail"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/beer"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/category_beer"
+                        android:textAlignment="center"
+                        app:checkedChip="@+id/beer"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/champagne"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="@string/category_champagne"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/champagne"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/wine"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="@string/category_wine"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/wine"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/whiskey"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="@string/category_whiskey"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/spirit"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/umeshu"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="@string/category_umeshu"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/umeshu"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/sake"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="@string/category_sake"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:checkedChip="@+id/sake"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/txt_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/txt_distance"
+                    android:textColor="@color/black_3f3a3a"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chipGroup_category" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_distance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="32dp"
+                    android:textAlignment="center"
+                    app:chipSpacingHorizontal="16dp"
+                    app:chipSpacingVertical="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_distance"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        contentPadding="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/five_hundred_meter"
+                        android:textAlignment="center"
+                        app:checkedChip="@+id/chip_1"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/one_kilometer"
+                        android:textAlignment="center"
+                        app:checkedChip="@+id/chip_2"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_3"
+                        style="@style/FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/two_kilometer"
+                        android:textAlignment="center"
+                        app:checkedChip="@+id/chip_3"
+                        app:chipMinTouchTargetSize="0dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <View
+                    android:id="@+id/view10"
+                    android:layout_width="20dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/gray_f0f0f0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/desc_price_range"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/filter_price_range_desc"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/txt_price_level"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_price_level" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_add2cart_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <View
+                android:id="@+id/view_add2cart_bottom_separation"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/gray_cccccc"
+                app:layout_constraintBottom_toTopOf="@+id/btn_confirm"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_confirm"
+                style="@style/RatingButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/confirm"
+                android:textSize="16sp"
+                app:backgroundTint="@color/primaryColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

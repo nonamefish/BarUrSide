@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="home_title_size">18sp</dimen>
+    <dimen name="home_context_size">15sp</dimen>
+    <dimen name="profile_icon_width">24dp</dimen>
+    <dimen name="profile_icon_height">24dp</dimen>
+    <dimen name="profile_btn_text_size">13dp</dimen>
+    <dimen name="profile_btn_layout_width">60dp</dimen>
+    <dimen name="profile_btn_layout_height">51dp</dimen>
+    <dimen name="profile_order_btn_margin_top">24dp</dimen>
+    <dimen name="tool_bar_tilte_size">20sp</dimen>
+    <dimen name="profile_base_name_size">18sp</dimen>
+    <dimen name="profile_base_consume_size">13sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+    <dimen name="dp_24">24dp</dimen>
+    <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_0">0dp</dimen>
+    <dimen name="dp_14">14dp</dimen>
+    <dimen name="dp_17">17dp</dimen>
+    <dimen name="dp_48">48dp</dimen>
+</resources>

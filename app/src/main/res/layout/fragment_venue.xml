@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.venue.VenueViewModel" />
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="ratings"
+            type="java.util.List&lt;com.mingyuwu.barurside.data.RatingInfo&gt;" />
+
+        <variable
+            name="imgs"
+            type="java.util.List&lt;String&gt;" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cnst_venue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/img_venue"
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:contentDescription="@string/img_object"
+                    android:scaleType="centerCrop"
+                    app:imageUrl="@{viewModel.venueInfo.images[0]}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@tools:sample/avatars" />
+
+                <ImageView
+                    android:id="@+id/img_collect_filled_filled"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/ic_baseline_favorite_36"
+                    android:backgroundTint="@{viewModel.isCollect ? @color/red_e02401 : @color/gray_888888}"
+                    android:contentDescription="@string/img_collect"
+                    android:onClickListener="@{()->viewModel.setCollect()}"
+                    app:alpha="@{viewModel.isCollect ?  1.0f : 0.5f }"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_venue"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageView
+                    android:id="@+id/img_collect_border"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:contentDescription="@string/img_collect"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_venue"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_favorite_border_36"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/venue_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@{viewModel.venueInfo.name}"
+                    android:textColor="@color/black_3f3a3a"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@+id/venue_rtg_score_list"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_venue"
+                    tools:text="不醉不歸酒吧" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/venue_rtg_score_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toStartOf="@+id/venue_rtg_avg_score"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/venue_title"
+                    app:stars="@{viewModel.venueInfo.avgRating}">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <TextView
+                    android:id="@+id/venue_rtg_avg_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@{viewModel.venueInfo.rtgCount == 0 ? `無評論` : @string/venue_rating_info_view(viewModel.venueInfo.avgRating, viewModel.venueInfo.rtgCount)}"
+                    app:layout_constraintStart_toEndOf="@+id/venue_rtg_score_list"
+                    app:layout_constraintTop_toBottomOf="@+id/venue_title"
+                    tools:text="TextView" />
+
+                <TextView
+                    android:id="@+id/venue_service_flag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    app:isOpen="@{viewModel.venueInfo.serviceTime}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/venue_rtg_avg_score"
+                    tools:text="營業中 直至夜間2:00" />
+
+                <ImageView
+                    android:id="@+id/img_venue_address"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:contentDescription="@string/img_venue_address"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_baseline_location_on_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/venue_service_flag" />
+
+                <ImageView
+                    android:id="@+id/img_venue_taxi"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:contentDescription="@string/img_uber"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_baseline_directions_car_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_venue_address" />
+
+                <ImageView
+                    android:id="@+id/img_venue_phone"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:contentDescription="@string/img_telephone"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_baseline_phone_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_venue_taxi" />
+
+                <TextView
+                    android:id="@+id/venue_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@{viewModel.venueInfo.address}"
+                    android:textColor="@color/black_3f3a3a"
+                    app:layout_constraintStart_toEndOf="@+id/img_venue_address"
+                    app:layout_constraintTop_toTopOf="@+id/img_venue_address"
+                    tools:text="台北市中正區忠孝東路一段1號" />
+
+                <TextView
+                    android:id="@+id/venue_taxi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="0dp"
+                    android:text="@string/txt_uber"
+                    android:textColor="@color/black_3f3a3a"
+                    app:layout_constraintStart_toEndOf="@+id/img_venue_taxi"
+                    app:layout_constraintTop_toTopOf="@+id/img_venue_taxi" />
+
+                <TextView
+                    android:id="@+id/venue_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@{viewModel.venueInfo.phone}"
+                    android:textColor="@color/black_3f3a3a"
+                    app:layout_constraintStart_toEndOf="@+id/img_venue_phone"
+                    app:layout_constraintTop_toTopOf="@+id/img_venue_phone"
+                    tools:text="02-12345678" />
+
+                <View
+                    android:id="@+id/separateLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/gray_f0f0f0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/venue_menu_list" />
+
+                <View
+                    android:id="@+id/view11"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/gray_f0f0f0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/venue_phone" />
+
+                <TextView
+                    android:id="@+id/txt_venue_rtg_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/txt_rating"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/separateLine" />
+
+                <TextView
+                    android:id="@+id/txt_venue_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:onClick="@{() -> viewModel.navigateToMenu()}"
+                    android:text="@{viewModel.menuInfo.size()==0 ? @string/add_menu : @string/recommend}"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view11" />
+
+                <TextView
+                    android:id="@+id/txt_venue_menu_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:onClick="@{() -> viewModel.navigateToMenu()}"
+                    android:text="@string/check_menu"
+                    android:textColor="@color/primaryDarkColor"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="@{viewModel.menuInfo.size()==0 ? view.GONE : view.visibility}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view11" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/venue_menu_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:clipToPadding="true"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_venue_menu"
+                    app:listData="@{viewModel.menuInfo}">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cnstrt_edit_rating"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="60dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_venue_rtg_title">
+
+                    <ImageView
+                        android:id="@+id/image_edit_star_1"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="2dp"
+                        android:contentDescription="@string/rating_score"
+                        android:elevation="2dp"
+                        android:src="@drawable/ic_baseline_star_border_24"
+                        app:layout_constraintEnd_toStartOf="@+id/image_edit_star_2"
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/image_edit_star_2"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="2dp"
+                        android:contentDescription="@string/rating_score"
+                        android:elevation="2dp"
+                        android:src="@drawable/ic_baseline_star_border_24"
+                        app:layout_constraintEnd_toStartOf="@+id/image_edit_star_3"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/image_edit_star_1"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/image_edit_star_3"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="2dp"
+                        android:contentDescription="@string/rating_score"
+                        android:elevation="2dp"
+                        android:src="@drawable/ic_baseline_star_border_24"
+                        app:layout_constraintEnd_toStartOf="@+id/image_edit_star_4"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/image_edit_star_2"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/image_edit_star_4"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="2dp"
+                        android:contentDescription="@string/rating_score"
+                        android:elevation="2dp"
+                        android:src="@drawable/ic_baseline_star_border_24"
+                        app:layout_constraintEnd_toStartOf="@+id/image_edit_star_5"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/image_edit_star_3"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/image_edit_star_5"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="2dp"
+                        android:contentDescription="@string/rating_score"
+                        android:elevation="2dp"
+                        android:src="@drawable/ic_baseline_star_border_24"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/image_edit_star_4"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="18dp"
+                    android:background="@color/gray_f0f0f0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cnstrt_edit_rating" />
+
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/gray_f0f0f0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/venue_img_list" />
+
+                <TextView
+                    android:id="@+id/txt_venue_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="@{imgs.size() > 0}"
+                    android:text="@{imgs.size == 0 ? `尚無相片` : `相片 >`}"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/view3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/txt_venue_last_rtg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@{imgs.size() == 0 ? `尚無評論` : `最新評論`}"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view3"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/venue_img_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:clipToPadding="true"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_venue_img"
+                    app:listData="@{imgs}">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/venue_rtg_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:clipToPadding="true"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_venue_last_rtg"
+                    app:rtgList="@{ratings}">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <TextView
+                    android:id="@+id/venue_all_review"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="24dp"
+                    android:onClick="@{() -> viewModel.navigateToAllRating()}"
+                    android:text="@string/check_all"
+                    android:visibility="@{viewModel.rtgInfos.size > 3 ? view.VISIBLE: view.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/venue_rtg_list" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_loading"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="center"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="loading.json"
+            app:lottie_loop="true"
+            tools:visibility="gone" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

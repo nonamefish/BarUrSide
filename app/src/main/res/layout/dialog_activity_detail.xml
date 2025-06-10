@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.activity.dialog.ActivityDetailViewModel" />
+
+        <variable
+            name="user"
+            type="com.mingyuwu.barurside.data.User" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="350dp"
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        android:background="@drawable/drawable_round_edge"
+        android:backgroundTint="@color/white">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cnst_activity_detail"
+            android:layout_width="350dp"
+            android:layout_height="380dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/activity_detail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@{viewModel.dtActivity.name}"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="酒中豪傑 Crazy Friday" />
+
+            <ImageView
+                android:id="@+id/img_share"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="18dp"
+                android:contentDescription="@string/img_share_activity"
+                android:foregroundGravity="right"
+                android:padding="6dp"
+                android:src="@drawable/ic_baseline_share_24"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_detail_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_detail_name" />
+
+            <ImageView
+                android:id="@+id/img_add_activity_time"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/ic_baseline_access_time_24"
+                android:backgroundTint="@color/black_3f3a3a"
+                android:contentDescription="@string/img_activity_start"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_detail_endtime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txt_time_from" />
+
+            <TextView
+                android:id="@+id/txt_time_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/activity_start"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toEndOf="@+id/img_add_activity_time"
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_name" />
+
+            <TextView
+                android:id="@+id/activity_detail_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:activityTime="@{viewModel.dtActivity.startTime}"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_time_from"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txt_time_from"
+                app:layout_constraintTop_toTopOf="@+id/txt_time_from"
+                tools:text="2021/10/1 下午 1:00" />
+
+            <TextView
+                android:id="@+id/activity_time_dash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:text="@string/activity_end"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toEndOf="@+id/img_add_activity_time"
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_time" />
+
+            <TextView
+                android:id="@+id/activity_detail_endtime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:activityTime="@{viewModel.dtActivity.endTime}"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_time_dash"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/activity_time_dash"
+                app:layout_constraintTop_toTopOf="@+id/activity_time_dash"
+                tools:text="2021/10/1 下午 3:00" />
+
+            <ImageView
+                android:id="@+id/img_add_activity_address"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/ic_outline_location_on_24"
+                android:backgroundTint="@color/black_3f3a3a"
+                android:contentDescription="@string/img_activity_location"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_detail_address"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_detail_address" />
+
+            <TextView
+                android:id="@+id/activity_detail_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="@{viewModel.dtActivity.address}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/img_add_activity_address"
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_endtime"
+                tools:text="新北市新莊區中正路1號" />
+
+            <ImageView
+                android:id="@+id/img_activity_people_limit"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/icons_32px_profile"
+                android:contentDescription="@string/img_activity_people_limit"
+                app:layout_constraintEnd_toEndOf="@+id/img_add_activity_address"
+                app:layout_constraintStart_toStartOf="@+id/img_add_activity_address"
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_address"
+                app:tint="@color/black_3f3a3a" />
+
+            <TextView
+                android:id="@+id/activity_detail_limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{@string/activity_detail_limit(viewModel.dtActivity.bookers.size(), viewModel.dtActivity.peopleLimit)}"
+                app:layout_constraintBottom_toBottomOf="@+id/img_activity_people_limit"
+                app:layout_constraintStart_toEndOf="@+id/img_activity_people_limit"
+                app:layout_constraintTop_toTopOf="@+id/img_activity_people_limit"
+                tools:text="11 / 20" />
+
+            <ImageView
+                android:id="@+id/img_activity_drink_main"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_outline_local_drink_24"
+                android:backgroundTint="@color/black_3f3a3a"
+                android:contentDescription="@string/img_activity_main_drink"
+                app:layout_constraintEnd_toEndOf="@+id/img_activity_people_limit"
+                app:layout_constraintStart_toStartOf="@+id/img_activity_people_limit"
+                app:layout_constraintTop_toBottomOf="@+id/activity_detail_limit" />
+
+            <TextView
+                android:id="@+id/activity_detail_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{viewModel.dtActivity.mainDrinking}"
+                app:layout_constraintBottom_toBottomOf="@+id/img_activity_drink_main"
+                app:layout_constraintStart_toEndOf="@+id/img_activity_drink_main"
+                app:layout_constraintTop_toTopOf="@+id/img_activity_drink_main"
+                tools:text="雞尾酒" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_sponsor_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/gray_f0f0f0"
+                android:foreground="@drawable/border_activity_detail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_activity_drink_main">
+
+                <ImageView
+                    android:id="@+id/img_activity_people_limit_sponsor"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/ic_baseline_sponsor_24"
+                    android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_activity_sponsor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txt_activity_detail_sponsor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/txt_sponsor"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_activity_people_limit_sponsor"
+                    app:layout_constraintStart_toEndOf="@+id/img_activity_people_limit_sponsor"
+                    app:layout_constraintTop_toTopOf="@+id/img_activity_people_limit_sponsor" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/profile_base_img"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="250dp"
+                    app:cardMaxElevation="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_activity_people_limit_sponsor">
+
+                    <ImageView
+                        android:id="@+id/img_rtg_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/sponsor_picture"
+                        android:scaleType="centerCrop"
+                        app:imageUrl="@{viewModel.sponsor.image}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@tools:sample/backgrounds/scenic" />
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/rtg_user_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{viewModel.sponsor.name}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/profile_base_img"
+                    app:layout_constraintTop_toTopOf="@+id/profile_base_img"
+                    tools:text="無尾熊" />
+
+                <ImageView
+                    android:id="@+id/img_user_post_cnt"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/img_user_post_cnt"
+                    android:src="@drawable/ic_baseline_menu_24"
+                    app:layout_constraintStart_toEndOf="@+id/profile_base_img"
+                    app:layout_constraintTop_toBottomOf="@+id/rtg_user_name" />
+
+                <TextView
+                    android:id="@+id/user_post_cnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@{viewModel.sponsor.shareCount.toString()}"
+                    app:layout_constraintStart_toEndOf="@+id/img_user_post_cnt"
+                    app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt"
+                    tools:text="569" />
+
+                <ImageView
+                    android:id="@+id/img_user_postimg_cnt"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/ic_baseline_image_24"
+                    android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_user_posting_cnt"
+                    app:layout_constraintStart_toEndOf="@+id/user_post_cnt"
+                    app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt" />
+
+                <TextView
+                    android:id="@+id/user_postimg_cnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@{viewModel.sponsor.shareImageCount.toString()}"
+                    app:layout_constraintStart_toEndOf="@+id/img_user_postimg_cnt"
+                    app:layout_constraintTop_toTopOf="@+id/img_user_post_cnt"
+                    tools:text="569" />
+
+                <TextView
+                    android:id="@+id/see_user_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text=">"
+                    app:layout_constraintStart_toEndOf="@+id/user_postimg_cnt"
+                    app:layout_constraintTop_toTopOf="@+id/user_postimg_cnt" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btn_book_activity"
+                style="@style/RatingButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="8dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:textColor="@color/white_ffffff"
+                android:textSize="14sp"
+                app:hasBook="@{viewModel.hasBook}"
+                app:isFull="@{viewModel.dtActivity.bookers.size()==viewModel.dtActivity.peopleLimit}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraint_sponsor_info" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_loading"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:foregroundGravity="center"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="loading.json"
+            app:lottie_loop="true"
+            tools:visibility="gone" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

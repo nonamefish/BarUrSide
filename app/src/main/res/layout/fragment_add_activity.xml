@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.addactivity.AddActivityViewModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:id="@+id/txt_add_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="56dp"
+            android:text="@string/txt_enter_activity_name"
+            android:textColor="@color/gray_999999"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editTextTextPersonName2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:ems="10"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:text="@={viewModel.name}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_add_activity" />
+
+        <ImageView
+            android:id="@+id/img_add_activity_time"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/ic_baseline_access_time_24"
+            android:backgroundTint="@color/black_3f3a3a"
+            android:contentDescription="@string/img_activity_time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+
+        <TextView
+            android:id="@+id/txt_add_activity_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/time"
+            android:textColor="@color/black_3f3a3a"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_time"
+            app:layout_constraintStart_toEndOf="@+id/img_add_activity_time"
+            app:layout_constraintTop_toTopOf="@+id/img_add_activity_time" />
+
+        <TextView
+            android:id="@+id/txt_add_activity_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/start"
+            android:textColor="@color/black_3f3a3a"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/txt_add_activity_time"
+            app:layout_constraintTop_toBottomOf="@+id/txt_add_activity_time" />
+
+        <TextView
+            android:id="@+id/add_activity_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:hint="@string/enter_activity_start"
+            android:text="@={viewModel.startTime}"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_add_activity_start"
+            app:layout_constraintStart_toEndOf="@+id/txt_add_activity_start"
+            app:layout_constraintTop_toTopOf="@+id/txt_add_activity_start" />
+
+        <TextView
+            android:id="@+id/txt_add_activity_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/end"
+            android:textColor="@color/black_3f3a3a"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/txt_add_activity_time"
+            app:layout_constraintTop_toBottomOf="@+id/txt_add_activity_start" />
+
+        <TextView
+            android:id="@+id/add_activity_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:hint="@string/enter_activity_end"
+            android:text="@={viewModel.endTime}"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_add_activity_end"
+            app:layout_constraintStart_toEndOf="@+id/txt_add_activity_end"
+            app:layout_constraintTop_toTopOf="@+id/txt_add_activity_end" />
+
+        <ImageView
+            android:id="@+id/img_add_activity_address"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/ic_outline_location_on_24"
+            android:backgroundTint="@color/black_3f3a3a"
+            android:contentDescription="@string/enter_location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_add_activity_end" />
+
+        <TextView
+            android:id="@+id/add_activity_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center_vertical"
+            android:hint="@string/enter_location"
+            android:minHeight="40dp"
+            android:text="@={viewModel.address}"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_address"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_add_activity_address"
+            app:layout_constraintTop_toTopOf="@+id/img_add_activity_address"
+            tools:text="輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點輸入地點" />
+
+        <ImageView
+            android:id="@+id/img_add_activity_limit"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/ic_outline_person_outline_24"
+            android:backgroundTint="@color/black_3f3a3a"
+            android:contentDescription="@string/enter_people_limit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_activity_address"
+            app:tint="@color/black_3f3a3a" />
+
+        <EditText
+            android:id="@+id/add_activity_limit"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:background="@null"
+            android:ems="10"
+            android:hint="@string/enter_people_limit"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:text="@={viewModel.limit}"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_limit"
+            app:layout_constraintStart_toEndOf="@+id/img_add_activity_limit"
+            app:layout_constraintTop_toTopOf="@+id/img_add_activity_limit" />
+
+        <ImageView
+            android:id="@+id/img_add_activity_main"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/ic_outline_local_drink_24"
+            android:backgroundTint="@color/black_3f3a3a"
+            android:contentDescription="@string/enter_main_drink"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_add_activity_limit" />
+
+        <EditText
+            android:id="@+id/add_activity_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@null"
+            android:ems="10"
+            android:hint="@string/enter_main_drink"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:minHeight="36dp"
+            android:singleLine="true"
+            android:text="@={viewModel.mainDrink}"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/img_add_activity_main"
+            app:layout_constraintStart_toEndOf="@+id/img_add_activity_main"
+            app:layout_constraintTop_toTopOf="@+id/img_add_activity_main" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="@style/RatingButton"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/cancel"
+            android:textSize="16sp"
+            app:backgroundTint="@color/gray_999999"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_add_actovity_confirm"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_add_actovity_confirm"
+            style="@style/RatingButton"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/btn_complete"
+            android:textSize="16sp"
+            app:backgroundTint="@color/primaryDarkColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_cancel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

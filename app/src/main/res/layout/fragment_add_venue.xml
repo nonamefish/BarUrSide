@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.addvenue.AddVenueViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <TextView
+                    android:id="@+id/txt_venue_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="24dp"
+                    android:text="@string/txt_add_venue"
+                    android:textColor="@color/gray_999999"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/img_venue_name"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/ic_baseline_storefront_24"
+                    android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_venue_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_venue_name" />
+
+                <EditText
+                    android:id="@+id/edittxt_obj_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/border_edit_text"
+                    android:ems="10"
+                    android:hint="@string/enter_venue"
+                    android:inputType="textMultiLine"
+                    android:minHeight="40dp"
+                    android:paddingStart="8dp"
+                    android:text="@={viewModel.name}"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_venue_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/img_venue_name"
+                    app:layout_constraintTop_toTopOf="@+id/img_venue_name" />
+
+                <ImageView
+                    android:id="@+id/img_obj_address"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/ic_outline_location_on_24"
+                    android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_enter_address"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edittxt_obj_name" />
+
+                <TextView
+                    android:id="@+id/txt_venue_address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/border_edit_text"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:hint="@string/enter_address"
+                    android:maxLines="2"
+                    android:minHeight="40dp"
+                    android:paddingStart="8dp"
+                    android:text="@{viewModel.address}"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/img_obj_address"
+                    app:layout_constraintTop_toTopOf="@+id/img_obj_address" />
+
+                <ImageView
+                    android:id="@+id/img_venue_type"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/ic_outline_category_24"
+                    android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_venue_style"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_venue_address" />
+
+                <Spinner
+                    android:id="@+id/spinner_venue_style"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/border_edit_text"
+                    android:overlapAnchor="false"
+                    android:paddingLeft="4dp"
+                    android:singleLine="true"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_venue_type"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/img_venue_type"
+                    app:layout_constraintTop_toTopOf="@+id/img_venue_type" />
+
+                <ImageView
+                    android:id="@+id/img_venue_price"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/ic_baseline_attach_money_24"
+                    android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_venue_price_range"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_venue_type" />
+
+                <Spinner
+                    android:id="@+id/spinner_venue_level"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/border_edit_text"
+                    android:overlapAnchor="false"
+                    android:paddingStart="4dp"
+                    android:singleLine="true"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_venue_price"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/img_venue_price"
+                    app:layout_constraintTop_toTopOf="@+id/img_venue_price" />
+
+                <ImageView
+                    android:id="@+id/img_venue_phone"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="31dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/ic_outline_local_phone_24"
+                    android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_venue_phone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_venue_price" />
+
+                <EditText
+                    android:id="@+id/edittxt_venue_phone"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/border_edit_text"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:hint="@string/enter_phone"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:paddingStart="8dp"
+                    android:text="@={viewModel.phone}"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_venue_phone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/img_venue_phone"
+                    app:layout_constraintTop_toTopOf="@+id/img_venue_phone" />
+
+                <ImageView
+                    android:id="@+id/img_venue_web"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="31dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/ic_outline_web_24"
+                    android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_venue_web"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_venue_phone" />
+
+                <EditText
+                    android:id="@+id/edittxt_venue_web"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/border_edit_text"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:hint="@string/enter_web"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine"
+                    android:minHeight="40dp"
+                    android:paddingStart="8dp"
+                    android:text="@={viewModel.web}"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_venue_web"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/img_venue_web"
+                    app:layout_constraintTop_toTopOf="@+id/img_venue_web" />
+
+                <ImageView
+                    android:id="@+id/img_venue_service_time"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/ic_baseline_access_time_24"
+                    android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_venue_service_time"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_venue_web" />
+
+                <TextView
+                    android:id="@+id/venue_service_time_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/border_edit_text"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:hint="@string/enter_service_start"
+                    android:paddingStart="8dp"
+                    android:text="@{viewModel.startTime}"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_venue_service_time"
+                    app:layout_constraintStart_toEndOf="@+id/img_venue_service_time"
+                    app:layout_constraintTop_toTopOf="@+id/img_venue_service_time" />
+
+                <TextView
+                    android:id="@+id/venue_service_time_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/border_edit_text"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:hint="@string/enter_service_end"
+                    android:paddingStart="8dp"
+                    android:text="@{viewModel.closeTime}"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="@+id/venue_service_time_start"
+                    app:layout_constraintStart_toStartOf="@+id/venue_service_time_start"
+                    app:layout_constraintTop_toBottomOf="@+id/venue_service_time_start" />
+
+                <ImageView
+                    android:id="@+id/img_venue_photo"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/ic_outline_image_24"
+                    android:backgroundTint="@color/black_3f3a3a"
+                    android:contentDescription="@string/img_upload_image"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/venue_service_time_close"
+                    app:tint="@color/black_3f3a3a" />
+
+                <TextView
+                    android:id="@+id/txt_venue_photo"
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/border_edit_text"
+                    android:hint="@string/upload_image"
+                    android:paddingStart="8dp"
+                    android:paddingTop="8dp"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/img_venue_photo"
+                    app:layout_constraintTop_toTopOf="@+id/img_venue_photo" />
+
+
+                <ImageView
+                    android:id="@+id/venue_photo"
+                    android:layout_width="200dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:contentDescription="@string/img_upload_image_trigger"
+                    android:scaleType="centerCrop"
+                    app:imageBitmap="@{viewModel.image}"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_venue_photo"
+                    app:layout_constraintEnd_toEndOf="@+id/txt_venue_photo"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/txt_venue_photo"
+                    app:layout_constraintTop_toTopOf="@+id/txt_venue_photo"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:src="@drawable/placeholder" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                style="@style/RatingButton"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/cancel"
+                android:textSize="16sp"
+                app:backgroundTint="@color/gray_999999"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_add_actovity_confirm"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_add_actovity_confirm"
+                style="@style/RatingButton"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/btn_complete"
+                android:textSize="16sp"
+                app:backgroundTint="@color/primaryDarkColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_cancel"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

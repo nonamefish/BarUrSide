@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="?android:attr/spinnerItemStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    android:gravity="center_vertical"
+    android:paddingStart="@dimen/dp_14"
+    android:singleLine="true"
+    android:textColor="@color/black"
+    tools:ignore="RtlSymmetry"
+    tools:text="12345678">
+</CheckedTextView>

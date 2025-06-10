@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.editrating.EditRatingViewModel" />
+
+        <variable
+            name="rtgOrder"
+            type="int" />
+
+        <variable
+            name="view"
+            type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/border_activity_detail"
+            android:backgroundTint="@color/white_f5f5f5"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+            <TextView
+                android:id="@+id/rtg_venue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
+                android:gravity="center"
+                android:text="@{viewModel.objectName[rtgOrder]}"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="不醉不歸酒吧" />
+
+            <ImageView
+                android:id="@+id/image_edit_star_1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/rating_score"
+                android:elevation="2dp"
+                android:onClick="@{()->viewModel.clickRatingStore(1,rtgOrder)}"
+                app:clickRtgScore="@{viewModel.star[rtgOrder]>=1}"
+                app:layout_constraintEnd_toStartOf="@+id/image_edit_star_2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rtg_venue"
+                tools:src="@drawable/ic_baseline_star_rate_24" />
+
+
+            <ImageView
+                android:id="@+id/image_edit_star_2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/rating_score"
+                android:elevation="2dp"
+                android:onClick="@{()->viewModel.clickRatingStore(2,rtgOrder)}"
+                app:clickRtgScore="@{viewModel.star[rtgOrder]>=2}"
+                app:layout_constraintEnd_toStartOf="@+id/image_edit_star_3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/image_edit_star_1"
+                app:layout_constraintTop_toBottomOf="@+id/rtg_venue"
+                tools:src="@drawable/ic_baseline_star_rate_24" />
+
+            <ImageView
+                android:id="@+id/image_edit_star_3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/rating_score"
+                android:elevation="2dp"
+                android:onClick="@{()->viewModel.clickRatingStore(3,rtgOrder)}"
+                app:clickRtgScore="@{viewModel.star[rtgOrder]>=3}"
+                app:layout_constraintEnd_toStartOf="@+id/image_edit_star_4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/image_edit_star_2"
+                app:layout_constraintTop_toBottomOf="@+id/rtg_venue"
+                tools:src="@drawable/ic_baseline_star_rate_24" />
+
+            <ImageView
+                android:id="@+id/image_edit_star_4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/rating_score"
+                android:elevation="2dp"
+                android:onClick="@{()->viewModel.clickRatingStore(4,rtgOrder)}"
+                app:clickRtgScore="@{viewModel.star[rtgOrder]>=4}"
+                app:layout_constraintEnd_toStartOf="@+id/image_edit_star_5"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/image_edit_star_3"
+                app:layout_constraintTop_toBottomOf="@+id/rtg_venue"
+                tools:src="@drawable/ic_baseline_star_rate_24" />
+
+            <ImageView
+                android:id="@+id/image_edit_star_5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="36dp"
+                android:contentDescription="@string/rating_score"
+                android:elevation="2dp"
+                android:onClick="@{()->viewModel.clickRatingStore(5,rtgOrder)}"
+                app:clickRtgScore="@{viewModel.star[rtgOrder]>=5}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/image_edit_star_4"
+                app:layout_constraintTop_toBottomOf="@+id/rtg_venue"
+                tools:src="@drawable/ic_baseline_star_rate_24" />
+
+            <EditText
+                android:id="@+id/rtg_score_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:minHeight="140dp"
+                android:background="@drawable/background_map_search"
+                android:backgroundTint="@color/white"
+                android:ems="10"
+                android:hint="@string/enter_comment"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:padding="8sp"
+                android:paddingStart="16dp"
+                android:text="@={viewModel.comment[rtgOrder]}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_edit_star_1" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_upload_photo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/background_map_search"
+                android:backgroundTint="@color/white"
+                android:paddingBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraint_tag_frds">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/rating_add_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="250dp"
+                    app:cardMaxElevation="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="@color/primaryDarkColor"
+                    app:strokeWidth="0.6dp">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="6dp"
+                        android:background="@drawable/ic_baseline_image_24"
+                        android:backgroundTint="@color/primaryDarkColor"
+                        android:contentDescription="@string/upload_images"
+                        app:layout_constraintBottom_toBottomOf="@+id/rating_tag_frd"
+                        app:layout_constraintStart_toStartOf="@+id/rating_tag_frd"
+                        app:layout_constraintTop_toTopOf="@+id/rating_tag_frd" />
+
+                    <TextView
+                        android:id="@+id/txt_rating_add_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginTop="7.2dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="6dp"
+                        android:text="@string/upload_images"
+                        android:textColor="@color/primaryDarkColor"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/discover_object_category" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <Button
+                    android:id="@+id/btn_add_image"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/ic_baseline_add_24"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/rating_add_img"
+                    app:layout_constraintTop_toBottomOf="@+id/rating_add_img" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rating_add_img_list"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:orientation="horizontal"
+                    app:imageBitmaps="@{viewModel.uploadImg[rtgOrder]}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_add_image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btn_add_image"
+                    app:layout_constraintTop_toTopOf="@+id/btn_add_image" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_tag_frds"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/background_map_search"
+                android:backgroundTint="@color/white"
+                android:visibility="@{rtgOrder==0 ? view.Visibility : view.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rtg_score_list">
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/rating_tag_frd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="250dp"
+                    app:cardMaxElevation="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="@color/primaryDarkColor"
+                    app:strokeWidth="0.6dp">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="6dp"
+                        android:background="@drawable/icons_32px_profile_select"
+                        android:backgroundTint="@color/primaryDarkColor"
+                        android:contentDescription="@string/tag_friend"
+                        app:layout_constraintBottom_toBottomOf="@+id/rating_tag_frd"
+                        app:layout_constraintStart_toStartOf="@+id/rating_tag_frd"
+                        app:layout_constraintTop_toTopOf="@+id/rating_tag_frd" />
+
+                    <TextView
+                        android:id="@+id/txt_rating_tag_frds"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginTop="7.2dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="6dp"
+                        android:text="@string/tag_friend"
+                        android:textColor="@color/primaryDarkColor"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/discover_object_category" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/btn_tag_frd"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:completionThreshold="1"
+                    android:hint="@string/enter_friend"
+                    android:paddingStart="8dp"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rating_tag_frd" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rating_tag_frds_list"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_tag_frd"
+                    app:listData="@{viewModel.tagFrd}" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="3dp"
+            android:elevation="12dp"
+            android:text="x"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            android:visibility="@{rtgOrder!=0 ? view.VISIBLE : view.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton"
+            app:layout_constraintEnd_toEndOf="@+id/floatingActionButton"
+            app:layout_constraintStart_toStartOf="@+id/floatingActionButton"
+            app:layout_constraintTop_toTopOf="@+id/floatingActionButton" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/red_ff4436"
+            android:contentDescription="@string/btn_cancel"
+            android:onClick="@{()-> viewModel.removeRating(rtgOrder)}"
+            android:scaleType="center"
+            android:visibility="@{rtgOrder!=0 ? view.VISIBLE : view.GONE}"
+            app:borderWidth="0dp"
+            app:fabSize="auto"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

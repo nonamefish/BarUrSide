@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.mingyuwu.barurside.drink.DrinkViewModel" />
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="ratings"
+            type="java.util.List&lt;com.mingyuwu.barurside.data.RatingInfo&gt;" />
+
+        <variable
+            name="imgs"
+            type="java.util.List&lt;String&gt;" />
+    </data>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_drink"
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:contentDescription="@string/img_object"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{viewModel.drinkInfo.images[0]}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/img_collect_filled_filled"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/ic_baseline_favorite_36"
+                android:backgroundTint="@{viewModel.isCollect ? @color/red_e02401 : @color/gray_888888}"
+                android:contentDescription="@string/img_collect"
+                android:onClickListener="@{()->viewModel.setCollect()}"
+                app:alpha="@{viewModel.isCollect ?  1.0f : 0.5f }"
+                app:layout_constraintBottom_toBottomOf="@+id/img_drink"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_collect_border"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:contentDescription="@string/img_collect"
+                app:layout_constraintBottom_toBottomOf="@+id/img_drink"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_baseline_favorite_border_36"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/drink_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:text="@{viewModel.drinkInfo.name}"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/drink_price"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_drink"
+                tools:text="文青不要喝IPA" />
+
+            <TextView
+                android:id="@+id/drink_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@{@string/drink_info_price(viewModel.drinkInfo.price)}"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/drink_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/drink_title"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="$ 2000" />
+
+            <TextView
+                android:id="@+id/drink_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@{viewModel.drinkInfo.description}"
+                android:textColor="@color/gray_888888"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/drink_title"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/drink_title"
+                app:layout_constraintTop_toBottomOf="@id/drink_title"
+                tools:text="草莓奶酒加入咖啡，泰式檸檬以及煉乳，一杯呈現越南咖啡風味的調酒" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/drink_rtg_score_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toStartOf="@+id/drink_rtg_avg_score"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/drink_desc"
+                app:stars="@{viewModel.drinkInfo.avgRating}">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/drink_rtg_avg_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="4dp"
+                android:text="@{viewModel.drinkInfo.rtgCount == 0 ? `無評論` : @string/venue_rating_info_view(viewModel.drinkInfo.avgRating, viewModel.drinkInfo.rtgCount)}"
+                app:layout_constraintStart_toEndOf="@+id/drink_rtg_score_list"
+                app:layout_constraintTop_toBottomOf="@+id/drink_desc"
+                tools:text="TextView" />
+
+            <View
+                android:id="@+id/separateLine"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/gray_f0f0f0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/drink_rtg_avg_score" />
+
+            <TextView
+                android:id="@+id/txt_drink_by_venue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/txt_sale_store"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separateLine" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/gray_f0f0f0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/drink_by_venue_style" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/gray_f0f0f0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/drink_img_list" />
+
+            <TextView
+                android:id="@+id/txt_drink_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="@{imgs.size() > 0}"
+                android:text="@{imgs.size == 0 ? `尚無相片` : `相片 >`}"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/view3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view2"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/txt_drink_last_rtg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@{imgs.size() == 0 ? `尚無評論` : `最新評論`}"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view3"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/drink_img_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:clipToPadding="true"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_drink_img"
+                app:listData="@{imgs}">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/drink_rtg_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="true"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_drink_last_rtg"
+                app:rtgList="@{ratings}">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <ImageView
+                android:id="@+id/img_venue"
+                android:layout_width="48dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/img_object"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{viewModel.venueInfo.images[0]}"
+                app:layout_constraintBottom_toBottomOf="@+id/drink_by_venue_style"
+                app:layout_constraintStart_toStartOf="@+id/txt_drink_by_venue"
+                app:layout_constraintTop_toTopOf="@+id/drink_by_venue"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/drink_by_venue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@{viewModel.venueInfo.name}"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/btn_venue_info"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/img_venue"
+                app:layout_constraintTop_toBottomOf="@+id/txt_drink_by_venue"
+                tools:text="不醉不歸酒吧" />
+
+            <TextView
+                android:id="@+id/drink_by_venue_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@{viewModel.venueInfo.address}"
+                app:layout_constraintEnd_toEndOf="@+id/drink_by_venue"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/drink_by_venue"
+                app:layout_constraintTop_toBottomOf="@+id/drink_by_venue"
+                tools:text="台北市忠孝東路一段2號" />
+
+            <TextView
+                android:id="@+id/drink_by_venue_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toEndOf="@+id/img_venue"
+                app:layout_constraintTop_toBottomOf="@+id/drink_by_venue_address"
+                app:venueStyle="@{viewModel.venueInfo.style}"
+                tools:text="Restaurant" />
+
+            <ImageView
+                android:id="@+id/btn_venue_info"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/more_info"
+                android:src="@drawable/ic_outline_info_24"
+                app:layout_constraintBottom_toBottomOf="@+id/drink_by_venue_style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/drink_by_venue" />
+
+            <TextView
+                android:id="@+id/drink_all_review"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
+                android:onClick="@{() -> viewModel.navigateToAllRating()}"
+                android:text="@string/check_all"
+                android:visibility="@{viewModel.rtgInfo.size > 3 ? view.VISIBLE: view.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/drink_rtg_list" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

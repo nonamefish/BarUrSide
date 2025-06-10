@@ -1,0 +1,349 @@
+<resources>
+    <string name="app_name">BarUrSide</string>
+
+    <!--    Activity Fragment-->
+    <string name="activity">activity</string>
+    <string name="activity_title">動態牆</string>
+    <string name="activity_tab_recommend">為你推薦</string>
+    <string name="activity_tab_activity">近期活動</string>
+    <string name="activity_tab_follow">追蹤中</string>
+    <string name="activity_tab_type">type</string>
+
+    <!--    Activity Detail Page-->
+    <string name="activity_time_range">%s至%s</string>
+    <string name="activity_detail_limit">%d/%d</string>
+    <string name="activity_share_message">與您分享品酒活動：%s \n %s</string>
+    <string name="activity_notify">提醒：今日你有一個即將舉行的活動 <![CDATA[<b>%s</b>]]></string>
+    <string name="activity_full">人數已滿</string>
+    <string name="activity_quit">退出活動</string>
+    <string name="activity_join">加入活動</string>
+
+    <!--    ADD_ACTIVITY-->
+    <string name="add_activity_tile">新增活動</string>
+    <string name="activity_uncompleted_title">活動資訊不完整</string>
+    <string name="activity_uncompleted_content">所有欄位皆必須填寫</string>
+    <string name="date_range_error_title">活動期間有誤</string>
+    <string name="date_range_error_content">開始時間必須早於結束時間</string>
+    <string name="adding_activity">活動資訊新增中</string>
+
+    <!--    Collect Tab-->
+    <string name="collect_tab_is_venue">isVenue</string>
+    <string name="collect_title">我的收藏</string>
+    <string name="collect_tab_venue">店家</string>
+    <string name="collect_tab_drink">酒項</string>
+    <string name="distance_meter">距 %d公尺</string>
+    <string name="distance_kilometer">距 %s公里</string>
+
+    <!--    Discover Fragment-->
+    <string name="discover_title">探索</string>
+    <string-array name="search_type">
+        <item>Store</item>
+        <item>Drink</item>
+    </string-array>
+
+    <!--    DISCOVER DETAIL Fragment-->
+    <string name="user_friend_title">朋友列表</string>
+    <string name="notification_title">通知</string>
+    <string name="menu_title">菜單</string>
+    <string name="image_title">相片</string>
+    <string name="activity_list_title">活動列表</string>
+    <string name="filter_title">搜尋結果</string>
+    <string name="people_limit">上限: %d 人</string>
+
+    <!--    Notification-->
+    <string name="minute_ago">%d分鐘前</string>
+    <string name="hour_ago">%d小時前</string>
+    <string name="day_ago">%d天前</string>
+    <string name="week_ago">%d週前</string>
+    <string name="month_ago">幾個月前</string>
+
+    <!--    DRINK Info -->
+    <string name="drink_title">酒項</string>
+    <string name="drink_info_price">$ %d</string>
+
+    <!--    Venue Info -->
+    <string name="venue_title">店家</string>
+    <string name="venue_rating_info_view">(%,.1f)&#160;|&#160;%d則評論</string>
+    <string name="venue_rating_info_list">%,.1f&#160;|&#160;%d則評論</string>
+    <string name="service_until_today">營業中 直至%s</string>
+    <string name="service_until_tomorrow">營業中 直至明日%s</string>
+    <string name="rest_until_today">休息中 開始營業時間：%s</string>
+    <string name="rest_until_tomorrow">休息中 開始營業時間：明日%s</string>
+
+    <!--    Add Drink Info -->
+    <string name="add_object_tile">新增項目</string>
+    <string name="drink_uncompleted_context">酒名、類別及價格為必填項目</string>
+    <string name="adding_drink">酒項資訊新增中</string>
+    <string-array name="drink_type">
+        <item>請選擇類別</item>
+        <item>啤酒</item>
+        <item>調酒</item>
+        <item>葡萄酒</item>
+        <item>氣泡酒</item>
+        <item>威士忌</item>
+        <item>梅酒</item>
+        <item>清酒</item>
+        <item>其他</item>
+    </string-array>
+
+    <!--    Add Venue Info -->
+    <string name="venue_uncompleted_context">店名、地址、營業時間、價格範圍及店家風格為必填項目</string>
+    <string name="adding_venue">店家資訊新增中</string>
+    <string name="venue_phone">tel: %s</string>
+    <string-array name="venue_style">
+        <item>請選擇店家風格</item>
+        <item>美式餐廳</item>
+        <item>歐式餐廳</item>
+        <item>日式餐廳</item>
+        <item>台式餐廳</item>
+        <item>韓式餐廳</item>
+        <item>Bar</item>
+        <item>Pub</item>
+    </string-array>
+    <string-array name="venue_level">
+        <item>請選擇平均消費</item>
+        <item>$ (低於300元)</item>
+        <item><![CDATA[$$ (301–900)]]></item>
+        <item><![CDATA[$$$ (901–1800)]]></item>
+        <item>$$$$ (1800元以上)</item>
+    </string-array>
+
+    <!--    Edit Rating-->
+    <string name="edit_rating_title">編輯評論</string>
+    <string name="tag_friend">標註好友</string>
+    <string name="no_menu">無提供菜單</string>
+    <string name="add_drink_item">選取評價項目</string>
+    <string name="add_drink_confirm">OK</string>
+    <string name="add_drink_cancel">Cancel</string>
+
+    <!--    Filter Tab-->
+    <string name="filter_uncompleted_context">價格範圍為必填項目</string>
+    <string name="five_hundred_meter">500公尺</string>
+    <string name="one_kilometer">1公里</string>
+    <string name="two_kilometer">2公里</string>
+    <string name="filter_price_range_desc"><![CDATA[平均消費金額，$ (300元以下)，$$ (301–900)\n$$$ (901–1800)，$$$$ (1801元以上)]]></string>
+    <string name="style_american">美式餐廳</string>
+    <string name="style_european">歐式餐廳</string>
+    <string name="style_japanese">日式餐廳</string>
+    <string name="style_korean">韓式餐廳</string>
+    <string name="style_taiwanese">台式餐廳</string>
+    <string name="style_bar">Bar</string>
+    <string name="style_pub">Pub</string>
+    <string name="category_cocktail">調酒</string>
+    <string name="category_beer">啤酒</string>
+    <string name="category_champagne">氣泡酒</string>
+    <string name="category_wine">葡萄酒</string>
+    <string name="category_whiskey">威士忌</string>
+    <string name="category_umeshu">梅酒</string>
+    <string name="category_sake">清酒</string>
+    <string name="category_other">其他</string>
+
+    <!--    Profile Page-->
+    <string name="profile">profile</string>
+    <string name="friend">friend</string>
+    <string name="other_profile_title">使用者頁面</string>
+    <string name="user_profile_title">個人頁面</string>
+    <string name="profile_frds_cnt">%d位好友</string>
+    <string name="profile_rtgs_cnt">共%d則評價</string>
+    <string name="friend_requesting">好友邀請寄送中</string>
+    <string name="friend_confirm">好友邀請寄送中</string>
+    <string name="add_friend_notify"><![CDATA[<b>%s</b>]]> 想要加你好友</string>
+    <string name="unfriend_notify_title">與 %s 解除朋友關係?</string>
+    <string name="unfriend_notify_content">取消朋友關係的人將無法：\n1. 標註你\n2. 在動態牆即時看到評論消息</string>
+
+    <!--    All Rating-->
+    <string name="all_rating_title">評價</string>
+    <string name="rating_star_count">(%d)</string>
+
+    <!--    Login Page-->
+    <string name="login_content1">Explore Your favourite and</string>
+    <string name="login_content2">what to drink</string>
+
+    <!--    Bottom Navigation Title-->
+    <string name="btm_nvgt_activity">Activity</string>
+    <string name="btm_nvgt_map">Map</string>
+    <string name="btm_nvgt_discovery">Discover</string>
+    <string name="btm_nvgt_collect">Collect</string>
+    <string name="btm_nvgt_profile">Profile</string>
+
+    <!--    DatePicker-->
+    <string name="date_format">yyyy/MM/dd</string>
+    <string name="time_format">a hh:mm</string>
+    <string name="service_format">HH:mm</string>
+    <string name="datetime_format">yyyy/MM/dd a hh:mm</string>
+
+    <!--    Permission-->
+    <string name="permission_image">請開通相片權限，以上傳照片</string>
+    <string name="permission_location_collect">請開通位置存取權，以計算店家與您的距離</string>
+    <string name="permission_confirm">確定</string>
+    <string name="permission_reject">忍痛拒絕</string>
+    <string name="permission_reject_toast">These permissions are denied: %s</string>
+
+    <!--    GPS-->
+    <string name="request_gps_title">GPS 尚未開啟</string>
+    <string name="request_gps_content">使用此功能需要開啟 GPS 定位功能</string>
+    <string name="request_gps_positive">前往開啟</string>
+    <string name="request_gps_cancel">取消</string>
+
+    <!--    Choose Image-->
+    <string name="from_gallery">從照片選擇</string>
+    <string name="exit">離開</string>
+
+    <!--    Data Source-->
+    <string name="fail">Fail at getResult: nothing found</string>
+
+    <!--    Report-->
+    <string name="report_confirm">送出</string>
+    <string name="rule_confirm">同意</string>
+    <string name="text_report">請詳閱《社群規範》</string>
+    <string name="report_rule">《社群規範》</string>
+    <string name="report_menu">檢舉不當內容</string>
+    <string name="block_user">封鎖使用者</string>
+    <string name="report_title">檢舉不當內容</string>
+    <string name="report_user">檢舉使用者</string>
+    <string name="block_text">封鎖需求已送出，我們會立即進行後續事宜，您將不會看到任何有關該使用者的評論以及無法建立朋友關係</string>
+    <string name="report_text_1">感謝您提出檢舉，我們會立即進行審查，如果這位使用者確實違反了 BarUrSide 的《社群規範》，我們就會對他做出懲處，情節嚴重的話我們會移除該使用者帳號以及他所有已發布的內容。</string>
+    <string name="report_text_2">感謝您提出檢舉，我們會立即進行審查，如果這則留言確實違反了 BarUrSide 的《社群規範》，我們就會移除它，並對違規的使用者進行懲處，情節嚴重的話我們會移除該使用者帳號以及他所有已發布的內容。</string>
+    <string name="rules_of_use">若您想要使用"BarUrSide"，請您詳閱並接受以下使用條款:\n
+帳號終止規定:
+因違反《社群規範》而受到終止處分
+帳號可能受到終止處分的原因：
+                     \n
+\n1.以任何內容形式反覆發布含有騷擾、濫用和/或仇恨內容的相片或文字
+\n2.情節重大的單次騷擾/濫用行為，例如掠奪性行為、垃圾內容或色情內容
+\n3.帳號經常違反政策規定，例如出現仇恨言論、做出騷擾行為或冒用他人身分
+     \n\n
+如果帳號遭到終止，您就有可能無法使用、擁有或建立其他 BarUrSide帳戶。帳號遭到終止時，帳號擁有者會收到一封電子郵件，內文詳細說明了終止的原因。
+如果您認為自己的帳號不應遭到終止，請填寫申訴信件提出申訴。
+請勿重複提交同一項申訴要求，以免我們因審查工作量增加而導致回覆時間延遲。
+請盡量在信件中提供完整資訊，包括帳號ID。提供的資訊越詳盡，越有助我們處理您的要求。
+
+
+barurside@gmail.com</string>
+
+    <!--    layout-->
+    <string name="venue_image">Venue image</string>
+    <string name="img_discover_object">使用者發布評論時分享的照片</string>
+    <string name="img_rtg_user">使用者發佈評論一同分享的圖片</string>
+    <string name="rating_score">評分星等</string>
+    <string name="btn_cancel">取消按鈕</string>
+    <string name="confirm">確認</string>
+    <string name="cancel">取消</string>
+    <string name="accept_invitation">已接受邀請</string>
+    <string name="reject_invitation">已接受邀請</string>
+    <string name="img_object">店家或酒項的示意圖片</string>
+    <string name="more_info">更多資訊</string>
+    <string name="enter_comment">輸入評論</string>
+    <string name="upload_images">上傳圖片</string>
+    <string name="enter_friend">Enter friend</string>
+    <string name="img_user_post_cnt">使用者分享評論數目的示意圖</string>
+    <string name="img_user_posting_cnt">使用者分享評論附圖數目的示意圖</string>
+    <string name="img_collect">收藏店家或酒項的示意圖</string>
+    <string name="img_venue_address">店家地址示意圖</string>
+    <string name="img_uber">Uber叫車示意圖</string>
+    <string name="img_telephone">店家電話示意圖</string>
+    <string name="txt_uber">搭 Uber 到這</string>
+    <string name="txt_rating">我要評分</string>
+    <string name="add_menu">新增菜單 +</string>
+    <string name="recommend">為你推薦</string>
+    <string name="check_menu">查看菜單 ></string>
+    <string name="check_all"><![CDATA[查看全部 >]]></string>
+    <string name="choose_venue">就決定是你了</string>
+    <string name="back_previous_page">回上頁</string>
+    <string name="go_to_venue">前往店家</string>
+    <string name="search_for_venue">Search for venue</string>
+    <string name="btn_search">搜尋示意圖</string>
+    <string name="btn_filter">篩選示意圖</string>
+    <string name="txt_sign_in">Let\'s sign you in</string>
+    <string name="img_google_sign_in">google登入示意圖</string>
+    <string name="txt_google_sign_in">Sign in with Google</string>
+    <string name="txt_my_activity">我的活動</string>
+    <string name="txt_share_image">分享相片</string>
+    <string name="friend_status">朋友狀態</string>
+    <string name="my_friend">我的朋友</string>
+    <string name="my_activity">我的活動</string>
+    <string name="txt_rating_amount">評論總數</string>
+    <string name="venue_rating_amount">店家評價</string>
+    <string name="venue_rating_amount_more"><![CDATA[店家評價 >]]></string>
+    <string name="drink_rating_amount">酒類評價</string>
+    <string name="drink_rating_amount_more"><![CDATA[酒類評價 >]]></string>
+    <string name="no_image">尚無相片</string>
+    <string name="image_more"><![CDATA[相片 >]]></string>
+    <string name="status_friend">好友</string>
+    <string name="add_friend">加為朋友</string>
+    <string name="around_bar">附近酒吧</string>
+    <string name="trend_drink">人氣酒項</string>
+    <string name="trend_bar">熱門酒吧</string>
+    <string name="high_rate_drink">好評酒類</string>
+    <string name="high_rate_bar">眾人愛店</string>
+    <string name="btn_add_venue">新增店家按鈕</string>
+    <string name="img_dropdown">下拉選單示意圖</string>
+    <string name="btn_random">隨機篩選按鈕</string>
+    <string name="txt_sale_store">販售店家</string>
+    <string name="txt_send_rating">送出評論</string>
+    <string name="add_drink_rating">新增酒類評論</string>
+    <string name="txt_drink">酒類</string>
+    <string name="txt_distance">距離</string>
+    <string name="txt_style">店家風格</string>
+    <string name="level_one">$</string>
+    <string name="level_two">$$</string>
+    <string name="level_three">$$$</string>
+    <string name="level_four">$$$$</string>
+    <string name="txt_price_range">價格區間</string>
+    <string name="txt_venue">店家</string>
+    <string name="txt_add_venue">新增店家資訊</string>
+    <string name="enter_venue">輸入店名</string>
+    <string name="img_enter_address">輸入地址示意圖</string>
+    <string name="enter_address">輸入地址</string>
+    <string name="img_venue_style">選擇店家風格示意圖</string>
+    <string name="img_venue_price_range">店家價位區間示意圖</string>
+    <string name="img_venue_phone">店家電話號碼示意圖</string>
+    <string name="enter_phone">輸入電話號碼</string>
+    <string name="img_venue_web">店家官方網站示意圖</string>
+    <string name="enter_web">輸入官方網站</string>
+    <string name="img_venue_service_time">店家營業時間示意圖</string>
+    <string name="enter_service_start">輸入開始營業時間</string>
+    <string name="enter_service_end">輸入結束營業時間</string>
+    <string name="img_upload_image">上傳店家圖片示意圖</string>
+    <string name="upload_image">上傳相片</string>
+    <string name="img_upload_image_trigger">使用者上傳圖片觸發區域</string>
+    <string name="btn_complete">完成</string>
+    <string name="img_venue_name">輸入店名示意圖</string>
+    <string name="txt_add_drink">新增酒類項目</string>
+    <string name="enter_drink">輸入酒項名稱</string>
+    <string name="img_obj_desc">輸入酒項描述的示意圖</string>
+    <string name="enter_price">輸入價格</string>
+    <string name="enter_description">輸入製作方式或口感</string>
+    <string name="img_drink_name">輸入酒名示意圖</string>
+    <string name="img_drink_type">選擇酒類的示意圖</string>
+    <string name="img_drink_price">輸入價格的示意圖</string>
+    <string name="txt_enter_activity_name">輸入活動名稱</string>
+    <string name="time">時間</string>
+    <string name="start">開始</string>
+    <string name="enter_activity_start">輸入開始時間</string>
+    <string name="end">結束</string>
+    <string name="enter_activity_end">輸入結束時間</string>
+    <string name="enter_location">輸入地點</string>
+    <string name="enter_people_limit">輸入人數上限</string>
+    <string name="enter_main_drink">輸入主要品嚐酒類</string>
+    <string name="img_activity_time">輸入活動時間的示意圖</string>
+    <string name="fab_add_activity">新增活動按鈕</string>
+    <string name="rating_score_uncompleted">評等分數尚未填寫</string>
+    <string name="info_uncompleted">資訊不完整</string>
+    <string name="adding_rating">評論送出中</string>
+    <string name="img_notification">訊息通知示意圖</string>
+    <string name="img_notification_not_check">未讀訊息數目示意圖</string>
+    <string name="img_share_activity">分享活動</string>
+    <string name="img_activity_start">活動開始時間示意圖</string>
+    <string name="activity_start">開始：</string>
+    <string name="activity_end">結束：</string>
+    <string name="img_activity_location">活動地點示意圖</string>
+    <string name="img_activity_people_limit">活動人數上限示意圖</string>
+    <string name="img_activity_main_drink">活動主要品嘗酒類示意圖</string>
+    <string name="img_activity_sponsor">活動發起人示意圖</string>
+    <string name="txt_sponsor">發起人</string>
+    <string name="sponsor_picture">活動發起人頭像</string>
+
+
+
+</resources>

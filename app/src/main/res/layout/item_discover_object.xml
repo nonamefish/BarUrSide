@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="img"
+            type="String" />
+
+        <variable
+            name="name"
+            type="String" />
+
+        <variable
+            name="info"
+            type="String" />
+
+        <variable
+            name="rating"
+            type="String" />
+
+        <variable
+            name="category"
+            type="String" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cnstrt_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_discover_object"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/img_object"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{img}"
+            app:layout_constraintBottom_toBottomOf="@+id/info_avg_star"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/discover_object_name"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/discover_object_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
+            android:maxLines="2"
+            android:text="@{name}"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/btn_object_info"
+            app:layout_constraintStart_toEndOf="@+id/img_discover_object"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="文青不要喝IPA" />
+
+        <TextView
+            android:id="@+id/discover_object_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{info}"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="@+id/discover_object_name"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/discover_object_name"
+            app:layout_constraintTop_toBottomOf="@+id/discover_object_name"
+            tools:text="$ 1314" />
+
+        <TextView
+            android:id="@+id/discover_object_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{category}"
+            app:layout_constraintEnd_toEndOf="@+id/discover_object_name"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/discover_object_info"
+            app:layout_constraintTop_toBottomOf="@+id/discover_object_info"
+            tools:text="雞尾酒" />
+
+        <ImageView
+            android:id="@+id/info_avg_star"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/ic_baseline_star_rate_24"
+            android:contentDescription="@string/rating_score"
+            app:layout_constraintStart_toStartOf="@+id/discover_object_category"
+            app:layout_constraintTop_toBottomOf="@+id/discover_object_category" />
+
+        <TextView
+            android:id="@+id/discover_object_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@{rating}"
+            app:layout_constraintBottom_toBottomOf="@+id/info_avg_star"
+            app:layout_constraintStart_toEndOf="@+id/info_avg_star"
+            app:layout_constraintTop_toTopOf="@+id/info_avg_star"
+            tools:text="雞尾酒" />
+
+        <ImageView
+            android:id="@+id/btn_object_info"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/more_info"
+            android:src="@drawable/ic_outline_info_24"
+            app:layout_constraintBottom_toBottomOf="@+id/discover_object_rating"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/discover_object_name"
+            app:layout_constraintVertical_bias="0.522" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/gray_f0f0f0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_avg_star" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
