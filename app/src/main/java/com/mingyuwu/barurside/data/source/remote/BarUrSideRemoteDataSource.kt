@@ -333,11 +333,11 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
                     var venue = result.data
                     val imgs = when (venue?.images) {
                         null -> rating?.images
-                        else -> rating?.images?.plus(venue?.images as List<String>)
+                        else -> rating?.images?.plus(venue.images as List<String>)
                     }
 
                     val newRtg =
-                        (venue?.rtgCount?.times(venue?.avgRating)?.plus(rating.rating ?: 0)
+                        (venue?.rtgCount?.times(venue.avgRating)?.plus(rating.rating ?: 0)
                                 )?.div(venue.rtgCount?.plus(1) ?: -1)
 
                     continuation.resume(
@@ -360,13 +360,13 @@ object BarUrSideRemoteDataSource : BarUrSideDataSource {
 
                 if (result is Result.Success) {
                     val drink = result.data
-                    val newRtg = (drink?.rtgCount?.times(drink?.avgRating)?.plus(rating.rating ?: 0)
+                    val newRtg = (drink?.rtgCount?.times(drink.avgRating)?.plus(rating.rating ?: 0)
                             )?.div(drink.rtgCount?.plus(1) ?: -1)
 
                     continuation.resume(
                         db.collection(PATH_DRINK).document(id).update(
                             mapOf(
-                                "images" to rating?.images?.plus(drink?.images as List<String>),
+                                "images" to rating.images?.plus(drink?.images as List<String>),
                                 "avgRating" to newRtg,
                                 "rtgCount" to drink?.rtgCount?.plus(1)
                             )).taskSuccessReturn(true)

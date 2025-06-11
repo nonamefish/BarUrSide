@@ -12,7 +12,7 @@ class EditRatingViewModelFactory(
     private val venue: Venue
 ) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+    override fun <T : ViewModel> create(modelClass: Class<T>): T =
         with(modelClass) {
             when {
                 isAssignableFrom(EditRatingViewModel::class.java) ->

@@ -12,7 +12,7 @@ class ActivityPageViewModelFactory(
     private val type: ActivityTypeFilter
 ) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
                 isAssignableFrom(ActivityPageViewModel::class.java) ->

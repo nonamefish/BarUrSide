@@ -77,6 +77,7 @@ class DiscoverFragment : Fragment() {
                             when (viewModel.searchType.value) {
                                 true -> viewModel.getDrinkBySearch(it)
                                 false -> viewModel.getVenueBySearch(it)
+                                else -> {}
                             }
                         }
                     } else {
@@ -90,7 +91,7 @@ class DiscoverFragment : Fragment() {
         viewModel.searchInfo.observe(
             viewLifecycleOwner, {
 
-                if(!it.isNullOrEmpty()){
+                if (!it.isNullOrEmpty()) {
 
                     val list: List<String>?
                     val id: List<String>?
@@ -102,11 +103,13 @@ class DiscoverFragment : Fragment() {
                             list = data.map { drink -> drink.name }
                             id = data.map { drink -> drink.id }
                         }
+
                         is Venue -> {
                             val data = it.filterIsInstance<Venue>()
                             list = data.map { venue -> venue.name }
                             id = data.map { venue -> venue.id }
                         }
+
                         else -> {
                             list = listOf()
                             id = listOf()
@@ -144,11 +147,14 @@ class DiscoverFragment : Fragment() {
                                 MainNavigationDirections.navigateToDrinkFragment(it)
                             )
                         }
+
                         false -> {
                             findNavController().navigate(
                                 MainNavigationDirections.navigateToVenueFragment(it)
                             )
                         }
+
+                        else -> {}
                     }
                     viewModel.onLeft()
                 }

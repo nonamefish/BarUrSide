@@ -140,6 +140,7 @@ class VenueViewModel(private val repository: BarUrSideRepository, val id: String
                 addCollect(postItem)
                 isCollect.value = true
             }
+            else -> {}
         }
     }
 

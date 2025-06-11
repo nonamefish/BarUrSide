@@ -13,7 +13,7 @@ class ActivityViewModelFactory(
     private val activityId: String?,
 ) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
                 isAssignableFrom(ActivityDetailViewModel::class.java) ->

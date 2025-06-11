@@ -14,7 +14,7 @@ class InfoViewModelFactory(
     private val id: String
 ) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+    override fun <T : ViewModel> create(modelClass: Class<T>): T =
         with(modelClass) {
             when {
                 isAssignableFrom(VenueViewModel::class.java) ->

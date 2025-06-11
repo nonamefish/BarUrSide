@@ -227,11 +227,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
         }
     }
 
-    override fun onInfoWindowClick(marker: Marker?) {
-        marker?.title?.let {
-            val info = marker.snippet.toString().split(",")
-            viewModel.navigateToVenue.value = info[0]
-        }
+    override fun onInfoWindowClick(p0: Marker) {
+        val info = p0.snippet.toString().split(",")
+        viewModel.navigateToVenue.value = info[0]
     }
 
 }

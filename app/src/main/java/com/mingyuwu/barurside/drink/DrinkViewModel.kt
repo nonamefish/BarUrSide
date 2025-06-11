@@ -82,14 +82,17 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
                     _error.value = null
                     result.data.any { it.objectId == id }
                 }
+
                 is Result.Fail -> {
                     _error.value = result.error
                     null
                 }
+
                 is Result.Error -> {
                     _error.value = result.exception.toString()
                     null
                 }
+
                 else -> {
                     null
                 }
@@ -103,11 +106,14 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
                 isCollect.value = false
                 removeCollect(id, userId)
             }
+
             false -> {
                 val postItem = Collect("", false, userId, id)
                 addCollect(postItem)
                 isCollect.value = true
             }
+
+            else -> {}
         }
     }
 
@@ -121,12 +127,15 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
                     _error.value = null
                     result.data
                 }
+
                 is Result.Fail -> {
                     _error.value = result.error
                 }
+
                 is Result.Error -> {
                     _error.value = result.exception.toString()
                 }
+
                 else -> {
                     Logger.w("Wrong Result Type: $result")
                 }
@@ -144,12 +153,15 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
                     _error.value = null
                     result.data
                 }
+
                 is Result.Fail -> {
                     _error.value = result.error
                 }
+
                 is Result.Error -> {
                     _error.value = result.exception.toString()
                 }
+
                 else -> {
                     Logger.w("Wrong Result Type: $result")
                 }

@@ -192,7 +192,7 @@ class AddVenueFragment : Fragment() {
 
         val timePicker = TimePickerDialog(
             binding.root.context,
-            R.style.ThemeOverlay_MaterialComponents_TimePicker,
+            com.google.android.material.R.style.ThemeOverlay_MaterialComponents_TimePicker,
             timeListener,
             calender.get(Calendar.HOUR_OF_DAY),
             calender.get(Calendar.MINUTE),

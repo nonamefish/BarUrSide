@@ -87,7 +87,7 @@ class MarkerCallback internal constructor(marker: Marker?) :
     override fun onLoadFailed(
         e: GlideException?,
         model: Any?,
-        target: Target<Drawable>?,
+        target: Target<Drawable?>,
         isFirstResource: Boolean
     ): Boolean {
         Log.e(javaClass.simpleName, "Error loading thumbnail! -> $e")
@@ -95,10 +95,10 @@ class MarkerCallback internal constructor(marker: Marker?) :
     }
 
     override fun onResourceReady(
-        resource: Drawable?,
-        model: Any?,
-        target: Target<Drawable>?,
-        dataSource: DataSource?,
+        resource: Drawable,
+        model: Any,
+        target: Target<Drawable?>?,
+        dataSource: DataSource,
         isFirstResource: Boolean
     ): Boolean {
         onSuccess()

@@ -139,7 +139,7 @@ class AddActivityFragment : Fragment() {
 
         val dialog = DatePickerDialog1(
             binding.root.context,
-            R.style.ThemeOverlay_MaterialComponents_TimePicker,
+            R.style.ThemeOverlay_App_DatePicker,
             dateListener,
             calender.get(Calendar.YEAR),
             calender.get(Calendar.MONTH),
@@ -168,7 +168,7 @@ class AddActivityFragment : Fragment() {
 
         val dialog = TimePickerDialog(
             binding.root.context,
-            R.style.ThemeOverlay_MaterialComponents_TimePicker,
+            com.google.android.material.R.style.ThemeOverlay_MaterialComponents_TimePicker,
             timeListener,
             calender.get(Calendar.HOUR_OF_DAY),
             calender.get(Calendar.MINUTE),

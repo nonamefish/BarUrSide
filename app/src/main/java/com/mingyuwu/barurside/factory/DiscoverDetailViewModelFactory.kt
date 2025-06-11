@@ -15,7 +15,7 @@ class DiscoverDetailViewModelFactory(
     private val filterParameter: FilterParameter?
 ) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+    override fun <T : ViewModel> create(modelClass: Class<T>): T =
         with(modelClass) {
             when {
                 isAssignableFrom(DiscoverDetailViewModel::class.java) ->
