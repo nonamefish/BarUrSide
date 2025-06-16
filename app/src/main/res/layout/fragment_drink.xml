@@ -32,7 +32,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/img_drink"
+                android:id="@+id/imgDrink"
                 android:layout_width="match_parent"
                 android:layout_height="260dp"
                 android:contentDescription="@string/img_object"
@@ -44,7 +44,7 @@
                 tools:src="@tools:sample/avatars" />
 
             <ImageView
-                android:id="@+id/img_collect_filled_filled"
+                android:id="@+id/imgCollectFilledFilled"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_marginEnd="16dp"
@@ -54,23 +54,23 @@
                 android:contentDescription="@string/img_collect"
                 android:onClickListener="@{()->viewModel.setCollect()}"
                 app:alpha="@{viewModel.isCollect ?  1.0f : 0.5f }"
-                app:layout_constraintBottom_toBottomOf="@+id/img_drink"
+                app:layout_constraintBottom_toBottomOf="@+id/imgDrink"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
-                android:id="@+id/img_collect_border"
+                android:id="@+id/imgCollectBorder"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:contentDescription="@string/img_collect"
-                app:layout_constraintBottom_toBottomOf="@+id/img_drink"
+                app:layout_constraintBottom_toBottomOf="@+id/imgDrink"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_baseline_favorite_border_36"
                 app:tint="@color/white" />
 
             <TextView
-                android:id="@+id/drink_title"
+                android:id="@+id/txtDrinkTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -80,14 +80,14 @@
                 android:textColor="@color/black_3f3a3a"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/drink_price"
+                app:layout_constraintEnd_toStartOf="@+id/txtDrinkPrice"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_drink"
+                app:layout_constraintTop_toBottomOf="@+id/imgDrink"
                 tools:text="文青不要喝IPA" />
 
             <TextView
-                android:id="@+id/drink_price"
+                android:id="@+id/txtDrinkPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -95,28 +95,28 @@
                 android:textColor="@color/black_3f3a3a"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/drink_title"
+                app:layout_constraintBottom_toBottomOf="@+id/txtDrinkTitle"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/drink_title"
+                app:layout_constraintTop_toTopOf="@+id/txtDrinkTitle"
                 app:layout_constraintVertical_bias="0.0"
                 tools:text="$ 2000" />
 
             <TextView
-                android:id="@+id/drink_desc"
+                android:id="@+id/txtDrinkDesc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="@{viewModel.drinkInfo.description}"
                 android:textColor="@color/gray_888888"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@+id/drink_title"
+                app:layout_constraintEnd_toEndOf="@+id/txtDrinkTitle"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/drink_title"
-                app:layout_constraintTop_toBottomOf="@id/drink_title"
+                app:layout_constraintStart_toStartOf="@+id/txtDrinkTitle"
+                app:layout_constraintTop_toBottomOf="@id/txtDrinkTitle"
                 tools:text="草莓奶酒加入咖啡，泰式檸檬以及煉乳，一杯呈現越南咖啡風味的調酒" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/drink_rtg_score_list"
+                android:id="@+id/rvDrinkRtgScoreList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -124,22 +124,22 @@
                 android:layout_marginEnd="4dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toStartOf="@+id/drink_rtg_avg_score"
+                app:layout_constraintEnd_toStartOf="@+id/txtDrinkRtgAvgScore"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/drink_desc"
+                app:layout_constraintTop_toBottomOf="@+id/txtDrinkDesc"
                 app:stars="@{viewModel.drinkInfo.avgRating}">
 
             </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
-                android:id="@+id/drink_rtg_avg_score"
+                android:id="@+id/txtDrinkRtgAvgScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="4dp"
                 android:text="@{viewModel.drinkInfo.rtgCount == 0 ? `無評論` : @string/venue_rating_info_view(viewModel.drinkInfo.avgRating, viewModel.drinkInfo.rtgCount)}"
-                app:layout_constraintStart_toEndOf="@+id/drink_rtg_score_list"
-                app:layout_constraintTop_toBottomOf="@+id/drink_desc"
+                app:layout_constraintStart_toEndOf="@+id/rvDrinkRtgScoreList"
+                app:layout_constraintTop_toBottomOf="@+id/txtDrinkDesc"
                 tools:text="TextView" />
 
             <View
@@ -150,10 +150,10 @@
                 android:background="@color/gray_f0f0f0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/drink_rtg_avg_score" />
+                app:layout_constraintTop_toBottomOf="@+id/txtDrinkRtgAvgScore" />
 
             <TextView
-                android:id="@+id/txt_drink_by_venue"
+                android:id="@+id/txtVenueTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -164,6 +164,67 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/separateLine" />
 
+            <ImageView
+                android:id="@+id/imgVenue"
+                android:layout_width="48dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/img_object"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{viewModel.venueInfo.images[0]}"
+                app:layout_constraintBottom_toBottomOf="@+id/txtDrinkByVenueStyle"
+                app:layout_constraintStart_toStartOf="@+id/txtDrinkTitle"
+                app:layout_constraintTop_toTopOf="@+id/txtDrinkByVenue"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/txtDrinkByVenue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@{viewModel.venueInfo.name}"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/btnVenueInfo"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/imgVenue"
+                app:layout_constraintTop_toBottomOf="@+id/txtVenueTitle"
+                tools:text="不醉不歸酒吧" />
+
+            <TextView
+                android:id="@+id/txtDrinkByVenueAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@{viewModel.venueInfo.address}"
+                app:layout_constraintEnd_toEndOf="@+id/txtDrinkByVenue"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/txtDrinkByVenue"
+                app:layout_constraintTop_toBottomOf="@+id/txtDrinkByVenue"
+                tools:text="台北市忠孝東路一段2號" />
+
+            <TextView
+                android:id="@+id/txtDrinkByVenueStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toEndOf="@+id/imgVenue"
+                app:layout_constraintTop_toBottomOf="@+id/txtDrinkByVenueAddress"
+                app:venueStyle="@{viewModel.venueInfo.style}"
+                tools:text="Restaurant" />
+
+            <ImageView
+                android:id="@+id/btnVenueInfo"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/more_info"
+                android:src="@drawable/ic_outline_info_24"
+                app:layout_constraintBottom_toBottomOf="@+id/txtDrinkByVenueStyle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txtDrinkByVenue" />
+
             <View
                 android:id="@+id/view2"
                 android:layout_width="match_parent"
@@ -172,7 +233,7 @@
                 android:background="@color/gray_f0f0f0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/drink_by_venue_style" />
+                app:layout_constraintTop_toBottomOf="@+id/txtDrinkByVenueStyle" />
 
             <View
                 android:id="@+id/view3"
@@ -182,10 +243,10 @@
                 android:background="@color/gray_f0f0f0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/drink_img_list" />
+                app:layout_constraintTop_toBottomOf="@+id/rvDrinkImgList" />
 
             <TextView
-                android:id="@+id/txt_drink_img"
+                android:id="@+id/txtDrinkImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -201,7 +262,7 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/txt_drink_last_rtg"
+                android:id="@+id/txtDrinkLastRtg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -216,7 +277,7 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/drink_img_list"
+                android:id="@+id/rvDrinkImgList"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
@@ -226,14 +287,14 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_drink_img"
+                app:layout_constraintTop_toBottomOf="@+id/txtDrinkImg"
                 app:listData="@{imgs}">
 
             </androidx.recyclerview.widget.RecyclerView>
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/drink_rtg_list"
+                android:id="@+id/rvDrinkRtgList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="true"
@@ -241,74 +302,14 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_drink_last_rtg"
+                app:layout_constraintTop_toBottomOf="@+id/txtDrinkLastRtg"
                 app:rtgList="@{ratings}">
 
             </androidx.recyclerview.widget.RecyclerView>
 
-            <ImageView
-                android:id="@+id/img_venue"
-                android:layout_width="48dp"
-                android:layout_height="0dp"
-                android:contentDescription="@string/img_object"
-                android:scaleType="centerCrop"
-                app:imageUrl="@{viewModel.venueInfo.images[0]}"
-                app:layout_constraintBottom_toBottomOf="@+id/drink_by_venue_style"
-                app:layout_constraintStart_toStartOf="@+id/txt_drink_by_venue"
-                app:layout_constraintTop_toTopOf="@+id/drink_by_venue"
-                tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/drink_by_venue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="@{viewModel.venueInfo.name}"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/btn_venue_info"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/img_venue"
-                app:layout_constraintTop_toBottomOf="@+id/txt_drink_by_venue"
-                tools:text="不醉不歸酒吧" />
-
-            <TextView
-                android:id="@+id/drink_by_venue_address"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@{viewModel.venueInfo.address}"
-                app:layout_constraintEnd_toEndOf="@+id/drink_by_venue"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/drink_by_venue"
-                app:layout_constraintTop_toBottomOf="@+id/drink_by_venue"
-                tools:text="台北市忠孝東路一段2號" />
-
-            <TextView
-                android:id="@+id/drink_by_venue_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintStart_toEndOf="@+id/img_venue"
-                app:layout_constraintTop_toBottomOf="@+id/drink_by_venue_address"
-                app:venueStyle="@{viewModel.venueInfo.style}"
-                tools:text="Restaurant" />
-
-            <ImageView
-                android:id="@+id/btn_venue_info"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_marginEnd="16dp"
-                android:contentDescription="@string/more_info"
-                android:src="@drawable/ic_outline_info_24"
-                app:layout_constraintBottom_toBottomOf="@+id/drink_by_venue_style"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/drink_by_venue" />
-
-            <TextView
-                android:id="@+id/drink_all_review"
+                android:id="@+id/txtDrinkAllReview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -319,7 +320,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/drink_rtg_list" />
+                app:layout_constraintTop_toBottomOf="@+id/rvDrinkRtgList" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

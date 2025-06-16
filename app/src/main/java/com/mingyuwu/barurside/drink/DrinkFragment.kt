@@ -75,9 +75,9 @@ class DrinkFragment : Fragment() {
         )
 
         // set recyclerView Adapter
-        binding.drinkRtgList.adapter = InfoRatingAdapter()
-        binding.drinkImgList.adapter = ImageAdapter(80, 100)
-        binding.drinkRtgScoreList.adapter = RatingScoreAdapter(15, 15)
+        binding.rvDrinkRtgList.adapter = InfoRatingAdapter()
+        binding.rvDrinkImgList.adapter = ImageAdapter(80, 100)
+        binding.rvDrinkRtgScoreList.adapter = RatingScoreAdapter(15, 15)
 
         // drink's venue info click listener
         binding.btnVenueInfo.setOnClickListener {
