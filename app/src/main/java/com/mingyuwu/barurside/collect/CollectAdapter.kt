@@ -1,11 +1,14 @@
 package com.mingyuwu.barurside.collect
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.mingyuwu.barurside.BarUrSideApplication
@@ -19,66 +22,102 @@ import kotlin.math.roundToInt
 class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: OnClickListener) :
     ListAdapter<Any, CollectAdapter.CollectViewHolder>(DiffCallback) {
 
-    class CollectViewHolder(private var binding: ItemCollectBinding) :
+    class CollectViewHolder(private val binding: ItemCollectBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         companion object {
             fun from(parent: ViewGroup): CollectViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemCollectBinding.inflate(layoutInflater, parent, false)
-                binding.lifecycleOwner = parent.context as LifecycleOwner
-
                 return CollectViewHolder(binding)
             }
         }
 
         fun bind(collect: Any, viewModel: CollectPageViewModel) {
-            binding.viewModel = viewModel
-
             when (collect) {
                 is Venue -> {
-                    binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
-                    binding.venue = collect
-                    binding.isVenue = true
-                    binding.position = adapterPosition
-                    viewModel.location.value?.let {
-                        binding.distance =
+                    binding.rvRatingScore.adapter = RatingScoreAdapter(15, 15)
+                    updateImage(binding.imgCatalogProduct, collect.images?.first())
+                    binding.txtCatalogProductName.text = collect.name
+                    binding.txtCatalogProductDistance.visibility = View.VISIBLE
+                    binding.txtCatalogProductDistance.text =
+                        when (val distance = viewModel.location.value?.let {
                             SphericalUtil.computeDistanceBetween(
                                 it,
                                 LatLng(collect.latitude, collect.longitude)
                             ).roundToInt()
-                    }
-                    binding.rtgInfo = when (collect.rtgCount) {
-                        0L -> {
-                            "無評論"
+                        }) {
+                            null -> ""
+                            else -> "距 $distance 公尺"
                         }
-                        else -> {
-                            BarUrSideApplication.instance.getString(
-                                R.string.venue_rating_info_view,
-                                collect.avgRating,
-                                collect.rtgCount
-                            )
-                        }
+                    binding.txtVenueRtgAvgScore.text = when (collect.rtgCount) {
+                        0L -> "無評論"
+                        else -> BarUrSideApplication.instance.getString(
+                            R.string.venue_rating_info_view,
+                            collect.avgRating,
+                            collect.rtgCount
+                        )
                     }
+                    updateCollectButton(adapterPosition, viewModel)
+                    setupCollectButton(collect.id, adapterPosition, true, viewModel)
                 }
+
                 is Drink -> {
-                    binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
-                    binding.drink = collect
-                    binding.isVenue = false
-                    binding.position = adapterPosition
-                    binding.rtgInfo = when (collect.rtgCount) {
-                        0L -> {
-                            "無評論"
-                        }
-                        else -> {
-                            BarUrSideApplication.instance.getString(
-                                R.string.venue_rating_info_view,
-                                collect.avgRating,
-                                collect.rtgCount
-                            )
-                        }
+                    binding.rvRatingScore.adapter = RatingScoreAdapter(15, 15)
+                    updateImage(binding.imgCatalogProduct, collect.images?.first())
+                    binding.txtCatalogProductName.text = collect.name
+                    binding.txtCatalogProductDistance.visibility = View.GONE
+                    binding.txtVenueRtgAvgScore.text = when (collect.rtgCount) {
+                        0L -> "無評論"
+                        else -> BarUrSideApplication.instance.getString(
+                            R.string.venue_rating_info_view,
+                            collect.avgRating,
+                            collect.rtgCount
+                        )
                     }
+                    updateCollectButton(adapterPosition, viewModel)
+                    setupCollectButton(collect.id, adapterPosition, false, viewModel)
                 }
+            }
+            binding.imgCatalogProduct.apply {
+                Glide.with(context)
+                    .load(collect)
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
+                    .into(this)
+            }
+        }
+
+        private fun updateImage(view: ImageView, imgUrl: String?) {
+            view.apply {
+                Glide.with(context)
+                    .load(imgUrl)
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
+                    .into(this)
+            }
+        }
+
+        private fun updateCollectButton(position: Int, viewModel: CollectPageViewModel) {
+            val isCollected = viewModel.isCollect.value?.get(position) == true
+            binding.imgCollectFilled.apply {
+                backgroundTintList = ContextCompat.getColorStateList(
+                    context,
+                    if (isCollected) R.color.red_e02401 else R.color.gray_888888
+                )
+                alpha = if (isCollected) 1.0f else 0.5f
+            }
+        }
+
+        private fun setupCollectButton(
+            id: String,
+            position: Int,
+            isVenue: Boolean,
+            viewModel: CollectPageViewModel
+        ) {
+            binding.imgCollectFilled.setOnClickListener {
+                viewModel.setCollect(id, position, isVenue)
+                updateCollectButton(position, viewModel)
             }
         }
     }
@@ -117,6 +156,7 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
                     onClickListener.onClick(product.id)
                 }
             }
+
             is Drink -> {
                 holder.itemView.setOnClickListener {
                     onClickListener.onClick(product.id)

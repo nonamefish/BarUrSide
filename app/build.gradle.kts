@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId = "com.mingyuwu.barurside"
-        minSdk = 24 // 建議設為 24 以上，支援度較佳
+        minSdk = 24
         targetSdk = 34
         versionCode = 25
         versionName = "5.6.10"

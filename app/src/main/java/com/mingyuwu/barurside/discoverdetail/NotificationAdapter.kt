@@ -1,12 +1,22 @@
 package com.mingyuwu.barurside.discoverdetail
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.fromHtml
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.databinding.ItemNotificationBinding
+import com.mingyuwu.barurside.util.Util
+import com.mingyuwu.barurside.util.Util.getDiffDay
+import com.mingyuwu.barurside.util.Util.getDiffHour
+import com.mingyuwu.barurside.util.Util.getDiffMinute
+import java.sql.Timestamp
 
 class NotificationAdapter(val viewModel: DiscoverDetailViewModel) :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
@@ -24,8 +34,47 @@ class NotificationAdapter(val viewModel: DiscoverDetailViewModel) :
         }
 
         fun bind(notification: Notification, viewModel: DiscoverDetailViewModel) {
-            binding.notification = notification
-            binding.viewModel = viewModel
+            binding.imgRatingUser.apply {
+                Glide.with(context)
+                    .load(notification.image)
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
+                    .into(this)
+            }
+
+            binding.txtNotifyTitle.text = fromHtml(notification.content, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            binding.txtNotifyPeriod.text = getNotificationPeriod(notification.timestamp ?: return)
+            binding.clFriend.visibility =
+                if (notification.type == "friend") View.VISIBLE else View.GONE
+            binding.btnConfirm.apply {
+                setOnClickListener { viewModel.replyAddFriend(notification, true) }
+                visibility = if (notification.reply == null) View.VISIBLE else View.GONE
+            }
+            binding.btnCancel.apply {
+                setOnClickListener { viewModel.replyAddFriend(notification, false) }
+                visibility = if (notification.reply == null) View.VISIBLE else View.GONE
+            }
+            binding.txtReplyInvitation.apply {
+                visibility = if (notification.reply == null) View.VISIBLE else View.GONE
+                text = when (notification.reply) {
+                    true -> Util.getString(R.string.accept_invitation)
+                    false -> Util.getString(R.string.reject_invitation)
+                    else -> ""
+                }
+            }
+        }
+
+        fun getNotificationPeriod(date: Timestamp): String {
+            val diffHour = getDiffHour(date)
+            val diffDay = getDiffDay(date)
+            val diffWeek = (diffDay.toDouble() / 7).toString().substringBefore(".").toInt()
+            return when {
+                diffHour < 0 -> Util.getString(R.string.minute_ago, getDiffMinute(date))
+                diffHour < 24 -> Util.getString(R.string.hour_ago, diffHour)
+                diffDay < 7 -> Util.getString(R.string.day_ago, diffDay)
+                diffDay < 30 -> Util.getString(R.string.week_ago, diffWeek)
+                else -> Util.getString(R.string.month_ago)
+            }
         }
     }
 

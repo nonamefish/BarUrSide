@@ -155,43 +155,6 @@ fun bindRecyclerViewWithImageBitmaps(recyclerView: RecyclerView, imageBitmaps: L
     }
 }
 
-@BindingAdapter("notifyPeriod")
-fun bindNotificationPeriod(textView: TextView, date: Timestamp?) {
-    date?.let {
-        val diffHour = getDiffHour(date)
-        val diffDay = getDiffDay(date)
-        val diffWeek = (diffDay.toDouble() / 7).toString().substringBefore(".").toInt()
-        when {
-            diffHour < 0 -> {
-                textView.text = Util.getString(R.string.minute_ago, getDiffMinute(date))
-            }
-            diffHour < 24 -> {
-                textView.text =
-                    Util.getString(R.string.hour_ago, diffHour)
-            }
-            diffDay < 7 -> {
-                textView.text = Util.getString(R.string.day_ago, diffDay)
-            }
-            diffDay < 30 -> {
-                textView.text = Util.getString(
-                    R.string.week_ago,
-                    diffWeek
-                )
-            }
-            else -> {
-                textView.text = Util.getString(R.string.month_ago)
-            }
-        }
-    }
-}
-
-@BindingAdapter("notifyContent")
-fun bindNotificationContent(textView: TextView, content: String?) {
-    content?.let {
-        textView.text = fromHtml(content, HtmlCompat.FROM_HTML_MODE_LEGACY)
-    }
-}
-
 @BindingAdapter("isOpen")
 fun bindIsOpen(textView: TextView, serviceTime: String?) {
     serviceTime?.let {
@@ -306,20 +269,6 @@ fun bindActivityDetailBtn(button: Button, isFull: Boolean, hasBook: Boolean) {
         else -> {
             button.text = Util.getString(R.string.activity_join)
             button.isEnabled = true
-        }
-    }
-}
-
-@BindingAdapter("distance")
-fun bindDistance(textView: TextView, distance: Int?) {
-    distance?.let {
-        if (it < 1000) {
-            textView.text = Util.getString(R.string.distance_meter, distance)
-        } else {
-            textView.text = Util.getString(
-                R.string.distance_kilometer,
-                String.format("%.1f", (it.toDouble() / 1000))
-            )
         }
     }
 }
