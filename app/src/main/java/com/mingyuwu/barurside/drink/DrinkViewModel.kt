@@ -3,7 +3,11 @@ package com.mingyuwu.barurside.drink
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mingyuwu.barurside.data.*
+import com.mingyuwu.barurside.data.Collect
+import com.mingyuwu.barurside.data.Drink
+import com.mingyuwu.barurside.data.RatingInfo
+import com.mingyuwu.barurside.data.Result
+import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
 import com.mingyuwu.barurside.util.Logger
@@ -16,7 +20,9 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
 
     // set source data
     var drinkInfo = MutableLiveData<Drink>()
+
     var venueInfo = MutableLiveData<Venue>()
+
     var rtgInfo = MutableLiveData<List<RatingInfo>>()
     var isCollect = MutableLiveData<Boolean?>()
     val userId = UserManager.user.value?.id ?: ""
@@ -49,50 +55,61 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
 
     private fun getDrinkResult(id: String) {
         drinkInfo = repository.getDrink(id)
+        drinkInfo.observeForever { drink ->
+            drink?.let {
+                // If the drink has a venue, get the venue information
+                if (venueInfo.value?.id.isNullOrEmpty() && it.venueId.isNotEmpty()) {
+                    getVenueResult(it.venueId)
+                }
+                // Get the rating information for the drink
+                getRatingResult(id, false)
+            }
+        }
     }
 
     fun getRatingResult(id: String, isVenue: Boolean) {
-        rtgInfo = repository.getRatingByObject(id, isVenue)
+        repository.getRatingByObject(id, isVenue).observeForever { ratings ->
+            ratings?.let {
+                rtgInfo.value = it
+                setImages(it)
+            }
+        }
     }
 
     fun getVenueResult(id: String) {
-        venueInfo = repository.getVenue(id)
+        repository.getVenue(id).observeForever { venue ->
+            venue?.let {
+                venueInfo.value = it
+            }
+        }
     }
 
     fun setImages(rtgs: List<RatingInfo>) {
-
         val list = mutableListOf<String>()
-
         rtgs.forEach { ratingInfo ->
             ratingInfo.images?.let { images ->
                 list += images
             }
         }
-
         _images.value = list
     }
 
     private fun getCollect(userId: String) {
-
         coroutineScope.launch {
-
             val result = repository.getCollect(userId)
             isCollect.value = when (result) {
                 is Result.Success -> {
                     _error.value = null
                     result.data.any { it.objectId == id }
                 }
-
                 is Result.Fail -> {
                     _error.value = result.error
                     null
                 }
-
                 is Result.Error -> {
                     _error.value = result.exception.toString()
                     null
                 }
-
                 else -> {
                     null
                 }
@@ -106,36 +123,29 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
                 isCollect.value = false
                 removeCollect(id, userId)
             }
-
             false -> {
                 val postItem = Collect("", false, userId, id)
                 addCollect(postItem)
                 isCollect.value = true
             }
-
             else -> {}
         }
     }
 
     private fun addCollect(collect: Collect) {
-
         coroutineScope.launch {
-
             val result = repository.addCollect(collect)
             when (result) {
                 is Result.Success -> {
                     _error.value = null
                     result.data
                 }
-
                 is Result.Fail -> {
                     _error.value = result.error
                 }
-
                 is Result.Error -> {
                     _error.value = result.exception.toString()
                 }
-
                 else -> {
                     Logger.w("Wrong Result Type: $result")
                 }
@@ -144,24 +154,19 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
     }
 
     private fun removeCollect(id: String, userId: String) {
-
         coroutineScope.launch {
-
             val result = repository.removeCollect(id, userId)
             when (result) {
                 is Result.Success -> {
                     _error.value = null
                     result.data
                 }
-
                 is Result.Fail -> {
                     _error.value = result.error
                 }
-
                 is Result.Error -> {
                     _error.value = result.exception.toString()
                 }
-
                 else -> {
                     Logger.w("Wrong Result Type: $result")
                 }
@@ -175,5 +180,13 @@ class DrinkViewModel(private val repository: BarUrSideRepository, val id: String
 
     fun onLeft() {
         navigateToAll.value = null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+        drinkInfo.removeObserver { }
+        venueInfo.removeObserver { }
+        rtgInfo.removeObserver { }
     }
 }

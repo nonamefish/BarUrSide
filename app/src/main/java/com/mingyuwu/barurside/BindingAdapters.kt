@@ -247,28 +247,3 @@ fun bindIconBack(imageView: ImageView, currentFragmentType: CurrentFragmentType?
         }
     }
 }
-
-@BindingAdapter("venueStyle")
-fun bindVenueStyle(textView: TextView, style: String?) {
-    style?.let {
-        textView.text = Style.valueOf(it.uppercase()).chinese
-    }
-}
-
-@BindingAdapter("isFull", "hasBook")
-fun bindActivityDetailBtn(button: Button, isFull: Boolean, hasBook: Boolean) {
-    when {
-        isFull -> {
-            button.text = Util.getString(R.string.activity_full)
-            button.isEnabled = false
-        }
-        hasBook -> {
-            button.text = Util.getString(R.string.activity_quit)
-            button.isEnabled = true
-        }
-        else -> {
-            button.text = Util.getString(R.string.activity_join)
-            button.isEnabled = true
-        }
-    }
-}
