@@ -3,26 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.mingyuwu.barurside.venue.VenueViewModel" />
-
-        <variable
-            name="view"
-            type="android.view.View" />
-
-        <variable
-            name="ratings"
-            type="java.util.List&lt;com.mingyuwu.barurside.data.RatingInfo&gt;" />
-
-        <variable
-            name="imgs"
-            type="java.util.List&lt;String&gt;" />
-
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -44,11 +24,8 @@
                     android:layout_height="260dp"
                     android:contentDescription="@string/img_object"
                     android:scaleType="centerCrop"
-                    app:imageUrl="@{viewModel.venueInfo.images[0]}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@tools:sample/avatars" />
+                    tools:src="@tools:sample/avatars"
+                    tools:ignore="MissingConstraints" />
 
                 <ImageView
                     android:id="@+id/imgCollectFilledFilled"
@@ -57,10 +34,9 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/ic_baseline_favorite_36"
-                    android:backgroundTint="@{viewModel.isCollect ? @color/red_e02401 : @color/gray_888888}"
+                    android:backgroundTint="@color/gray_888888"
                     android:contentDescription="@string/img_collect"
-                    android:onClickListener="@{()->viewModel.setCollect()}"
-                    app:alpha="@{viewModel.isCollect ?  1.0f : 0.5f }"
+                    app:alpha="0.5"
                     app:layout_constraintBottom_toBottomOf="@+id/imgVenue"
                     app:layout_constraintEnd_toEndOf="parent" />
 
@@ -84,7 +60,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="4dp"
-                    android:text="@{viewModel.venueInfo.name}"
+                    android:text="@string/venue_title"
                     android:textColor="@color/black_3f3a3a"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/rvRtgScoreList"
@@ -105,10 +81,7 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toStartOf="@+id/txtRtgAvgScore"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtVenueTitle"
-                    app:stars="@{viewModel.venueInfo.avgRating}">
-
-                </androidx.recyclerview.widget.RecyclerView>
+                    app:layout_constraintTop_toBottomOf="@+id/txtVenueTitle" />
 
                 <TextView
                     android:id="@+id/txtRtgAvgScore"
@@ -116,7 +89,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="4dp"
-                    android:text="@{viewModel.venueInfo.rtgCount == 0 ? `無評論` : @string/venue_rating_info_view(viewModel.venueInfo.avgRating, viewModel.venueInfo.rtgCount)}"
                     app:layout_constraintStart_toEndOf="@+id/rvRtgScoreList"
                     app:layout_constraintTop_toBottomOf="@+id/txtVenueTitle"
                     tools:text="TextView" />
@@ -127,7 +99,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
-                    app:isOpen="@{viewModel.venueInfo.serviceTime}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtRtgAvgScore"
                     tools:text="營業中 直至夜間2:00" />
@@ -173,7 +144,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="@{viewModel.venueInfo.address}"
                     android:textColor="@color/black_3f3a3a"
                     app:layout_constraintStart_toEndOf="@+id/imgVenueAddress"
                     app:layout_constraintTop_toTopOf="@+id/imgVenueAddress"
@@ -195,7 +165,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="@{viewModel.venueInfo.phone}"
+                    android:text="@string/venue_phone"
                     android:textColor="@color/black_3f3a3a"
                     app:layout_constraintStart_toEndOf="@+id/imgVenuePhone"
                     app:layout_constraintTop_toTopOf="@+id/imgVenuePhone"
@@ -239,8 +209,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:onClick="@{() -> viewModel.navigateToMenu()}"
-                    android:text="@{viewModel.menuInfo.size()==0 ? @string/add_menu : @string/recommend}"
+                    android:text="@string/recommend"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -252,12 +221,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:onClick="@{() -> viewModel.navigateToMenu()}"
                     android:text="@string/check_menu"
                     android:textColor="@color/primaryDarkColor"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:visibility="@{viewModel.menuInfo.size()==0 ? view.GONE : view.visibility}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view11" />
 
@@ -272,10 +239,7 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtMenu"
-                    app:listData="@{viewModel.menuInfo}">
-
-                </androidx.recyclerview.widget.RecyclerView>
+                    app:layout_constraintTop_toBottomOf="@+id/txtMenu" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -383,8 +347,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    android:clickable="@{imgs.size() > 0}"
-                    android:text="@{imgs.size == 0 ? `尚無相片` : `相片 >`}"
+                    android:clickable="true"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/view3"
@@ -399,7 +362,6 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    android:text="@{imgs.size() == 0 ? `尚無評論` : `最新評論`}"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -418,10 +380,7 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtImg"
-                    app:listData="@{imgs}">
-
-                </androidx.recyclerview.widget.RecyclerView>
+                    app:layout_constraintTop_toBottomOf="@+id/txtImg" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -433,10 +392,7 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtLastRtg"
-                    app:rtgList="@{ratings}">
-
-                </androidx.recyclerview.widget.RecyclerView>
+                    app:layout_constraintTop_toBottomOf="@+id/txtLastRtg" />
 
                 <TextView
                     android:id="@+id/txtAllReview"
@@ -444,9 +400,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="24dp"
-                    android:onClick="@{() -> viewModel.navigateToAllRating()}"
                     android:text="@string/check_all"
-                    android:visibility="@{viewModel.rtgInfos.size > 3 ? view.VISIBLE: view.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

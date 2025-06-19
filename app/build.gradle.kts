@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId = "com.mingyuwu.barurside"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 25
         versionName = "5.6.10"
