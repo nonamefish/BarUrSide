@@ -56,10 +56,10 @@ class VenueFragment : Fragment() {
         )
 
         // set recyclerView Adapter
-        binding.venueRtgList.adapter = InfoRatingAdapter()
-        binding.venueMenuList.adapter = MenuAdapter()
-        binding.venueImgList.adapter = ImageAdapter(80, 100)
-        binding.venueRtgScoreList.adapter = RatingScoreAdapter(15, 15)
+        binding.rvRtgList.adapter = InfoRatingAdapter()
+        binding.rvMenuList.adapter = MenuAdapter()
+        binding.rvImgList.adapter = ImageAdapter(80, 100)
+        binding.rvRtgScoreList.adapter = RatingScoreAdapter(15, 15)
 
         // set rating clock click listener
         binding.cnstrtEditRating.setOnClickListener {
@@ -85,7 +85,7 @@ class VenueFragment : Fragment() {
         )
 
         // set venue phone on click listener
-        binding.venuePhone.setOnClickListener {
+        binding.txtPhone.setOnClickListener {
             val dialIntent = Intent(Intent.ACTION_DIAL)
             dialIntent.data =
                 Uri.parse(getString(R.string.venue_phone, viewModel.venueInfo.value?.phone))
@@ -117,7 +117,7 @@ class VenueFragment : Fragment() {
         )
 
         // set view all image's on click listener
-        binding.txtVenueImg.setOnClickListener {
+        binding.txtImg.setOnClickListener {
             viewModel.images.value?.let {
                 findNavController().navigate(
                     MainNavigationDirections.navigateToDiscoverDetailFragment(

@@ -32,14 +32,14 @@
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cnst_venue"
+                android:id="@+id/cnstVenue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 tools:visibility="visible">
 
                 <ImageView
-                    android:id="@+id/img_venue"
+                    android:id="@+id/imgVenue"
                     android:layout_width="match_parent"
                     android:layout_height="260dp"
                     android:contentDescription="@string/img_object"
@@ -51,7 +51,7 @@
                     tools:src="@tools:sample/avatars" />
 
                 <ImageView
-                    android:id="@+id/img_collect_filled_filled"
+                    android:id="@+id/imgCollectFilledFilled"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_marginEnd="16dp"
@@ -61,23 +61,23 @@
                     android:contentDescription="@string/img_collect"
                     android:onClickListener="@{()->viewModel.setCollect()}"
                     app:alpha="@{viewModel.isCollect ?  1.0f : 0.5f }"
-                    app:layout_constraintBottom_toBottomOf="@+id/img_venue"
+                    app:layout_constraintBottom_toBottomOf="@+id/imgVenue"
                     app:layout_constraintEnd_toEndOf="parent" />
 
                 <ImageView
-                    android:id="@+id/img_collect_border"
+                    android:id="@+id/imgCollectBorder"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
                     android:contentDescription="@string/img_collect"
-                    app:layout_constraintBottom_toBottomOf="@+id/img_venue"
+                    app:layout_constraintBottom_toBottomOf="@+id/imgVenue"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:srcCompat="@drawable/ic_baseline_favorite_border_36"
                     app:tint="@color/white" />
 
                 <TextView
-                    android:id="@+id/venue_title"
+                    android:id="@+id/txtVenueTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -87,15 +87,15 @@
                     android:text="@{viewModel.venueInfo.name}"
                     android:textColor="@color/black_3f3a3a"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/venue_rtg_score_list"
+                    app:layout_constraintBottom_toTopOf="@+id/rvRtgScoreList"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/img_venue"
+                    app:layout_constraintTop_toBottomOf="@+id/imgVenue"
                     tools:text="不醉不歸酒吧" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/venue_rtg_score_list"
+                    android:id="@+id/rvRtgScoreList"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -103,37 +103,37 @@
                     android:layout_marginEnd="4dp"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintEnd_toStartOf="@+id/venue_rtg_avg_score"
+                    app:layout_constraintEnd_toStartOf="@+id/txtRtgAvgScore"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/venue_title"
+                    app:layout_constraintTop_toBottomOf="@+id/txtVenueTitle"
                     app:stars="@{viewModel.venueInfo.avgRating}">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
                 <TextView
-                    android:id="@+id/venue_rtg_avg_score"
+                    android:id="@+id/txtRtgAvgScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="4dp"
                     android:text="@{viewModel.venueInfo.rtgCount == 0 ? `無評論` : @string/venue_rating_info_view(viewModel.venueInfo.avgRating, viewModel.venueInfo.rtgCount)}"
-                    app:layout_constraintStart_toEndOf="@+id/venue_rtg_score_list"
-                    app:layout_constraintTop_toBottomOf="@+id/venue_title"
+                    app:layout_constraintStart_toEndOf="@+id/rvRtgScoreList"
+                    app:layout_constraintTop_toBottomOf="@+id/txtVenueTitle"
                     tools:text="TextView" />
 
                 <TextView
-                    android:id="@+id/venue_service_flag"
+                    android:id="@+id/txtServiceFlag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
                     app:isOpen="@{viewModel.venueInfo.serviceTime}"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/venue_rtg_avg_score"
+                    app:layout_constraintTop_toBottomOf="@+id/txtRtgAvgScore"
                     tools:text="營業中 直至夜間2:00" />
 
                 <ImageView
-                    android:id="@+id/img_venue_address"
+                    android:id="@+id/imgVenueAddress"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginStart="16dp"
@@ -142,10 +142,10 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_baseline_location_on_24"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/venue_service_flag" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtServiceFlag" />
 
                 <ImageView
-                    android:id="@+id/img_venue_taxi"
+                    android:id="@+id/imgVenueTaxi"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginStart="16dp"
@@ -154,10 +154,10 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_baseline_directions_car_24"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/img_venue_address" />
+                    app:layout_constraintTop_toBottomOf="@+id/imgVenueAddress" />
 
                 <ImageView
-                    android:id="@+id/img_venue_phone"
+                    android:id="@+id/imgVenuePhone"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginStart="16dp"
@@ -166,39 +166,39 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_baseline_phone_24"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/img_venue_taxi" />
+                    app:layout_constraintTop_toBottomOf="@+id/imgVenueTaxi" />
 
                 <TextView
-                    android:id="@+id/venue_address"
+                    android:id="@+id/txtAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="@{viewModel.venueInfo.address}"
                     android:textColor="@color/black_3f3a3a"
-                    app:layout_constraintStart_toEndOf="@+id/img_venue_address"
-                    app:layout_constraintTop_toTopOf="@+id/img_venue_address"
+                    app:layout_constraintStart_toEndOf="@+id/imgVenueAddress"
+                    app:layout_constraintTop_toTopOf="@+id/imgVenueAddress"
                     tools:text="台北市中正區忠孝東路一段1號" />
 
                 <TextView
-                    android:id="@+id/venue_taxi"
+                    android:id="@+id/txtTaxi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="0dp"
                     android:text="@string/txt_uber"
                     android:textColor="@color/black_3f3a3a"
-                    app:layout_constraintStart_toEndOf="@+id/img_venue_taxi"
-                    app:layout_constraintTop_toTopOf="@+id/img_venue_taxi" />
+                    app:layout_constraintStart_toEndOf="@+id/imgVenueTaxi"
+                    app:layout_constraintTop_toTopOf="@+id/imgVenueTaxi" />
 
                 <TextView
-                    android:id="@+id/venue_phone"
+                    android:id="@+id/txtPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="@{viewModel.venueInfo.phone}"
                     android:textColor="@color/black_3f3a3a"
-                    app:layout_constraintStart_toEndOf="@+id/img_venue_phone"
-                    app:layout_constraintTop_toTopOf="@+id/img_venue_phone"
+                    app:layout_constraintStart_toEndOf="@+id/imgVenuePhone"
+                    app:layout_constraintTop_toTopOf="@+id/imgVenuePhone"
                     tools:text="02-12345678" />
 
                 <View
@@ -209,7 +209,7 @@
                     android:background="@color/gray_f0f0f0"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/venue_menu_list" />
+                    app:layout_constraintTop_toBottomOf="@+id/rvMenuList" />
 
                 <View
                     android:id="@+id/view11"
@@ -219,10 +219,10 @@
                     android:background="@color/gray_f0f0f0"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/venue_phone" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtPhone" />
 
                 <TextView
-                    android:id="@+id/txt_venue_rtg_title"
+                    android:id="@+id/txtRtgTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -234,7 +234,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/separateLine" />
 
                 <TextView
-                    android:id="@+id/txt_venue_menu"
+                    android:id="@+id/txtMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -247,7 +247,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/view11" />
 
                 <TextView
-                    android:id="@+id/txt_venue_menu_all"
+                    android:id="@+id/txtMenuAll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -262,7 +262,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/view11" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/venue_menu_list"
+                    android:id="@+id/rvMenuList"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
@@ -272,14 +272,14 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_venue_menu"
+                    app:layout_constraintTop_toBottomOf="@+id/txtMenu"
                     app:listData="@{viewModel.menuInfo}">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cnstrt_edit_rating"
+                    android:id="@+id/cnstrtEditRating"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="60dp"
@@ -287,63 +287,63 @@
                     android:layout_marginEnd="60dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_venue_rtg_title">
+                    app:layout_constraintTop_toBottomOf="@+id/txtRtgTitle">
 
                     <ImageView
-                        android:id="@+id/image_edit_star_1"
+                        android:id="@+id/imgEditStar1"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="2dp"
                         android:contentDescription="@string/rating_score"
                         android:elevation="2dp"
                         android:src="@drawable/ic_baseline_star_border_24"
-                        app:layout_constraintEnd_toStartOf="@+id/image_edit_star_2"
+                        app:layout_constraintEnd_toStartOf="@+id/imgEditStar2"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
 
                     <ImageView
-                        android:id="@+id/image_edit_star_2"
+                        android:id="@+id/imgEditStar2"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="2dp"
                         android:contentDescription="@string/rating_score"
                         android:elevation="2dp"
                         android:src="@drawable/ic_baseline_star_border_24"
-                        app:layout_constraintEnd_toStartOf="@+id/image_edit_star_3"
+                        app:layout_constraintEnd_toStartOf="@+id/imgEditStar3"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/image_edit_star_1"
+                        app:layout_constraintStart_toEndOf="@+id/imgEditStar1"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/image_edit_star_3"
+                        android:id="@+id/imgEditStar3"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="2dp"
                         android:contentDescription="@string/rating_score"
                         android:elevation="2dp"
                         android:src="@drawable/ic_baseline_star_border_24"
-                        app:layout_constraintEnd_toStartOf="@+id/image_edit_star_4"
+                        app:layout_constraintEnd_toStartOf="@+id/imgEditStar4"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/image_edit_star_2"
+                        app:layout_constraintStart_toEndOf="@+id/imgEditStar2"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/image_edit_star_4"
+                        android:id="@+id/imgEditStar4"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="2dp"
                         android:contentDescription="@string/rating_score"
                         android:elevation="2dp"
                         android:src="@drawable/ic_baseline_star_border_24"
-                        app:layout_constraintEnd_toStartOf="@+id/image_edit_star_5"
+                        app:layout_constraintEnd_toStartOf="@+id/imgEditStar5"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/image_edit_star_3"
+                        app:layout_constraintStart_toEndOf="@+id/imgEditStar3"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/image_edit_star_5"
+                        android:id="@+id/imgEditStar5"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="2dp"
@@ -351,7 +351,7 @@
                         android:elevation="2dp"
                         android:src="@drawable/ic_baseline_star_border_24"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/image_edit_star_4"
+                        app:layout_constraintStart_toEndOf="@+id/imgEditStar4"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -364,7 +364,7 @@
                     android:background="@color/gray_f0f0f0"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cnstrt_edit_rating" />
+                    app:layout_constraintTop_toBottomOf="@+id/cnstrtEditRating" />
 
                 <View
                     android:id="@+id/view3"
@@ -374,10 +374,10 @@
                     android:background="@color/gray_f0f0f0"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/venue_img_list" />
+                    app:layout_constraintTop_toBottomOf="@+id/rvImgList" />
 
                 <TextView
-                    android:id="@+id/txt_venue_img"
+                    android:id="@+id/txtImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -393,7 +393,7 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/txt_venue_last_rtg"
+                    android:id="@+id/txtLastRtg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -408,7 +408,7 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/venue_img_list"
+                    android:id="@+id/rvImgList"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="16dp"
@@ -418,14 +418,14 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_venue_img"
+                    app:layout_constraintTop_toBottomOf="@+id/txtImg"
                     app:listData="@{imgs}">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/venue_rtg_list"
+                    android:id="@+id/rvRtgList"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:clipToPadding="true"
@@ -433,13 +433,13 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_venue_last_rtg"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLastRtg"
                     app:rtgList="@{ratings}">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
                 <TextView
-                    android:id="@+id/venue_all_review"
+                    android:id="@+id/txtAllReview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -450,14 +450,14 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/venue_rtg_list" />
+                    app:layout_constraintTop_toBottomOf="@+id/rvRtgList" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/animation_loading"
+            android:id="@+id/animationLoading"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:foregroundGravity="center"
