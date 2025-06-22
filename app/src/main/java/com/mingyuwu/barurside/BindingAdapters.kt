@@ -102,27 +102,6 @@ fun bindRtgDate(textView: TextView, timeStamp: Timestamp?) {
     }
 }
 
-@BindingAdapter("rtgList")
-fun bindRtgList(recyclerView: RecyclerView, rtgList: List<RatingInfo>?) {
-    rtgList?.let {
-        recyclerView.adapter?.apply {
-            when (this) {
-                is InfoRatingAdapter -> {
-                    submitList(rtgList)
-                }
-            }
-        }
-    }
-}
-
-@BindingAdapter("userImgSize")
-fun bindUserImgSize(cardView: CardView, size: Int) {
-    size.let {
-        val dpToPx = BarUrSideApplication.appContext!!.resources.displayMetrics.density
-        cardView.layoutParams.height = size * dpToPx.toInt()
-        cardView.layoutParams.width = size * dpToPx.toInt()
-    }
-}
 
 @BindingAdapter("imgHeight", "imgWidth")
 fun bindImgSize(imageView: ImageView, imgHeight: Int, imgWidth: Int) {
@@ -152,49 +131,6 @@ fun bindRecyclerViewWithImageBitmaps(recyclerView: RecyclerView, imageBitmaps: L
                 }
             }
         }
-    }
-}
-
-@BindingAdapter("isOpen")
-fun bindIsOpen(textView: TextView, serviceTime: String?) {
-    serviceTime?.let {
-        val open = serviceTime.split("-")[0]
-        val close = serviceTime.split("-")[1]
-        val current = LocalTime.now()
-        when (checkTime(open, close)) {
-            true -> {
-                if (open.split(":")[0].toInt() < close.split(":")[0].toInt()) {
-                    textView.text = Util.getString(R.string.service_until_today, close)
-                } else {
-                    textView.text = Util.getString(R.string.service_until_tomorrow, close)
-                }
-            }
-            false -> {
-                if (current.isBefore(LocalTime.parse(open))) {
-                    textView.text = Util.getString(R.string.rest_until_today, open)
-                } else {
-                    textView.text = Util.getString(R.string.rest_until_tomorrow, open)
-                }
-            }
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun checkTime(open: String, close: String): Boolean {
-    val openTime = LocalTime.parse(open)
-    val closeTime = LocalTime.parse(close)
-    val current = LocalTime.now()
-
-    return current.isAfter(openTime) && current.isBefore(closeTime)
-}
-
-@BindingAdapter("activityTime")
-fun bindTimeActivityTime(textView: TextView, activityTime: Date?) {
-    activityTime?.let {
-        textView.text = DateFormat.format(
-            Util.getString(R.string.datetime_format), activityTime
-        ).toString()
     }
 }
 

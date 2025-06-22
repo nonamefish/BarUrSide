@@ -8,11 +8,18 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.RatingInfo
+import com.mingyuwu.barurside.data.User
+import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.databinding.ItemInfoRatingBinding
 import com.mingyuwu.barurside.util.Util.popUpMenuReport
 import com.mingyuwu.barurside.util.Util.reportRating
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class InfoRatingAdapter :
     ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
@@ -30,45 +37,76 @@ class InfoRatingAdapter :
             }
         }
 
-        fun bind(rating: RatingInfo?, view: View) {
+        fun bind(rating: RatingInfo?) {
+            // user info
+            binding.constraintUserInfo.visibility =
+                if (rating?.userInfo == null) View.GONE else View.VISIBLE
+            if (rating?.userInfo == null) return
 
-            // setting navigate to profile page
-            binding.imgRtgUser.setOnClickListener {
-                if (rating != null) {
-                    view.findNavController()
-                        .navigate(MainNavigationDirections.navigateToProfileFragment(rating.userId))
-                }
+            // user image
+            rating.userInfo?.run {
+                Glide.with(binding.imgRtgUser.context)
+                    .load(image)
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
+                    .into(binding.imgRtgUser)
+
+                binding.txtRtgUserName.text = name
+                binding.txtUserPostCnt.text = shareCount?.toString()
+                binding.txtUserPostimgCnt.text = shareImageCount?.toString()
             }
 
-            // setting navigate to venue/drink page
+            // 報告按鈕
+            binding.imgReport.setOnClickListener {
+                popUpMenuReport(binding.imgReport, binding.root.context, rating.id)
+            }
+
+            Glide.with(binding.imgInfoRtg.context)
+                .load(rating.images?.getOrNull(0))
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(binding.imgInfoRtg)
+
+            binding.txtInfoRtgObject.text = rating.objectName
+
+            // 評分
+            val starList = MutableList((rating.rating ?: 0).toInt()) { ScoreStatus.FULL }
+            (binding.rvRatingScoreList.adapter as? RatingScoreAdapter)?.submitList(starList)
+
+            // 評論內容
+            binding.txtRtgContent.text = rating.comment
+
+            // tag friend visibility
+            val tagFriends = rating.tagFriends ?: emptyList<TagFriend>()
+            val tagVisible = if (tagFriends.isEmpty()) View.GONE else View.VISIBLE
+            binding.imgTagFrd.visibility = tagVisible
+            binding.txtRatingTagFrds.visibility = tagVisible
+
+            val tagFrdAdapter = TagFriendAdapter()
+            tagFrdAdapter.submitList(tagFriends)
+            binding.rvRatingTagFrdList.adapter = tagFrdAdapter
+
+            // 日期
+            rating.postTimestamp?.let {
+                binding.txtRatingPostDate.text =
+                    SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(Date(it.time))
+            }
+
+            // 點擊事件
+            binding.imgRtgUser.setOnClickListener {
+                binding.root.findNavController()
+                    .navigate(MainNavigationDirections.navigateToProfileFragment(rating.userId))
+            }
             binding.constraintRtgInfo.setOnClickListener {
-                rating?.isVenue?.let {
+                rating.isVenue?.let {
                     if (it) {
-                        view.findNavController()
-                            .navigate(
-                                MainNavigationDirections.navigateToVenueFragment(rating.objectId)
-                            )
+                        binding.root.findNavController()
+                            .navigate(MainNavigationDirections.navigateToVenueFragment(rating.objectId))
                     } else {
-                        view.findNavController()
-                            .navigate(
-                                MainNavigationDirections.navigateToDrinkFragment(rating.objectId)
-                            )
+                        binding.root.findNavController()
+                            .navigate(MainNavigationDirections.navigateToDrinkFragment(rating.objectId))
                     }
                 }
-            }
-
-            // set adapter
-            binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
-            binding.ratingTagFrdList.adapter = TagFriendAdapter()
-            binding.rating = rating
-
-            // set user Info
-            binding.user = rating?.userInfo // UserData.user.user[0]
-
-            // set report click listener
-            binding.imgReport.setOnClickListener {
-                popUpMenuReport(binding.imgReport, binding.root.context, rating?.id ?: "")
-//                reportRating(binding.root.context, rating?.id ?: "")
             }
         }
     }
@@ -96,7 +134,7 @@ class InfoRatingAdapter :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is InfoRatingViewHolder -> {
-                holder.bind((getItem(position) as RatingInfo), holder.itemView)
+                holder.bind((getItem(position) as RatingInfo))
             }
         }
     }
