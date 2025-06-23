@@ -15,10 +15,13 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.databinding.DataBindingUtil
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -29,7 +32,6 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.mingyuwu.barurside.BarUrSideApplication
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.FragmentAddVenueBinding
@@ -41,11 +43,13 @@ import com.mingyuwu.barurside.util.AppPermission
 import com.mingyuwu.barurside.util.Style
 import com.mingyuwu.barurside.util.Util
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class AddVenueFragment : Fragment() {
 
-    private lateinit var binding: FragmentAddVenueBinding
+    private var _binding: FragmentAddVenueBinding? = null
+    private val binding get() = _binding!!
     private val startForGallery = registerStartForGallery()
     private val startForMapAutoComplete = registerStartForMapAutoComplete()
     private val calender = Calendar.getInstance()
@@ -56,55 +60,69 @@ class AddVenueFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        _binding = FragmentAddVenueBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_add_venue, container, false
-        )
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
-
-        // set post rating button click listener
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // 確保 Places API 已初始化
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), getString(R.string.google_maps_key))
+        }
         var alertDialog: AlertDialog? = null
 
-        // confirm button
-        binding.btnAddActovityConfirm.setOnClickListener {
-            if (viewModel.checkValue()) {
-                viewModel.uploadPhoto()
-                alertDialog = postRatingDialog(AlertDialog.Builder(binding.root.context))
-            } else {
-                showAddUncompleted()
+        // name
+        viewModel.name.observe(viewLifecycleOwner) { name ->
+            if (binding.editTxtVenueName.text.toString() != name) {
+                binding.editTxtVenueName.setText(name ?: "")
             }
         }
+        binding.editTxtVenueName.doAfterTextChanged {
+            viewModel.name.value = it?.toString()
+        }
 
-        // Initialize place api
-        Places.initialize(requireContext(), getString(R.string.google_maps_key))
-
-        // return after the user has made a selection.
-        val field = listOf(Place.Field.ID, Place.Field.ADDRESS, Place.Field.LAT_LNG)
-
-        // Start the autocomplete intent.
-        val intent = Autocomplete
-            .IntentBuilder(AutocompleteActivityMode.FULLSCREEN, field)
-            .setCountries(listOf("TW"))
-            .build(requireContext())
-
-        // address edit text click listener
+        // address
+        viewModel.address.observe(viewLifecycleOwner) { address ->
+            binding.txtVenueAddress.text = address ?: ""
+        }
         binding.txtVenueAddress.setOnClickListener {
-            // start activity result
+            // 啟動地圖自動補全
+            val field = listOf(Place.Field.ID, Place.Field.ADDRESS, Place.Field.LAT_LNG)
+            val intent = Autocomplete
+                .IntentBuilder(AutocompleteActivityMode.FULLSCREEN, field)
+                .setCountries(listOf("TW"))
+                .build(requireContext())
             startForMapAutoComplete.launch(intent)
         }
 
-        // set spinner style and adapter
+        // phone
+        viewModel.phone.observe(viewLifecycleOwner) { phone ->
+            if (binding.editTxtVenuePhone.text.toString() != phone) {
+                binding.editTxtVenuePhone.setText(phone ?: "")
+            }
+        }
+        binding.editTxtVenuePhone.doAfterTextChanged {
+            viewModel.phone.value = it?.toString()
+        }
+
+        // web
+        viewModel.web.observe(viewLifecycleOwner) { web ->
+            if (binding.editTxtVenueWeb.text.toString() != web) {
+                binding.editTxtVenueWeb.setText(web ?: "")
+            }
+        }
+        binding.editTxtVenueWeb.doAfterTextChanged {
+            viewModel.web.value = it?.toString()
+        }
+
+        // spinner style
         val adapterStyle = ArrayAdapter.createFromResource(
-            binding.root.context,
+            requireContext(),
             R.array.venue_style,
             R.layout.spinner_search_type
         )
-
-        // set spinner style adapter
         binding.spinnerVenueStyle.adapter = adapterStyle
-
         binding.spinnerVenueStyle.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -115,7 +133,7 @@ class AddVenueFragment : Fragment() {
                 ) {
                     if (position != 0) {
                         val selected = parent?.getItemAtPosition(position).toString()
-                        viewModel.style.value = Style.values().find { it.chinese == selected }?.name
+                        viewModel.style.value = Style.entries.find { it.chinese == selected }?.name
                     } else {
                         viewModel.style.value = null
                     }
@@ -124,13 +142,19 @@ class AddVenueFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
-        // set spinner level adapter
+        viewModel.style.observe(viewLifecycleOwner) { style ->
+            val idx = Style.entries.toTypedArray().indexOfFirst { it.name == style }
+            if (idx >= 0 && binding.spinnerVenueStyle.selectedItemPosition != idx) {
+                binding.spinnerVenueStyle.setSelection(idx + 1)
+            }
+        }
+
+        // spinner level
         val adapterLevel = ArrayAdapter.createFromResource(
-            binding.root.context,
+            requireContext(),
             R.array.venue_level,
             R.layout.spinner_search_type
         )
-
         binding.spinnerVenueLevel.adapter = adapterLevel
         binding.spinnerVenueLevel.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -149,37 +173,63 @@ class AddVenueFragment : Fragment() {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-
-        // activity start time
-        binding.venueServiceTimeStart.setOnClickListener {
-            timePicker(viewModel.startTime)
+        viewModel.level.observe(viewLifecycleOwner) { level ->
+            if (level != null && binding.spinnerVenueLevel.selectedItemPosition != level) {
+                binding.spinnerVenueLevel.setSelection(level)
+            }
         }
 
-        // activity end time
-        binding.venueServiceTimeClose.setOnClickListener {
+        // service time
+        viewModel.startTime.observe(viewLifecycleOwner) { start ->
+            binding.txtVenueServiceTimeStart.text = start ?: ""
+        }
+        binding.txtVenueServiceTimeStart.setOnClickListener {
+            timePicker(viewModel.startTime)
+        }
+        viewModel.closeTime.observe(viewLifecycleOwner) { close ->
+            binding.txtVenueServiceTimeClose.text = close ?: ""
+        }
+        binding.txtVenueServiceTimeClose.setOnClickListener {
             timePicker(viewModel.closeTime)
         }
 
+        // image
+        viewModel.image.observe(viewLifecycleOwner) { bitmap ->
+            bitmap?.let {
+                binding.imgVenuePreview.setImageBitmap(it)
+            }
+        }
+
+        // confirm button
+        binding.btnAddVenueConfirm.setOnClickListener {
+            if (viewModel.checkValue()) {
+                viewModel.uploadPhoto()
+                alertDialog = postRatingDialog(AlertDialog.Builder(binding.root.context))
+            } else {
+                showAddUncompleted()
+            }
+        }
         // cancel button
         binding.btnCancel.setOnClickListener {
             findNavController().popBackStack()
         }
-
-        // add photo
+        // add venue photo onclick
         binding.txtVenuePhoto.setOnClickListener {
-            this.context?.let { context -> chooseImage(context) }
+            context?.let { chooseImage(it) }
         }
-
         // after post activity then navigate to activity fragment
-        viewModel.leave.observe(viewLifecycleOwner, { leave ->
+        viewModel.leave.observe(viewLifecycleOwner) { leave ->
             leave?.let {
                 alertDialog?.dismiss()
                 findNavController().navigate(MainNavigationDirections.navigateToDiscoverFragment())
                 viewModel.onLeft()
             }
-        })
+        }
+    }
 
-        return binding.root
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun timePicker(datetime: MutableLiveData<String>) {
