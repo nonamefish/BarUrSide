@@ -20,7 +20,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.databinding.DataBindingUtil
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -39,7 +39,8 @@ import com.mingyuwu.barurside.util.Util.saveBitmap
 
 class AddDrinkFragment : Fragment() {
 
-    private lateinit var binding: FragmentAddDrinkBinding
+    private var _binding: FragmentAddDrinkBinding? = null
+    private val binding get() = _binding!!
     private val startForGallery = registerStartForGallery()
     private val viewModel by viewModels<AddDrinkViewModel> {
         getVmFactory(
@@ -52,38 +53,58 @@ class AddDrinkFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        _binding = FragmentAddDrinkBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val id = AddDrinkFragmentArgs.fromBundle(requireArguments()).id
-
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_add_drink, container, false
-        )
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
-
-        // set post rating button click listener
         var alertDialog: AlertDialog? = null
 
-        // confirm button
-        binding.btnAddActovityConfirm.setOnClickListener {
-            if (viewModel.checkValue()) {
-                viewModel.uploadPhoto()
-                alertDialog = postRatingDialog(AlertDialog.Builder(binding.root.context))
-            } else {
-                showDrinkUncompleted()
-            }
+        // venue name
+        viewModel.venue.observe(viewLifecycleOwner) { venue ->
+            binding.txtVenueName.text = venue?.name ?: ""
         }
 
-        // set spinner type and adapter
+        // editText: name
+        viewModel.name.observe(viewLifecycleOwner) { name ->
+            if (binding.editTxtDrinkName.text.toString() != name) {
+                binding.editTxtDrinkName.setText(name ?: "")
+            }
+        }
+        binding.editTxtDrinkName.doAfterTextChanged {
+            viewModel.name.value = it?.toString()
+        }
+
+        // editText: price
+        viewModel.price.observe(viewLifecycleOwner) { price ->
+            if (binding.editTxtDrinkPrice.text.toString() != price) {
+                binding.editTxtDrinkPrice.setText(price ?: "")
+            }
+        }
+        binding.editTxtDrinkPrice.doAfterTextChanged {
+            viewModel.price.value = it?.toString()
+        }
+
+        // editText: description
+        viewModel.description.observe(viewLifecycleOwner) { desc ->
+            if (binding.editTxtDrinkDesc.text.toString() != desc) {
+                binding.editTxtDrinkDesc.setText(desc ?: "")
+            }
+        }
+        binding.editTxtDrinkDesc.doAfterTextChanged {
+            viewModel.description.value = it?.toString()
+        }
+
+        // spinner type
         val adapter = ArrayAdapter.createFromResource(
-            binding.root.context,
+            requireContext(),
             R.array.drink_type,
             R.layout.spinner_search_type
         )
-
-        binding.spinnerObjectType.adapter = adapter
-
-        binding.spinnerObjectType.onItemSelectedListener =
+        binding.spinnerDrinkType.adapter = adapter
+        binding.spinnerDrinkType.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -102,31 +123,55 @@ class AddDrinkFragment : Fragment() {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
+        // spinner value observe
+        viewModel.type.observe(viewLifecycleOwner) { type ->
+            val idx = Category.values().indexOfFirst { it.name == type }
+            if (idx >= 0 && binding.spinnerDrinkType.selectedItemPosition != idx) {
+                binding.spinnerDrinkType.setSelection(idx)
+            }
+        }
 
-        // cancel post rating button
+        // image
+        viewModel.image.observe(viewLifecycleOwner) { bitmap ->
+            if (bitmap != null) {
+                binding.imgDrinkPreview.setImageBitmap(bitmap)
+            } else {
+                binding.imgDrinkPreview.setImageResource(R.drawable.image_placeholder)
+            }
+        }
+
+        // confirm button
+        binding.btnAddDrinkConfirm.setOnClickListener {
+            if (viewModel.checkValue()) {
+                viewModel.uploadPhoto()
+                alertDialog = postRatingDialog(AlertDialog.Builder(binding.root.context))
+            } else {
+                showDrinkUncompleted()
+            }
+        }
+        // cancel button
         binding.btnCancel.setOnClickListener {
             findNavController().popBackStack()
         }
-
-        // add drink photo onclick listener
-        binding.txtObjectPhoto.setOnClickListener {
-            this.context?.let { context -> chooseImage(context) }
+        // add drink photo onclick
+        binding.txtDrinkPhoto.setOnClickListener {
+            context?.let { chooseImage(it) }
         }
-
         // after post activity then navigate to activity fragment
-        viewModel.leave.observe(
-            viewLifecycleOwner, {
-                it?.let {
-                    alertDialog!!.dismiss()
-                    findNavController().navigate(
-                        MainNavigationDirections.navigateToVenueFragment(id)
-                    )
-                    viewModel.onLeft()
-                }
+        viewModel.leave.observe(viewLifecycleOwner) {
+            it?.let {
+                alertDialog?.dismiss()
+                findNavController().navigate(
+                    MainNavigationDirections.navigateToVenueFragment(id)
+                )
+                viewModel.onLeft()
             }
-        )
+        }
+    }
 
-        return binding.root
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun chooseImage(context: Context) {
