@@ -45,6 +45,7 @@ import com.mingyuwu.barurside.util.Util
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import androidx.core.graphics.drawable.toDrawable
 
 class AddVenueFragment : Fragment() {
 
@@ -125,12 +126,7 @@ class AddVenueFragment : Fragment() {
         binding.spinnerVenueStyle.adapter = adapterStyle
         binding.spinnerVenueStyle.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long,
-                ) {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     if (position != 0) {
                         val selected = parent?.getItemAtPosition(position).toString()
                         viewModel.style.value = Style.entries.find { it.chinese == selected }?.name
@@ -142,12 +138,6 @@ class AddVenueFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
-        viewModel.style.observe(viewLifecycleOwner) { style ->
-            val idx = Style.entries.toTypedArray().indexOfFirst { it.name == style }
-            if (idx >= 0 && binding.spinnerVenueStyle.selectedItemPosition != idx) {
-                binding.spinnerVenueStyle.setSelection(idx + 1)
-            }
-        }
 
         // spinner level
         val adapterLevel = ArrayAdapter.createFromResource(
@@ -158,26 +148,12 @@ class AddVenueFragment : Fragment() {
         binding.spinnerVenueLevel.adapter = adapterLevel
         binding.spinnerVenueLevel.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long,
-                ) {
-                    if (position != 0) {
-                        viewModel.level.value = position
-                    } else {
-                        viewModel.level.value = null
-                    }
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        viewModel.level.value = if (position != 0) position else null
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-        viewModel.level.observe(viewLifecycleOwner) { level ->
-            if (level != null && binding.spinnerVenueLevel.selectedItemPosition != level) {
-                binding.spinnerVenueLevel.setSelection(level)
-            }
-        }
 
         // service time
         viewModel.startTime.observe(viewLifecycleOwner) { start ->
@@ -373,7 +349,7 @@ class AddVenueFragment : Fragment() {
         // set parameter
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
     }
 
     private fun postRatingDialog(postDialog: AlertDialog.Builder): AlertDialog {
@@ -392,7 +368,7 @@ class AddVenueFragment : Fragment() {
         dialog.show()
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
 
         return dialog
     }
