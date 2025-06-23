@@ -70,6 +70,18 @@ class EditRatingFragment : Fragment() {
             }
         }
 
+        viewModel.star.observe(viewLifecycleOwner) {
+            editRatingAdapter.notifyDataSetChanged()
+        }
+
+        viewModel.frdList.observe(viewLifecycleOwner) {
+            editRatingAdapter.notifyDataSetChanged()
+        }
+
+        viewModel.tagFrd.observe(viewLifecycleOwner) {
+            editRatingAdapter.notifyDataSetChanged()
+        }
+
         // viewModel observer
         viewModel.objectId.observe(viewLifecycleOwner, {
             editRatingAdapter.submitList(it)
