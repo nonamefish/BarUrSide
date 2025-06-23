@@ -4,15 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="drink"
-            type="com.mingyuwu.barurside.data.Drink" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cnst_menu_drink"
+        android:id="@+id/cnstMenuDrink"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -22,7 +15,7 @@
         android:background="@drawable/background_menu_item">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/catalog_product_img"
+            android:id="@+id/cardProductImg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -35,56 +28,53 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/imgProduct"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:contentDescription="@string/venue_image"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{drink.images[0]}"
                 tools:src="@drawable/placeholder" />
         </androidx.cardview.widget.CardView>
 
 
         <TextView
-            android:id="@+id/catalog_product_name"
+            android:id="@+id/txtProductName"
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginTop="8dp"
             android:maxLines="3"
-            android:text="@{drink.name}"
             android:textColor="@color/black_3f3a3a"
             android:textSize="12sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/catalog_product_img"
-            app:layout_constraintStart_toStartOf="@+id/catalog_product_img"
-            app:layout_constraintTop_toBottomOf="@+id/catalog_product_img"
+            app:layout_constraintEnd_toEndOf="@+id/cardProductImg"
+            app:layout_constraintStart_toStartOf="@+id/cardProductImg"
+            app:layout_constraintTop_toBottomOf="@+id/cardProductImg"
             tools:text="文青不要喝IPA" />
 
         <TextView
-            android:id="@+id/catalog_product_price"
+            android:id="@+id/txtProductPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:maxLines="3"
-            android:text="@{@string/drink_info_price(drink.price)}"
             android:textColor="@color/black_3f3a3a"
             android:textSize="10sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/catalog_product_img"
-            app:layout_constraintTop_toBottomOf="@+id/catalog_product_name"
+            app:layout_constraintStart_toStartOf="@+id/cardProductImg"
+            app:layout_constraintTop_toBottomOf="@+id/txtProductName"
             tools:text="$360" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rating_score_list"
+            android:id="@+id/rvRatingScoreList"
             android:layout_width="50dp"
             android:layout_height="12dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/catalog_product_price"
-            app:stars="@{drink.avgRating}" />
+            app:layout_constraintTop_toTopOf="@+id/txtProductPrice"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -12,11 +12,9 @@ import com.bumptech.glide.Glide
 import com.mingyuwu.barurside.MainNavigationDirections
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.RatingInfo
-import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.data.TagFriend
 import com.mingyuwu.barurside.databinding.ItemInfoRatingBinding
 import com.mingyuwu.barurside.util.Util.popUpMenuReport
-import com.mingyuwu.barurside.util.Util.reportRating
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -39,8 +37,7 @@ class InfoRatingAdapter :
 
         fun bind(rating: RatingInfo?) {
             // user info
-            binding.constraintUserInfo.visibility =
-                if (rating?.userInfo == null) View.GONE else View.VISIBLE
+            binding.constraintUserInfo.visibility = if (rating?.userInfo == null) View.GONE else View.VISIBLE
             if (rating?.userInfo == null) return
 
             // user image
@@ -70,8 +67,9 @@ class InfoRatingAdapter :
             binding.txtInfoRtgObject.text = rating.objectName
 
             // 評分
-            val starList = MutableList((rating.rating ?: 0).toInt()) { ScoreStatus.FULL }
-            (binding.rvRatingScoreList.adapter as? RatingScoreAdapter)?.submitList(starList)
+            val ratingScoreAdapter = RatingScoreAdapter(15, 15)
+            binding.rvRatingScoreList.adapter = ratingScoreAdapter
+            ratingScoreAdapter.submitList(MutableList((rating.rating ?: 0).toInt()) { ScoreStatus.FULL })
 
             // 評論內容
             binding.txtRtgContent.text = rating.comment

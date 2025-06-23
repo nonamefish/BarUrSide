@@ -31,45 +31,6 @@ import java.time.LocalTime
 import java.util.*
 import kotlin.math.roundToInt
 
-@BindingAdapter("stars")
-fun bindRecyclerViewWithStarts(recyclerView: RecyclerView, stars: Double) {
-    val starList = mutableListOf<ScoreStatus>()
-    for (i in 0 until stars.roundToInt()) {
-        starList += ScoreStatus.FULL
-    }
-    recyclerView.adapter?.apply {
-        when (this) {
-            is RatingScoreAdapter -> {
-                submitList(starList)
-            }
-        }
-    }
-}
-
-@BindingAdapter("listData")
-fun bindRecyclerViewWithListData(recyclerView: RecyclerView, listData: List<Any>?) {
-    listData?.let {
-        if (listData != listOf(null)) {
-            recyclerView.adapter?.apply {
-                when (this) {
-                    is ImageAdapter -> {
-                        submitList((listData).toMutableList())
-                    }
-                    is TagFriendAdapter -> {
-                        val list = listData.filterIsInstance<TagFriend>()
-                        submitList(list.toMutableList())
-                    }
-                    is MenuAdapter -> {
-                        val list = listData.filterIsInstance<Drink>()
-                        submitList(
-                            list.toMutableList().sortedByDescending { it.avgRating }.take(10)
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
@@ -83,14 +44,6 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
         imgView.setBackgroundResource(R.drawable.image_placeholder)
     }
 }
-
-@BindingAdapter("rtgDate")
-fun bindRtgDate(textView: TextView, timeStamp: Timestamp?) {
-    timeStamp?.let {
-        textView.text = DateFormat.format("yyyy-MM-dd", timeStamp).toString()
-    }
-}
-
 
 @BindingAdapter("imgHeight", "imgWidth")
 fun bindImgSize(imageView: ImageView, imgHeight: Int, imgWidth: Int) {
