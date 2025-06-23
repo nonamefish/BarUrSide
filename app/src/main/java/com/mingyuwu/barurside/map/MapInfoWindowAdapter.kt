@@ -28,15 +28,22 @@ class MapInfoWindowAdapter(
         val info = marker.snippet.toString().split(",")
 
         // set venue name
-        binding.objectName = marker.title
+        binding.txtVenueName.text = marker.title
 
         // score: set adapter
         val scoreAdapter = RatingScoreAdapter(12, 12)
-        binding.venueScoreList.adapter = scoreAdapter
+        binding.rvScoreList.adapter = scoreAdapter
+        val avgRating = info[1].toDoubleOrNull() ?: 0.0
+        val shareCount = info[2].toIntOrNull() ?: 0
+        val starList = MutableList(avgRating.toInt()) { com.mingyuwu.barurside.rating.ScoreStatus.FULL }
+        scoreAdapter.submitList(starList)
 
         // set average score & rating count
-        binding.avgRating = info[1].toDouble()
-        binding.shareCount = info[2].toInt()
+        binding.txtAvgScore.text = if (shareCount == 0) {
+            "無評論"
+        } else {
+            context.getString(R.string.venue_rating_info_view, avgRating, shareCount)
+        }
 
         binding.imgInfo.setOnClickListener {
             viewModel.navigateToVenue.value = info[0]
