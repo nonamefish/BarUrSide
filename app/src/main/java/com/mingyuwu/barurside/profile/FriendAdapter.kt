@@ -8,7 +8,9 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.User
 import com.mingyuwu.barurside.databinding.ItemFriendBinding
 
@@ -19,8 +21,15 @@ class FriendAdapter(val viewModel: ViewModel) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(friend: User?, view: View) {
-            binding.friend = friend
-            binding.profileBaseImg.setOnClickListener {
+            binding.txtUserName.text = friend?.name
+
+            Glide.with(binding.imgUser.context)
+                .load(friend?.image)
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(binding.imgUser)
+
+            binding.cardUserBaseImg.setOnClickListener {
                 friend?.let {
                     view.findNavController()
                         .navigate(MainNavigationDirections.navigateToProfileFragment(friend.id))
