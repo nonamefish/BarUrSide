@@ -106,23 +106,6 @@ fun bindRecyclerViewWithImageBitmap(imageView: ImageView, imageBitmap: Bitmap?) 
     }
 }
 
-@BindingAdapter("imageBitmaps")
-fun bindRecyclerViewWithImageBitmaps(recyclerView: RecyclerView, imageBitmaps: List<Bitmap>?) {
-
-    imageBitmaps?.let {
-        if (imageBitmaps != listOf(null)) {
-            recyclerView.adapter?.apply {
-                when (this) {
-                    is BitmapAdapter -> {
-                        submitList(imageBitmaps)
-                        notifyDataSetChanged()
-                    }
-                }
-            }
-        }
-    }
-}
-
 @BindingAdapter("iconNotify")
 fun bindIconNotify(constraintLayout: ConstraintLayout, currentFragmentType: CurrentFragmentType?) {
     currentFragmentType?.let {

@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_user_info"
+            android:id="@+id/constraintUserInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -25,47 +25,44 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/img_discover_object"
+                android:id="@+id/imgDiscoverObject"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:contentDescription="@string/img_discover_object"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{rating.images[0]}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/discover_object_name"
+                android:id="@+id/txtDiscoverObjectName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@{rating.objectName}"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/rating_date"
+                app:layout_constraintEnd_toStartOf="@+id/txtRatingDate"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/img_discover_object"
-                app:layout_constraintTop_toTopOf="@+id/img_discover_object"
+                app:layout_constraintStart_toEndOf="@+id/imgDiscoverObject"
+                app:layout_constraintTop_toTopOf="@+id/imgDiscoverObject"
                 tools:text="不醉不歸酒吧" />
 
             <TextView
-                android:id="@+id/discover_object_category"
+                android:id="@+id/txtDiscoverObjectCategory"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@{rating.comment}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/rating_score_list"
-                app:layout_constraintTop_toBottomOf="@+id/rating_score_list"
+                app:layout_constraintStart_toStartOf="@+id/rvRatingScoreList"
+                app:layout_constraintTop_toBottomOf="@+id/rvRatingScoreList"
                 tools:text="燈光美，氣氛佳，家教好去處，燈光美，氣氛佳，家教好去處，燈光美，氣氛佳，家教好去處，燈光美，氣氛佳，家教好去處，燈光美，氣氛佳，家教好去處，燈光美，氣氛佳，家教好去處，燈光美，氣氛佳，家教好去處，燈光美，氣氛佳，家教好去處，" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rating_score_list"
+                android:id="@+id/rvRatingScoreList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -74,19 +71,17 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/img_discover_object"
-                app:layout_constraintTop_toBottomOf="@+id/discover_object_name"
-                app:stars="@{rating.rating.floatValue()}" />
+                app:layout_constraintStart_toEndOf="@+id/imgDiscoverObject"
+                app:layout_constraintTop_toBottomOf="@+id/txtDiscoverObjectName"/>
 
             <TextView
-                android:id="@+id/rating_date"
+                android:id="@+id/txtRatingDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:gravity="end"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/discover_object_name"
-                app:rtgDate="@{rating.postTimestamp}"
+                app:layout_constraintTop_toTopOf="@+id/txtDiscoverObjectName"
                 tools:text="2021.10.15" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
