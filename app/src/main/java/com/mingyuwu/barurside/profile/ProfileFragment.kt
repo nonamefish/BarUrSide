@@ -2,7 +2,6 @@ package com.mingyuwu.barurside.profile
 
 import android.app.AlertDialog
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -51,7 +51,7 @@ class ProfileFragment : Fragment() {
         val id =
             ProfileFragmentArgs.fromBundle(requireArguments()).id ?: (UserManager.user.value?.id
                 ?: "")
-        val toolbarTitle = requireActivity().findViewById<TextView>(R.id.text_toolbar_title)
+        val toolbarTitle = requireActivity().findViewById<TextView>(R.id.txtToolbarTitle)
 
         // image adapter
         val imgAdapter = ImageAdapter(80, 100)
@@ -241,6 +241,6 @@ class ProfileFragment : Fragment() {
         // set border as transparent
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
     }
 }

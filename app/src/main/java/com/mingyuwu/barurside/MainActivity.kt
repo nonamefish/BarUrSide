@@ -3,6 +3,7 @@ package com.mingyuwu.barurside
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -21,7 +22,6 @@ import com.mingyuwu.barurside.util.CurrentFragmentType
 import com.mingyuwu.barurside.util.Logger
 import com.mingyuwu.barurside.util.Util.popUpMenuOtherUser
 import com.mingyuwu.barurside.util.Util.popUpMenuUser
-import com.mingyuwu.barurside.util.Util.reportRule
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
 
         // setting binding
         binding = ActivityMainBinding.inflate(layoutInflater)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
 
         // set notification onclick listener
         binding.imgNotification.setOnClickListener {
@@ -52,6 +50,68 @@ class MainActivity : AppCompatActivity() {
         // set toolbar back button on click listener
         binding.imgBack.setOnClickListener {
             navController.popBackStack()
+        }
+
+        // observe currentFragmentType，搬移 BindingAdapter 的顯示/隱藏邏輯
+        viewModel.currentFragmentType.observe(this) { type ->
+            // Toolbar 本身顯示/隱藏
+            binding.toolbarMain.visibility = if (
+                type == CurrentFragmentType.MAP || type == CurrentFragmentType.LOGIN
+            ) View.GONE else View.VISIBLE
+
+            // Toolbar Back Icon
+            binding.imgBack.visibility = if (type in listOf(
+                    CurrentFragmentType.DISCOVER_DETAIL,
+                    CurrentFragmentType.OTHER_PROFILE,
+                    CurrentFragmentType.EDIT_RATING,
+                    CurrentFragmentType.ALL_RATING,
+                    CurrentFragmentType.DRINK,
+                    CurrentFragmentType.VENUE
+                )
+            ) View.VISIBLE else View.GONE
+
+            // Toolbar BarUrSide Title
+            binding.txtBarursideTitle.visibility =
+                if (type == CurrentFragmentType.ACTIVITY) View.VISIBLE else View.GONE
+
+            // Toolbar Toolbar Title
+            binding.txtToolbarTitle.visibility =
+                if (type != CurrentFragmentType.ACTIVITY) View.VISIBLE else View.GONE
+            binding.txtToolbarTitle.text = when (type) {
+                CurrentFragmentType.DISCOVER_DETAIL -> viewModel.discoverType.value
+                else -> type.value
+            } ?: ""
+
+            // Notification Icon 區塊（整個 ConstraintLayout）
+            binding.layoutNotify.visibility = if (type in listOf(
+                    CurrentFragmentType.ACTIVITY,
+                    CurrentFragmentType.DISCOVER,
+                    CurrentFragmentType.COLLECT
+                )
+            ) View.VISIBLE else View.GONE
+
+            // Notification Badge
+            viewModel.notificationSize?.observe(this) { size ->
+                binding.imgBadge.visibility = if (size > 0) View.VISIBLE else View.GONE
+                binding.txtNotify.visibility = if (size > 0) View.VISIBLE else View.GONE
+                binding.txtNotify.text = size.toString()
+            }
+
+            // Report Icon
+            binding.imgReport.visibility = if (type in listOf(
+                    CurrentFragmentType.OTHER_PROFILE,
+                    CurrentFragmentType.USER_PROFILE
+                )
+            ) View.VISIBLE else View.GONE
+
+            // BottomNav 顯示/隱藏
+            binding.bottomNav.visibility = if (type in listOf(
+                    CurrentFragmentType.LOGIN,
+                    CurrentFragmentType.EDIT_RATING,
+                    CurrentFragmentType.ALL_RATING,
+                    CurrentFragmentType.ADD_OBJECT
+                )
+            ) View.GONE else View.VISIBLE
         }
 
         // navigate to Start
@@ -87,7 +147,7 @@ class MainActivity : AppCompatActivity() {
 
         // get navController and setting connection between bottom navigation item and navigation fragment
         val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         navController = navHostFragment.navController // container for navigation destination
         binding.bottomNav.setupWithNavController(navController)
 
@@ -105,18 +165,22 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(MainNavigationDirections.navigateToActivityFragment())
                     return@setOnItemSelectedListener true
                 }
+
                 R.id.mapFragment -> {
                     navController.navigate(MainNavigationDirections.navigateToMapFragment())
                     return@setOnItemSelectedListener true
                 }
+
                 R.id.discoverFragment -> {
                     navController.navigate(MainNavigationDirections.navigateToDiscoverFragment())
                     return@setOnItemSelectedListener true
                 }
+
                 R.id.collectFragment -> {
                     navController.navigate(MainNavigationDirections.navigateToCollectFragment())
                     return@setOnItemSelectedListener true
                 }
+
                 R.id.profileFragment -> {
                     navController.navigate(
                         MainNavigationDirections.navigateToProfileFragment(
@@ -131,7 +195,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavController() {
-        findNavController(R.id.nav_host_fragment)
+        findNavController(R.id.navHostFragment)
             .addOnDestinationChangedListener {
                     navController: NavController,
                     _: NavDestination,
@@ -157,6 +221,7 @@ class MainActivity : AppCompatActivity() {
                             CurrentFragmentType.OTHER_PROFILE
                         }
                     }
+
                     R.id.discoverFragment -> CurrentFragmentType.DISCOVER
                     R.id.discoverDetailFragment -> CurrentFragmentType.DISCOVER_DETAIL
                     R.id.drinkFragment -> CurrentFragmentType.DRINK
@@ -178,8 +243,6 @@ class MainActivity : AppCompatActivity() {
                 it?.let {
 
                     viewModel.getNotification(it.id)
-
-                    binding.viewModel = viewModel
 
                     startService(Intent(this, BarUrSideService::class.java))
 
