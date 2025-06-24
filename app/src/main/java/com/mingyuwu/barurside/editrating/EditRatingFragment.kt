@@ -19,7 +19,6 @@ import android.widget.Button
 import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -51,9 +50,7 @@ class EditRatingFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
 
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_edit_rating, container, false
-        )
+        binding = FragmentEditRatingBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 

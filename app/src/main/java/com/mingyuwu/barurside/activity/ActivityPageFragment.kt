@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -38,9 +37,7 @@ class ActivityPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_activity_page, container, false
-        )
+        binding = FragmentActivityPageBinding.inflate(inflater, container, false)
 
         // get activity tab type and set recyclerView adapter
         val type = this.requireArguments().get(type)
