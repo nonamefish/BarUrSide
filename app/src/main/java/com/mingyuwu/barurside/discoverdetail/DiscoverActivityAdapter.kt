@@ -2,10 +2,11 @@ package com.mingyuwu.barurside.discoverdetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.activity.ActivityPageViewModel
 import com.mingyuwu.barurside.data.Activity
@@ -28,7 +29,6 @@ class DiscoverActivityAdapter(val viewModel: ViewModel) :
         }
 
         fun bind(activity: Activity, viewModel: ViewModel) {
-
             when (viewModel) {
                 is DiscoverDetailViewModel -> {
                     binding.cnstrtListItem.setOnClickListener {
@@ -42,11 +42,17 @@ class DiscoverActivityAdapter(val viewModel: ViewModel) :
                 }
             }
 
-            binding.name = activity.name
-            binding.img = ""
-            binding.category = activity.mainDrinking
-            binding.info = activity.address
-            binding.limit = getString(R.string.people_limit, activity.peopleLimit ?: 0)
+            binding.txtDiscoverObjectName.text = activity.name
+
+            Glide.with(binding.imgDiscoverObject.context)
+                .load("")
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(binding.imgDiscoverObject)
+
+            binding.txtDiscoverObjectCategory.text = activity.mainDrinking
+            binding.txtDiscoverObjectInfo.text = activity.address
+            binding.txtDiscoverObjectInfo2.text = getString(R.string.people_limit, activity.peopleLimit ?: 0)
         }
     }
 
