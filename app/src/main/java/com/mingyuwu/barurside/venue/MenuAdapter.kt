@@ -26,7 +26,6 @@ class MenuAdapter :
             fun from(parent: ViewGroup): MenuViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemVenueMenuBinding.inflate(layoutInflater, parent, false)
-                binding.lifecycleOwner = parent.context as LifecycleOwner
 
                 return MenuViewHolder(binding)
             }

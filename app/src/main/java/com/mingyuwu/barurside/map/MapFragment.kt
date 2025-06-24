@@ -49,8 +49,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
 
         // Inflate the layout for this fragment
         binding = FragmentMapBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
         if (container != null) {
             parent = container
         }

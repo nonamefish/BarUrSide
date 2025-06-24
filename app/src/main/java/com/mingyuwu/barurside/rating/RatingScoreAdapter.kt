@@ -13,7 +13,7 @@ class RatingScoreAdapter(val width: Int, val height: Int) :
     class RatingScoreViewHolder(private var binding: ItemRatingScoreBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(starStatus: ScoreStatus) {
-            binding.starStatus = starStatus
+
         }
     }
 

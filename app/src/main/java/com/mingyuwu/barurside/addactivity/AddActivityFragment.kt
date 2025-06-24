@@ -50,8 +50,6 @@ class AddActivityFragment : Fragment() {
 
         // Inflate the layout for this fragment
         binding = FragmentAddActivityBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
 
         // Initialize place api
         Places.initialize(requireContext(), getString(R.string.google_maps_key))

@@ -29,7 +29,6 @@ class InfoRatingAdapter :
             fun from(parent: ViewGroup): InfoRatingViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemInfoRatingBinding.inflate(layoutInflater, parent, false)
-                binding.lifecycleOwner = parent.context as LifecycleOwner
 
                 return InfoRatingViewHolder(binding)
             }
@@ -106,6 +105,8 @@ class InfoRatingAdapter :
                     }
                 }
             }
+
+
         }
     }
 

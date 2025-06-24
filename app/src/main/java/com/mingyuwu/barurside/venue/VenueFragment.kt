@@ -36,7 +36,6 @@ class VenueFragment : Fragment() {
     ): View {
 
         binding = FragmentVenueBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
 
         val id = VenueFragmentArgs.fromBundle(requireArguments()).id
 

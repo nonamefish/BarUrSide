@@ -201,7 +201,6 @@
             android:textColor="@color/primaryDarkColor"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:visibility="@{rating.tagFriends.size()==0 ? view.GONE : view.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/imgTagFrd"
             app:layout_constraintStart_toEndOf="@+id/imgTagFrd"
             app:layout_constraintTop_toTopOf="@+id/imgTagFrd" />

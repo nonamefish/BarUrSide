@@ -38,7 +38,6 @@ class CollectPageFragment : Fragment() {
     ): View {
 
         binding = FragmentCollectPageBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
         val isVenue = this.requireArguments().getBoolean(isVenue)
 
         // set variable for get location

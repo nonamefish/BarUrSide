@@ -56,15 +56,12 @@ class MapInfoWindowAdapter(
             .listener(MarkerCallback(marker))
             .into(binding.imgInfo)
 
-        // instant trigger
-        binding.executePendingBindings()
     }
 
     override fun getInfoContents(marker: Marker): View {
         // set binding
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = InfoWindowBinding.inflate(layoutInflater, parent, false)
-        binding.lifecycleOwner = parent.context as LifecycleOwner
 
         render(marker, binding)
         return binding.root
