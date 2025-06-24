@@ -59,7 +59,7 @@ class InfoRatingAdapter :
             }
 
             Glide.with(binding.imgInfoRtg.context)
-                .load(rating.images?.getOrNull(0))
+                .load(rating.images?.getOrNull(0) ?: "")
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_placeholder)
                 .into(binding.imgInfoRtg)

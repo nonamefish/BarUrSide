@@ -34,7 +34,7 @@ class MenuAdapter :
 
         fun bind(drink: Drink, view: View) {
             Glide.with(binding.imgProduct.context)
-                .load(drink.images?.getOrNull(0))
+                .load(drink.images?.getOrNull(0) ?: "")
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_placeholder)
                 .into(binding.imgProduct)

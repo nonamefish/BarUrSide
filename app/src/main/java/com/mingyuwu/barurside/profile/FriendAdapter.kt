@@ -24,7 +24,7 @@ class FriendAdapter(val viewModel: ViewModel) :
             binding.txtUserName.text = friend?.name
 
             Glide.with(binding.imgUser.context)
-                .load(friend?.image)
+                .load(friend?.image ?: "")
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_placeholder)
                 .into(binding.imgUser)

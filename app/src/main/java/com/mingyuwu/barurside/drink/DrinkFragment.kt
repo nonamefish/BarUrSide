@@ -59,7 +59,7 @@ class DrinkFragment : Fragment() {
                 }
 
                 Glide.with(this)
-                    .load(it.images?.firstOrNull())
+                    .load(it.images?.firstOrNull() ?: "")
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder)
                     .into(binding.imgDrink)
@@ -74,7 +74,7 @@ class DrinkFragment : Fragment() {
                 binding.txtDrinkByVenueStyle.text = Style.valueOf(it.style).chinese
 
                 Glide.with(this)
-                    .load(it.images?.firstOrNull())
+                    .load(it.images?.firstOrNull() ?: "")
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder)
                     .into(binding.imgVenue)

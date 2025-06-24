@@ -24,7 +24,7 @@ class UserRatingAdapter :
 
         fun bind(rating: RatingInfo?, view: View) {
             // 1. 物件圖片
-            val objImg = rating?.images?.getOrNull(0)
+            val objImg = rating?.images?.getOrNull(0) ?: ""
             Glide.with(binding.imgDiscoverObject.context)
                 .load(objImg)
                 .placeholder(R.drawable.image_placeholder)

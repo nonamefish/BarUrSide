@@ -91,7 +91,7 @@ class CollectAdapter(val viewModel: CollectPageViewModel, val onClickListener: O
         private fun updateImage(view: ImageView, imgUrl: String?) {
             view.apply {
                 Glide.with(context)
-                    .load(imgUrl)
+                    .load(imgUrl ?: "")
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder)
                     .into(this)
