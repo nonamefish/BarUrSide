@@ -1,5 +1,6 @@
 package com.mingyuwu.barurside.rating
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -21,16 +22,23 @@ class BitmapAdapter(
     class ImageViewHolder(private var binding: ItemRatingBitmapBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        fun dpToPx(dp: Int, context: Context): Int {
+            return (dp * context.resources.displayMetrics.density).toInt()
+        }
+
         fun bind(
             img: Bitmap,
-            width: Int,
-            height: Int,
+            widthDp: Int,
+            heightDp: Int,
             rtgOrder: Int,
             viewModel: ViewModel
         ) {
-            binding.img = img
-            binding.width = width
-            binding.height = height
+            binding.imgRtgUser.setImageBitmap(img)
+
+            binding.imgRtgUser.layoutParams?.apply {
+                this.width = dpToPx(widthDp, binding.imgRtgUser.context)
+                this.height = dpToPx(heightDp, binding.imgRtgUser.context)
+            }
 
             when (viewModel) {
                 is EditRatingViewModel -> {

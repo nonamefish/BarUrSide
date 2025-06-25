@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.mingyuwu.barurside.BarUrSideApplication
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.databinding.ItemRatingImageBinding
 
 class ImageAdapter(val width: Int, val height: Int) :
@@ -14,9 +17,18 @@ class ImageAdapter(val width: Int, val height: Int) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(img: String, width: Int, height: Int) {
-            binding.img = img
-            binding.width = width
-            binding.height = height
+
+            Glide.with(binding.imgRtgUser.context)
+                .load(img)
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(binding.imgRtgUser)
+
+            val dpToPx = BarUrSideApplication.appContext!!.resources.displayMetrics.density
+            binding.imgRtgUser.layoutParams.apply {
+                this.width = width * dpToPx.toInt()
+                this.height = height * dpToPx.toInt()
+            }
         }
     }
 

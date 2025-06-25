@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.RelativeLayout
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -49,11 +48,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
     ): View {
 
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_map, container, false
-        )
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding = FragmentMapBinding.inflate(inflater, container, false)
         if (container != null) {
             parent = container
         }
@@ -227,11 +222,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickL
         }
     }
 
-    override fun onInfoWindowClick(marker: Marker?) {
-        marker?.title?.let {
-            val info = marker.snippet.toString().split(",")
-            viewModel.navigateToVenue.value = info[0]
-        }
+    override fun onInfoWindowClick(p0: Marker) {
+        val info = p0.snippet.toString().split(",")
+        viewModel.navigateToVenue.value = info[0]
     }
 
 }

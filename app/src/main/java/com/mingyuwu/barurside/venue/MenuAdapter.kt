@@ -8,10 +8,13 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.databinding.ItemVenueMenuBinding
 import com.mingyuwu.barurside.rating.RatingScoreAdapter
+import com.mingyuwu.barurside.rating.ScoreStatus
 
 class MenuAdapter :
     ListAdapter<Drink, MenuAdapter.MenuViewHolder>(DiffCallback) {
@@ -23,15 +26,26 @@ class MenuAdapter :
             fun from(parent: ViewGroup): MenuViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemVenueMenuBinding.inflate(layoutInflater, parent, false)
-                binding.lifecycleOwner = parent.context as LifecycleOwner
 
                 return MenuViewHolder(binding)
             }
         }
 
         fun bind(drink: Drink, view: View) {
-            binding.ratingScoreList.adapter = RatingScoreAdapter(13, 13)
-            binding.drink = drink
+            Glide.with(binding.imgProduct.context)
+                .load(drink.images?.getOrNull(0) ?: "")
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(binding.imgProduct)
+
+            binding.txtProductName.text = drink.name
+
+            binding.txtProductPrice.text = view.context.getString(R.string.drink_info_price, drink.price)
+
+            val ratingScoreAdapter = RatingScoreAdapter(15, 15)
+            binding.rvRatingScoreList.adapter = ratingScoreAdapter
+            ratingScoreAdapter.submitList(MutableList(drink.avgRating.toInt()) { ScoreStatus.FULL })
+
             binding.cnstMenuDrink.setOnClickListener {
                 view.findNavController()
                     .navigate(MainNavigationDirections.navigateToDrinkFragment(drink.id))

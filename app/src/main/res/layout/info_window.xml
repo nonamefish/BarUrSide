@@ -1,104 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
 
-    <data>
+    <ImageView
+        android:id="@+id/imgInfo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/img_object"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@+id/txtAvgScore"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtVenueName"
+        tools:srcCompat="@tools:sample/avatars" />
 
-        <variable
-            name="objectImg"
-            type="String" />
-
-        <variable
-            name="objectName"
-            type="String" />
-
-        <variable
-            name="avgRating"
-            type="double" />
-
-        <variable
-            name="shareCount"
-            type="int" />
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="280dp"
+    <TextView
+        android:id="@+id/txtVenueName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="8dp"
+        android:maxLines="2"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/btnVenueInfo"
+        app:layout_constraintStart_toEndOf="@+id/imgInfo"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="文青不要喝IPA" />
 
-        <ImageView
-            android:id="@+id/img_info"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:contentDescription="@string/img_object"
-            android:scaleType="centerCrop"
-            app:imageUrl="@{objectImg}"
-            app:layout_constraintBottom_toBottomOf="@+id/venue_avg_score"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/info_venue_name"
-            tools:srcCompat="@tools:sample/avatars" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvScoreList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="0dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txtVenueName"
+        app:layout_constraintTop_toBottomOf="@+id/txtVenueName"
+        app:layout_constraintVertical_bias="0.0">
 
-        <TextView
-            android:id="@+id/info_venue_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="8dp"
-            android:maxLines="2"
-            android:text="@{objectName}"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/btn_venue_info"
-            app:layout_constraintStart_toEndOf="@+id/img_info"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="文青不要喝IPA" />
+    </androidx.recyclerview.widget.RecyclerView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/venue_score_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="0dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/info_venue_name"
-            app:layout_constraintTop_toBottomOf="@+id/info_venue_name"
-            app:layout_constraintVertical_bias="0.0"
-            app:stars="@{avgRating}">
+    <TextView
+        android:id="@+id/txtAvgScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/rvScoreList"
+        app:layout_constraintTop_toBottomOf="@+id/txtVenueName"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="(4,1) | 66則評論" />
 
-        </androidx.recyclerview.widget.RecyclerView>
+    <ImageView
+        android:id="@+id/btnVenueInfo"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/more_info"
+        android:src="@drawable/ic_outline_info_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtVenueName" />
 
-        <TextView
-            android:id="@+id/venue_avg_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="0dp"
-            android:text="@{shareCount==0 ? `無評論` : @string/venue_rating_info_view(avgRating, shareCount)}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/venue_score_list"
-            app:layout_constraintTop_toBottomOf="@+id/info_venue_name"
-            app:layout_constraintVertical_bias="0.0"
-            tools:text="(4,1) | 66則評論" />
-
-        <ImageView
-            android:id="@+id/btn_venue_info"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="@string/more_info"
-            android:src="@drawable/ic_outline_info_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/info_venue_name" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

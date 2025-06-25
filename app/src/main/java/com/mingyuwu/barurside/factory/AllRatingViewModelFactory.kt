@@ -10,7 +10,7 @@ class AllRatingViewModelFactory(
     private val ratings: List<RatingInfo>
 ) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
                 isAssignableFrom(AllRatingViewModel::class.java) ->

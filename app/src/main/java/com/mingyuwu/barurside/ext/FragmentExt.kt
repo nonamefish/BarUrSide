@@ -67,7 +67,7 @@ fun Fragment.isPermissionGranted(permission: AppPermission) =
     } == PackageManager.PERMISSION_GRANTED)
 
 fun Fragment.requestPermission(permission: AppPermission) =
-    PermissionX.init(activity)
+    PermissionX.init(requireActivity())
         .permissions(
             permission.permissionName
         )

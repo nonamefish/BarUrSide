@@ -1,9 +1,13 @@
 package com.mingyuwu.barurside.editrating
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -19,59 +23,106 @@ class EditRatingAdapter(private val viewModel: EditRatingViewModel) :
     class EditRatingViewHolder(private var binding: ItemEditRatingObjectBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        private val starViews by lazy {
+            listOf(
+                binding.imgEditStar1,
+                binding.imgEditStar2,
+                binding.imgEditStar3,
+                binding.imgEditStar4,
+                binding.imgEditStar5
+            )
+        }
+
+        private fun setRatingScore(star: Int) {
+            starViews.forEachIndexed { index, imageView ->
+                imageView.setImageResource(
+                    if (star >= index + 1) R.drawable.ic_baseline_star_rate_24
+                    else R.drawable.ic_baseline_star_border_24
+                )
+            }
+        }
+
         companion object {
             fun from(parent: ViewGroup): EditRatingViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemEditRatingObjectBinding.inflate(layoutInflater, parent, false)
-                binding.lifecycleOwner = parent.context as LifecycleOwner
 
                 return EditRatingViewHolder(binding)
             }
         }
 
         fun bind(viewModel: EditRatingViewModel, rtgOrder: Int) {
+            // 1. 標題
+            binding.txtVenue.text = viewModel.objectName.value?.getOrNull(rtgOrder) ?: ""
 
-            binding.viewModel = viewModel
-            binding.rtgOrder = rtgOrder
+            // 2. 評論內容（雙向）
+            binding.editTxtScoreList.setText(viewModel.comment.value?.getOrNull(rtgOrder) ?: "")
+            binding.editTxtScoreList.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    viewModel.comment.value?.set(rtgOrder, s?.toString() ?: "")
+                }
 
-            // set recyclerView adapter
-            val imgAdapter = BitmapAdapter(80, 100, rtgOrder, viewModel)
-            val tagFrdAdapter = TagFriendAdapter()
-            binding.ratingAddImgList.adapter = imgAdapter
-            binding.ratingTagFrdsList.adapter = tagFrdAdapter
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            // upload photo : set button click listener
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            })
+
+            // 3. 星星顯示
+            setRatingScore(viewModel.star.value?.getOrNull(rtgOrder) ?: 0)
+            starViews.forEachIndexed { index, imageView ->
+                imageView.setOnClickListener {
+                    viewModel.clickRatingStore(index + 1, rtgOrder)
+                }
+            }
+
+            // 4. constraintTagFrds visibility
+            binding.constraintTagFrds.visibility = if (rtgOrder == 0) View.VISIBLE else View.GONE
+            binding.txtClose.visibility = if (rtgOrder != 0) View.VISIBLE else View.GONE
+            binding.floatingActionButton.visibility = if (rtgOrder != 0) View.VISIBLE else View.GONE
+
+            // 5. 上傳圖片
             binding.btnAddImage.setOnClickListener {
                 viewModel.isUploadImgBtn.value = true
                 viewModel.clickPosition.value = rtgOrder
             }
-
-            binding.ratingAddImg.setOnClickListener {
+            binding.cardAddImg.setOnClickListener {
                 viewModel.isUploadImgBtn.value = true
                 viewModel.clickPosition.value = rtgOrder
             }
 
-            // tag friend : set adapter and item click listener
-            binding.lifecycleOwner?.let {
-                viewModel.frdList.observe(it, {
+            // 6. rvAddImgList 設定圖片
+            val imgAdapter = BitmapAdapter(80, 100, rtgOrder, viewModel)
+            binding.rvAddImgList.adapter = imgAdapter
+            viewModel.uploadImg.value?.getOrNull(rtgOrder)
+                ?.takeIf { it.filterNotNull().isNotEmpty() }
+                ?.let { imgAdapter.submitList(it) }
 
-                        val friendList = viewModel.frdList.value?.map { "${it.name} (${it.id})" }
-                        val adapter = ArrayAdapter(
-                            binding.root.context,
-                            R.layout.spinner_friend_list,
-                            friendList!!
-                        )
+            // 7. btnTagFrd 綁定朋友名單
+            viewModel.frdList.value?.let { frds ->
+                val friendList = frds.map { "${it.name} (${it.id})" }
+                val adapter = ArrayAdapter(
+                    binding.root.context,
+                    R.layout.spinner_friend_list,
+                    friendList
+                )
+                binding.btnTagFrd.setAdapter(adapter)
+                binding.btnTagFrd.setOnItemClickListener { parent, _, position, _ ->
+                    val selected = parent.getItemAtPosition(position)
+                    val pos = friendList.indexOf(selected)
+                    binding.btnTagFrd.setText("")
+                    viewModel.addTagFrd(TagFriend(frds[pos].id, frds[pos].name))
+                    adapter.remove("${frds[pos].name} (${frds[pos].id})")
+                }
+            }
 
-                        binding.btnTagFrd.setAdapter(adapter)
+            // 8. rvTagFrdsList 設定 tagFrd
+            val tagFrdAdapter = TagFriendAdapter()
+            binding.rvTagFrdsList.adapter = tagFrdAdapter
+            tagFrdAdapter.submitList(viewModel.tagFrd.value)
 
-                        binding.btnTagFrd.setOnItemClickListener { parent, _, position, _ ->
-                            val selected = parent.getItemAtPosition(position)
-                            val pos = friendList.indexOf(selected)
-                            binding.btnTagFrd.setText("")
-                            viewModel.addTagFrd(TagFriend(it[pos].id, it[pos].name))
-                            adapter.remove("${it[pos].name} (${it[pos].id})")
-                        }
-                    })
+            // 9. 刪除/移除
+            binding.floatingActionButton.setOnClickListener {
+                viewModel.removeRating(rtgOrder)
             }
         }
     }

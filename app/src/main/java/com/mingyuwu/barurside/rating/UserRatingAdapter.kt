@@ -7,9 +7,14 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mingyuwu.barurside.MainNavigationDirections
+import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.RatingInfo
 import com.mingyuwu.barurside.databinding.ItemUserRatingBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class UserRatingAdapter :
     ListAdapter<RatingInfo?, UserRatingAdapter.UserRatingViewHolder>(DiffCallback) {
@@ -18,9 +23,32 @@ class UserRatingAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(rating: RatingInfo?, view: View) {
+            // 1. 物件圖片
+            val objImg = rating?.images?.getOrNull(0) ?: ""
+            Glide.with(binding.imgDiscoverObject.context)
+                .load(objImg)
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(binding.imgDiscoverObject)
+            // 2. 物件名稱
+            binding.txtDiscoverObjectName.text = rating?.objectName
 
-            // setting navigate to venue/drink page
-            binding.discoverObjectName.setOnClickListener {
+            // 3. 評論內容
+            binding.txtDiscoverObjectCategory.text = rating?.comment
+
+            // 4. 星星顯示
+            val ratingScoreAdapter = RatingScoreAdapter(15, 15)
+            binding.rvRatingScoreList.adapter = ratingScoreAdapter
+            ratingScoreAdapter.submitList(MutableList((rating?.rating ?: 0).toInt()) { ScoreStatus.FULL })
+
+            // 5. 日期
+            rating?.postTimestamp?.let {
+                binding.txtRatingDate.text =
+                    SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(Date(it.time))
+            }
+
+            // 點擊事件
+            binding.txtDiscoverObjectName.setOnClickListener {
                 rating?.isVenue?.let {
                     if (it) {
                         view.findNavController()
@@ -35,9 +63,6 @@ class UserRatingAdapter :
                     }
                 }
             }
-
-            binding.ratingScoreList.adapter = RatingScoreAdapter(15, 15)
-            binding.rating = rating
         }
     }
 

@@ -1,411 +1,396 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.mingyuwu.barurside.discover.DiscoverViewModel" />
-
-        <variable
-            name="theme"
-            type="com.mingyuwu.barurside.discover.Theme" />
-    </data>
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/primaryDarkColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/cnst_search"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/background_map_search"
+        app:layout_constraintBottom_toBottomOf="@+id/view1"
+        app:layout_constraintEnd_toEndOf="@+id/view1"
+        app:layout_constraintStart_toStartOf="@+id/view1"
+        app:layout_constraintTop_toTopOf="@+id/view1">
 
-        <View
-            android:id="@+id/view1"
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:background="@color/primaryDarkColor"
+        <AutoCompleteTextView
+            android:id="@+id/auto_discover_filter"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:background="@null"
+            android:ems="10"
+            android:hint="Search drink"
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:paddingStart="48dp"
+            android:paddingEnd="8dp"
+            android:singleLine="true"
+            android:text="Search drink"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/spinner_search_type"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/spinner_search_type"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/background_spinner_dropdown"
+            android:overlapAnchor="false"
+            android:paddingStart="10dp"
+            android:spinnerMode="dropdown"
+            android:src="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        </Spinner>
+
+        <ImageView
+            android:id="@+id/img_dropdown"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/icons_32px_dropdown"
+            android:backgroundTint="@color/gray_999999"
+            android:contentDescription="img_dropdown"
+            app:layout_constraintBottom_toBottomOf="@+id/spinner_search_type"
+            app:layout_constraintEnd_toEndOf="@+id/spinner_search_type"
+            app:layout_constraintTop_toTopOf="@+id/spinner_search_type">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/btn_search"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:contentDescription="btn_search"
+            android:src="@drawable/icons_32px_discover"
+            app:layout_constraintBottom_toBottomOf="@+id/auto_discover_filter"
+            app:layout_constraintStart_toStartOf="@+id/auto_discover_filter"
+            app:layout_constraintTop_toTopOf="@+id/auto_discover_filter"
+            app:tint="@color/gray_999999" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cnstrt_recent_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="navigateToTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view1">
+
+        <ImageView
+            android:id="@+id/img_recent_activity"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="activity_tab_activity"
+            android:src="@drawable/ic_outline_run_circle_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cnst_search"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/background_map_search"
-            app:layout_constraintBottom_toBottomOf="@+id/view1"
-            app:layout_constraintEnd_toEndOf="@+id/view1"
-            app:layout_constraintStart_toStartOf="@+id/view1"
-            app:layout_constraintTop_toTopOf="@+id/view1">
-
-            <AutoCompleteTextView
-                android:id="@+id/auto_discover_filter"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:background="@null"
-                android:ems="10"
-                android:hint="@{viewModel.searchType ? `Search drink` : `Search store`}"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:paddingStart="48dp"
-                android:paddingEnd="8dp"
-                android:singleLine="true"
-                android:text="@={viewModel.searchText}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/spinner_search_type"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Spinner
-                android:id="@+id/spinner_search_type"
-                android:layout_width="100dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/background_spinner_dropdown"
-                android:overlapAnchor="false"
-                android:paddingStart="10dp"
-                android:spinnerMode="dropdown"
-                android:src="@android:color/transparent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-            </Spinner>
-
-            <ImageView
-                android:id="@+id/img_dropdown"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="12dp"
-                android:background="@drawable/icons_32px_dropdown"
-                android:backgroundTint="@color/gray_999999"
-                android:contentDescription="@string/img_dropdown"
-                app:layout_constraintBottom_toBottomOf="@+id/spinner_search_type"
-                app:layout_constraintEnd_toEndOf="@+id/spinner_search_type"
-                app:layout_constraintTop_toTopOf="@+id/spinner_search_type">
-            </ImageView>
-
-            <ImageView
-                android:id="@+id/btn_search"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="2dp"
-                android:contentDescription="@string/btn_search"
-                android:src="@drawable/icons_32px_discover"
-                app:layout_constraintBottom_toBottomOf="@+id/auto_discover_filter"
-                app:layout_constraintStart_toStartOf="@+id/auto_discover_filter"
-                app:layout_constraintTop_toTopOf="@+id/auto_discover_filter"
-                app:tint="@color/gray_999999" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cnstrt_recent_activity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="@{()->viewModel.navigateToTheme(theme.RECENT_ACTIVITY)}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view1">
-
-            <ImageView
-                android:id="@+id/img_recent_activity"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:contentDescription="@string/activity_tab_activity"
-                android:src="@drawable/ic_outline_run_circle_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/txt_recent_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/activity_tab_activity"
-                android:textColor="@color/black_3f3a3a"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/img_recent_activity"
-                app:layout_constraintStart_toEndOf="@+id/img_recent_activity"
-                app:layout_constraintTop_toTopOf="@+id/img_recent_activity" />
-
-            <View
-                android:id="@+id/view4"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="12dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_recent_activity" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cnstrt_around_venue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="@{()->viewModel.navigateToTheme(theme.AROUND_VENUE)}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cnstrt_recent_activity">
-
-            <ImageView
-                android:id="@+id/img_around_venue"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:contentDescription="@string/around_bar"
-                android:padding="1dp"
-                android:src="@drawable/ic_baseline_storefront_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/gray_606060" />
-
-            <TextView
-                android:id="@+id/txt_around_venue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/around_bar"
-                android:textColor="@color/black_3f3a3a"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/img_around_venue"
-                app:layout_constraintStart_toEndOf="@+id/img_around_venue"
-                app:layout_constraintTop_toTopOf="@+id/img_around_venue" />
-
-            <View
-                android:id="@+id/view2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="12dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_around_venue" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cnstrt_hot_drink"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="@{()->viewModel.navigateToTheme(theme.HOT_DRINK)}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cnstrt_around_venue">
-
-            <ImageView
-                android:id="@+id/img_hot_drink"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:contentDescription="@string/trend_drink"
-                android:padding="1dp"
-                android:src="@drawable/ic_baseline_local_fire_department_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/gray_606060" />
-
-            <TextView
-                android:id="@+id/txt_hot_drink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/trend_drink"
-                android:textColor="@color/black_3f3a3a"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/img_hot_drink"
-                app:layout_constraintStart_toEndOf="@+id/img_hot_drink"
-                app:layout_constraintTop_toTopOf="@+id/img_hot_drink" />
-
-            <View
-                android:id="@+id/view5"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="12dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_hot_drink" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cnstrt_hot_venue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="@{()->viewModel.navigateToTheme(theme.HOT_VENUE)}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_drink">
-
-            <ImageView
-                android:id="@+id/img_hot_venue"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:contentDescription="@string/trend_bar"
-                android:padding="4dp"
-                android:src="@drawable/ic_baseline_trend_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/gray_606060" />
-
-            <TextView
-                android:id="@+id/txt_hot_venue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/trend_bar"
-                android:textColor="@color/black_3f3a3a"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/img_hot_venue"
-                app:layout_constraintStart_toEndOf="@+id/img_hot_venue"
-                app:layout_constraintTop_toTopOf="@+id/img_hot_venue" />
-
-            <View
-                android:id="@+id/view6"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="12dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_hot_venue" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cnstrt_high_rate_drink"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="@{()->viewModel.navigateToTheme(theme.HIGH_RATE_DRINK)}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_venue">
-
-            <ImageView
-                android:id="@+id/img_high_rate_drink"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:contentDescription="@string/high_rate_drink"
-                android:padding="1dp"
-                android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/gray_606060" />
-
-            <TextView
-                android:id="@+id/txt_high_rate_drink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/high_rate_drink"
-                android:textColor="@color/black_3f3a3a"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/img_high_rate_drink"
-                app:layout_constraintStart_toEndOf="@+id/img_high_rate_drink"
-                app:layout_constraintTop_toTopOf="@+id/img_high_rate_drink" />
-
-            <View
-                android:id="@+id/view7"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="12dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_high_rate_drink" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cnstrt_high_rate_venue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="@{()->viewModel.navigateToTheme(theme.HIGH_RATE_VENUE)}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cnstrt_high_rate_drink">
-
-            <ImageView
-                android:id="@+id/img_high_rate_venue"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:contentDescription="@string/high_rate_bar"
-                android:src="@drawable/ic_outline_hotel_class_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/gray_606060" />
-
-            <TextView
-                android:id="@+id/txt_high_rate_venue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/high_rate_bar"
-                android:textColor="@color/black_3f3a3a"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/img_high_rate_venue"
-                app:layout_constraintStart_toEndOf="@+id/img_high_rate_venue"
-                app:layout_constraintTop_toTopOf="@+id/img_high_rate_venue" />
-
-            <View
-                android:id="@+id/view8"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="12dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_high_rate_venue" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btn_add_venue"
+        <TextView
+            android:id="@+id/txt_recent_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/primaryDarkColor"
-            android:clickable="true"
-            android:contentDescription="@string/btn_add_venue"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_baseline_add_24"
-            app:tint="@android:color/white" />
+            android:layout_marginStart="16dp"
+            android:text="@string/activity_tab_activity"
+            android:textColor="@color/black_3f3a3a"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/img_recent_activity"
+            app:layout_constraintStart_toEndOf="@+id/img_recent_activity"
+            app:layout_constraintTop_toTopOf="@+id/img_recent_activity" />
 
+        <View
+            android:id="@+id/view4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_recent_activity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cnstrt_around_venue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="navigateToTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cnstrt_recent_activity">
+
+        <ImageView
+            android:id="@+id/img_around_venue"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="around_bar"
+            android:padding="1dp"
+            android:src="@drawable/ic_baseline_storefront_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gray_606060" />
+
+        <TextView
+            android:id="@+id/txt_around_venue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/around_bar"
+            android:textColor="@color/black_3f3a3a"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/img_around_venue"
+            app:layout_constraintStart_toEndOf="@+id/img_around_venue"
+            app:layout_constraintTop_toTopOf="@+id/img_around_venue" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_around_venue" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cnstrt_hot_drink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="navigateToTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cnstrt_around_venue">
+
+        <ImageView
+            android:id="@+id/img_hot_drink"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="trend_drink"
+            android:padding="1dp"
+            android:src="@drawable/ic_baseline_local_fire_department_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gray_606060" />
+
+        <TextView
+            android:id="@+id/txt_hot_drink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/trend_drink"
+            android:textColor="@color/black_3f3a3a"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/img_hot_drink"
+            app:layout_constraintStart_toEndOf="@+id/img_hot_drink"
+            app:layout_constraintTop_toTopOf="@+id/img_hot_drink" />
+
+        <View
+            android:id="@+id/view5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_hot_drink" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cnstrt_hot_venue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="navigateToTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_drink">
+
+        <ImageView
+            android:id="@+id/img_hot_venue"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="trend_bar"
+            android:padding="4dp"
+            android:src="@drawable/ic_baseline_trend_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gray_606060" />
+
+        <TextView
+            android:id="@+id/txt_hot_venue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/trend_bar"
+            android:textColor="@color/black_3f3a3a"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/img_hot_venue"
+            app:layout_constraintStart_toEndOf="@+id/img_hot_venue"
+            app:layout_constraintTop_toTopOf="@+id/img_hot_venue" />
+
+        <View
+            android:id="@+id/view6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_hot_venue" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cnstrt_high_rate_drink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="navigateToTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cnstrt_hot_venue">
+
+        <ImageView
+            android:id="@+id/img_high_rate_drink"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="high_rate_drink"
+            android:padding="1dp"
+            android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gray_606060" />
+
+        <TextView
+            android:id="@+id/txt_high_rate_drink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/high_rate_drink"
+            android:textColor="@color/black_3f3a3a"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/img_high_rate_drink"
+            app:layout_constraintStart_toEndOf="@+id/img_high_rate_drink"
+            app:layout_constraintTop_toTopOf="@+id/img_high_rate_drink" />
+
+        <View
+            android:id="@+id/view7"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_high_rate_drink" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cnstrt_high_rate_venue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="navigateToTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cnstrt_high_rate_drink">
+
+        <ImageView
+            android:id="@+id/img_high_rate_venue"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="high_rate_bar"
+            android:src="@drawable/ic_outline_hotel_class_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gray_606060" />
+
+        <TextView
+            android:id="@+id/txt_high_rate_venue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/high_rate_bar"
+            android:textColor="@color/black_3f3a3a"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/img_high_rate_venue"
+            app:layout_constraintStart_toEndOf="@+id/img_high_rate_venue"
+            app:layout_constraintTop_toTopOf="@+id/img_high_rate_venue" />
+
+        <View
+            android:id="@+id/view8"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_high_rate_venue" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add_venue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/primaryDarkColor"
+        android:clickable="true"
+        android:contentDescription="btn_add_venue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_add_24"
+        app:tint="@android:color/white" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

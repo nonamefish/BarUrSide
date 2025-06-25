@@ -2,8 +2,8 @@ package com.mingyuwu.barurside
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import com.mingyuwu.barurside.data.Notification
 import com.mingyuwu.barurside.data.source.BarUrSideRepository
 import com.mingyuwu.barurside.login.UserManager
@@ -37,7 +37,7 @@ class MainViewModel(private val repository: BarUrSideRepository) : ViewModel() {
         notification = repository.getNotification(userId)
 
         // set notification size
-        notificationSize = Transformations.map(notification) { it ->
+        notificationSize = notification.map { it ->
             it.filter {
                 it.toId == UserManager.user.value!!.id &&
                         (it.isCheck == false && (

@@ -1,0 +1,64 @@
+[versions]
+kotlin = "2.0.0"
+android_gradle_plugin = "8.5.0"
+navigation = "2.7.7"
+lifecycle = "2.7.0"
+lifecycle_extensions = "2.2.0" # 已废弃，无新版
+google_map = "18.2.0"
+google_place = "3.4.0"
+lottie = "6.4.0"
+glide = "4.16.0"
+permissionx = "1.8.1"
+work_runtime = "2.9.0"
+ktlint = "12.1.1"
+legacy_support = "1.0.0" # 已废弃，无新版
+firestore_ktx = "25.1.4"
+storage_ktx = "21.0.2"
+auth_ktx = "23.2.1"
+crashlytics_ktx = "19.4.4"
+analytics_ktx = "22.4.0"
+firebase_ui_storage = "8.0.0"
+test_junit = "4.13.2"
+test_ext_junit = "1.1.5"
+test_espresso = "3.5.1"
+map_utils = "3.8.0"
+play_services_location = "21.2.0"
+play-services-auth = "20.7.0"
+
+[libraries]
+core_ktx = { module = "androidx.core:core-ktx", version = "1.13.1" }
+appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.0" }
+material = { module = "com.google.android.material:material", version = "1.12.0" }
+constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.2.0-alpha13" }
+legacy_support = { module = "androidx.legacy:legacy-support-v4", version.ref = "legacy_support" }
+navigation_fragment_ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+navigation_ui_ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
+firestore_ktx = { module = "com.google.firebase:firebase-firestore", version.ref = "firestore_ktx" }
+storage_ktx = { module = "com.google.firebase:firebase-storage", version.ref = "storage_ktx" }
+auth_ktx = { module = "com.google.firebase:firebase-auth", version.ref = "auth_ktx" }
+crashlytics_ktx = { module = "com.google.firebase:firebase-crashlytics", version.ref = "crashlytics_ktx" }
+analytics_ktx = { module = "com.google.firebase:firebase-analytics", version.ref = "analytics_ktx" }
+firebase_ui_storage = { module = "com.firebaseui:firebase-ui-storage", version.ref = "firebase_ui_storage" }
+lifecycle_extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycle_extensions" }
+lifecycle_viewmodel_ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+lifecycle_livedata_ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
+map_utils = { module = "com.google.maps.android:android-maps-utils", version.ref = "map_utils" }
+play_services_maps = { module = "com.google.android.gms:play-services-maps", version.ref = "google_map" }
+play_services_location = { module = "com.google.android.gms:play-services-location", version.ref = "play_services_location" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
+places = { module = "com.google.android.libraries.places:places", version.ref = "google_place" }
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+permissionx = { module = "com.guolindev.permissionx:permissionx", version.ref = "permissionx" }
+
+junit = { module = "junit:junit", version.ref = "test_junit" }
+ext_junit = { module = "androidx.test.ext:junit", version.ref = "test_ext_junit" }
+espresso_core = { module = "androidx.test.espresso:espresso-core", version.ref = "test_espresso" }
+
+[plugins]
+android_application = { id = "com.android.application", version.ref = "android_gradle_plugin" }
+kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google_services = { id = "com.google.gms.google-services", version = "4.4.1" }
+navigation_safeargs = { id = "androidx.navigation.safeargs.kotlin", version = "2.7.7" }
+crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.1" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.1.1" }

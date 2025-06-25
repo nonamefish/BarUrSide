@@ -56,6 +56,7 @@ class ActivityPageViewModel(
                 getRecentActivity()
                 _status.value = LoadStatus.DONE
             }
+            else -> {}
         }
     }
 

@@ -19,6 +19,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ActivityDetailViewModel(
     private val repository: BarUrSideRepository,
@@ -56,6 +58,12 @@ class ActivityDetailViewModel(
 
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    private val dateFormat = SimpleDateFormat("yyyy/MM/dd a hh:mm", Locale.TAIWAN)
+
+    fun formatDate(date: java.util.Date?): String {
+        return date?.let { dateFormat.format(it) } ?: ""
+    }
 
     init {
         if (activityId.isNullOrEmpty()) {

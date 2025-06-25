@@ -23,7 +23,8 @@ import com.mingyuwu.barurside.util.Util
 
 class FilterFragment : BottomSheetDialogFragment() {
 
-    private lateinit var binding: FragmentFilterBinding
+    private var _binding: FragmentFilterBinding? = null
+    private val binding get() = _binding!!
     private val viewModel by viewModels<FilterViewModel> { getVmFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,21 +37,17 @@ class FilterFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
-        // set binding and viewModel
-        binding = FragmentFilterBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        // set binding
+        _binding = FragmentFilterBinding.inflate(inflater, container, false)
 
         // set confirm button click listener
         binding.btnConfirm.setOnClickListener {
-
             if (viewModel.checkValue()) { // user have set field
                 viewModel.choiceStyle.value = binding.chipGroupStyle.checkedChipIds.map {
                     binding.chipGroupStyle.resources.getResourceEntryName(it).uppercase()
                 }
                 viewModel.choiceCategory.value = binding.chipGroupCategory.checkedChipIds.map {
-                    binding.chipGroupStyle.resources.getResourceEntryName(it).uppercase()
+                    binding.chipGroupCategory.resources.getResourceEntryName(it).uppercase()
                 }
                 viewModel.navigateToResult()
             } else {
@@ -59,9 +56,10 @@ class FilterFragment : BottomSheetDialogFragment() {
         }
 
         // set chip group selected item
-        binding.chipGroupLevel.setOnCheckedChangeListener { chipGroup, id ->
+        binding.chipGroupLevel.setOnCheckedStateChangeListener { chipGroup, checkedIds ->
+            val id = checkedIds.firstOrNull() ?: View.NO_ID
             viewModel.choiceLevel.value =
-                if (chipGroup.findViewById<Chip>(id) == null) {
+                if (id == View.NO_ID || chipGroup.findViewById<Chip>(id) == null) {
                     null
                 } else {
                     chipGroup.findViewById<Chip>(id).text.length
@@ -69,8 +67,9 @@ class FilterFragment : BottomSheetDialogFragment() {
         }
 
         // set chip group selected item
-        binding.chipGroupDistance.setOnCheckedChangeListener { chipGroup, id ->
-            viewModel.choiceDistance.value = when (chipGroup.findViewById<Chip>(id).text) {
+        binding.chipGroupDistance.setOnCheckedStateChangeListener { chipGroup, checkedIds ->
+            val id = checkedIds.firstOrNull() ?: View.NO_ID
+            viewModel.choiceDistance.value = when (chipGroup.findViewById<Chip>(id)?.text) {
                 Util.getString(R.string.five_hundred_meter) -> 0.5
                 Util.getString(R.string.one_kilometer) -> 1.0
                 else -> 2.0
@@ -78,8 +77,7 @@ class FilterFragment : BottomSheetDialogFragment() {
         }
 
         // navigate to filter result
-        viewModel.navigateToResult.observe(
-            viewLifecycleOwner, {
+        viewModel.navigateToResult.observe(viewLifecycleOwner, {
                 it?.let {
                     findNavController().navigate(
                         MainNavigationDirections.navigateToDiscoverDetailFragment(
@@ -94,6 +92,11 @@ class FilterFragment : BottomSheetDialogFragment() {
         )
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun showAddUncompleted() {

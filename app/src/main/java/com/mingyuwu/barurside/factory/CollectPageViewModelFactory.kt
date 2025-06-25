@@ -11,7 +11,7 @@ class CollectPageViewModelFactory(
     private val isVenue: Boolean
 ) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
                 isAssignableFrom(CollectPageViewModel::class.java) ->

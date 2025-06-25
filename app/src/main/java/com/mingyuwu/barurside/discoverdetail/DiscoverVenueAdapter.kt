@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Venue
 import com.mingyuwu.barurside.databinding.ItemDiscoverObjectBinding
@@ -30,14 +31,17 @@ class DiscoverVenueAdapter(val viewModel: DiscoverDetailViewModel) :
         }
 
         fun bind(venue: Venue, viewModel: DiscoverDetailViewModel) {
-            binding.name = venue.name
-            binding.img = venue.images?.get(0) ?: ""
-            binding.category = Style.valueOf(venue.style.uppercase()).chinese
-            binding.info = venue.address
-            binding.rating = binding.root.context.getString(
+            binding.txtDiscoverObjectName.text = venue.name
+            Glide.with(binding.imgDiscoverObject.context)
+                .load(venue.images?.getOrNull(0) ?: "")
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(binding.imgDiscoverObject)
+            binding.txtDiscoverObjectCategory.text = Style.valueOf(venue.style.uppercase()).chinese
+            binding.txtDiscoverObjectInfo.text = venue.address
+            binding.txtDiscoverObjectRating.text = binding.root.context.getString(
                 R.string.venue_rating_info_list, venue.avgRating, venue.rtgCount
             )
-
             binding.cnstrtListItem.setOnClickListener {
                 viewModel.navigateToInfo.value = venue
             }

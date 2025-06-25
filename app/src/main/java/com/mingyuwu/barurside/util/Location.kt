@@ -76,12 +76,10 @@ object Location {
         mFusedLocationProviderClient.requestLocationUpdates(
             locationRequest,
             object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult?) {
-                    locationResult ?: return
-                    location.value = LatLng(
-                        locationResult.lastLocation.latitude,
-                        locationResult.lastLocation.longitude
-                    )
+                override fun onLocationResult(p0: LocationResult) {
+                    p0.lastLocation?.let {
+                        location.value = LatLng(it.latitude, it.longitude)
+                    }
                 }
             },
             null

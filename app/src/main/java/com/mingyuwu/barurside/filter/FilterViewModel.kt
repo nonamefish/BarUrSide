@@ -18,7 +18,7 @@ class FilterViewModel() : ViewModel() {
             choiceLevel.value,
             choiceCategory.value,
             if (choiceStyle.value.isNullOrEmpty()) {
-                Style.values().map { it.name }
+                Style.entries.map { it.name }
             } else {
                 choiceStyle.value
             },

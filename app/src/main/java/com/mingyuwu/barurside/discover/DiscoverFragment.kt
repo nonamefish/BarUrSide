@@ -1,6 +1,8 @@
 package com.mingyuwu.barurside.discover
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,9 +28,7 @@ class DiscoverFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val binding = FragmentDiscoverBinding.inflate(layoutInflater)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        val binding = FragmentDiscoverBinding.inflate(inflater, container, false)
 
         // set spinner type and adapter
         val adapter = ArrayAdapter.createFromResource(
@@ -50,6 +50,8 @@ class DiscoverFragment : Fragment() {
                         1 -> true
                         else -> null
                     }
+
+                    binding.autoDiscoverFilter.hint = if (viewModel.searchType.value == true) "Search drink" else "Search store"
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -65,6 +67,8 @@ class DiscoverFragment : Fragment() {
             viewLifecycleOwner, {
                 binding.autoDiscoverFilter.setText("")
                 viewModel.searchInfo.value = null
+                // 更新 hint
+                binding.autoDiscoverFilter.hint = if (viewModel.searchType.value == true) "Search drink" else "Search store"
             }
         )
 
@@ -77,6 +81,7 @@ class DiscoverFragment : Fragment() {
                             when (viewModel.searchType.value) {
                                 true -> viewModel.getDrinkBySearch(it)
                                 false -> viewModel.getVenueBySearch(it)
+                                else -> {}
                             }
                         }
                     } else {
@@ -90,7 +95,7 @@ class DiscoverFragment : Fragment() {
         viewModel.searchInfo.observe(
             viewLifecycleOwner, {
 
-                if(!it.isNullOrEmpty()){
+                if (!it.isNullOrEmpty()) {
 
                     val list: List<String>?
                     val id: List<String>?
@@ -102,11 +107,13 @@ class DiscoverFragment : Fragment() {
                             list = data.map { drink -> drink.name }
                             id = data.map { drink -> drink.id }
                         }
+
                         is Venue -> {
                             val data = it.filterIsInstance<Venue>()
                             list = data.map { venue -> venue.name }
                             id = data.map { venue -> venue.id }
                         }
+
                         else -> {
                             list = listOf()
                             id = listOf()
@@ -144,11 +151,14 @@ class DiscoverFragment : Fragment() {
                                 MainNavigationDirections.navigateToDrinkFragment(it)
                             )
                         }
+
                         false -> {
                             findNavController().navigate(
                                 MainNavigationDirections.navigateToVenueFragment(it)
                             )
                         }
+
+                        else -> {}
                     }
                     viewModel.onLeft()
                 }
@@ -168,6 +178,34 @@ class DiscoverFragment : Fragment() {
                 }
             }
         )
+
+        binding.cnstrtRecentActivity.setOnClickListener {
+            viewModel.navigateToTheme(Theme.RECENT_ACTIVITY)
+        }
+        binding.cnstrtAroundVenue.setOnClickListener {
+            viewModel.navigateToTheme(Theme.AROUND_VENUE)
+        }
+        binding.cnstrtHotDrink.setOnClickListener {
+            viewModel.navigateToTheme(Theme.HOT_DRINK)
+        }
+        binding.cnstrtHotVenue.setOnClickListener {
+            viewModel.navigateToTheme(Theme.HOT_VENUE)
+        }
+        binding.cnstrtHighRateDrink.setOnClickListener {
+            viewModel.navigateToTheme(Theme.HIGH_RATE_DRINK)
+        }
+        binding.cnstrtHighRateVenue.setOnClickListener {
+            viewModel.navigateToTheme(Theme.HIGH_RATE_VENUE)
+        }
+
+        // 雙向綁定：EditText 內容變動時同步到 viewModel.searchText
+        binding.autoDiscoverFilter.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.searchText.value = s?.toString()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         return binding.root
     }

@@ -28,15 +28,22 @@ class MapInfoWindowAdapter(
         val info = marker.snippet.toString().split(",")
 
         // set venue name
-        binding.objectName = marker.title
+        binding.txtVenueName.text = marker.title
 
         // score: set adapter
         val scoreAdapter = RatingScoreAdapter(12, 12)
-        binding.venueScoreList.adapter = scoreAdapter
+        binding.rvScoreList.adapter = scoreAdapter
+        val avgRating = info[1].toDoubleOrNull() ?: 0.0
+        val shareCount = info[2].toIntOrNull() ?: 0
+        val starList = MutableList(avgRating.toInt()) { com.mingyuwu.barurside.rating.ScoreStatus.FULL }
+        scoreAdapter.submitList(starList)
 
         // set average score & rating count
-        binding.avgRating = info[1].toDouble()
-        binding.shareCount = info[2].toInt()
+        binding.txtAvgScore.text = if (shareCount == 0) {
+            "無評論"
+        } else {
+            context.getString(R.string.venue_rating_info_view, avgRating, shareCount)
+        }
 
         binding.imgInfo.setOnClickListener {
             viewModel.navigateToVenue.value = info[0]
@@ -49,15 +56,12 @@ class MapInfoWindowAdapter(
             .listener(MarkerCallback(marker))
             .into(binding.imgInfo)
 
-        // instant trigger
-        binding.executePendingBindings()
     }
 
     override fun getInfoContents(marker: Marker): View {
         // set binding
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = InfoWindowBinding.inflate(layoutInflater, parent, false)
-        binding.lifecycleOwner = parent.context as LifecycleOwner
 
         render(marker, binding)
         return binding.root
@@ -87,7 +91,7 @@ class MarkerCallback internal constructor(marker: Marker?) :
     override fun onLoadFailed(
         e: GlideException?,
         model: Any?,
-        target: Target<Drawable>?,
+        target: Target<Drawable?>,
         isFirstResource: Boolean
     ): Boolean {
         Log.e(javaClass.simpleName, "Error loading thumbnail! -> $e")
@@ -95,10 +99,10 @@ class MarkerCallback internal constructor(marker: Marker?) :
     }
 
     override fun onResourceReady(
-        resource: Drawable?,
-        model: Any?,
-        target: Target<Drawable>?,
-        dataSource: DataSource?,
+        resource: Drawable,
+        model: Any,
+        target: Target<Drawable?>?,
+        dataSource: DataSource,
         isFirstResource: Boolean
     ): Boolean {
         onSuccess()

@@ -14,7 +14,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -50,11 +49,7 @@ class AddActivityFragment : Fragment() {
     ): View {
 
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_add_activity, container, false
-        )
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding = FragmentAddActivityBinding.inflate(inflater, container, false)
 
         // Initialize place api
         Places.initialize(requireContext(), getString(R.string.google_maps_key))
@@ -139,7 +134,7 @@ class AddActivityFragment : Fragment() {
 
         val dialog = DatePickerDialog1(
             binding.root.context,
-            R.style.ThemeOverlay_MaterialComponents_TimePicker,
+            R.style.ThemeOverlay_App_DatePicker,
             dateListener,
             calender.get(Calendar.YEAR),
             calender.get(Calendar.MONTH),
@@ -168,7 +163,7 @@ class AddActivityFragment : Fragment() {
 
         val dialog = TimePickerDialog(
             binding.root.context,
-            R.style.ThemeOverlay_MaterialComponents_TimePicker,
+            com.google.android.material.R.style.ThemeOverlay_MaterialComponents_TimePicker,
             timeListener,
             calender.get(Calendar.HOUR_OF_DAY),
             calender.get(Calendar.MINUTE),

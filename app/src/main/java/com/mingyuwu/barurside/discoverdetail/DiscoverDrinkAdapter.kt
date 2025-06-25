@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mingyuwu.barurside.R
 import com.mingyuwu.barurside.data.Drink
 import com.mingyuwu.barurside.data.Venue
@@ -27,14 +28,17 @@ class DiscoverDrinkAdapter(val viewModel: DiscoverDetailViewModel) :
         }
 
         fun bind(drink: Drink, viewModel: DiscoverDetailViewModel) {
-            binding.name = drink.name
-            binding.img = drink.images?.get(0) ?: ""
-            binding.category = Category.valueOf(drink.category.uppercase()).chinese
-            binding.info = binding.root.context.getString(R.string.drink_info_price, drink.price)
-            binding.rating = binding.root.context.getString(
+            binding.txtDiscoverObjectName.text = drink.name
+            Glide.with(binding.imgDiscoverObject.context)
+                .load(drink.images?.getOrNull(0) ?: "")
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(binding.imgDiscoverObject)
+            binding.txtDiscoverObjectCategory.text = Category.valueOf(drink.category.uppercase()).chinese
+            binding.txtDiscoverObjectInfo.text = binding.root.context.getString(R.string.drink_info_price, drink.price)
+            binding.txtDiscoverObjectRating.text = binding.root.context.getString(
                 R.string.venue_rating_info_list, drink.avgRating, drink.rtgCount
             )
-
             binding.cnstrtListItem.setOnClickListener {
                 viewModel.navigateToInfo.value = drink
             }
