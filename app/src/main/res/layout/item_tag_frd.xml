@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/profile_base_img"
+        android:id="@+id/cardProfileBaseImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -23,7 +23,7 @@
         app:strokeWidth="0.6dp">
 
         <TextView
-            android:id="@+id/img_rtg_user"
+            android:id="@+id/txtRtgUser"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
@@ -32,7 +32,6 @@
             android:layout_marginBottom="4dp"
             android:gravity="center"
             android:scaleType="centerCrop"
-            android:text="@{name}"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -19,6 +19,8 @@ import android.widget.Button
 import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -36,7 +38,8 @@ import com.mingyuwu.barurside.util.Util.saveBitmap
 
 class EditRatingFragment : Fragment() {
 
-    private lateinit var binding: FragmentEditRatingBinding
+    private var _binding: FragmentEditRatingBinding? = null
+    private val binding get() = _binding!!
     private val startForGallery = registerStartForGallery()
     private val viewModel by viewModels<EditRatingViewModel> {
         getVmFactory(
@@ -49,14 +52,11 @@ class EditRatingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
-        binding = FragmentEditRatingBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        _binding = FragmentEditRatingBinding.inflate(inflater, container, false)
 
         // set adapter
         val editRatingAdapter = EditRatingAdapter(viewModel)
-        binding.venueRtgScoreList.adapter = editRatingAdapter
+        binding.rvRtgScoreList.adapter = editRatingAdapter
 
         // add drink rating : set button click listener
         binding.btnAddDrinkRtg.setOnClickListener {
@@ -67,44 +67,44 @@ class EditRatingFragment : Fragment() {
             }
         }
 
+        // 動態 enable 與背景色
+        viewModel.menu.observe(viewLifecycleOwner) { menu ->
+            val enabled = menu?.isNotEmpty() == true
+            binding.btnAddDrinkRtg.isEnabled = enabled
+            binding.btnAddDrinkRtg.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                if (enabled) R.color.black_3f3a3a else R.color.gray_f5f5f5
+            )
+        }
+
         viewModel.star.observe(viewLifecycleOwner) {
             editRatingAdapter.notifyDataSetChanged()
         }
-
         viewModel.frdList.observe(viewLifecycleOwner) {
             editRatingAdapter.notifyDataSetChanged()
         }
-
         viewModel.tagFrd.observe(viewLifecycleOwner) {
             editRatingAdapter.notifyDataSetChanged()
         }
-
-        // viewModel observer
-        viewModel.objectId.observe(viewLifecycleOwner, {
+        viewModel.objectId.observe(viewLifecycleOwner) {
             editRatingAdapter.submitList(it)
             editRatingAdapter.notifyDataSetChanged()
-        })
-
-        // click add photo button
-        viewModel.isUploadImgBtn.observe(viewLifecycleOwner, {
+        }
+        viewModel.isUploadImgBtn.observe(viewLifecycleOwner) {
             if (isPermissionGranted(AppPermission.ReadExternalStorage)) {
                 chooseImage(binding.root.context)
             } else {
                 requestPermission(AppPermission.ReadExternalStorage)
                 chooseImage(binding.root.context)
             }
-        })
-
-        // get friend list
-        viewModel.user.observe(viewLifecycleOwner, { user ->
+        }
+        viewModel.user.observe(viewLifecycleOwner) { user ->
             user.friends?.let {
                 viewModel.getUsersResultList(user)
             }
-        })
-
+        }
         // set post rating button click listener
         var alertDialog: AlertDialog? = null
-
         binding.btnRtgConfirm.setOnClickListener {
             if (viewModel.checkRating()) {
                 viewModel.uploadPhoto()
@@ -113,19 +113,16 @@ class EditRatingFragment : Fragment() {
                 showRatingUncompleted()
             }
         }
-
         // leave rating and to previous view
-        viewModel.leave.observe(viewLifecycleOwner, {
+        viewModel.leave.observe(viewLifecycleOwner) {
             it?.let {
                 alertDialog!!.dismiss()
                 findNavController().navigateUp()
                 viewModel.onLeft()
             }
-        })
-
+        }
         return binding.root
     }
-
 
     private fun chooseImage(context: Context) {
 
@@ -257,9 +254,13 @@ class EditRatingFragment : Fragment() {
         // set windows transparent
         val layoutParameter = dialog.window?.attributes
         layoutParameter?.width = 800
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
 
         return dialog
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

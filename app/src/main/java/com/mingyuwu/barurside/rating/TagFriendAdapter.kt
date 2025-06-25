@@ -27,7 +27,8 @@ class TagFriendAdapter :
         }
 
         fun bind(tagFriend: TagFriend, view: View) {
-            binding.profileBaseImg.setOnClickListener {
+            binding.txtRtgUser.text = tagFriend.name
+            binding.cardProfileBaseImg.setOnClickListener {
                 view.findNavController().navigate(
                     MainNavigationDirections.navigateToProfileFragment(tagFriend.id)
                 )
