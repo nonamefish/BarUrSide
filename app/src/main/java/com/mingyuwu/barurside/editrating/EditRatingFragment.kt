@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -125,33 +126,34 @@ class EditRatingFragment : Fragment() {
     }
 
     private fun chooseImage(context: Context) {
-
-        // create a menuOption Array
-        val optionsMenu = arrayOf<CharSequence>(
-            Util.getString(R.string.from_gallery),
-            Util.getString(R.string.exit),
-        )
-
-        // create a dialog for showing the optionsMenu
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-
-        // set the items in builder
-        builder.setItems(
-            optionsMenu
-        ) { dialogInterface, i ->
-            if (optionsMenu[i] == Util.getString(R.string.from_gallery)) {
-                // choose from  external storage
-                val pickPhoto = Intent(
-                    Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                )
-                startForGallery.launch(pickPhoto)
-            } else if (optionsMenu[i] == Util.getString(R.string.exit)) {
-                dialogInterface.dismiss()
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            startForGallery.launch(Intent(MediaStore.ACTION_PICK_IMAGES))
+            return
         }
 
-        builder.show()
+        if (!isPermissionGranted(AppPermission.ReadExternalStorage)) {
+            requestPermission(AppPermission.ReadExternalStorage)
+            chooseImage(context)
+            return
+        }
+        val optionsMenu = arrayOf(
+            Util.getString(R.string.from_gallery),
+            Util.getString(R.string.exit)
+        )
+        AlertDialog.Builder(context)
+            .setItems(optionsMenu) { dialog, i ->
+                when (optionsMenu[i]) {
+                    Util.getString(R.string.from_gallery) -> {
+                        val pickPhoto = Intent(
+                            Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                        )
+                        startForGallery.launch(pickPhoto)
+                    }
+                    Util.getString(R.string.exit) -> dialog.dismiss()
+                }
+            }
+            .show()
     }
 
     private fun registerStartForGallery(): ActivityResultLauncher<Intent> {
