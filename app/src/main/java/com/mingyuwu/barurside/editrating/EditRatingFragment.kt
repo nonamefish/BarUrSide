@@ -91,13 +91,12 @@ class EditRatingFragment : Fragment() {
             editRatingAdapter.submitList(it)
             editRatingAdapter.notifyDataSetChanged()
         }
+        viewModel.uploadImg.observe(viewLifecycleOwner) {
+            editRatingAdapter.notifyDataSetChanged()
+        }
+
         viewModel.isUploadImgBtn.observe(viewLifecycleOwner) {
-            if (isPermissionGranted(AppPermission.ReadExternalStorage)) {
-                chooseImage(binding.root.context)
-            } else {
-                requestPermission(AppPermission.ReadExternalStorage)
-                chooseImage(binding.root.context)
-            }
+            chooseImage(binding.root.context)
         }
         viewModel.user.observe(viewLifecycleOwner) { user ->
             user.friends?.let {
@@ -136,6 +135,7 @@ class EditRatingFragment : Fragment() {
             chooseImage(context)
             return
         }
+
         val optionsMenu = arrayOf(
             Util.getString(R.string.from_gallery),
             Util.getString(R.string.exit)
