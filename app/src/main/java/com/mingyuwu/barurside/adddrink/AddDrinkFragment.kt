@@ -156,7 +156,7 @@ class AddDrinkFragment : Fragment() {
         }
         // add drink photo onclick
         binding.txtDrinkPhoto.setOnClickListener {
-            context?.let { chooseImage(it) }
+            launchImagePicker(context ?: return@setOnClickListener)
         }
         // after post activity then navigate to activity fragment
         viewModel.leave.observe(viewLifecycleOwner) {
@@ -175,17 +175,20 @@ class AddDrinkFragment : Fragment() {
         _binding = null
     }
 
-    private fun chooseImage(context: Context) {
+    private fun launchImagePicker(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             startForGallery.launch(Intent(MediaStore.ACTION_PICK_IMAGES))
             return
         }
-
         if (!isPermissionGranted(AppPermission.ReadExternalStorage)) {
             requestPermission(AppPermission.ReadExternalStorage)
-            chooseImage(context)
+            launchImagePicker(context)
             return
         }
+        showImageSourceDialog(context)
+    }
+
+    private fun showImageSourceDialog(context: Context) {
         val optionsMenu = arrayOf(
             Util.getString(R.string.from_gallery),
             Util.getString(R.string.exit)

@@ -96,7 +96,7 @@ class EditRatingFragment : Fragment() {
         }
 
         viewModel.isUploadImgBtn.observe(viewLifecycleOwner) {
-            chooseImage(binding.root.context)
+            launchImagePicker(binding.root.context)
         }
         viewModel.user.observe(viewLifecycleOwner) { user ->
             user.friends?.let {
@@ -124,18 +124,20 @@ class EditRatingFragment : Fragment() {
         return binding.root
     }
 
-    private fun chooseImage(context: Context) {
+    private fun launchImagePicker(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             startForGallery.launch(Intent(MediaStore.ACTION_PICK_IMAGES))
             return
         }
-
         if (!isPermissionGranted(AppPermission.ReadExternalStorage)) {
             requestPermission(AppPermission.ReadExternalStorage)
-            chooseImage(context)
+            launchImagePicker(context)
             return
         }
+        showImageSourceDialog(context)
+    }
 
+    private fun showImageSourceDialog(context: Context) {
         val optionsMenu = arrayOf(
             Util.getString(R.string.from_gallery),
             Util.getString(R.string.exit)

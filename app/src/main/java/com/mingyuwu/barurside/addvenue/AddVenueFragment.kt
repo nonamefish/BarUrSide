@@ -202,7 +202,7 @@ class AddVenueFragment : Fragment() {
         }
         // add venue photo onclick
         binding.txtVenuePhoto.setOnClickListener {
-            context?.let { chooseImage(it) }
+            launchImagePicker(requireContext())
         }
         // after post activity then navigate to activity fragment
         viewModel.leave.observe(viewLifecycleOwner) { leave ->
@@ -244,18 +244,20 @@ class AddVenueFragment : Fragment() {
         datetime.value = time.format(calender.time)
     }
 
-    private fun chooseImage(context: Context) {
+    private fun launchImagePicker(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             startForGallery.launch(Intent(MediaStore.ACTION_PICK_IMAGES))
             return
         }
-
         if (!isPermissionGranted(AppPermission.ReadExternalStorage)) {
             requestPermission(AppPermission.ReadExternalStorage)
-            chooseImage(context)
+            launchImagePicker(context)
             return
         }
+        showImageSourceDialog(context)
+    }
 
+    private fun showImageSourceDialog(context: Context) {
         val optionsMenu = arrayOf(
             Util.getString(R.string.from_gallery),
             Util.getString(R.string.exit)
